@@ -3,3 +3,4 @@ target/
 .DS_Store
 .serena/
 .remember/
+__pycache__/

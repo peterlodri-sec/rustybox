@@ -1,0 +1,38 @@
+name: Sponsors
+
+# Keeps SPONSORS.md and this README's sponsor list in sync with the account's
+# GitHub Sponsors listing (shared with crabcc/Vaked — see
+# docs/sponsors-profile.md). GitHub Actions can listen to the `sponsorship`
+# webhook event natively, so no external receiver/infra is needed.
+on:
+  sponsorship:
+    types: [created, cancelled, edited, tier_changed, pending_cancellation, pending_tier_change]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sponsors-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sync sponsor credits
+        run: python3 scripts/sync_sponsors.py
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet; then
+            echo "No sponsor-credit changes."
+            exit 0
+          fi
+          git add SPONSORS.md README.md
+          git commit -m "chore(sponsors): sync sponsor credits [skip ci]"
+          git push

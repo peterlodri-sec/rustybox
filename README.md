@@ -62,14 +62,25 @@ rustybox is built in the open — resurrecting dead code, hardening it across ar
 
 ### [→ Sponsor on GitHub](https://github.com/sponsors/peterlodri-sec)
 
+One [GitHub Sponsors](https://github.com/sponsors/peterlodri-sec) listing funds
+this alongside my other open-source work (crabcc, Vaked, …) — the tiers below
+are shared across all of it, with rustybox-specific perks layered on top.
+
 | tier | / month | you get |
 |---|---|---|
-| 🌱 **Supporter** | $5 | Name in `SPONSORS.md` + the warm glow of funding safe systems software |
-| 🔧 **Backer** | $15 | Above + your name/handle in this README |
-| 🚀 **Sponsor** | $50 | Above + your logo on [rustybox.io](https://rustybox.io) |
-| 🛰️ **Patron** | $250 | Above + logo up top, and a say in the roadmap (which applets go memory-safe next) |
+| 🌱 **Supporter** | $5 | Name in [`SPONSORS.md`](SPONSORS.md) + the warm glow of funding safe systems software |
+| 🔧 **Contributor** | $25 | Above, plus a monthly research-experiment run on the wider stack |
+| 🏗️ **Backer** | $100 | Above, plus your name/handle in *this* README |
+| 🚀 **Sponsor** | $500 | Above, plus your logo on [rustybox.io](https://rustybox.io) |
+| 🤝 **Partner** | $2,500 | Above, plus prominent logo placement and a say in which applets go memory-safe next |
 
-One-time contributions welcome too. Every sponsor is credited (opt-out anytime).
+One-time contributions welcome too. Every sponsor is credited automatically
+from their GitHub Sponsors tier (opt out anytime by replying to the welcome
+message — see [SPONSORS.md](SPONSORS.md)).
+
+<!-- sponsors:backers:start -->
+_Be the first._
+<!-- sponsors:backers:end -->
 
 ## Editions & licensing
 
