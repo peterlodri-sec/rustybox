@@ -83,6 +83,36 @@ is nearly free.
 - **Static musl.** All target crates must build for `*-linux-musl` static. Verify
   in CI on both arches (the build already does dual-arch musl).
 
+## Harness-useful tools (agentic / Claude Code)
+
+Modern agent harnesses lean on a specific slice of the userland. Where the
+applet already exists in BusyBox, we route it to a memory-safe backend; the
+standouts are wired now:
+
+| applet | why harnesses want it | backend |
+|---|---|---|
+| **timeout** | bound runaway commands — the single most useful guard for autonomous loops (`timeout 30 <cmd>`) | uu_timeout ✅ |
+| **nohup** | detach long-running work from the session | uu_nohup ✅ |
+| **dd** | byte-exact I/O, image/stream work | uu_dd ✅ |
+| **shuf, nice, truncate, fold, expand, unexpand, comm, split, cksum, paste, sync, uname** | data munging + housekeeping | uutils ✅ |
+| env, seq, sleep, tee, mktemp, realpath, nproc, printf | scripting glue | uutils ✅ (Phase 1) |
+
+**Stay transpiled for now** (util-linux/procps, no coreutils crate): `xargs`
+(fan-out), `watch`, `flock`, `setsid`, `chrt`, `ionice`. Candidates for
+in-house safe rewrites (Phase 3) or a dedicated crate.
+
+**Net-new applets** — not in BusyBox, so they need an `applet_tables.rs` entry
+in addition to a backend. High-value future adds:
+
+- `stdbuf` (uu_stdbuf) — unbuffer child output; very useful for streaming logs
+  from agent-spawned processes.
+- `numfmt` (uu_numfmt), `tsort` (uu_tsort), `join` (uu_join) — coreutils that
+  BusyBox omits.
+- Optional "modern CLI" layer (own applet names, not BusyBox): `rg` (ripgrep),
+  `fd`, `bat`, `jq`→`jaq` (pure-Rust jq), `hyperfine`, `zoxide`. These are
+  developer-facing niceties; gate behind a separate `extras` feature so the
+  BusyBox-compatible core stays clean.
+
 ## Success criteria
 
 A migrated applet is "done" when: its `*-modern` backend is the default feature,

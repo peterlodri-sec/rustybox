@@ -111,6 +111,36 @@ pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
     "logname" => Some(uu_logname::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-factor")]
     "factor" => Some(uu_factor::uumain(argv.iter().map(std::ffi::OsString::from))),
+    #[cfg(feature = "modern-timeout")]
+    "timeout" => Some(uu_timeout::uumain(argv.iter().map(std::ffi::OsString::from))),
+    #[cfg(feature = "modern-nohup")]
+    "nohup" => Some(uu_nohup::uumain(argv.iter().map(std::ffi::OsString::from))),
+    #[cfg(feature = "modern-shuf")]
+    "shuf" => Some(uu_shuf::uumain(argv.iter().map(std::ffi::OsString::from))),
+    #[cfg(feature = "modern-nice")]
+    "nice" => Some(uu_nice::uumain(argv.iter().map(std::ffi::OsString::from))),
+    #[cfg(feature = "modern-dd")]
+    "dd" => Some(uu_dd::uumain(argv.iter().map(std::ffi::OsString::from))),
+    #[cfg(feature = "modern-truncate")]
+    "truncate" => Some(uu_truncate::uumain(argv.iter().map(std::ffi::OsString::from))),
+    #[cfg(feature = "modern-fold")]
+    "fold" => Some(uu_fold::uumain(argv.iter().map(std::ffi::OsString::from))),
+    #[cfg(feature = "modern-expand")]
+    "expand" => Some(uu_expand::uumain(argv.iter().map(std::ffi::OsString::from))),
+    #[cfg(feature = "modern-unexpand")]
+    "unexpand" => Some(uu_unexpand::uumain(argv.iter().map(std::ffi::OsString::from))),
+    #[cfg(feature = "modern-comm")]
+    "comm" => Some(uu_comm::uumain(argv.iter().map(std::ffi::OsString::from))),
+    #[cfg(feature = "modern-split")]
+    "split" => Some(uu_split::uumain(argv.iter().map(std::ffi::OsString::from))),
+    #[cfg(feature = "modern-cksum")]
+    "cksum" => Some(uu_cksum::uumain(argv.iter().map(std::ffi::OsString::from))),
+    #[cfg(feature = "modern-paste")]
+    "paste" => Some(uu_paste::uumain(argv.iter().map(std::ffi::OsString::from))),
+    #[cfg(feature = "modern-sync")]
+    "sync" => Some(uu_sync::uumain(argv.iter().map(std::ffi::OsString::from))),
+    #[cfg(feature = "modern-uname")]
+    "uname" => Some(uu_uname::uumain(argv.iter().map(std::ffi::OsString::from))),
     _ => None,
   }
 }
