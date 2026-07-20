@@ -5,10 +5,10 @@ use libc;
 use libc::nlmsghdr;
 use libc::sockaddr_nl;
 use libc::strcpy;
+use crate::compat::memcpy;
+use crate::compat::memset;
 extern "C" {
   fn if_nametoindex(__ifname: *const libc::c_char) -> libc::c_uint;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
 /* We need linux/types.h because older kernels use u32 etc
  * in linux/[rt]netlink.h. 2.6.19 seems to be ok, though */

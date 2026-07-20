@@ -48,9 +48,9 @@ use libc::timeval;
 use libc::uid_t;
 use libc::umask;
 use libc::unlink;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> *mut libc::c_char;
 
@@ -68,8 +68,6 @@ extern "C" {
   fn atoll(__nptr: *const libc::c_char) -> libc::c_longlong;
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   fn gettimeofday(__tv: *mut timeval, __tz: __timezone_ptr_t) -> libc::c_int;
 

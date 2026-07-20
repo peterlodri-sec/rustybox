@@ -34,6 +34,8 @@ use libc::strcmp;
 use libc::strrchr;
 use libc::strstr;
 use libc::FILE;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
   pub type tls_handshake_data;
 
@@ -74,11 +76,9 @@ extern "C" {
   fn fileno_unlocked(__stream: *mut FILE) -> libc::c_int;
 
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
   fn strnlen(__string: *const libc::c_char, __maxlen: size_t) -> size_t;
   fn inet_pton(
     __af: libc::c_int,

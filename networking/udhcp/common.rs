@@ -13,11 +13,11 @@ use libc::sockaddr_in6;
 use libc::sprintf;
 use libc::strchr;
 use libc::strtok;
+use crate::compat::memcpy;
+use crate::compat::strlen;
 extern "C" {
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
-
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
+  
 
   /* Some useful definitions */
   /* Macros for min/max.  */

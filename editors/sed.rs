@@ -22,6 +22,7 @@ use libc::strcpy;
 use libc::uid_t;
 use libc::unlink;
 use libc::FILE;
+use crate::compat::strlen;
 extern "C" {
   fn strtol(
     __nptr: *const libc::c_char,
@@ -49,7 +50,6 @@ extern "C" {
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
   fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
   fn strpbrk(_: *const libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* Reads a line from a text file, up to a newline or NUL byte, inclusive.
    * Returns malloc'ed char*. If end is NULL '\n' isn't considered

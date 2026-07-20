@@ -1,12 +1,12 @@
 use crate::librb::size_t;
 use libc;
 use libc::FILE;
+use crate::compat::memcmp;
+use crate::compat::strlen;
 extern "C" {
   fn getc_unlocked(__stream: *mut FILE) -> libc::c_int;
 
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
 
 }
 

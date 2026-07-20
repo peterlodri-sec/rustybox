@@ -13,9 +13,8 @@ use libc::stat;
 use libc::strstr;
 use libc::timeval;
 use libc::unlink;
+use crate::compat::strlen;
 extern "C" {
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* After v = xrealloc_vector(v, SHIFT, idx) it's ok to use
    * at least v[idx] and v[idx+1], for all idx values.

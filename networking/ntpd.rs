@@ -30,6 +30,10 @@ use libc::strcpy;
 use libc::suseconds_t;
 use libc::time_t;
 use libc::timeval;
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;
@@ -89,13 +93,11 @@ extern "C" {
   fn unsetenv(__name: *const libc::c_char) -> libc::c_int;
   fn qsort(__base: *mut libc::c_void, __nmemb: size_t, __size: size_t, __compar: __compar_fn_t);
   fn abs(_: libc::c_int) -> libc::c_int;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
+
+  
 
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
   fn strnlen(__string: *const libc::c_char, __maxlen: size_t) -> size_t;
   fn strncasecmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;

@@ -12,6 +12,8 @@ use libc::sa_family_t;
 use libc::sockaddr;
 use libc::strchr;
 use libc::strrchr;
+use crate::compat::memcpy;
+use crate::compat::memset;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_ns;
@@ -33,8 +35,6 @@ extern "C" {
     __optval: *const libc::c_void,
     __optlen: socklen_t,
   ) -> libc::c_int;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn getservbyname(__name: *const libc::c_char, __proto: *const libc::c_char) -> *mut servent;
   fn getaddrinfo(

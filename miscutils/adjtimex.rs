@@ -3,10 +3,11 @@ use c2rust_bitfields::BitfieldStruct;
 
 use libc;
 use libc::printf;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
 
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
 
   fn adjtimex(__ntx: *mut timex) -> libc::c_int;
 }

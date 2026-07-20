@@ -5,6 +5,7 @@ use libc::nlmsghdr;
 use libc::printf;
 use libc::sockaddr_nl;
 use libc::strcmp;
+use crate::compat::memset;
 extern "C" {
 
   fn snprintf(
@@ -18,8 +19,6 @@ extern "C" {
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_ulong;
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 

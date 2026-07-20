@@ -6,14 +6,13 @@ use libc::printf;
 use libc::termios;
 use libc::winsize;
 use libc::FILE;
+use crate::compat::memcpy;
 extern "C" {
   fn _exit(_: libc::c_int) -> !;
 
   static mut stderr: *mut FILE;
 
   fn scanf(_: *const libc::c_char, _: ...) -> libc::c_int;
-
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn tcgetattr(__fd: libc::c_int, __termios_p: *mut termios) -> libc::c_int;
 

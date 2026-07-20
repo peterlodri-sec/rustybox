@@ -28,6 +28,7 @@ use libc::umount2;
 use libc::unlink;
 use libc::useconds_t;
 use libc::FILE;
+use crate::compat::strlen;
 extern "C" {
 
   fn atof(__nptr: *const libc::c_char) -> libc::c_double;
@@ -52,7 +53,6 @@ extern "C" {
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
   fn waitpid(__pid: pid_t, __stat_loc: *mut libc::c_int, __options: libc::c_int) -> pid_t;
 
   fn strftime(

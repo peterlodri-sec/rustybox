@@ -27,6 +27,7 @@ use libc::strcmp;
 use libc::useconds_t;
 use libc::DIR;
 use libc::FILE;
+use crate::compat::strlen;
 extern "C" {
 
   fn if_nametoindex(__ifname: *const libc::c_char) -> libc::c_uint;
@@ -46,8 +47,6 @@ extern "C" {
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   fn inet_aton(__cp: *const libc::c_char, __inp: *mut in_addr) -> libc::c_int;
 

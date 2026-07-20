@@ -7,6 +7,7 @@ use libc::free;
 use libc::printf;
 use libc::puts;
 use libc::strstr;
+use crate::compat::strlen;
 extern "C" {
 
   fn exit(_: libc::c_int) -> !;
@@ -18,7 +19,6 @@ extern "C" {
     __haystack: *const libc::c_char,
     __needle: *const libc::c_char,
   ) -> *mut libc::c_char;
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   static mut option_mask32: u32;
 

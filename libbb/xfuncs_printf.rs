@@ -29,6 +29,12 @@ use libc::strchr;
 use libc::uid_t;
 use libc::unlink;
 use libc::DIR;
+use crate::compat::malloc;
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::read;
+use crate::compat::realloc;
+use crate::compat::strlen;
 extern "C" {
 
   pub type sockaddr_x25;
@@ -43,8 +49,6 @@ extern "C" {
   pub type sockaddr_at;
   fn rand() -> libc::c_int;
   fn srand(__seed: libc::c_uint);
-  fn malloc(_: libc::c_ulong) -> *mut libc::c_void;
-  fn realloc(_: *mut libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn setenv(
     __name: *const libc::c_char,
@@ -92,11 +96,9 @@ extern "C" {
   fn fchdir(__fd: libc::c_int) -> libc::c_int;
 
   fn pipe(__pipedes: *mut libc::c_int) -> libc::c_int;
-  fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
 
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+
   fn strdup(_: *const libc::c_char) -> *mut libc::c_char;
 
   fn mempcpy(
@@ -104,7 +106,6 @@ extern "C" {
     __src: *const libc::c_void,
     __n: size_t,
   ) -> *mut libc::c_void;
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* must be directly before hash[] */
   /* always correctly aligned for uint64_t */

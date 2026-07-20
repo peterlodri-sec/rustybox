@@ -8,11 +8,7 @@ use libc::readdir;
 use libc::stat;
 use libc::strcpy;
 use libc::DIR;
-extern "C" {
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
-
-}
+use crate::compat::strlen;
 
 #[repr(C)]
 #[derive(Copy, Clone)]

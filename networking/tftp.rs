@@ -31,6 +31,7 @@ use libc::strcpy;
 use libc::strrchr;
 use libc::strstr;
 use libc::unlink;
+use crate::compat::strlen;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;
@@ -60,8 +61,6 @@ extern "C" {
     _: *const libc::c_char,
     _: ...
   ) -> libc::c_int;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* Non-aborting kind of convertors: bb_strto[u][l]l */
   /* On exit: errno = 0 only if there was non-empty, '\0' terminated value

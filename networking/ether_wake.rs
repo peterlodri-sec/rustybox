@@ -2,12 +2,11 @@ use crate::librb::size_t;
 use libc;
 use libc::sockaddr;
 use libc::sscanf;
+use crate::compat::memcpy;
+use crate::compat::memset;
 extern "C" {
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
   static mut optind: libc::c_int;
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn ether_aton_r(__asc: *const libc::c_char, __addr: *mut ether_addr) -> *mut ether_addr;
   fn ether_hostton(__hostname: *const libc::c_char, __addr: *mut ether_addr) -> libc::c_int;

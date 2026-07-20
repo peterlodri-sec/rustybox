@@ -2,11 +2,7 @@ use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::size_t;
 use libc;
 use libc::strcpy;
-extern "C" {
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
-
-}
+use crate::compat::strlen;
 /* Specialized: */
 /* Using xatoi() instead of naive atoi() is not always convenient -
  * in many places people want *non-negative* values, but store them

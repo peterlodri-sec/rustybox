@@ -9,6 +9,9 @@ use libc::sockaddr;
 use libc::sockaddr_in;
 use libc::sockaddr_in6;
 use libc::ssize_t;
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;
@@ -30,9 +33,7 @@ extern "C" {
     __addr_len: socklen_t,
   ) -> ssize_t;
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
+  
 
   /* Wrapper which restarts poll on EINTR or ENOMEM.
    * On other errors complains [perror("poll")] and returns.

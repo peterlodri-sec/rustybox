@@ -2,6 +2,8 @@ use crate::librb::size_t;
 use crate::librb::smallint;
 use libc;
 use libc::strcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
   static mut optarg: *mut libc::c_char;
   static mut optind: libc::c_int;
@@ -12,9 +14,8 @@ extern "C" {
     __longopts: *const option,
     __longind: *mut libc::c_int,
   ) -> libc::c_int;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
 
 }
 pub type __builtin_va_list = [__va_list_tag; 1];

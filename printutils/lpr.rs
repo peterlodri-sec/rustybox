@@ -13,12 +13,11 @@ use libc::stat;
 use libc::strchr;
 use libc::strcpy;
 use libc::unlink;
+use crate::compat::strlen;
 extern "C" {
 
   static mut optind: libc::c_int;
   fn dprintf(__fd: libc::c_int, __fmt: *const libc::c_char, _: ...) -> libc::c_int;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   static bb_msg_standard_input: [libc::c_char; 0];
 }

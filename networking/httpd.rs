@@ -47,6 +47,9 @@ use libc::time;
 use libc::time_t;
 use libc::tm;
 use libc::FILE;
+use crate::compat::memcmp;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;
@@ -66,8 +69,6 @@ extern "C" {
   fn _exit(_: libc::c_int) -> !;
 
   fn fork() -> pid_t;
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   static ptr_to_globals: *mut globals;
 
@@ -110,13 +111,9 @@ extern "C" {
     __replace: libc::c_int,
   ) -> libc::c_int;
 
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
-
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   fn strncasecmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 

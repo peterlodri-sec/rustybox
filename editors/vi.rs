@@ -26,10 +26,13 @@ use libc::strcpy;
 use libc::system;
 use libc::termios;
 use libc::FILE;
+use crate::compat::memcpy;
+use crate::compat::memmove;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+
+  
   fn memchr(_: *const libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
   fn memrchr(__s: *const libc::c_void, __c: libc::c_int, __n: size_t) -> *mut libc::c_void;
 
@@ -65,7 +68,6 @@ extern "C" {
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
   fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   fn strncasecmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 

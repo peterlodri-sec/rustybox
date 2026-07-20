@@ -46,6 +46,11 @@ use libc::timeval;
 use libc::umask;
 use libc::DIR;
 use libc::FILE;
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memmove;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
   fn sigaction(__sig: libc::c_int, __act: *const sigaction, __oact: *mut sigaction) -> libc::c_int;
   fn fnmatch(
@@ -118,10 +123,8 @@ extern "C" {
     __compar: __compar_fn_t,
   ) -> *mut libc::c_void;
   fn qsort(__base: *mut libc::c_void, __nmemb: size_t, __size: size_t, __compar: __compar_fn_t);
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
+
+  
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
@@ -132,7 +135,7 @@ extern "C" {
     __src: *const libc::c_void,
     __n: size_t,
   ) -> *mut libc::c_void;
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
   fn strerror(_: libc::c_int) -> *mut libc::c_char;
   fn strsignal(__sig: libc::c_int) -> *mut libc::c_char;
   fn stpcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;

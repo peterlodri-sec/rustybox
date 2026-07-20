@@ -13,6 +13,8 @@ use libc::sockaddr_in;
 use libc::sockaddr_in6;
 use libc::strchr;
 use libc::strcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
 extern "C" {
 
   fn snprintf(
@@ -25,8 +27,7 @@ extern "C" {
   fn feof_unlocked(__stream: *mut FILE) -> libc::c_int;
   static mut optind: libc::c_int;
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+  
 
   fn inet_ntoa(__in: in_addr) -> *mut libc::c_char;
   fn inet_pton(

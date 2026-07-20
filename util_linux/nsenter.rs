@@ -5,12 +5,11 @@ use libc::close;
 use libc::gid_t;
 use libc::pid_t;
 use libc::uid_t;
+use crate::compat::memset;
 extern "C" {
   fn setns(__fd: libc::c_int, __nstype: libc::c_int) -> libc::c_int;
 
   static mut optind: libc::c_int;
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn setgroups(__n: size_t, __groups: *const gid_t) -> libc::c_int;
 

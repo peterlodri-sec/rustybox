@@ -7,10 +7,12 @@ use libc;
 use libc::free;
 use libc::strcmp;
 use libc::strrchr;
+use crate::compat::memcmp;
+use crate::compat::memmove;
+use crate::compat::memset;
 extern "C" {
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
+
+  
   static mut optind: libc::c_int;
 
   static mut option_mask32: u32;

@@ -15,6 +15,8 @@ use libc::strchr;
 use libc::time_t;
 use libc::tm;
 use libc::FILE;
+use crate::compat::memcpy;
+use crate::compat::strlen;
 extern "C" {
 
   static mut optind: libc::c_int;
@@ -24,10 +26,9 @@ extern "C" {
 
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
   fn strcat(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
   fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
   fn stpcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
 
   fn strftime(

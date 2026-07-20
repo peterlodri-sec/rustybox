@@ -10,15 +10,17 @@ use libc::passwd;
 use libc::strcmp;
 use libc::uid_t;
 use libc::FILE;
+use crate::compat::memcpy;
+use crate::compat::memmove;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
 
   fn rewind(__stream: *mut FILE);
   fn fileno_unlocked(__stream: *mut FILE) -> libc::c_int;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
+
   fn setgroups(__n: size_t, __groups: *const gid_t) -> libc::c_int;
 
 }

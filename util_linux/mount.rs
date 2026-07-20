@@ -21,6 +21,8 @@ use libc::strcmp;
 use libc::strcpy;
 use libc::strstr;
 use libc::FILE;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
 
   fn getmntent_r(
@@ -36,15 +38,11 @@ extern "C" {
 
   static mut optind: libc::c_int;
 
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
 
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   fn strncasecmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 

@@ -11,11 +11,7 @@ use libc::printf;
 use libc::puts;
 use libc::strchr;
 use libc::unlink;
-extern "C" {
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-
-}
+use crate::compat::memset;
 
 pub type C2RustUnnamed = libc::c_uint;
 pub const DAEMON_ONLY_SANITIZE: C2RustUnnamed = 8;

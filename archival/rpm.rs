@@ -24,6 +24,7 @@ use libc::strcmp;
 use libc::time_t;
 use libc::tm;
 use libc::uid_t;
+use crate::compat::strlen;
 extern "C" {
   static mut optind: libc::c_int;
 
@@ -37,7 +38,6 @@ extern "C" {
     __compar: __compar_fn_t,
   ) -> *mut libc::c_void;
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
   fn mmap(
     __addr: *mut libc::c_void,
     __len: size_t,

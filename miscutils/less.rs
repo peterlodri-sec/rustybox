@@ -25,6 +25,9 @@ use libc::termios;
 use libc::time;
 use libc::time_t;
 use libc::FILE;
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
   fn sched_yield() -> libc::c_int;
 
@@ -36,12 +39,11 @@ extern "C" {
   static mut optind: libc::c_int;
   static bb_msg_standard_input: [libc::c_char; 0];
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+  
 
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
   fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
   fn stpcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
 

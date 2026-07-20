@@ -8,12 +8,13 @@ use libc::time;
 use libc::time_t;
 use libc::timespec;
 use libc::tm;
+use crate::compat::memcpy;
+use crate::compat::memmove;
 extern "C" {
 
   static mut optind: libc::c_int;
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
+  
 
   fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
 

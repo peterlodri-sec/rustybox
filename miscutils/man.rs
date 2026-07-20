@@ -13,12 +13,12 @@ use libc::strcmp;
 use libc::strcpy;
 use libc::strrchr;
 use libc::system;
+use crate::compat::strlen;
 extern "C" {
 
   static mut optind: libc::c_int;
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* After v = xrealloc_vector(v, SHIFT, idx) it's ok to use
    * at least v[idx] and v[idx+1], for all idx values.

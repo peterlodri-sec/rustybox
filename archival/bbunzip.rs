@@ -14,13 +14,12 @@ use libc::suseconds_t;
 use libc::timeval;
 use libc::unlink;
 use libc::FILE;
+use crate::compat::strlen;
 extern "C" {
 
   static mut optind: libc::c_int;
 
   static mut stderr: *mut FILE;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   fn utimes(__file: *const libc::c_char, __tvp: *const timeval) -> libc::c_int;
 

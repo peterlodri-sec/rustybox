@@ -12,6 +12,7 @@ use libc::off64_t;
 use libc::off_t;
 use libc::time_t;
 use libc::uid_t;
+use crate::compat::memcmp;
 extern "C" {
 
   fn strtoull(
@@ -21,7 +22,7 @@ extern "C" {
   ) -> libc::c_ulonglong;
 
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
+  
 /* Some useful definitions */
 /* Macros for min/max.  */
 /* buffer allocation schemes */

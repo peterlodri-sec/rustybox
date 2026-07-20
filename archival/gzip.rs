@@ -1,9 +1,10 @@
 use crate::librb::size_t;
 use crate::librb::smallint;
 use libc;
+use crate::compat::memcpy;
+use crate::compat::memset;
 extern "C" {
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+
   static mut optind: libc::c_int;
   static ptr_to_globals: *mut globals;
 

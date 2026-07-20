@@ -6,6 +6,7 @@ use libc::puts;
 use libc::strchr;
 use libc::strcmp;
 use libc::strtok;
+use crate::compat::strlen;
 extern "C" {
   static mut optarg: *mut libc::c_char;
   static mut optind: libc::c_int;
@@ -26,8 +27,6 @@ extern "C" {
   ) -> libc::c_int;
 
   fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   static mut option_mask32: u32;
 

@@ -17,6 +17,9 @@ use libc::sockaddr;
 use libc::sockaddr_in;
 use libc::sockaddr_in6;
 use libc::ssize_t;
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;
@@ -49,9 +52,8 @@ extern "C" {
   static mut optind: libc::c_int;
 
   fn exit(_: libc::c_int) -> !;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
+
+  
   fn mempcpy(
     __dest: *mut libc::c_void,
     __src: *const libc::c_void,

@@ -41,10 +41,11 @@ use libc::time_t;
 use libc::uid_t;
 use libc::DIR;
 use libc::FILE;
+use crate::compat::memmove;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
   fn sigaction(__sig: libc::c_int, __act: *const sigaction, __oact: *mut sigaction) -> libc::c_int;
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   static mut stdin: *mut FILE;
   static mut stdout: *mut FILE;
@@ -66,8 +67,6 @@ extern "C" {
   fn strcat(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* Copyright (C) 1991,92,95,96,97,98,99,2001 Free Software Foundation, Inc.
   This file is part of the GNU C Library.

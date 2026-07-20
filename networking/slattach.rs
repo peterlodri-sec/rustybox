@@ -8,14 +8,15 @@ use libc::speed_t;
 use libc::system;
 use libc::tcflag_t;
 use libc::termios;
+use crate::compat::memcpy;
+use crate::compat::memset;
 extern "C" {
 
   static mut optind: libc::c_int;
 
   fn exit(_: libc::c_int) -> !;
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+  
 
   fn cfgetospeed(__termios_p: *const termios) -> speed_t;
   fn cfgetispeed(__termios_p: *const termios) -> speed_t;

@@ -20,6 +20,7 @@ use libc::ssize_t;
 use libc::suseconds_t;
 use libc::time_t;
 use libc::timeval;
+use crate::compat::memset;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;
@@ -55,7 +56,6 @@ extern "C" {
 
   static mut optind: libc::c_int;
 
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
   fn setitimer(
     __which: __itimer_which_t,
     __new: *const itimerval,

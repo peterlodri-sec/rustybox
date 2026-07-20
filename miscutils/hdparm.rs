@@ -10,6 +10,8 @@ use libc::printf;
 use libc::puts;
 use libc::sleep;
 use libc::sync;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
 
   static mut optarg: *mut libc::c_char;
@@ -19,9 +21,9 @@ extern "C" {
 
   fn exit(_: libc::c_int) -> !;
   fn abs(_: libc::c_int) -> libc::c_int;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+  
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
   fn mlock(__addr: *const libc::c_void, __len: size_t) -> libc::c_int;
   fn munlock(__addr: *const libc::c_void, __len: size_t) -> libc::c_int;
 

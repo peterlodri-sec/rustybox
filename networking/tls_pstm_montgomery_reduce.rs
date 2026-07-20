@@ -1,12 +1,8 @@
 use libc;
 use libc::free;
-extern "C" {
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-
-}
 
 use crate::librb::size_t;
+use crate::compat::memset;
 /*
  * Copyright (C) 2017 Denys Vlasenko
  *

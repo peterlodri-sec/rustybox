@@ -8,13 +8,14 @@ use libc::getpid;
 use libc::kill;
 use libc::pid_t;
 use libc::printf;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
 
   fn getsid(__pid: pid_t) -> pid_t;
   static mut optind: libc::c_int;
 
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
 
   static mut option_mask32: u32;
 

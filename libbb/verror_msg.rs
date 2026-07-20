@@ -5,8 +5,10 @@ use libc;
 use libc::free;
 use libc::strcpy;
 use libc::syslog;
+use crate::compat::memmove;
+use crate::compat::realloc;
+use crate::compat::strlen;
 extern "C" {
-  fn realloc(_: *mut libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn vsnprintf(
     _: *mut libc::c_char,
@@ -19,9 +21,8 @@ extern "C" {
     __f: *const libc::c_char,
     __arg: ::std::ffi::VaList,
   ) -> libc::c_int;
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
 
 }
 pub type __builtin_va_list = [__va_list_tag; 1];

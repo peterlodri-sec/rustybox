@@ -6,6 +6,8 @@ use libc::free;
 use libc::ssize_t;
 use libc::termios;
 use libc::FILE;
+use crate::compat::memset;
+use crate::compat::read;
 extern "C" {
 
   fn sigaction(__sig: libc::c_int, __act: *const sigaction, __oact: *mut sigaction) -> libc::c_int;
@@ -13,9 +15,7 @@ extern "C" {
 
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
 
-  fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+  
 
   fn tcgetattr(__fd: libc::c_int, __termios_p: *mut termios) -> libc::c_int;
 

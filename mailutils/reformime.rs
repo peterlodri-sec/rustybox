@@ -12,6 +12,7 @@ use libc::strcasecmp;
 use libc::strchr;
 use libc::strtok;
 use libc::FILE;
+use crate::compat::strlen;
 extern "C" {
 
   static ptr_to_globals: *mut globals;
@@ -23,8 +24,6 @@ extern "C" {
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
 
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   fn strncasecmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 

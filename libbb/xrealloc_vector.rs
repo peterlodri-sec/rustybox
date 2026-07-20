@@ -1,9 +1,6 @@
 use crate::librb::size_t;
 use libc;
-extern "C" {
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-
-}
+use crate::compat::memset;
 
 /* After v = xrealloc_vector(v, SHIFT, idx) it's ok to use
  * at least v[idx] and v[idx+1], for all idx values.

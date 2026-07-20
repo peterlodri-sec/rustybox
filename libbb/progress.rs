@@ -1,13 +1,13 @@
 use libc;
 use libc::fprintf;
 use libc::isatty;
+use crate::compat::memset;
 extern "C" {
 
   static mut stderr: *mut FILE;
 
   fn putc_unlocked(__c: libc::c_int, __stream: *mut FILE) -> libc::c_int;
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
 //UNUSED: char* FAST_FUNC unicode_conv_to_printable_maxwidth(uni_stat_t *stats, const char *src, unsigned maxwidth);
 

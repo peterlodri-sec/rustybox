@@ -4,13 +4,13 @@ use libc::free;
 use libc::passwd;
 use libc::printf;
 use libc::strchr;
+use crate::compat::strlen;
 extern "C" {
 
   fn strcasestr(
     __haystack: *const libc::c_char,
     __needle: *const libc::c_char,
   ) -> *mut libc::c_char;
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
 }
 

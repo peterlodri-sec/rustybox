@@ -1,10 +1,11 @@
 use crate::libbb::xfuncs_printf::xmalloc;
 use libc;
 use libc::free;
+use crate::compat::memcpy;
 extern "C" {
 
   static mut optind: libc::c_int;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
+  
   fn memchr(_: *const libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
 }

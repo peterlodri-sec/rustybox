@@ -7,11 +7,10 @@ use libc::sprintf;
 use libc::sscanf;
 use libc::stat;
 use libc::strcpy;
+use crate::compat::memset;
 extern "C" {
 
   static mut optind: libc::c_int;
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn strnlen(__string: *const libc::c_char, __maxlen: size_t) -> size_t;
 

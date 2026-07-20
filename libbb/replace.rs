@@ -3,6 +3,7 @@ use crate::librb::size_t;
 use libc;
 use libc::strcpy;
 use libc::strstr;
+use crate::compat::strlen;
 extern "C" {
 
   fn mempcpy(
@@ -10,7 +11,6 @@ extern "C" {
     __src: *const libc::c_void,
     __n: size_t,
   ) -> *mut libc::c_void;
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
 }
 /*

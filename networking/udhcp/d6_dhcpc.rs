@@ -21,17 +21,18 @@ use libc::sleep;
 use libc::sockaddr;
 use libc::strcmp;
 use libc::unlink;
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+  
 
   fn mempcpy(
     __dest: *mut libc::c_void,
     __src: *const libc::c_void,
     __n: size_t,
   ) -> *mut libc::c_void;
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* client -> server */
   /* client -> server */

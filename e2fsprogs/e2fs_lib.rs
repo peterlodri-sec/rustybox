@@ -7,12 +7,11 @@ use libc::ioctl;
 use libc::open;
 use libc::opendir;
 use libc::readdir;
+use crate::compat::strlen;
 extern "C" {
 
   fn putc_unlocked(__c: libc::c_int, __stream: *mut FILE) -> libc::c_int;
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
 }
 

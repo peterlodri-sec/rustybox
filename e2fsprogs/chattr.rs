@@ -2,9 +2,8 @@ use libc;
 use libc::free;
 use libc::lstat;
 use libc::strchr;
+use crate::compat::memset;
 extern "C" {
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   /*
    * See README for additional information

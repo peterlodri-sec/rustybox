@@ -1,12 +1,9 @@
 use libc;
-extern "C" {
-
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-}
 
 use crate::librb::size_t;
 
 use crate::util_linux::volume_id::volume_id::volume_id;
+use crate::compat::memcpy;
 
 pub type uuid_format = libc::c_uint;
 // pub const UUID_DCE_STRING: uuid_format = 3;

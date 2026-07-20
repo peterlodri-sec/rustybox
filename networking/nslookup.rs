@@ -19,6 +19,10 @@ use libc::strcmp;
 use libc::strcpy;
 use libc::strtok;
 use libc::FILE;
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::read;
 extern "C" {
 
   fn fopen(__filename: *const libc::c_char, __modes: *const libc::c_char) -> *mut FILE;
@@ -54,9 +58,7 @@ extern "C" {
   ) -> libc::c_int;
   // ...end resolv externs
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
+  
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
 
@@ -95,7 +97,6 @@ extern "C" {
   /* Guaranteed to NOT be a macro (smallest code). Saves nearly 2k on uclibc.
    * But potentially slow, don't use in one-billion-times loops */
 
-  fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
   /* { "-", NULL } */
   static mut option_mask32: u32;
 

@@ -4,6 +4,7 @@ use libc::close;
 use libc::fstat;
 use libc::open;
 use libc::sleep;
+use crate::compat::memmove;
 extern "C" {
 
   static mut optind: libc::c_int;
@@ -12,7 +13,6 @@ extern "C" {
   fn dprintf(__fd: libc::c_int, __fmt: *const libc::c_char, _: ...) -> libc::c_int;
 
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
   static bkm_suffixes: [suffix_mult; 0];
 

@@ -2,14 +2,15 @@ use crate::libbb::xfuncs_printf::xmalloc;
 use libc;
 use libc::free;
 use libc::sleep;
+use crate::compat::memcpy;
+use crate::compat::strlen;
 extern "C" {
 
   static mut stdout: *mut FILE;
 
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
   fn strnlen(__string: *const libc::c_char, __maxlen: size_t) -> size_t;
 
   static mut bb_common_bufsiz1: [libc::c_char; 0];

@@ -19,6 +19,8 @@ use libc::sprintf;
 use libc::stat;
 use libc::strcpy;
 use libc::FILE;
+use crate::compat::memcpy;
+use crate::compat::strlen;
 extern "C" {
 
   static mut optarg: *mut libc::c_char;
@@ -32,9 +34,8 @@ extern "C" {
   ) -> *mut libc::c_char;
 
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
   fn dirname(__path: *mut libc::c_char) -> *mut libc::c_char;
 
 /* Some useful definitions */

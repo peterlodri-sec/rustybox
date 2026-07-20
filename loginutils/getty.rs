@@ -24,6 +24,7 @@ use libc::tcflag_t;
 use libc::termios;
 use libc::uid_t;
 use libc::useconds_t;
+use crate::compat::read;
 extern "C" {
   fn exit(_: libc::c_int) -> !;
 
@@ -37,8 +38,6 @@ extern "C" {
   fn execlp(__file: *const libc::c_char, __arg: *const libc::c_char, _: ...) -> libc::c_int;
   fn usleep(__useconds: useconds_t) -> libc::c_int;
   fn fchown(__fd: libc::c_int, __owner: uid_t, __group: gid_t) -> libc::c_int;
-
-  fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
 
   fn strsep(__stringp: *mut *mut libc::c_char, __delim: *const libc::c_char) -> *mut libc::c_char;
 

@@ -1,10 +1,8 @@
 use crate::libbb::skip_whitespace::skip_whitespace;
 use crate::librb::size_t;
 use libc;
-extern "C" {
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn strlen(__s: *const libc::c_char) -> size_t;
-}
+use crate::compat::memmove;
+use crate::compat::strlen;
 /*
  * Utility routines.
  *

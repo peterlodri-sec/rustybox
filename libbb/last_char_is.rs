@@ -1,8 +1,6 @@
 use crate::librb::size_t;
 use libc;
-extern "C" {
-  fn strlen(__s: *const libc::c_char) -> size_t;
-}
+use crate::compat::strlen;
 /*
  * Busybox main internal header file
  *

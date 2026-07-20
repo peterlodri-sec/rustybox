@@ -19,6 +19,8 @@ use libc::stat;
 use libc::strcpy;
 use libc::uid_t;
 use libc::FILE;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
 
   static mut optind: libc::c_int;
@@ -31,9 +33,7 @@ extern "C" {
 
   static mut stderr: *mut FILE;
 
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
 
   fn mkdir(__path: *const libc::c_char, __mode: mode_t) -> libc::c_int;
 

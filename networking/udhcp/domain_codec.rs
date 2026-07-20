@@ -2,15 +2,16 @@ use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::size_t;
 use libc;
 use libc::free;
+use crate::compat::memcmp;
+use crate::compat::strlen;
 extern "C" {
 
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
   fn mempcpy(
     __dest: *mut libc::c_void,
     __src: *const libc::c_void,
     __n: size_t,
   ) -> *mut libc::c_void;
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
   fn stpcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
 
 }

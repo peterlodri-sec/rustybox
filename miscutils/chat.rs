@@ -13,16 +13,17 @@ use libc::sleep;
 use libc::ssize_t;
 use libc::strcmp;
 use libc::useconds_t;
+use crate::compat::memcmp;
+use crate::compat::memmove;
+use crate::compat::strlen;
 extern "C" {
 
   static mut optind: libc::c_int;
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
   fn usleep(__useconds: useconds_t) -> libc::c_int;
 
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
+  
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
   fn tcsendbreak(__fd: libc::c_int, __duration: libc::c_int) -> libc::c_int;
 

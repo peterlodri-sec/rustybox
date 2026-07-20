@@ -26,6 +26,9 @@ use libc::strchr;
 use libc::strcmp;
 use libc::strcpy;
 use libc::FILE;
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
 
   fn fnmatch(
@@ -33,8 +36,6 @@ extern "C" {
     __name: *const libc::c_char,
     __flags: libc::c_int,
   ) -> libc::c_int;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn dup(__fd: libc::c_int) -> libc::c_int;
   fn execlp(__file: *const libc::c_char, __arg: *const libc::c_char, _: ...) -> libc::c_int;
@@ -49,8 +50,6 @@ extern "C" {
   static mut stderr: *mut FILE;
 
   fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> *mut libc::c_char;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   static mut bb_got_signal: smallint;
 

@@ -11,6 +11,9 @@ use libc::pid_t;
 use libc::ptrdiff_t;
 use libc::strchr;
 use libc::FILE;
+use crate::compat::memcpy;
+use crate::compat::memmove;
+use crate::compat::strlen;
 extern "C" {
 
   fn unsetenv(__name: *const libc::c_char) -> libc::c_int;
@@ -23,10 +26,7 @@ extern "C" {
   fn popen(__command: *const libc::c_char, __modes: *const libc::c_char) -> *mut FILE;
   fn pclose(__stream: *mut FILE) -> libc::c_int;
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
 
 //char FAST_FUNC *parse_url(char *url, char **user, char **pass);
 

@@ -12,9 +12,8 @@ use libc::sprintf;
 use libc::stat;
 use libc::strcpy;
 use libc::DIR;
+use crate::compat::memset;
 extern "C" {
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
 // NB: will return short read on error, not -1,
 // if some data was read before error occurred

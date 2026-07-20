@@ -21,6 +21,9 @@ use libc::strcasecmp;
 use libc::time;
 use libc::time_t;
 use libc::unlink;
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
 extern "C" {
   //extern const int const_int_1;
   /* This struct is deliberately not defined. */
@@ -30,9 +33,8 @@ extern "C" {
 
   static mut optind: libc::c_int;
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
+  
+  
   fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> *mut libc::c_char;
   fn strtok_r(
     __s: *mut libc::c_char,

@@ -9,11 +9,12 @@ use libc::sa_family_t;
 use libc::sockaddr;
 use libc::sockaddr_in6;
 use libc::strcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
 extern "C" {
   fn rand() -> libc::c_int;
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+  
 
   /* SO_REUSEADDR allows a server to rebind to an address that is already
    * "in use" by old connections to e.g. previous server instance which is

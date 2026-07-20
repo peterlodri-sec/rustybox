@@ -7,6 +7,7 @@ use libc::free;
 use libc::pid_t;
 use libc::strcmp;
 use libc::FILE;
+use crate::compat::strlen;
 extern "C" {
 
   static mut optind: libc::c_int;
@@ -14,8 +15,6 @@ extern "C" {
 
   fn getchar_unlocked() -> libc::c_int;
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }

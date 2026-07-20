@@ -17,6 +17,7 @@ use libc::strcpy;
 use libc::termios;
 use libc::useconds_t;
 use libc::FILE;
+use crate::compat::memset;
 extern "C" {
   fn strtoul(
     __nptr: *const libc::c_char,
@@ -39,7 +40,7 @@ extern "C" {
   ) -> *mut libc::c_char;
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
   fn usleep(__useconds: useconds_t) -> libc::c_int;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+  
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
   fn stpcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
   static mut option_mask32: u32;

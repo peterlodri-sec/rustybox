@@ -19,6 +19,8 @@ use libc::stat;
 use libc::strcpy;
 use libc::timespec;
 use libc::unlink;
+use crate::compat::memset;
+use crate::compat::read;
 extern "C" {
 
   fn flock(__fd: libc::c_int, __operation: libc::c_int) -> libc::c_int;
@@ -31,9 +33,7 @@ extern "C" {
 
   fn fchdir(__fd: libc::c_int) -> libc::c_int;
 
-  fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+  
 
   fn stpcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;

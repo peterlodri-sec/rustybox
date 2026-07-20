@@ -19,11 +19,12 @@ use libc::stat;
 use libc::strcmp;
 use libc::sync;
 use libc::FILE;
+use crate::compat::memmove;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
 
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+  
 
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
 
@@ -59,8 +60,6 @@ extern "C" {
   ) -> libc::c_ulonglong;
 
   static ptr_to_globals: *mut globals;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* Non-aborting kind of convertors: bb_strto[u][l]l */
   /* On exit: errno = 0 only if there was non-empty, '\0' terminated value

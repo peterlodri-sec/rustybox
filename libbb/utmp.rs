@@ -8,11 +8,11 @@ use libc::pid_t;
 use libc::setutxent;
 use libc::time;
 use libc::time_t;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
 
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
   fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> *mut libc::c_char;
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   fn getutxent() -> *mut utmpx;
   fn pututxline(__utmpx: *const utmpx) -> *mut utmpx;

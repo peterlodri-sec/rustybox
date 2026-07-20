@@ -22,6 +22,10 @@ use libc::strcpy;
 use libc::strrchr;
 use libc::uid_t;
 use libc::FILE;
+use crate::compat::memmove;
+use crate::compat::memset;
+use crate::compat::read;
+use crate::compat::strlen;
 extern "C" {
 
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
@@ -38,15 +42,12 @@ extern "C" {
     __n: libc::c_int,
     __stream: *mut FILE,
   ) -> *mut libc::c_char;
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> *mut libc::c_char;
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
-  fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
+  
   fn getpagesize() -> libc::c_int;
 }
 

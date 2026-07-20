@@ -11,14 +11,13 @@ use libc::strcpy;
 use libc::time;
 use libc::time_t;
 use libc::FILE;
+use crate::compat::memcpy;
+use crate::compat::memset;
 extern "C" {
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
   static mut optind: libc::c_int;
 
   static mut stderr: *mut FILE;
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> *mut libc::c_char;
 

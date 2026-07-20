@@ -11,13 +11,12 @@ use libc::nlmsghdr;
 use libc::sa_family_t;
 use libc::sockaddr;
 use libc::strcmp;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
   fn socket(__domain: libc::c_int, __type: libc::c_int, __protocol: libc::c_int) -> libc::c_int;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn exit(_: libc::c_int) -> !;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* Convert each alpha char in str to lower-case */
 

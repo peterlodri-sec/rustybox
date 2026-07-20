@@ -3,12 +3,11 @@ use crate::librb::smallint;
 use libc;
 use libc::putchar_unlocked;
 use libc::FILE;
+use crate::compat::memmove;
 extern "C" {
   static mut optind: libc::c_int;
   static mut stdout: *mut FILE;
   fn getc_unlocked(__stream: *mut FILE) -> libc::c_int;
-
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
   static mut option_mask32: u32;
 

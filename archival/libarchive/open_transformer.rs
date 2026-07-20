@@ -9,14 +9,15 @@ use libc::off_t;
 use libc::open;
 use libc::pid_t;
 use libc::ssize_t;
+use crate::compat::memcpy;
+use crate::compat::memset;
 extern "C" {
 
   fn vfork() -> libc::c_int;
 
   fn _exit(_: libc::c_int) -> !;
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+  
   fn wait(__stat_loc: *mut libc::c_int) -> pid_t;
 
   static mut bb_got_signal: smallint;

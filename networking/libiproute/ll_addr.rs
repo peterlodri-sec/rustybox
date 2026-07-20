@@ -3,6 +3,7 @@ use crate::networking::libiproute::utils::inet_prefix;
 use libc;
 use libc::sscanf;
 use libc::strchr;
+use crate::compat::memcpy;
 extern "C" {
   fn snprintf(
     _: *mut libc::c_char,
@@ -10,8 +11,6 @@ extern "C" {
     _: *const libc::c_char,
     _: ...
   ) -> libc::c_int;
-
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn inet_ntop(
     __af: libc::c_int,

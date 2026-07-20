@@ -10,10 +10,9 @@ use libc::ptrdiff_t;
 use libc::putchar_unlocked;
 use libc::strchr;
 use libc::strstr;
+use crate::compat::memcpy;
 extern "C" {
   fn strtod(__nptr: *const libc::c_char, __endptr: *mut *mut libc::c_char) -> libc::c_double;
-
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
 /* Non-aborting kind of convertors: bb_strto[u][l]l */
 /* On exit: errno = 0 only if there was non-empty, '\0' terminated value

@@ -8,6 +8,7 @@ use libc::printf;
 use libc::sprintf;
 use libc::strchr;
 use libc::strcpy;
+use crate::compat::strlen;
 extern "C" {
 
   fn snprintf(
@@ -18,8 +19,6 @@ extern "C" {
   ) -> libc::c_int;
 
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   static mut bb_common_bufsiz1: [libc::c_char; 0];
   fn sysinfo(__info: *mut sysinfo) -> libc::c_int;

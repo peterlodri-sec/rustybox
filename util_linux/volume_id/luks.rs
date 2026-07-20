@@ -1,8 +1,6 @@
 use crate::util_linux::volume_id::volume_id::volume_id;
 use libc;
-extern "C" {
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
-}
+use crate::compat::memcmp;
 
 pub type uuid_format = libc::c_uint;
 pub const UUID_DCE_STRING: uuid_format = 3;

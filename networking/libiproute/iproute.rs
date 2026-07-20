@@ -8,12 +8,13 @@ use libc::printf;
 use libc::sockaddr;
 use libc::strcmp;
 use libc::FILE;
+use crate::compat::memcpy;
+use crate::compat::memset;
 extern "C" {
 
   static mut stderr: *mut FILE;
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+  
 
   static bb_msg_requires_arg: [libc::c_char; 0];
   static mut bb_common_bufsiz1: [libc::c_char; 0];

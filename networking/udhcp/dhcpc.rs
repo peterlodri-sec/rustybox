@@ -23,15 +23,15 @@ use libc::sprintf;
 use libc::ssize_t;
 use libc::strcpy;
 use libc::unlink;
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
+  
 
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
 
   fn __cmsg_nxthdr(__mhdr: *mut msghdr, __cmsg: *mut cmsghdr) -> *mut cmsghdr;
 

@@ -4,14 +4,13 @@ use crate::librb::size_t;
 use libc;
 use libc::sprintf;
 use libc::strcmp;
+use crate::compat::strlen;
 extern "C" {
   fn strtoull(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_ulonglong;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
 }
 /* math.h - interface to shell math "library" -- this allows shells to share

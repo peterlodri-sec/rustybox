@@ -8,8 +8,8 @@ use libc::sockaddr;
 use libc::sockaddr_in;
 use libc::strchr;
 use libc::strcmp;
+use crate::compat::memcpy;
 extern "C" {
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn strtoul(
     __nptr: *const libc::c_char,

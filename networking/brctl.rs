@@ -15,6 +15,7 @@ use libc::ssize_t;
 use libc::strcpy;
 use libc::DIR;
 use libc::FILE;
+use crate::compat::memcmp;
 extern "C" {
 
   fn strtod(__nptr: *const libc::c_char, __endptr: *mut *mut libc::c_char) -> libc::c_double;
@@ -24,8 +25,6 @@ extern "C" {
   static mut stdout: *mut FILE;
 
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
   static bb_msg_invalid_arg_to: [libc::c_char; 0];
   static mut bb_common_bufsiz1: [libc::c_char; 0];

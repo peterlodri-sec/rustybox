@@ -1,6 +1,8 @@
 use crate::librb::size_t;
 use libc;
 use libc::ssize_t;
+use crate::compat::memcpy;
+use crate::compat::memset;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;
@@ -23,8 +25,6 @@ extern "C" {
   ) -> ssize_t;
   fn sendmsg(__fd: libc::c_int, __message: *const msghdr, __flags: libc::c_int) -> ssize_t;
   fn recvmsg(__fd: libc::c_int, __message: *mut msghdr, __flags: libc::c_int) -> ssize_t;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
 }
 

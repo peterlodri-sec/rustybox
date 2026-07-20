@@ -9,6 +9,7 @@ use libc::sockaddr_in6;
 use libc::suseconds_t;
 use libc::time_t;
 use libc::timeval;
+use crate::compat::memcpy;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;
@@ -28,8 +29,6 @@ extern "C" {
     __timeout: *mut timeval,
   ) -> libc::c_int;
   fn accept(__fd: libc::c_int, __addr: __SOCKADDR_ARG, __addr_len: *mut socklen_t) -> libc::c_int;
-
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
 }
 

@@ -8,13 +8,15 @@ use libc::off_t;
 use libc::sigset_t;
 use libc::ssize_t;
 use libc::time_t;
+use crate::compat::memcpy;
+use crate::compat::memmove;
+use crate::compat::memset;
 extern "C" {
 
   fn _setjmp(_: *mut __jmp_buf_tag) -> libc::c_int;
   fn longjmp(_: *mut __jmp_buf_tag, _: libc::c_int) -> !;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+
+  
 
 }
 

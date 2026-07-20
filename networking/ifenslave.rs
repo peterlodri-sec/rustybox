@@ -5,9 +5,9 @@ use libc::ioctl;
 use libc::sa_family_t;
 use libc::sockaddr;
 use libc::strcpy;
+use crate::compat::memcpy;
+use crate::compat::memset;
 extern "C" {
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   static mut optind: libc::c_int;
 

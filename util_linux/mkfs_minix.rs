@@ -11,13 +11,13 @@ use libc::printf;
 use libc::ssize_t;
 use libc::strcpy;
 use libc::FILE;
+use crate::compat::memset;
+use crate::compat::read;
 extern "C" {
   static mut optind: libc::c_int;
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
   static mut stderr: *mut FILE;
   fn feof_unlocked(__stream: *mut FILE) -> libc::c_int;
-  fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   static mut msg_eol: *const libc::c_char;
 

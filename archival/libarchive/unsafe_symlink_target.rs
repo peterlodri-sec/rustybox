@@ -3,10 +3,9 @@ use crate::librb::size_t;
 use libc;
 use libc::strstr;
 use libc::symlink;
+use crate::compat::strlen;
 extern "C" {
   fn link(__from: *const libc::c_char, __to: *const libc::c_char) -> libc::c_int;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
 }
 

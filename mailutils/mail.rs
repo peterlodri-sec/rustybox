@@ -10,6 +10,7 @@ use libc::printf;
 use libc::puts;
 use libc::ssize_t;
 use libc::FILE;
+use crate::compat::strlen;
 extern "C" {
 
   fn vfork() -> libc::c_int;
@@ -21,8 +22,6 @@ extern "C" {
   fn fread(__ptr: *mut libc::c_void, __size: size_t, __n: size_t, __stream: *mut FILE) -> size_t;
 
   static ptr_to_globals: *mut globals;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   static bb_uuenc_tbl_base64: [libc::c_char; 0];
 

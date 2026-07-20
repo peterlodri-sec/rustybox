@@ -15,11 +15,12 @@ use libc::strchr;
 use libc::strcmp;
 use libc::strstr;
 use libc::FILE;
+use crate::compat::strlen;
 extern "C" {
   static mut stdout: *mut FILE;
   fn setbuf(__stream: *mut FILE, __buf: *mut libc::c_char);
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
   fn waitpid(__pid: pid_t, __stat_loc: *mut libc::c_int, __options: libc::c_int) -> pid_t;
   fn getmntent_r(
     __stream: *mut FILE,

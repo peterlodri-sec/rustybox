@@ -15,6 +15,10 @@ use libc::sockaddr_nl;
 use libc::sprintf;
 use libc::strcmp;
 use libc::FILE;
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
   fn fnmatch(
     __pattern: *const libc::c_char,
@@ -22,11 +26,9 @@ extern "C" {
     __flags: libc::c_int,
   ) -> libc::c_int;
   fn socket(__domain: libc::c_int, __type: libc::c_int, __protocol: libc::c_int) -> libc::c_int;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
+
   static mut stdout: *mut FILE;
 
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;

@@ -13,6 +13,8 @@ use libc::ssize_t;
 use libc::stat;
 use libc::strchr;
 use libc::FILE;
+use crate::compat::memcpy;
+use crate::compat::memset;
 extern "C" {
 
   fn fsync(__fd: libc::c_int) -> libc::c_int;
@@ -20,8 +22,6 @@ extern "C" {
   static mut stderr: *mut FILE;
 
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   static cwbkMG_suffixes: [suffix_mult; 0];
 

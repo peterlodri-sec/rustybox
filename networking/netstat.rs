@@ -16,6 +16,8 @@ use libc::sockaddr_in6;
 use libc::sscanf;
 use libc::stat;
 use libc::strcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
 
   fn getservbyport(__port: libc::c_int, __proto: *const libc::c_char) -> *mut servent;
@@ -28,10 +30,8 @@ extern "C" {
     _: ...
   ) -> libc::c_int;
 
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-
   fn strcat(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
   fn inet_pton(
     __af: libc::c_int,
     __cp: *const libc::c_char,

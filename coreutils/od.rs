@@ -16,6 +16,9 @@ use libc::stat;
 use libc::strchr;
 use libc::strcpy;
 use libc::FILE;
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
 extern "C" {
 
   static mut optind: libc::c_int;
@@ -38,11 +41,7 @@ extern "C" {
 
   fn fileno_unlocked(__stream: *mut FILE) -> libc::c_int;
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
+  
 
   static bkm_suffixes: [suffix_mult; 0];
 

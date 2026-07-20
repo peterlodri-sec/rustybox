@@ -3,6 +3,7 @@ use libc::getenv;
 use libc::kill;
 use libc::printf;
 use libc::sleep;
+use crate::compat::read;
 extern "C" {
   fn exit(_: libc::c_int) -> !;
 
@@ -10,7 +11,6 @@ extern "C" {
 
   static mut optind: libc::c_int;
 
-  fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
   fn tcgetattr(__fd: libc::c_int, __termios_p: *mut termios) -> libc::c_int;
   fn tcsetattr(

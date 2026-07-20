@@ -21,6 +21,7 @@ use libc::stat;
 use libc::strcpy;
 use libc::DIR;
 use libc::FILE;
+use crate::compat::strlen;
 extern "C" {
 
   static mut optind: libc::c_int;
@@ -32,8 +33,6 @@ extern "C" {
     __n: libc::c_int,
     __stream: *mut FILE,
   ) -> *mut libc::c_char;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   static mut option_mask32: u32;
 

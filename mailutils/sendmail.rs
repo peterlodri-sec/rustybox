@@ -13,6 +13,7 @@ use libc::strchr;
 use libc::strcpy;
 use libc::strrchr;
 use libc::FILE;
+use crate::compat::strlen;
 extern "C" {
 
   static ptr_to_globals: *mut globals;
@@ -20,7 +21,7 @@ extern "C" {
   static mut stdin: *mut FILE;
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
   fn strncasecmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
   fn stpcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
 

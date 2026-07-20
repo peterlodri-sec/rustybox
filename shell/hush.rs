@@ -39,6 +39,10 @@ use libc::strcpy;
 use libc::timeval;
 use libc::umask;
 use libc::FILE;
+use crate::compat::memcpy;
+use crate::compat::memmove;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
   fn sigaction(__sig: libc::c_int, __act: *const sigaction, __oact: *mut sigaction) -> libc::c_int;
   fn getc_unlocked(__stream: *mut FILE) -> libc::c_int;
@@ -87,9 +91,8 @@ extern "C" {
   fn sigsuspend(__set: *const sigset_t) -> libc::c_int;
 
   fn unsetenv(__name: *const libc::c_char) -> libc::c_int;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+
+  
 
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
@@ -100,7 +103,7 @@ extern "C" {
     __src: *const libc::c_void,
     __n: size_t,
   ) -> *mut libc::c_void;
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
   fn strnlen(__string: *const libc::c_char, __maxlen: size_t) -> size_t;
   fn stpcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
 

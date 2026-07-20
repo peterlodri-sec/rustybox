@@ -7,9 +7,8 @@ use libc::putenv;
 use libc::puts;
 use libc::ssize_t;
 use libc::strchr;
+use crate::compat::strlen;
 extern "C" {
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   fn mmap(
     __addr: *mut libc::c_void,

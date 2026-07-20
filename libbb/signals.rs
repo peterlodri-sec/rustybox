@@ -9,6 +9,7 @@ use libc::sigprocmask;
 use libc::sigset_t;
 use libc::sigval;
 use libc::uid_t;
+use crate::compat::memset;
 extern "C" {
   fn sigaction(__sig: libc::c_int, __act: *const sigaction, __oact: *mut sigaction) -> libc::c_int;
   fn _exit(_: libc::c_int) -> !;
@@ -16,7 +17,7 @@ extern "C" {
   fn raise(__sig: libc::c_int) -> libc::c_int;
   fn sigfillset(__set: *mut sigset_t) -> libc::c_int;
   fn sigsuspend(__set: *const sigset_t) -> libc::c_int;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+  
 }
 
 #[repr(C)]

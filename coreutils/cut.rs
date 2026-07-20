@@ -6,12 +6,13 @@ use libc::putchar_unlocked;
 use libc::puts;
 use libc::strchr;
 use libc::FILE;
+use crate::compat::strlen;
 extern "C" {
   static mut optind: libc::c_int;
   static mut stdout: *mut FILE;
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
   fn qsort(__base: *mut libc::c_void, __nmemb: size_t, __size: size_t, __compar: __compar_fn_t);
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
   fn strsep(__stringp: *mut *mut libc::c_char, __delim: *const libc::c_char) -> *mut libc::c_char;
   static mut option_mask32: u32;
 }

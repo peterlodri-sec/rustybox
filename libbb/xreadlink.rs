@@ -3,12 +3,12 @@ use libc;
 use libc::free;
 use libc::strcpy;
 use libc::strrchr;
+use crate::compat::strlen;
 extern "C" {
 
   fn readlink(__path: *const libc::c_char, __buf: *mut libc::c_char, __len: size_t) -> ssize_t;
   fn realpath(__name: *const libc::c_char, __resolved: *mut libc::c_char) -> *mut libc::c_char;
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
   fn strerror(_: libc::c_int) -> *mut libc::c_char;
 
 }

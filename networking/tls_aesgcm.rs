@@ -2,11 +2,8 @@ use c2rust_asm_casts;
 use c2rust_asm_casts::AsmCastTrait;
 
 use libc;
-extern "C" {
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-
-}
+use crate::compat::memcpy;
+use crate::compat::memset;
 
 /*
  * Copyright (C) 2018 Denys Vlasenko

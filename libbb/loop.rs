@@ -9,11 +9,7 @@ use libc::off_t;
 use libc::open;
 use libc::sprintf;
 use libc::stat;
-extern "C" {
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-
-}
+use crate::compat::memset;
 
 pub type __u8 = libc::c_uchar;
 

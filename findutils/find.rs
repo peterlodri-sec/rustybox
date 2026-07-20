@@ -12,6 +12,8 @@ use libc::readdir;
 use libc::rmdir;
 use libc::time;
 use libc::unlink;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
 
   fn fnmatch(
@@ -19,11 +21,9 @@ extern "C" {
     __name: *const libc::c_char,
     __flags: libc::c_int,
   ) -> libc::c_int;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn exit(_: libc::c_int) -> !;
   fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* Specialized: */
   /* Using xatoi() instead of naive atoi() is not always convenient -

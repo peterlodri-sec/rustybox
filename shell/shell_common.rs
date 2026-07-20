@@ -14,6 +14,8 @@ use libc::strchr;
 use libc::strcmp;
 use libc::termios;
 use libc::FILE;
+use crate::compat::read;
+use crate::compat::strlen;
 extern "C" {
 
   static mut optarg: *mut libc::c_char;
@@ -22,11 +24,10 @@ extern "C" {
   static mut stderr: *mut FILE;
 
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-  fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
   fn getrlimit(__resource: __rlimit_resource_t, __rlimits: *mut rlimit) -> libc::c_int;
   fn setrlimit(__resource: __rlimit_resource_t, __rlimits: *const rlimit) -> libc::c_int;

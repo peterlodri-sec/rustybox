@@ -8,11 +8,10 @@ use libc::kill;
 use libc::pid_t;
 use libc::printf;
 use libc::puts;
+use crate::compat::strlen;
 extern "C" {
 
   fn getsid(__pid: pid_t) -> pid_t;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
 }
 

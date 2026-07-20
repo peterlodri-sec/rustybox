@@ -44,6 +44,10 @@ use libc::time_t;
 use libc::timeval;
 use libc::uid_t;
 use libc::unlink;
+use crate::compat::memcmp;
+use crate::compat::memmove;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_ns;
@@ -93,13 +97,11 @@ extern "C" {
   ) -> ssize_t;
   fn listen(__fd: libc::c_int, __n: libc::c_int) -> libc::c_int;
   fn accept(__fd: libc::c_int, __addr: __SOCKADDR_ARG, __addr_len: *mut socklen_t) -> libc::c_int;
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
+
+  
 
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
   fn _exit(_: libc::c_int) -> !;
 
   fn fork() -> pid_t;

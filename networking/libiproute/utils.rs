@@ -9,6 +9,8 @@ use libc::fscanf;
 use libc::strchr;
 use libc::strcmp;
 use libc::FILE;
+use crate::compat::memcmp;
+use crate::compat::memset;
 extern "C" {
 
   fn strtoul(
@@ -16,8 +18,6 @@ extern "C" {
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_ulong;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
   fn inet_pton(
     __af: libc::c_int,

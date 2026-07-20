@@ -15,11 +15,11 @@ use libc::sockaddr_in6;
 use libc::sprintf;
 use libc::strcasecmp;
 use libc::strcpy;
+use crate::compat::memcpy;
+use crate::compat::strlen;
 extern "C" {
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
 
   fn inet_aton(__cp: *const libc::c_char, __inp: *mut in_addr) -> libc::c_int;
 

@@ -4,9 +4,8 @@ use libc;
 use libc::alarm;
 use libc::ssize_t;
 use libc::termios;
+use crate::compat::read;
 extern "C" {
-
-  fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
 
   fn tcgetattr(__fd: libc::c_int, __termios_p: *mut termios) -> libc::c_int;
   fn tcsetattr(

@@ -14,6 +14,10 @@ use libc::strchr;
 use libc::strcmp;
 use libc::strcpy;
 use libc::strrchr;
+use crate::compat::memcpy;
+use crate::compat::memmove;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
 
   static mut optarg: *mut libc::c_char;
@@ -31,9 +35,8 @@ extern "C" {
   fn exit(_: libc::c_int) -> !;
 
   fn llabs(_: libc::c_longlong) -> libc::c_longlong;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+
+  
 
   static ptr_to_globals: *mut globals;
   static const_int_0: libc::c_int;
@@ -44,7 +47,7 @@ extern "C" {
   static mut option_mask32: u32;
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 pub type __builtin_va_list = [__va_list_tag; 1];

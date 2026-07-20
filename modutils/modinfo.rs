@@ -3,6 +3,7 @@ use libc;
 use libc::free;
 use libc::printf;
 use libc::strcmp;
+use crate::compat::strlen;
 extern "C" {
   fn fnmatch(
     __pattern: *const libc::c_char,
@@ -14,8 +15,6 @@ extern "C" {
   static mut optind: libc::c_int;
 
   fn memchr(_: *const libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   static mut option_mask32: u32;
 

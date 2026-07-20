@@ -1,13 +1,10 @@
 use libc;
-extern "C" {
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
-  fn strlen(__s: *const libc::c_char) -> size_t;
-
-}
 
 use crate::librb::size_t;
 
 use crate::util_linux::volume_id::volume_id::volume_id;
+use crate::compat::memcmp;
+use crate::compat::strlen;
 /*
  * volume_id - reads filesystem label and uuid
  *

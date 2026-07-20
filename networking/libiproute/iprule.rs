@@ -8,12 +8,13 @@ use libc::nlmsghdr;
 use libc::printf;
 use libc::sockaddr_nl;
 use libc::FILE;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
   static mut stdout: *mut FILE;
 
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  fn strlen(__s: *const libc::c_char) -> size_t;
+
   /* Guaranteed to NOT be a macro (smallest code). Saves nearly 2k on uclibc.
    * But potentially slow, don't use in one-billion-times loops */
 

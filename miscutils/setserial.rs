@@ -4,13 +4,13 @@ use libc::ioctl;
 use libc::printf;
 use libc::puts;
 use libc::strcasecmp;
+use crate::compat::strlen;
 extern "C" {
   fn exit(_: libc::c_int) -> !;
   static mut optind: libc::c_int;
 
   static bb_msg_requires_arg: [libc::c_char; 0];
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
 }
 
 use crate::librb::size_t;

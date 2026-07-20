@@ -11,6 +11,8 @@ use libc::printf;
 use libc::sscanf;
 use libc::strchr;
 use libc::strcmp;
+use crate::compat::memcmp;
+use crate::compat::memset;
 extern "C" {
 
   fn fgets_unlocked(
@@ -20,8 +22,6 @@ extern "C" {
   ) -> *mut libc::c_char;
 
   fn exit(_: libc::c_int) -> !;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
   fn inet_ntop(
     __af: libc::c_int,

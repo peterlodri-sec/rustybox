@@ -2,9 +2,9 @@ use crate::libbb::print_numbered_lines::number_state;
 use crate::librb::size_t;
 use crate::librb::smallint;
 use libc;
+use crate::compat::strlen;
 extern "C" {
   static mut optind: libc::c_int;
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
 }
 

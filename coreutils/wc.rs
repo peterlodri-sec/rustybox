@@ -2,12 +2,12 @@ use crate::librb::smallint;
 use libc;
 use libc::printf;
 use libc::FILE;
+use crate::compat::memset;
 extern "C" {
   static mut optind: libc::c_int;
 
   fn getc_unlocked(__stream: *mut FILE) -> libc::c_int;
   fn ferror_unlocked(__stream: *mut FILE) -> libc::c_int;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   static bb_msg_standard_input: [libc::c_char; 0];
 }

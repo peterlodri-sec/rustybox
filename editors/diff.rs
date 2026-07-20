@@ -12,6 +12,9 @@ use libc::puts;
 use libc::strcmp;
 use libc::strrchr;
 use libc::unlink;
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
 
   fn qsort(__base: *mut libc::c_void, __nmemb: size_t, __size: size_t, __compar: __compar_fn_t);
@@ -27,10 +30,8 @@ extern "C" {
   fn fseeko(__stream: *mut FILE, __off: off64_t, __whence: libc::c_int) -> libc::c_int;
 
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
 
   static mut option_mask32: u32;
 

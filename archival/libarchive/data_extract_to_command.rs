@@ -5,11 +5,12 @@ use libc;
 use libc::close;
 use libc::pid_t;
 use libc::putenv;
+use crate::compat::memset;
 extern "C" {
   fn vfork() -> libc::c_int;
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
   fn execl(__path: *const libc::c_char, __arg: *const libc::c_char, _: ...) -> libc::c_int;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+  
 }
 
 pub type C2RustUnnamed = libc::c_uint;

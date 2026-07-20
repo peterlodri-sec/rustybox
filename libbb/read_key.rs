@@ -2,14 +2,14 @@ use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::size_t;
 use libc;
 use libc::pollfd;
+use crate::compat::memcpy;
+use crate::compat::memmove;
 extern "C" {
   fn strtoul(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_ulong;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
 }
 

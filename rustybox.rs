@@ -549,6 +549,10 @@ pub mod util_linux;
 // Modern memory-safe applet backends (see MIGRATION.md).
 pub mod modern;
 
+// Compat shims for a handful of libc runtime functions the transpiled tree
+// redeclares per-file with a mismatched signature (see compat.rs).
+pub mod compat;
+
 // musl implements major()/minor()/makedev() as inline macros and does not
 // export the glibc `gnu_dev_*` symbols that the transpiled code links against.
 // Provide them (glibc dev_t encoding) for musl targets only.

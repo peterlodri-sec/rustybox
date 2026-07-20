@@ -16,6 +16,9 @@ use libc::strcmp;
 use libc::time;
 use libc::time_t;
 use libc::useconds_t;
+use crate::compat::memset;
+use crate::compat::read;
+use crate::compat::strlen;
 extern "C" {
 
   static mut optind: libc::c_int;
@@ -24,11 +27,8 @@ extern "C" {
   fn fchdir(__fd: libc::c_int) -> libc::c_int;
 
   fn usleep(__useconds: useconds_t) -> libc::c_int;
-  fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
 
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
 
   /* Some useful definitions */
   /* Macros for min/max.  */

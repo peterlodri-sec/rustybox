@@ -9,11 +9,10 @@ use libc::strcpy;
 use libc::sync;
 use libc::time;
 use libc::time_t;
+use crate::compat::memset;
 extern "C" {
 
   fn execlp(__file: *const libc::c_char, __arg: *const libc::c_char, _: ...) -> libc::c_int;
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn updwtmpx(__wtmpx_file: *const libc::c_char, __utmpx: *const utmpx);
 

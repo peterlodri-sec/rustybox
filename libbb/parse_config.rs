@@ -6,11 +6,11 @@ use libc::free;
 use libc::ssize_t;
 use libc::strchr;
 use libc::FILE;
+use crate::compat::memcpy;
+use crate::compat::memset;
 extern "C" {
 
   fn getline(__lineptr: *mut *mut libc::c_char, __n: *mut size_t, __stream: *mut FILE) -> ssize_t;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;

@@ -1,7 +1,8 @@
 use crate::librb::size_t;
 use libc;
+use crate::compat::strlen;
 extern "C" {
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
   fn fnmatch(
     __pattern: *const libc::c_char,
     __name: *const libc::c_char,

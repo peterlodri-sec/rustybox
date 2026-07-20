@@ -20,6 +20,8 @@ use libc::sockaddr_in;
 use libc::sockaddr_in6;
 use libc::timeval;
 use libc::useconds_t;
+use crate::compat::memcmp;
+use crate::compat::memcpy;
 extern "C" {
   fn setsockopt(
     __fd: libc::c_int,
@@ -35,8 +37,7 @@ extern "C" {
     __buf: *mut libc::c_char,
     __len: socklen_t,
   ) -> *const libc::c_char;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
+
   static mut optind: libc::c_int;
 
   /* not FAST_FUNC! */

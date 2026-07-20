@@ -10,6 +10,9 @@ use libc::pid_t;
 use libc::sleep;
 use libc::sprintf;
 use libc::strrchr;
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::strlen;
 extern "C" {
 
   fn fork() -> pid_t;
@@ -17,10 +20,7 @@ extern "C" {
   static mut optind: libc::c_int;
   fn daemon(__nochdir: libc::c_int, __noclose: libc::c_int) -> libc::c_int;
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
 
   static const_int_0: libc::c_int;
   fn getopt_long_only(

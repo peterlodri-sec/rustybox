@@ -1,12 +1,12 @@
 use crate::libbb::ptr_to_globals::bb_errno;
 use libc;
 use libc::printf;
+use crate::compat::strlen;
 extern "C" {
   fn strtod(__nptr: *const libc::c_char, __endptr: *mut *mut libc::c_char) -> libc::c_double;
   static mut optind: libc::c_int;
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
 }
 

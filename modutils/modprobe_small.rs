@@ -12,6 +12,9 @@ use libc::strcmp;
 use libc::strstr;
 use libc::syscall;
 use libc::unlink;
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
 
   fn exit(_: libc::c_int) -> !;
@@ -23,14 +26,11 @@ extern "C" {
   fn ferror_unlocked(__stream: *mut FILE) -> libc::c_int;
   fn usleep(__useconds: useconds_t) -> libc::c_int;
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+  
   fn memchr(_: *const libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* Reads and prints to stdout till eof, then closes FILE. Exits on error: */
 

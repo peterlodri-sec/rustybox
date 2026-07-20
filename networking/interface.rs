@@ -23,17 +23,16 @@ use libc::sscanf;
 use libc::strcmp;
 use libc::strstr;
 use libc::FILE;
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn fgets_unlocked(
     __s: *mut libc::c_char,
     __n: libc::c_int,
     __stream: *mut FILE,
   ) -> *mut libc::c_char;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   fn strerror(_: libc::c_int) -> *mut libc::c_char;
 

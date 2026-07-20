@@ -20,6 +20,8 @@ use libc::ssize_t;
 use libc::strcpy;
 use libc::termios;
 use libc::FILE;
+use crate::compat::memmove;
+use crate::compat::read;
 extern "C" {
   fn exit(_: libc::c_int) -> !;
 
@@ -32,9 +34,8 @@ extern "C" {
 
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
   fn execl(__path: *const libc::c_char, __arg: *const libc::c_char, _: ...) -> libc::c_int;
-  fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
 
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
+  
 
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
 

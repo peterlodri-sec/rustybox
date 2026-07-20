@@ -11,6 +11,8 @@ use libc::tcflag_t;
 use libc::termios;
 use libc::winsize;
 use libc::FILE;
+use crate::compat::memcmp;
+use crate::compat::memset;
 extern "C" {
   static mut stdout: *mut FILE;
 
@@ -22,8 +24,6 @@ extern "C" {
   ) -> libc::c_int;
 
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
   fn cfgetospeed(__termios_p: *const termios) -> speed_t;
   fn cfgetispeed(__termios_p: *const termios) -> speed_t;

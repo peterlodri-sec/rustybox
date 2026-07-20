@@ -4,10 +4,10 @@ use crate::librb::size_t;
 use libc;
 use libc::chdir;
 use libc::free;
+use crate::compat::memcpy;
 extern "C" {
   static mut optind: libc::c_int;
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 }
 
 pub type C2RustUnnamed = libc::c_uint;

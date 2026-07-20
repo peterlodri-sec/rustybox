@@ -12,10 +12,11 @@ use libc::pid_t;
 use libc::ssize_t;
 use libc::termios;
 use libc::winsize;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+  
   fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> *mut libc::c_char;
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   fn waitpid(__pid: pid_t, __stat_loc: *mut libc::c_int, __options: libc::c_int) -> pid_t;
   fn tcgetattr(__fd: libc::c_int, __termios_p: *mut termios) -> libc::c_int;

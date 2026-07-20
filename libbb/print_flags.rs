@@ -2,10 +2,7 @@
 
 use libc;
 use libc::printf;
-extern "C" {
-
-  fn strlen(__s: *const libc::c_char) -> libc::c_ulong;
-}
+use crate::compat::strlen;
 
 // #[derive(Copy, Clone)]
 // #[repr(C)]

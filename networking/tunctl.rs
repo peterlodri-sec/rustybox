@@ -2,11 +2,7 @@ use libc;
 use libc::geteuid;
 use libc::printf;
 use libc::puts;
-extern "C" {
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-
-}
+use crate::compat::memset;
 
 pub type __caddr_t = *mut libc::c_char;
 

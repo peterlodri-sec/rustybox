@@ -13,6 +13,7 @@ use libc::strcmp;
 use libc::strrchr;
 use libc::unlink;
 use libc::FILE;
+use crate::compat::strlen;
 extern "C" {
 
   fn strtol(
@@ -26,8 +27,6 @@ extern "C" {
   static mut stdin: *mut FILE;
 
   fn dprintf(__fd: libc::c_int, __fmt: *const libc::c_char, _: ...) -> libc::c_int;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   static mut option_mask32: u32;
 

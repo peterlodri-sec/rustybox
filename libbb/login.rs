@@ -9,6 +9,7 @@ use libc::puts;
 use libc::time;
 use libc::time_t;
 use libc::FILE;
+use crate::compat::strlen;
 extern "C" {
 
   fn unsetenv(__name: *const libc::c_char) -> libc::c_int;
@@ -18,7 +19,6 @@ extern "C" {
   fn getc_unlocked(__stream: *mut FILE) -> libc::c_int;
 
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   fn strftime(
     __s: *mut libc::c_char,

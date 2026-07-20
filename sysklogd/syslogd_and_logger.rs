@@ -36,6 +36,11 @@ use libc::time_t;
 use libc::uid_t;
 use libc::unlink;
 use libc::FILE;
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::read;
+use crate::compat::strlen;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_ns;
@@ -47,13 +52,9 @@ extern "C" {
   pub type sockaddr_ax25;
   pub type sockaddr_at;
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
+  
 
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
-
-  fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
+  
 
   static mut optind: libc::c_int;
 
@@ -84,8 +85,6 @@ extern "C" {
   ) -> *mut libc::c_char;
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   fn ctime(__timer: *const time_t) -> *mut libc::c_char;
   /* Some useful definitions */

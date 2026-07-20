@@ -6,12 +6,12 @@ use libc::close;
 use libc::printf;
 use libc::ssize_t;
 use libc::FILE;
+use crate::compat::read;
 extern "C" {
   static mut optind: libc::c_int;
   static mut stdout: *mut FILE;
 
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-  fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
 
   /* Applets which are useful from another applets */
 

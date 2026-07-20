@@ -7,11 +7,10 @@ use libc::off_t;
 use libc::printf;
 use libc::ssize_t;
 use libc::strcmp;
+use crate::compat::memset;
 extern "C" {
 
   static mut optind: libc::c_int;
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
 }
 

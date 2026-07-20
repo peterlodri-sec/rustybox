@@ -7,11 +7,10 @@ use libc::stat;
 use libc::strcpy;
 use libc::time;
 use libc::time_t;
+use crate::compat::memset;
 extern "C" {
 
   static mut optind: libc::c_int;
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   static mut option_mask32: u32;
 

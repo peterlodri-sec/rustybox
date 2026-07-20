@@ -8,6 +8,8 @@ use libc::free;
 use libc::printf;
 use libc::puts;
 use libc::strcmp;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
   fn strtoll(
     __nptr: *const libc::c_char,
@@ -15,10 +17,7 @@ extern "C" {
     __base: libc::c_int,
   ) -> libc::c_longlong;
 
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   static mut bb_common_bufsiz1: [libc::c_char; 0];
   fn regexec(

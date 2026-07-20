@@ -15,6 +15,9 @@ use libc::sockaddr;
 use libc::ssize_t;
 use libc::strchr;
 use libc::unlink;
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
 
   fn recv(
@@ -29,11 +32,9 @@ extern "C" {
     __value: *const libc::c_char,
     __replace: libc::c_int,
   ) -> libc::c_int;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
 
   static mut bb_got_signal: smallint;

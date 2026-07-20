@@ -11,6 +11,8 @@ use libc::sockaddr_nl;
 use libc::ssize_t;
 use libc::time;
 use libc::time_t;
+use crate::compat::memcpy;
+use crate::compat::memset;
 extern "C" {
   fn recvmsg(__fd: libc::c_int, __message: *mut msghdr, __flags: libc::c_int) -> ssize_t;
   fn sendmsg(__fd: libc::c_int, __message: *const msghdr, __flags: libc::c_int) -> ssize_t;
@@ -20,8 +22,7 @@ extern "C" {
     __n: size_t,
     __flags: libc::c_int,
   ) -> ssize_t;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+
 }
 
 #[repr(C)]

@@ -1,9 +1,8 @@
 use libc;
 use libc::printf;
+use crate::compat::memset;
 extern "C" {
   static mut optind: libc::c_int;
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   static kmg_i_suffixes: [suffix_mult; 0];
 

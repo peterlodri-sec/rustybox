@@ -4,11 +4,7 @@ use libc;
 use libc::close;
 use libc::open;
 use libc::ssize_t;
-extern "C" {
-
-  fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
-
-}
+use crate::compat::read;
 
 /*
  * Utility routines.

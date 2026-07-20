@@ -4,10 +4,7 @@ use libc;
 use libc::ino_t;
 use libc::stat;
 use libc::strcpy;
-extern "C" {
-  fn strlen(__s: *const libc::c_char) -> size_t;
-
-}
+use crate::compat::strlen;
 /*
  * Utility routines.
  *

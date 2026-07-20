@@ -17,6 +17,8 @@ use libc::time;
 use libc::time_t;
 use libc::tm;
 use libc::FILE;
+use crate::compat::memcpy;
+use crate::compat::memset;
 extern "C" {
   fn strtoul(
     __nptr: *const libc::c_char,
@@ -38,8 +40,7 @@ extern "C" {
   ) -> *mut libc::c_char;
   fn pause() -> libc::c_int;
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+  
 
   fn strftime(
     __s: *mut libc::c_char,

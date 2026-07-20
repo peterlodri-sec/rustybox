@@ -6,14 +6,16 @@ use c2rust_asm_casts::AsmCastTrait;
 use libc;
 use libc::openlog;
 use libc::putenv;
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
 extern "C" {
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
+  
   static mut optind: libc::c_int;
   fn rand() -> libc::c_int;
   fn srand(__seed: libc::c_uint);
 
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
+  
   fn inet_ntoa(__in: in_addr) -> *mut libc::c_char;
   fn inet_aton(__cp: *const libc::c_char, __inp: *mut in_addr) -> libc::c_int;
 

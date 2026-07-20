@@ -25,6 +25,7 @@ use libc::strcpy;
 use libc::strrchr;
 use libc::uid_t;
 use libc::FILE;
+use crate::compat::strlen;
 extern "C" {
 
   fn execvp(__file: *const libc::c_char, __argv: *const *mut libc::c_char) -> libc::c_int;
@@ -33,7 +34,6 @@ extern "C" {
   fn vfork() -> libc::c_int;
   static mut optind: libc::c_int;
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
   fn getpriority(__which: __priority_which_t, __who: id_t) -> libc::c_int;
   fn setpriority(__which: __priority_which_t, __who: id_t, __prio: libc::c_int) -> libc::c_int;
 

@@ -5,13 +5,11 @@ use libc::off64_t;
 use libc::off_t;
 use libc::ssize_t;
 use libc::time_t;
+use crate::compat::memmove;
+use crate::compat::read;
 extern "C" {
 
-  fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
-
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
-
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
 

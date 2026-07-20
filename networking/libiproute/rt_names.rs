@@ -3,9 +3,7 @@ use libc;
 use libc::sprintf;
 use libc::strcmp;
 use libc::FILE;
-extern "C" {
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-}
+use crate::compat::memcpy;
 
 pub type C2RustUnnamed = libc::c_uint;
 pub const PARSE_NORMAL: C2RustUnnamed = 4653056;

@@ -1,10 +1,10 @@
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::size_t;
 use libc;
+use crate::compat::memcpy;
+use crate::compat::strlen;
 extern "C" {
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
 }
 

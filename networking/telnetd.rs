@@ -25,6 +25,8 @@ use libc::time_t;
 use libc::timeval;
 use libc::useconds_t;
 use libc::winsize;
+use crate::compat::memmove;
+use crate::compat::memset;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;
@@ -49,8 +51,7 @@ extern "C" {
   fn accept(__fd: libc::c_int, __addr: __SOCKADDR_ARG, __addr_len: *mut socklen_t) -> libc::c_int;
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
 
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+  
   fn memchr(_: *const libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn tcgetattr(__fd: libc::c_int, __termios_p: *mut termios) -> libc::c_int;

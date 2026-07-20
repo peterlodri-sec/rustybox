@@ -11,12 +11,13 @@ use libc::sockaddr;
 use libc::strcmp;
 use libc::strcpy;
 use libc::FILE;
+use crate::compat::memcmp;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
   static mut optind: libc::c_int;
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
 
   static mut logmode: smallint;
 

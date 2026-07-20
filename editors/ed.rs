@@ -12,6 +12,9 @@ use libc::puts;
 use libc::strchr;
 use libc::strcpy;
 use libc::FILE;
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::strlen;
 extern "C" {
 
   fn creat(__file: *const libc::c_char, __mode: mode_t) -> libc::c_int;
@@ -22,13 +25,9 @@ extern "C" {
 
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
+  
 
   fn memchr(_: *const libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }

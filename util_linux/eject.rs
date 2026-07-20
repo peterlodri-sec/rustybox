@@ -1,10 +1,9 @@
 use libc;
 use libc::ioctl;
+use crate::compat::memset;
 extern "C" {
 
   static mut optind: libc::c_int;
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
 }
 

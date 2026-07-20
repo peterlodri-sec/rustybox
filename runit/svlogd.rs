@@ -31,6 +31,9 @@ use libc::time_t;
 use libc::timeval;
 use libc::unlink;
 use libc::FILE;
+use crate::compat::memcpy;
+use crate::compat::memmove;
+use crate::compat::strlen;
 extern "C" {
 
   fn flock(__fd: libc::c_int, __operation: libc::c_int) -> libc::c_int;
@@ -55,14 +58,12 @@ extern "C" {
   fn execl(__path: *const libc::c_char, __arg: *const libc::c_char, _: ...) -> libc::c_int;
   fn fchdir(__fd: libc::c_int) -> libc::c_int;
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
+  
   fn memchr(_: *const libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
   fn memrchr(__s: *const libc::c_void, __c: libc::c_int, __n: size_t) -> *mut libc::c_void;
 
   fn strdup(_: *const libc::c_char) -> *mut libc::c_char;
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
 
   fn gettimeofday(__tv: *mut timeval, __tz: __timezone_ptr_t) -> libc::c_int;

@@ -3,11 +3,12 @@ use libc;
 use libc::strchr;
 use libc::strcmp;
 use libc::FILE;
+use crate::compat::memmove;
+use crate::compat::strlen;
 extern "C" {
   fn getc_unlocked(__stream: *mut FILE) -> libc::c_int;
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
 
 }
 

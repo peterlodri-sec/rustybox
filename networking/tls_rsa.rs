@@ -1,11 +1,7 @@
 use crate::networking::tls_pstm::pstm_int;
 use libc;
-extern "C" {
-
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-
-}
+use crate::compat::memcpy;
+use crate::compat::memset;
 
 pub type uint32 = u32;
 pub type int32 = i32;

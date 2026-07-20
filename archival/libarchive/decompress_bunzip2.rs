@@ -5,11 +5,12 @@ use libc;
 use libc::free;
 use libc::sigset_t;
 use libc::ssize_t;
+use crate::compat::memcpy;
+use crate::compat::read;
 extern "C" {
   fn _setjmp(_: *mut __jmp_buf_tag) -> libc::c_int;
   fn longjmp(_: *mut __jmp_buf_tag, _: libc::c_int) -> !;
-  fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
+
 }
 
 pub type __jmp_buf = [libc::c_long; 8];

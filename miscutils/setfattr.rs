@@ -1,5 +1,6 @@
 use crate::librb::size_t;
 use libc;
+use crate::compat::strlen;
 extern "C" {
   fn lremovexattr(__path: *const libc::c_char, __name: *const libc::c_char) -> libc::c_int;
   fn removexattr(__path: *const libc::c_char, __name: *const libc::c_char) -> libc::c_int;
@@ -18,7 +19,7 @@ extern "C" {
     __flags: libc::c_int,
   ) -> libc::c_int;
   static mut optind: libc::c_int;
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
 }
 
 pub const OPT_h: C2RustUnnamed = 1;

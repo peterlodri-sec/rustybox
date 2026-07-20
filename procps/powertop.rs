@@ -23,6 +23,9 @@ use libc::strstr;
 use libc::termios;
 use libc::DIR;
 use libc::FILE;
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
 
   fn strtoul(
@@ -47,10 +50,8 @@ extern "C" {
   ) -> *mut libc::c_char;
 
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
 
 /* Non-aborting kind of convertors: bb_strto[u][l]l */
 /* On exit: errno = 0 only if there was non-empty, '\0' terminated value

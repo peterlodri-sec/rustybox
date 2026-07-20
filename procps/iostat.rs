@@ -14,6 +14,7 @@ use libc::time;
 use libc::time_t;
 use libc::tm;
 use libc::FILE;
+use crate::compat::memset;
 extern "C" {
 
   static mut optind: libc::c_int;
@@ -25,7 +26,6 @@ extern "C" {
     __stream: *mut FILE,
   ) -> *mut libc::c_char;
 
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
   fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> *mut libc::c_char;
 
   fn strftime(

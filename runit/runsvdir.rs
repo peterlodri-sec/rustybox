@@ -15,9 +15,8 @@ use libc::sleep;
 use libc::stat;
 use libc::time;
 use libc::useconds_t;
+use crate::compat::realloc;
 extern "C" {
-
-  fn realloc(_: *mut libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
   static mut optind: libc::c_int;
 

@@ -2,11 +2,7 @@ use crate::librb::size_t;
 use libc;
 use libc::ssize_t;
 use libc::strcmp;
-extern "C" {
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
-
-}
+use crate::compat::strlen;
 
 /*
  * Mini basename implementation for busybox

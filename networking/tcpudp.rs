@@ -16,6 +16,7 @@ use libc::sockaddr;
 use libc::sockaddr_in;
 use libc::sockaddr_in6;
 use libc::ssize_t;
+use crate::compat::strlen;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;
@@ -46,8 +47,6 @@ extern "C" {
   ) -> libc::c_int;
   fn accept(__fd: libc::c_int, __addr: __SOCKADDR_ARG, __addr_len: *mut socklen_t) -> libc::c_int;
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
-
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 

@@ -32,6 +32,8 @@ use libc::strcpy;
 use libc::strrchr;
 use libc::time_t;
 use libc::unlink;
+use crate::compat::memcpy;
+use crate::compat::strlen;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;
@@ -58,11 +60,8 @@ extern "C" {
 
   fn dup(__fd: libc::c_int) -> libc::c_int;
 
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  fn strlen(__s: *const libc::c_char) -> size_t;
 
   fn mkdir(__path: *const libc::c_char, __mode: mode_t) -> libc::c_int;
   fn gmtime_r(__timer: *const time_t, __tp: *mut tm) -> *mut tm;

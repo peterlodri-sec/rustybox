@@ -7,10 +7,8 @@ use crate::librb::size_t;
 use c2rust_asm_casts;
 use c2rust_asm_casts::AsmCastTrait;
 use libc;
-extern "C" {
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-}
+use crate::compat::memcpy;
+use crate::compat::memset;
 
 pub type bb__aliased_u64 = u64;
 /* Constants for SHA512 from FIPS 180-2:4.2.3.

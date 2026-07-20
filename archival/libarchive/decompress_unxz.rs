@@ -4,13 +4,16 @@ use crate::librb::size_t;
 use libc;
 use libc::free;
 use libc::strcpy;
+use crate::compat::malloc;
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memmove;
+use crate::compat::memset;
 extern "C" {
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
-  fn malloc(_: libc::c_ulong) -> *mut libc::c_void;
+  
+
+  
 
   /* Returns $SHELL, getpwuid(getuid())->pw_shell, or DEFAULT_SHELL.
    * Note that getpwuid result might need xstrdup'ing

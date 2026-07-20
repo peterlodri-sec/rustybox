@@ -7,6 +7,9 @@ use libc::sa_family_t;
 use libc::sockaddr;
 use libc::strcmp;
 use libc::strcpy;
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 extern "C" {
   fn gethostbyname(__name: *const libc::c_char) -> *mut hostent;
   fn getaddrinfo(
@@ -16,10 +19,8 @@ extern "C" {
     __pai: *mut *mut addrinfo,
   ) -> libc::c_int;
   fn freeaddrinfo(__ai: *mut addrinfo);
-  fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  fn strlen(__s: *const libc::c_char) -> size_t;
+  
   fn inet_aton(__cp: *const libc::c_char, __inp: *mut in_addr) -> libc::c_int;
 /* Some useful definitions */
 /* Macros for min/max.  */

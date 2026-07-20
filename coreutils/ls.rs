@@ -27,6 +27,7 @@ use libc::tm;
 use libc::uid_t;
 use libc::DIR;
 use libc::FILE;
+use crate::compat::memset;
 extern "C" {
 
   fn qsort(__base: *mut libc::c_void, __nmemb: size_t, __size: size_t, __compar: __compar_fn_t);
@@ -40,8 +41,6 @@ extern "C" {
   static mut stdout: *mut FILE;
 
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn strcoll(__s1: *const libc::c_char, __s2: *const libc::c_char) -> libc::c_int;
 

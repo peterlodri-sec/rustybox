@@ -19,6 +19,9 @@ use libc::sprintf;
 use libc::ssize_t;
 use libc::strcmp;
 use libc::FILE;
+use crate::compat::memcmp;
+use crate::compat::memset;
+use crate::compat::read;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;
@@ -49,10 +52,7 @@ extern "C" {
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
   static mut stderr: *mut FILE;
 
-  fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
-
-  fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
+  
 
   fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
