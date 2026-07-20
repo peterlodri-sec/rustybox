@@ -11,12 +11,16 @@
 
 #[cfg(feature = "modern-grep")]
 mod grep;
+#[cfg(feature = "modern-find")]
+mod find;
 
 #[allow(unused_variables)]
 pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
   match name {
     #[cfg(feature = "modern-grep")]
     "grep" | "egrep" | "fgrep" => Some(grep::run(name, argv)),
+    #[cfg(feature = "modern-find")]
+    "find" => Some(find::run(argv)),
     #[cfg(feature = "modern-cat")]
     "cat" => Some(uu_cat::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-echo")]

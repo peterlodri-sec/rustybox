@@ -1989,6 +1989,7 @@ dependencies = [
  "c2rust-asm-casts",
  "c2rust-bitfields",
  "duct",
+ "globset",
  "grep-regex",
  "grep-searcher",
  "ignore",
@@ -2057,6 +2058,7 @@ dependencies = [
  "uu_wc",
  "uu_whoami",
  "uu_yes",
+ "walkdir",
 ]
 
 [[package]]
