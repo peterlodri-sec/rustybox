@@ -536,6 +536,9 @@ pub mod sysklogd {
 pub mod librb;
 pub mod util_linux;
 
+// Modern memory-safe applet backends (see MIGRATION.md).
+pub mod modern;
+
 // musl implements major()/minor()/makedev() as inline macros and does not
 // export the glibc `gnu_dev_*` symbols that the transpiled code links against.
 // Provide them (glibc dev_t encoding) for musl targets only.

@@ -192,6 +192,13 @@ unsafe fn run_applet_no_and_exit(applet_no: usize, name: &str, argv: &[&str]) ->
     }
   }
 
+  // Modern memory-safe backend (MIGRATION.md): if one is wired for this
+  // applet, it handles the invocation and we exit with its status; otherwise
+  // fall through to the transpiled entrypoint below.
+  if let Some(code) = crate::modern::try_run(main_name, argv) {
+    ::std::process::exit(code);
+  }
+
   match applets[applet_no].entrypoint {
     Entrypoint::CStyle(f) => {
       xfunc_error_retval = f(argc, str_vec_to_ptrs(argv)) as u8;
