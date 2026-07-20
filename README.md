@@ -1,5 +1,12 @@
 # rustybox
 
+[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-db61a2?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/peterlodri-sec)
+[![License](https://img.shields.io/badge/license-GPL--2.0%20%2F%20MIT%20core-blue)](LICENSE)
+[![Static](https://img.shields.io/badge/build-static%20musl%20·%20x86__64%20%2B%20aarch64-2ee6a6)](#static-dual-architecture-binaries)
+[![site](https://img.shields.io/badge/site-rustybox.io-6cf)](https://rustybox.io)
+
+> **Built in the open — [♥ sponsor the resurrection](https://github.com/sponsors/peterlodri-sec).**
+
 RustyBox is a free-range, non-GMO fork of [BusyBox](https://busybox.net/) written entirely in [Rust](https://www.rust-lang.org/). It includes all your favorite commands like `ls`, `mount`, and `top`, but without a single line of C code. Like BusyBox, it fits in about a megabyte and covers the basic utilities you need to stand up a small Linux userland.
 
 ## Status
@@ -48,6 +55,21 @@ cargo build --release --target aarch64-unknown-linux-musl --all-features
 
 - **Idiomatic core** — replace the transpiled `unsafe` internals of the common applets with safe Rust, and trim the inherited warning pile.
 - **Modern equivalents** — where a best-in-class Rust CLI already exists (`ripgrep`, `bat`, `fd`, `eza`, `uutils`…), offer it as a drop-in behind the familiar applet name. See [MIGRATION.md](MIGRATION.md).
+
+## Sponsor
+
+rustybox is built in the open — resurrecting dead code, hardening it across architectures, and making the classic Unix toolbox memory-safe. If it saves you a dependency, a container megabyte, or a `timeout` guard around a runaway command, consider backing the work.
+
+### [→ Sponsor on GitHub](https://github.com/sponsors/peterlodri-sec)
+
+| tier | / month | you get |
+|---|---|---|
+| 🌱 **Supporter** | $5 | Name in `SPONSORS.md` + the warm glow of funding safe systems software |
+| 🔧 **Backer** | $15 | Above + your name/handle in this README |
+| 🚀 **Sponsor** | $50 | Above + your logo on [rustybox.io](https://rustybox.io) |
+| 🛰️ **Patron** | $250 | Above + logo up top, and a say in the roadmap (which applets go memory-safe next) |
+
+One-time contributions welcome too. Every sponsor is credited (opt-out anytime).
 
 ## Editions & licensing
 

@@ -62,6 +62,14 @@
   .spon-box{background:linear-gradient(180deg,color-mix(in oklab,var(--acc) 10%,var(--panel)),var(--panel));
     border:1px solid var(--acc);border-radius:16px;padding:28px;text-align:center}
   .spon-box p{color:var(--muted);max-width:52ch;margin:.4em auto 1.2em}
+  .tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:0 0 22px;text-align:left}
+  .tier{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .tier.hot{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc) inset}
+  .tier .ti{font-size:1.3rem}
+  .tier b{display:block;margin:.2em 0 .1em}
+  .tier em{font-family:var(--mono);color:var(--acc);font-style:normal;font-size:1.25rem}
+  .tier em small{color:var(--muted);font-size:.7rem}
+  .tier p{color:var(--muted);font-size:.82rem;margin:.5em 0 0;max-width:none}
   footer{padding:36px 0;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line)}
   footer a{color:var(--muted)}
   .lic{font-family:var(--mono)}
@@ -140,8 +148,15 @@ cargo build --release --features <span class="g">"cat ls grep find timeout"</spa
   <section id="sponsor">
     <h2>Sponsor the work</h2>
     <div class="spon-box">
-      <p>rustybox is built in the open, one honest commit at a time — resurrecting dead code, hardening it across architectures, and making the classic Unix toolbox memory-safe. If it saves you a dependency or a container megabyte, consider backing it.</p>
+      <p>rustybox is built in the open, one honest commit at a time — resurrecting dead code, hardening it across architectures, and making the classic Unix toolbox memory-safe. If it saves you a dependency, a container megabyte, or a <span class="k">timeout</span> around a runaway command, back it.</p>
+      <div class="tiers">
+        <div class="tier"><span class="ti">🌱</span><b>Supporter</b><em>$5<small>/mo</small></em><p>Name in <span class="k">SPONSORS.md</span> + the warm glow of funding safe systems software.</p></div>
+        <div class="tier"><span class="ti">🔧</span><b>Backer</b><em>$15<small>/mo</small></em><p>Above + your name/handle in the project README.</p></div>
+        <div class="tier hot"><span class="ti">🚀</span><b>Sponsor</b><em>$50<small>/mo</small></em><p>Above + your logo right here on rustybox.io.</p></div>
+        <div class="tier"><span class="ti">🛰️</span><b>Patron</b><em>$250<small>/mo</small></em><p>Above + logo up top + a say in which applets go memory-safe next.</p></div>
+      </div>
       <a class="btn primary" href="https://github.com/sponsors/peterlodri-sec">♥ Sponsor on GitHub</a>
+      <p style="font-size:.82rem;margin:.9em auto 0">One-time contributions welcome too · every sponsor credited (opt-out anytime)</p>
     </div>
   </section>
 </main>
