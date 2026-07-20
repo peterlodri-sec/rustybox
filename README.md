@@ -1,52 +1,54 @@
 # rustybox
-[![](https://github.com/samuela/rustybox/workflows/Rust/badge.svg)](https://github.com/samuela/rustybox/actions)
 
-RustyBox is a free-range, non-GMO fork of [BusyBox](https://busybox.net/) written entirely in [Rust](https://www.rust-lang.org/). It includes all your favorite commands like `ls`, `mount`, and `top`, but without a single line of C code! Like BusyBox, rustybox weighs in at just under 1 megabyte and includes all the basic utilities you need to set up a small Linux OS.
-
-![screenshot](https://i.ibb.co/fnJG4K3/carbon-1.png)
+RustyBox is a free-range, non-GMO fork of [BusyBox](https://busybox.net/) written entirely in [Rust](https://www.rust-lang.org/). It includes all your favorite commands like `ls`, `mount`, and `top`, but without a single line of C code. Like BusyBox, it fits in about a megabyte and covers the basic utilities you need to stand up a small Linux userland.
 
 ## Status
 
-rustybox is a work-in-progress! It started out life as a direct [c2rust](https://github.com/immunant/c2rust) transpile of the busybox project, and has been steadily improving since then. This has the benefit of ensuring that rustybox is "bug-for-bug" compatible with busybox, but it does mean that we have inherited the raw pointers and `unsafe`s that come from C land. If making essential software memory-safe is your cup of tea then join the party with a PR!
+**Resurrected (2026-07).** rustybox started as a direct [c2rust](https://github.com/immunant/c2rust) transpile of BusyBox and then sat untouched from 2020, when it stopped compiling on any modern Rust (`llvm_asm!`, removed nightly features, an ancient `libc`). It now builds, links, and runs again:
 
-## Contributing to rustybox
+- Compiles with a **current nightly** (pinned in `rust-toolchain.toml`), edition 2021.
+- **All applets compile** (`cargo build --all-features`).
+- **Fully-static musl binaries** for both **x86_64** and **aarch64** — the same source is portable across `glibc`/`musl` and both architectures.
+- `libc` bumped from the 2019-era `0.2.65` to current.
 
-Contributing to rustybox is a great way to get started with rust, dig into the bowels of linux, or to help to free the world from the diabolical tyranny of C.
+It is still "bug-for-bug compatible" with BusyBox in the sense that the internals are the transpiled C: raw pointers and `unsafe` abound. Making it idiomatic and memory-safe — applet by applet — is the ongoing work (see [MIGRATION.md](MIGRATION.md)).
 
-There's lots to be done, so we're happy to have you! Here are just a few ideas:
+## Building
 
-- Replace some `extern "C"` includes with more idiomatic `use`s. Pretty straightforward find/replace-all usually does the trick.
-- Pick a utility, like `cat` or `touch`, and work on translating it into safer, more idiomatic rust. There are plenty of `unsafe`s lying around that you can tackle!
-- Try building Alpine linux with rustybox in place of busybox. This could be an awesome drop-in replacement for the popular [`alpine` Docker image](https://hub.docker.com/_/alpine).
+rustybox is Linux-only (raw syscalls, Linux headers). On macOS/Windows, build in the provided container — it works identically everywhere.
 
-Check out [the contributing doc](CONTRIBUTING.md) for more info!
+```sh
+# one-time: build the Linux build image
+docker build -t rustybox-build:latest -f docker/Dockerfile .
 
-And of course please test out rustybox and report [any and all](https://pointersgonewild.com/2019/11/02/they-might-never-tell-you-its-broken/) issues, concerns, and comments!
-
-## Building rustybox
-
-Rustybox requires a Linux system to build. Developing in Docker works just as well on macOS and Windows. You'll need GCC and its development headers (esp. `quadmath.h`) in order to build the f128 dependency. Running `sudo apt install build-essential` should do the trick on Ubuntu/Debian.
-
-Please open an issue if you have trouble building!
-
-### Customizing your rustybox distribution
-
-By default, rustybox does not include any utility. You can include all of them:
-
-```
-cargo build --all-features
+# build everything / a curated core / run the tests
+docker/build.sh --all-features
+docker/build.sh                     # curated-core feature set
+docker/build.sh test
 ```
 
-Chances are you don't actually need or want _everything_ in rustybox, especially for a release. If you'd like to build rustybox with only a specific set of utilities:
+Features only gate the applet **dispatch table** (`applets/applet_tables.rs`), not module compilation — the whole tree always compiles. Pick the applets you want in the final binary:
 
-```
+```sh
 cargo build --release --features "cat ls which"
 ```
 
-Check out the `[features]` section of `Cargo.toml` for the full list of utilities on tap.
+### Static, dual-architecture binaries
 
-After building, you can remove unnecessary debug sections with `strip`. This is recommended if you are particularly size-conscious.
+The musl targets produce the fully-static, embeddable binaries. They link with `rust-lld`, so you can cross-build any arch from any host (no per-arch cross-`cc`):
+
+```sh
+cargo build --release --target x86_64-unknown-linux-musl  --all-features
+cargo build --release --target aarch64-unknown-linux-musl --all-features
+```
+
+`strip` the result if you are size-conscious; a curated core lands well under a megabyte.
+
+## Roadmap
+
+- **Idiomatic core** — replace the transpiled `unsafe` internals of the common applets with safe Rust, and trim the inherited warning pile.
+- **Modern equivalents** — where a best-in-class Rust CLI already exists (`ripgrep`, `bat`, `fd`, `eza`, `uutils`…), offer it as a drop-in behind the familiar applet name. See [MIGRATION.md](MIGRATION.md).
 
 ## Acknowledgements
 
-There's simply no way this project would be possible without the hard work from the wonderful [busybox](https://busybox.net/) and [c2rust](https://github.com/immunant/c2rust) teams. Both projects are dope, and you should check them out. Much of the code you find in this repo is transpiled from the work of the busybox [AUTHORS](https://github.com/mirror/busybox/blob/master/AUTHORS).
+None of this exists without the [BusyBox](https://busybox.net/) and [c2rust](https://github.com/immunant/c2rust) teams. Much of the code here is transpiled from the work of the BusyBox [AUTHORS](https://github.com/mirror/busybox/blob/master/AUTHORS).
