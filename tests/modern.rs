@@ -152,6 +152,26 @@ fn gzip_roundtrip() {
 }
 
 #[test]
+fn bzip2_roundtrip() {
+  let out = cmd!(exe(), "bzip2")
+    .stdin_bytes("bzip payload here")
+    .pipe(cmd!(exe(), "bunzip2"))
+    .read()
+    .unwrap();
+  assert_eq!(out, "bzip payload here");
+}
+
+#[test]
+fn xz_roundtrip() {
+  let out = cmd!(exe(), "xz")
+    .stdin_bytes("xz payload here")
+    .pipe(cmd!(exe(), "unxz"))
+    .read()
+    .unwrap();
+  assert_eq!(out, "xz payload here");
+}
+
+#[test]
 fn true_false_exit_codes() {
   let t = cmd!(exe(), "true").unchecked().run().unwrap();
   assert_eq!(t.status.code(), Some(0));
