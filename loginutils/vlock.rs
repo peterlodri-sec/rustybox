@@ -8,10 +8,8 @@ use libc::puts;
 use libc::termios;
 extern "C" {
 
-  #[no_mangle]
   fn tcgetattr(__fd: libc::c_int, __termios_p: *mut termios) -> libc::c_int;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
 }

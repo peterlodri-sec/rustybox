@@ -2,7 +2,6 @@ use libc;
 use libc::printf;
 use libc::syscall;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
 
 }

@@ -6,13 +6,10 @@ use libc::lstat;
 use libc::printf;
 use libc::stat;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn gnu_dev_major(__dev: libc::dev_t) -> libc::c_uint;
 
-  #[no_mangle]
   fn gnu_dev_minor(__dev: libc::dev_t) -> libc::c_uint;
 
 }

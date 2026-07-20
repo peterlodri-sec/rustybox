@@ -14,26 +14,18 @@ use libc::strchr;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   static mut stdin: *mut FILE;
-  #[no_mangle]
   fn freopen(
     __filename: *const libc::c_char,
     __modes: *const libc::c_char,
     __stream: *mut FILE,
   ) -> *mut FILE;
 
-  #[no_mangle]
   fn fread(__ptr: *mut libc::c_void, __size: size_t, __n: size_t, __stream: *mut FILE) -> size_t;
-  #[no_mangle]
   fn fseeko(__stream: *mut FILE, __off: off64_t, __whence: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn ferror_unlocked(__stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
 }

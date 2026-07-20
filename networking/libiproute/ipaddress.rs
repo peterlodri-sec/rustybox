@@ -16,43 +16,30 @@ use libc::sprintf;
 use libc::strcmp;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   fn fnmatch(
     __pattern: *const libc::c_char,
     __name: *const libc::c_char,
     __flags: libc::c_int,
   ) -> libc::c_int;
-  #[no_mangle]
   fn socket(__domain: libc::c_int, __type: libc::c_int, __protocol: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   static mut stdout: *mut FILE;
 
-  #[no_mangle]
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
 
   /* Guaranteed to NOT be a macro (smallest code). Saves nearly 2k on uclibc.
    * But potentially slow, don't use in one-billion-times loops */
 
-  #[no_mangle]
   static bb_msg_requires_arg: [libc::c_char; 0];
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
-  #[no_mangle]
   static mut preferred_family: family_t;
   /* UNUSED */
-  #[no_mangle]
   static mut oneline: smallint;
-  #[no_mangle]
   static mut _SL_: libc::c_char;
 
 /*void get_prefix_1(inet_prefix *dst, char *arg, int family) FAST_FUNC;*/

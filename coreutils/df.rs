@@ -8,16 +8,12 @@ use libc::strcmp;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   fn getmntent(__stream: *mut FILE) -> *mut mntent;
 
-  #[no_mangle]
   fn statvfs(__file: *const libc::c_char, __buf: *mut statvfs) -> libc::c_int;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   static kmg_i_suffixes: [suffix_mult; 0];
 
 //UNUSED: unsigned FAST_FUNC unicode_padding_to_width(unsigned width, const char *src);

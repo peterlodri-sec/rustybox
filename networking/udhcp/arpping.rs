@@ -20,9 +20,7 @@ extern "C" {
   pub type sockaddr_dl;
   pub type sockaddr_ax25;
   pub type sockaddr_at;
-  #[no_mangle]
   fn socket(__domain: libc::c_int, __type: libc::c_int, __protocol: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn sendto(
     __fd: libc::c_int,
     __buf: *const libc::c_void,
@@ -32,11 +30,8 @@ extern "C" {
     __addr_len: socklen_t,
   ) -> ssize_t;
 
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
   /* Wrapper which restarts poll on EINTR or ENOMEM.
@@ -44,9 +39,7 @@ extern "C" {
    * Warning! May take (much) longer than timeout_ms to return!
    * If this is a problem, use bare poll and open-code EINTR/ENOMEM handling */
 
-  #[no_mangle]
   static bb_msg_can_not_create_raw_socket: [libc::c_char; 0];
-  #[no_mangle]
   static mut dhcp_verbose: libc::c_uint;
 }
 

@@ -6,10 +6,8 @@ use libc::strcasecmp;
 use libc::strcmp;
 extern "C" {
 
-  #[no_mangle]
   fn gnu_dev_major(__dev: libc::dev_t) -> libc::c_uint;
 
-  #[no_mangle]
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
 }

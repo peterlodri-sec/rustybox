@@ -9,12 +9,9 @@ use libc::stat;
 use libc::uid_t;
 extern "C" {
 
-  #[no_mangle]
   fn lchown(__file: *const libc::c_char, __owner: uid_t, __group: gid_t) -> libc::c_int;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn dirname(__path: *mut libc::c_char) -> *mut libc::c_char;
 
 }

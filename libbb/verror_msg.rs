@@ -6,26 +6,21 @@ use libc::free;
 use libc::strcpy;
 use libc::syslog;
 extern "C" {
-  #[no_mangle]
   fn realloc(_: *mut libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn vsnprintf(
     _: *mut libc::c_char,
     _: libc::c_ulong,
     _: *const libc::c_char,
     _: ::std::ffi::VaList,
   ) -> libc::c_int;
-  #[no_mangle]
   fn vasprintf(
     __ptr: *mut *mut libc::c_char,
     __f: *const libc::c_char,
     __arg: ::std::ffi::VaList,
   ) -> libc::c_int;
-  #[no_mangle]
   fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
 }

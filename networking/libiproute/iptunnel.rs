@@ -13,21 +13,16 @@ use libc::strchr;
 use libc::strcmp;
 extern "C" {
 
-  #[no_mangle]
   fn fgets_unlocked(
     __s: *mut libc::c_char,
     __n: libc::c_int,
     __stream: *mut FILE,
   ) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn exit(_: libc::c_int) -> !;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn inet_ntop(
     __af: libc::c_int,
     __cp: *const libc::c_void,
@@ -40,7 +35,6 @@ extern "C" {
 
   /* Prints warning to stderr and returns NULL on failure: */
 
-  #[no_mangle]
   static mut _SL_: libc::c_char;
 }
 

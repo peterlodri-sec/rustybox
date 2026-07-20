@@ -1,9 +1,7 @@
 use libc;
 use libc::fscanf;
 extern "C" {
-  #[no_mangle]
   fn atof(__nptr: *const libc::c_char) -> libc::c_double;
-  #[no_mangle]
   fn usleep(__useconds: useconds_t) -> libc::c_int;
 
 }

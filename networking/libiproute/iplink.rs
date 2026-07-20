@@ -12,23 +12,17 @@ use libc::sa_family_t;
 use libc::sockaddr;
 use libc::strcmp;
 extern "C" {
-  #[no_mangle]
   fn socket(__domain: libc::c_int, __type: libc::c_int, __protocol: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn exit(_: libc::c_int) -> !;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* Convert each alpha char in str to lower-case */
 
-  #[no_mangle]
   static bb_msg_requires_arg: [libc::c_char; 0];
 
-  #[no_mangle]
   static mut preferred_family: family_t;
 
 /* We need linux/types.h because older kernels use u32 etc

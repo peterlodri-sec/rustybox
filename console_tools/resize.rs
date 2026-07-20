@@ -7,29 +7,22 @@ use libc::termios;
 use libc::winsize;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   fn _exit(_: libc::c_int) -> !;
 
-  #[no_mangle]
   static mut stderr: *mut FILE;
 
-  #[no_mangle]
   fn scanf(_: *const libc::c_char, _: ...) -> libc::c_int;
 
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn tcgetattr(__fd: libc::c_int, __termios_p: *mut termios) -> libc::c_int;
 
-  #[no_mangle]
   fn tcsetattr(
     __fd: libc::c_int,
     __optional_actions: libc::c_int,
     __termios_p: *const termios,
   ) -> libc::c_int;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

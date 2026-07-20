@@ -6,23 +6,16 @@ use libc::open;
 use libc::sleep;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   static bb_msg_standard_input: [libc::c_char; 0];
 
-  #[no_mangle]
   fn dprintf(__fd: libc::c_int, __fmt: *const libc::c_char, _: ...) -> libc::c_int;
 
-  #[no_mangle]
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
-  #[no_mangle]
   fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   static bkm_suffixes: [suffix_mult; 0];
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

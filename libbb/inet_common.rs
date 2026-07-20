@@ -8,25 +8,18 @@ use libc::sockaddr;
 use libc::strcmp;
 use libc::strcpy;
 extern "C" {
-  #[no_mangle]
   fn gethostbyname(__name: *const libc::c_char) -> *mut hostent;
-  #[no_mangle]
   fn getaddrinfo(
     __name: *const libc::c_char,
     __service: *const libc::c_char,
     __req: *const addrinfo,
     __pai: *mut *mut addrinfo,
   ) -> libc::c_int;
-  #[no_mangle]
   fn freeaddrinfo(__ai: *mut addrinfo);
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   fn inet_aton(__cp: *const libc::c_char, __inp: *mut in_addr) -> libc::c_int;
 /* Some useful definitions */
 /* Macros for min/max.  */

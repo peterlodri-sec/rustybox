@@ -43,10 +43,8 @@ extern "C" {
   pub type sockaddr_ax25;
   pub type sockaddr_at;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn recvfrom(
     __fd: libc::c_int,
     __buf: *mut libc::c_void,
@@ -56,7 +54,6 @@ extern "C" {
     __addr_len: *mut socklen_t,
   ) -> ssize_t;
 
-  #[no_mangle]
   fn snprintf(
     _: *mut libc::c_char,
     _: libc::c_ulong,
@@ -64,7 +61,6 @@ extern "C" {
     _: ...
   ) -> libc::c_int;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* Non-aborting kind of convertors: bb_strto[u][l]l */
@@ -79,13 +75,10 @@ extern "C" {
    *    return value is all-ones in this case.
    */
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
-  #[no_mangle]
   static mut logmode: smallint;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
 }

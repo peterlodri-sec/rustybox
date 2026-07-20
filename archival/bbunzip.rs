@@ -16,19 +16,14 @@ use libc::unlink;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   static mut stderr: *mut FILE;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   fn utimes(__file: *const libc::c_char, __tvp: *const timeval) -> libc::c_int;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
 }

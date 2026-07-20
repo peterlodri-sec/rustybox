@@ -24,27 +24,16 @@ use libc::unlink;
 use libc::useconds_t;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   fn link(__from: *const libc::c_char, __to: *const libc::c_char) -> libc::c_int;
-  #[no_mangle]
   fn fsync(__fd: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn fflush(__stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn fopen(__filename: *const libc::c_char, __modes: *const libc::c_char) -> *mut FILE;
-  #[no_mangle]
   fn ferror_unlocked(__stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn fileno_unlocked(__stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn fchown(__fd: libc::c_int, __owner: uid_t, __group: gid_t) -> libc::c_int;
-  #[no_mangle]
   fn usleep(__useconds: useconds_t) -> libc::c_int;
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   fn strsep(__stringp: *mut *mut libc::c_char, __delim: *const libc::c_char) -> *mut libc::c_char;
 }
 

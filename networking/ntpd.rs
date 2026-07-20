@@ -48,7 +48,6 @@ extern "C" {
   /* We can just memorize it once - no multithreading in busybox :) */
 
   /* Standard handler which just records signo */
-  #[no_mangle]
   static mut bb_got_signal: smallint;
 
   /* Create stream socket, and allocate suitable lsa.
@@ -68,14 +67,12 @@ extern "C" {
 
   /* Reverse */
 
-  #[no_mangle]
   fn recv(
     __fd: libc::c_int,
     __buf: *mut libc::c_void,
     __n: size_t,
     __flags: libc::c_int,
   ) -> ssize_t;
-  #[no_mangle]
   fn sendto(
     __fd: libc::c_int,
     __buf: *const libc::c_void,
@@ -84,63 +81,39 @@ extern "C" {
     __addr: __CONST_SOCKADDR_ARG,
     __addr_len: socklen_t,
   ) -> ssize_t;
-  #[no_mangle]
   fn rand() -> libc::c_int;
-  #[no_mangle]
   fn srand(__seed: libc::c_uint);
 
-  #[no_mangle]
   fn exit(_: libc::c_int) -> !;
 
-  #[no_mangle]
   fn unsetenv(__name: *const libc::c_char) -> libc::c_int;
-  #[no_mangle]
   fn qsort(__base: *mut libc::c_void, __nmemb: size_t, __size: size_t, __compar: __compar_fn_t);
-  #[no_mangle]
   fn abs(_: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   fn strnlen(__string: *const libc::c_char, __maxlen: size_t) -> size_t;
-  #[no_mangle]
   fn strncasecmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
-  #[no_mangle]
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn setpriority(__which: __priority_which_t, __who: id_t, __prio: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn gettimeofday(__tv: *mut timeval, __tz: __timezone_ptr_t) -> libc::c_int;
-  #[no_mangle]
   fn settimeofday(__tv: *const timeval, __tz: *const timezone) -> libc::c_int;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
-  #[no_mangle]
   static mut logmode: smallint;
 
-  #[no_mangle]
   static bb_msg_you_must_be_root: [libc::c_char; 0];
   /* '*const' ptr makes gcc optimize code much better.
    * Magic prevents ptr_to_globals from going into rodata.
    * If you want to assign a value, use SET_PTR_TO_GLOBALS(x) */
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
-  #[no_mangle]
   fn sqrt(_: libc::c_double) -> libc::c_double;
-  #[no_mangle]
   fn fabs(_: libc::c_double) -> libc::c_double;
-  #[no_mangle]
   fn adjtimex(__ntx: *mut timex) -> libc::c_int;
 }
 

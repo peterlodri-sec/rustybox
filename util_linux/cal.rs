@@ -7,26 +7,20 @@ use libc::strcpy;
 use libc::time;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   fn strftime(
     __s: *mut libc::c_char,
     __maxsize: size_t,
     __format: *const libc::c_char,
     __tp: *const tm,
   ) -> size_t;
-  #[no_mangle]
   fn localtime(__timer: *const time_t) -> *mut tm;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
 //UNUSED: char* FAST_FUNC unicode_conv_to_printable_maxwidth(uni_stat_t *stats, const char *src, unsigned maxwidth);

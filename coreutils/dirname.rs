@@ -1,7 +1,6 @@
 use libc;
 use libc::puts;
 extern "C" {
-  #[no_mangle]
   fn dirname(__path: *mut libc::c_char) -> *mut libc::c_char;
 
 }

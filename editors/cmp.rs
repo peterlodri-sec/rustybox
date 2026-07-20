@@ -5,15 +5,10 @@ use libc::fprintf;
 use libc::off_t;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   static mut stdout: *mut FILE;
-  #[no_mangle]
   static mut stderr: *mut FILE;
-  #[no_mangle]
   fn getc_unlocked(__stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   static mut logmode: smallint;
 }
 

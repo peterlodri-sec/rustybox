@@ -13,18 +13,12 @@ use libc::ssize_t;
 use libc::termios;
 use libc::winsize;
 extern "C" {
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> *mut libc::c_char;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   fn waitpid(__pid: pid_t, __stat_loc: *mut libc::c_int, __options: libc::c_int) -> pid_t;
-  #[no_mangle]
   fn tcgetattr(__fd: libc::c_int, __termios_p: *mut termios) -> libc::c_int;
-  #[no_mangle]
   fn tcsetattr(
     __fd: libc::c_int,
     __optional_actions: libc::c_int,
@@ -131,7 +125,6 @@ extern "C" {
    */
   /* "BusyBox vN.N.N (timestamp or extra_version)" */
   /* NB: (bb_hexdigits_upcase[i] | 0x20) -> lowercase hex digit */
-  #[no_mangle]
   static bb_hexdigits_upcase: [libc::c_char; 0];
 
 }

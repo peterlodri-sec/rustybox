@@ -18,53 +18,39 @@ use libc::time_t;
 use libc::tm;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   fn strtoul(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_ulong;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
-  #[no_mangle]
   static mut stdout: *mut FILE;
 
-  #[no_mangle]
   fn setbuf(__stream: *mut FILE, __buf: *mut libc::c_char);
 
-  #[no_mangle]
   fn fgets_unlocked(
     __s: *mut libc::c_char,
     __n: libc::c_int,
     __stream: *mut FILE,
   ) -> *mut libc::c_char;
-  #[no_mangle]
   fn pause() -> libc::c_int;
 
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn strftime(
     __s: *mut libc::c_char,
     __maxsize: size_t,
     __format: *const libc::c_char,
     __tp: *const tm,
   ) -> size_t;
-  #[no_mangle]
   fn localtime_r(__timer: *const time_t, __tp: *mut tm) -> *mut tm;
 
-  #[no_mangle]
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
 
-  #[no_mangle]
   fn uname(__name: *mut utsname) -> libc::c_int;
 }
 

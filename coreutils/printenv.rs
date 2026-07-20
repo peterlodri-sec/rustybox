@@ -3,7 +3,6 @@ use libc::getenv;
 use libc::puts;
 extern "C" {
 
-  #[no_mangle]
   static mut environ: *mut *mut libc::c_char;
 
 }

@@ -23,7 +23,6 @@ use libc::strstr;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   fn getmntent_r(
     __stream: *mut FILE,
     __result: *mut mntent,
@@ -31,43 +30,30 @@ extern "C" {
     __bufsize: libc::c_int,
   ) -> *mut mntent;
 
-  #[no_mangle]
   fn addmntent(__stream: *mut FILE, __mnt: *const mntent) -> libc::c_int;
 
-  #[no_mangle]
   fn atexit(__func: Option<unsafe extern "C" fn() -> ()>) -> libc::c_int;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   fn strncasecmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
-  #[no_mangle]
   static bb_msg_perm_denied_are_you_root: [libc::c_char; 0];
 
-  #[no_mangle]
   static bb_msg_you_must_be_root: [libc::c_char; 0];
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
 /* Returns:

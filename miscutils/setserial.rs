@@ -5,15 +5,11 @@ use libc::printf;
 use libc::puts;
 use libc::strcasecmp;
 extern "C" {
-  #[no_mangle]
   fn exit(_: libc::c_int) -> !;
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   static bb_msg_requires_arg: [libc::c_char; 0];
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 }
 

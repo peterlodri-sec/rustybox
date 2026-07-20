@@ -6,28 +6,20 @@ use libc::timeval;
 use libc::tm;
 extern "C" {
 
-  #[no_mangle]
   fn gettimeofday(__tv: *mut timeval, __tz: __timezone_ptr_t) -> libc::c_int;
 
-  #[no_mangle]
   fn settimeofday(__tv: *const timeval, __tz: *const timezone) -> libc::c_int;
 
-  #[no_mangle]
   fn localtime(__timer: *const time_t) -> *mut tm;
 
-  #[no_mangle]
   fn gmtime_r(__timer: *const time_t, __tp: *mut tm) -> *mut tm;
 
-  #[no_mangle]
   fn localtime_r(__timer: *const time_t, __tp: *mut tm) -> *mut tm;
 
-  #[no_mangle]
   fn ctime(__timer: *const time_t) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn tzset();
 
-  #[no_mangle]
   static mut timezone: libc::c_long;
 
 /*

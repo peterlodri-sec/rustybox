@@ -9,18 +9,12 @@ use libc::printf;
 use libc::timeval;
 extern "C" {
 
-  #[no_mangle]
   fn vfork() -> libc::c_int;
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn getpagesize() -> libc::c_int;
-  #[no_mangle]
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
 
-  #[no_mangle]
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  #[no_mangle]
   fn wait3(__stat_loc: *mut libc::c_int, __options: libc::c_int, __usage: *mut rusage) -> pid_t;
 
 }

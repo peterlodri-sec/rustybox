@@ -1,6 +1,5 @@
 use libc;
 extern "C" {
-  #[no_mangle]
   fn fnmatch(
     __pattern: *const libc::c_char,
     __name: *const libc::c_char,

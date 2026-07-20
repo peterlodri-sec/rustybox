@@ -44,43 +44,27 @@ extern "C" {
   pub type sockaddr_ax25;
   pub type sockaddr_at;
 
-  #[no_mangle]
   fn exit(_: libc::c_int) -> !;
-  #[no_mangle]
   fn mkstemp(__template: *mut libc::c_char) -> libc::c_int;
-  #[no_mangle]
   fn vfork() -> libc::c_int;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn chroot(__path: *const libc::c_char) -> libc::c_int;
 
-  #[no_mangle]
   fn getsockname(__fd: libc::c_int, __addr: __SOCKADDR_ARG, __len: *mut socklen_t) -> libc::c_int;
-  #[no_mangle]
   fn accept(__fd: libc::c_int, __addr: __SOCKADDR_ARG, __addr_len: *mut socklen_t) -> libc::c_int;
-  #[no_mangle]
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
-  #[no_mangle]
   static mut stdin: *mut FILE;
 
-  #[no_mangle]
   fn dup(__fd: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  #[no_mangle]
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   fn mkdir(__path: *const libc::c_char, __mode: mode_t) -> libc::c_int;
-  #[no_mangle]
   fn gmtime_r(__timer: *const time_t, __tp: *mut tm) -> *mut tm;
   /* Search for an entry with a matching username.  */
 
@@ -124,7 +108,6 @@ extern "C" {
   /* xvfork() can't be a _function_, return after vfork in child mangles stack
    * in the parent. It must be a macro. */
 
-  #[no_mangle]
   static mut logmode: smallint;
 
   /* Used by ftpd */
@@ -132,7 +115,6 @@ extern "C" {
   /* '*const' ptr makes gcc optimize code much better.
    * Magic prevents ptr_to_globals from going into rodata.
    * If you want to assign a value, use SET_PTR_TO_GLOBALS(x) */
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
 
 }

@@ -5,10 +5,8 @@ use libc::puts;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   static mut stdin: *mut FILE;
 
 }

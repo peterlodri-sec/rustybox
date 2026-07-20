@@ -6,10 +6,8 @@ use libc::puts;
 use libc::strcmp;
 extern "C" {
 
-  #[no_mangle]
   static mut stdout: *mut FILE;
 
-  #[no_mangle]
   fn fileno_unlocked(__stream: *mut FILE) -> libc::c_int;
 
 }

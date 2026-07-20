@@ -12,20 +12,16 @@ use libc::sigset_t;
 use libc::stat;
 use libc::strcmp;
 extern "C" {
-  #[no_mangle]
   fn strtoll(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_longlong;
 
-  #[no_mangle]
   fn _setjmp(_: *mut __jmp_buf_tag) -> libc::c_int;
-  #[no_mangle]
   fn longjmp(_: *mut __jmp_buf_tag, _: libc::c_int) -> !;
 
   /* See test_ptr_hack.c */
-  #[no_mangle]
   static test_ptr_to_statics: *mut test_statics;
 }
 pub type __int64_t = libc::c_long;

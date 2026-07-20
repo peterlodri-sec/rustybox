@@ -3,10 +3,8 @@ use libc;
 use libc::fclose;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   static mut stdin: *mut FILE;
 
-  #[no_mangle]
   fn ferror_unlocked(__stream: *mut FILE) -> libc::c_int;
 
 }

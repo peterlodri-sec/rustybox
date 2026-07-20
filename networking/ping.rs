@@ -31,11 +31,8 @@ extern "C" {
   pub type sockaddr_dl;
   pub type sockaddr_ax25;
   pub type sockaddr_at;
-  #[no_mangle]
   fn __cmsg_nxthdr(__mhdr: *mut msghdr, __cmsg: *mut cmsghdr) -> *mut cmsghdr;
-  #[no_mangle]
   fn socket(__domain: libc::c_int, __type: libc::c_int, __protocol: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn recvfrom(
     __fd: libc::c_int,
     __buf: *mut libc::c_void,
@@ -44,9 +41,7 @@ extern "C" {
     __addr: __SOCKADDR_ARG,
     __addr_len: *mut socklen_t,
   ) -> ssize_t;
-  #[no_mangle]
   fn recvmsg(__fd: libc::c_int, __message: *mut msghdr, __flags: libc::c_int) -> ssize_t;
-  #[no_mangle]
   fn setsockopt(
     __fd: libc::c_int,
     __level: libc::c_int,
@@ -54,28 +49,20 @@ extern "C" {
     __optval: *const libc::c_void,
     __optlen: socklen_t,
   ) -> libc::c_int;
-  #[no_mangle]
   fn if_nametoindex(__ifname: *const libc::c_char) -> libc::c_uint;
-  #[no_mangle]
   fn exit(_: libc::c_int) -> !;
-  #[no_mangle]
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn setitimer(
     __which: __itimer_which_t,
     __new: *const itimerval,
     __old: *mut itimerval,
   ) -> libc::c_int;
 
-  #[no_mangle]
   fn inet_ntoa(__in: in_addr) -> *mut libc::c_char;
-  #[no_mangle]
   fn inet_ntop(
     __af: libc::c_int,
     __cp: *const libc::c_void,
@@ -83,14 +70,10 @@ extern "C" {
     __len: socklen_t,
   ) -> *const libc::c_char;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
-  #[no_mangle]
   static bb_msg_can_not_create_raw_socket: [libc::c_char; 0];
-  #[no_mangle]
   static bb_msg_perm_denied_are_you_root: [libc::c_char; 0];
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

@@ -10,21 +10,14 @@ use libc::time;
 use libc::time_t;
 extern "C" {
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> *mut libc::c_char;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   fn getutxent() -> *mut utmpx;
-  #[no_mangle]
   fn pututxline(__utmpx: *const utmpx) -> *mut utmpx;
-  #[no_mangle]
   fn updwtmpx(__wtmpx_file: *const libc::c_char, __utmpx: *const utmpx);
 
-  #[no_mangle]
   static bb_path_wtmp_file: [libc::c_char; 0];
 }
 

@@ -8,7 +8,6 @@ use libc::isatty;
 use libc::open;
 extern "C" {
 
-  #[no_mangle]
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
 
 }

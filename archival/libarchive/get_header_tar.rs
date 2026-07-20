@@ -14,16 +14,13 @@ use libc::time_t;
 use libc::uid_t;
 extern "C" {
 
-  #[no_mangle]
   fn strtoull(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_ulonglong;
 
-  #[no_mangle]
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 /* Some useful definitions */
 /* Macros for min/max.  */

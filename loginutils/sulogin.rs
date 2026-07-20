@@ -5,15 +5,12 @@ use libc::getenv;
 use libc::openlog;
 extern "C" {
 
-  #[no_mangle]
   fn dup(__fd: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
   /* Search for an entry with a matching user ID.  */
 
-  #[no_mangle]
   static mut logmode: smallint;
 
 }

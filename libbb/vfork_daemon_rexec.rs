@@ -7,16 +7,12 @@ use libc::pid_t;
 use libc::prctl;
 use libc::setsid;
 extern "C" {
-  #[no_mangle]
   fn _exit(_: libc::c_int) -> !;
 
-  #[no_mangle]
   fn vfork() -> libc::c_int;
 
-  #[no_mangle]
   fn execvp(__file: *const libc::c_char, __argv: *const *mut libc::c_char) -> libc::c_int;
 
-  #[no_mangle]
   fn dup(__fd: libc::c_int) -> libc::c_int;
 
 }

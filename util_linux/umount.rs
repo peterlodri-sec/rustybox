@@ -9,7 +9,6 @@ use libc::umount2;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   fn getmntent_r(
     __stream: *mut FILE,
     __result: *mut mntent,
@@ -17,10 +16,8 @@ extern "C" {
     __bufsize: libc::c_int,
   ) -> *mut mntent;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

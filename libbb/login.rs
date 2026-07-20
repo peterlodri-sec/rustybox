@@ -11,33 +11,24 @@ use libc::time_t;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   fn unsetenv(__name: *const libc::c_char) -> libc::c_int;
 
-  #[no_mangle]
   static mut stdout: *mut FILE;
 
-  #[no_mangle]
   fn getc_unlocked(__stream: *mut FILE) -> libc::c_int;
 
-  #[no_mangle]
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   fn strftime(
     __s: *mut libc::c_char,
     __maxsize: size_t,
     __format: *const libc::c_char,
     __tp: *const tm,
   ) -> size_t;
-  #[no_mangle]
   fn localtime(__timer: *const time_t) -> *mut tm;
 
-  #[no_mangle]
   static bb_PATH_root_path: [libc::c_char; 0];
-  #[no_mangle]
   fn uname(__name: *mut utsname) -> libc::c_int;
 }
 

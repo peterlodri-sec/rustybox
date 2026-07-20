@@ -1,18 +1,12 @@
 use libc;
 extern "C" {
 
-  #[no_mangle]
   static bb_msg_standard_input: [libc::c_char; 0];
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memchr(_: *const libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

@@ -4,17 +4,13 @@ use libc;
 use libc::free;
 extern "C" {
 
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
-  #[no_mangle]
   fn mempcpy(
     __dest: *mut libc::c_void,
     __src: *const libc::c_void,
     __n: size_t,
   ) -> *mut libc::c_void;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   fn stpcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
 
 }

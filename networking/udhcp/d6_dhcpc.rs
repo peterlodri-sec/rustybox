@@ -23,18 +23,14 @@ use libc::strcmp;
 use libc::unlink;
 extern "C" {
 
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn mempcpy(
     __dest: *mut libc::c_void,
     __src: *const libc::c_void,
     __n: size_t,
   ) -> *mut libc::c_void;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* client -> server */
@@ -92,37 +88,26 @@ extern "C" {
   /* Returns 1 if no reply received */
   /* note: ip is a pointer to an IPv6 in network order, possibly misaliged */
 
-  #[no_mangle]
   fn rand() -> libc::c_int;
-  #[no_mangle]
   fn srand(__seed: libc::c_uint);
 
-  #[no_mangle]
   fn stpcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
-  #[no_mangle]
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn inet_pton(
     __af: libc::c_int,
     __cp: *const libc::c_char,
     __buf: *mut libc::c_void,
   ) -> libc::c_int;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
-  #[no_mangle]
   static mut wrote_pidfile: smallint;
 
-  #[no_mangle]
   static mut logmode: smallint;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
-  #[no_mangle]
   static MAC_BCAST_ADDR: [u8; 6];
 
-  #[no_mangle]
   static mut dhcp_verbose: libc::c_uint;
 
 }

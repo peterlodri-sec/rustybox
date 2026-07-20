@@ -12,21 +12,16 @@ use libc::sscanf;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   static mut stdin: *mut FILE;
 
-  #[no_mangle]
   fn fgets_unlocked(
     __s: *mut libc::c_char,
     __n: libc::c_int,
     __stream: *mut FILE,
   ) -> *mut libc::c_char;
-  #[no_mangle]
   fn fread(__ptr: *mut libc::c_void, __size: size_t, __n: size_t, __stream: *mut FILE) -> size_t;
 
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  #[no_mangle]
   fn mmap(
     __addr: *mut libc::c_void,
     __len: size_t,
@@ -36,9 +31,7 @@ extern "C" {
     __offset: off64_t,
   ) -> *mut libc::c_void;
 
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

@@ -8,22 +8,15 @@ use libc::free;
 use libc::strcmp;
 use libc::strrchr;
 extern "C" {
-  #[no_mangle]
   fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
-  #[no_mangle]
   static mut global_crc32_table: *mut u32;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
 /*

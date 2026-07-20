@@ -37,10 +37,8 @@ extern "C" {
   pub type sockaddr_ax25;
   pub type sockaddr_at;
 
-  #[no_mangle]
   fn exit(_: libc::c_int) -> !;
 
-  #[no_mangle]
   fn select(
     __nfds: libc::c_int,
     __readfds: *mut fd_set,
@@ -48,39 +46,25 @@ extern "C" {
     __exceptfds: *mut fd_set,
     __timeout: *mut timeval,
   ) -> libc::c_int;
-  #[no_mangle]
   fn accept(__fd: libc::c_int, __addr: __SOCKADDR_ARG, __addr_len: *mut socklen_t) -> libc::c_int;
-  #[no_mangle]
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
 
-  #[no_mangle]
   fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memchr(_: *const libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn tcgetattr(__fd: libc::c_int, __termios_p: *mut termios) -> libc::c_int;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
-  #[no_mangle]
   static mut logmode: smallint;
 
-  #[no_mangle]
   fn usleep(__useconds: useconds_t) -> libc::c_int;
-  #[no_mangle]
   fn execvp(__file: *const libc::c_char, __argv: *const *mut libc::c_char) -> libc::c_int;
-  #[no_mangle]
   fn _exit(_: libc::c_int) -> !;
-  #[no_mangle]
   fn tcsetpgrp(__fd: libc::c_int, __pgrp_id: pid_t) -> libc::c_int;
-  #[no_mangle]
   fn vfork() -> libc::c_int;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
 }

@@ -23,49 +23,32 @@ use libc::uid_t;
 use libc::unlink;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   fn strtol(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_long;
 
-  #[no_mangle]
   fn atexit(__func: Option<unsafe extern "C" fn() -> ()>) -> libc::c_int;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   static mut stdin: *mut FILE;
-  #[no_mangle]
   static mut stdout: *mut FILE;
 
-  #[no_mangle]
   fn getc_unlocked(__stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn putc_unlocked(__c: libc::c_int, __stream: *mut FILE) -> libc::c_int;
 
-  #[no_mangle]
   fn ungetc(__c: libc::c_int, __stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn ferror_unlocked(__stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn fchown(__fd: libc::c_int, __owner: uid_t, __group: gid_t) -> libc::c_int;
 
-  #[no_mangle]
   fn strcat(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  #[no_mangle]
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  #[no_mangle]
   fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  #[no_mangle]
   fn strpbrk(_: *const libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* Reads a line from a text file, up to a newline or NUL byte, inclusive.
@@ -80,13 +63,9 @@ extern "C" {
 
   /* "Opens" stdin if filename is special, else just opens file: */
 
-  #[no_mangle]
   static bb_msg_requires_arg: [libc::c_char; 0];
-  #[no_mangle]
   static bb_msg_standard_input: [libc::c_char; 0];
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
-  #[no_mangle]
   fn regexec(
     __preg: *const regex_t,
     __string: *const libc::c_char,
@@ -95,7 +74,6 @@ extern "C" {
     __eflags: libc::c_int,
   ) -> libc::c_int;
 
-  #[no_mangle]
   fn sed_free_and_close_stuff();
 }
 

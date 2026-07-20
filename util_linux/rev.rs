@@ -6,23 +6,17 @@ use libc::free;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   static mut stdout: *mut FILE;
 
-  #[no_mangle]
   fn fgets_unlocked(
     __s: *mut libc::c_char,
     __n: libc::c_int,
     __stream: *mut FILE,
   ) -> *mut libc::c_char;
-  #[no_mangle]
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn feof_unlocked(__stream: *mut FILE) -> libc::c_int;
 
-  #[no_mangle]
   static bb_argv_dash: [*const libc::c_char; 0];
 
 }

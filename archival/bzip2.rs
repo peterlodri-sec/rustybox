@@ -6,13 +6,10 @@ use libc;
 use libc::free;
 use libc::ssize_t;
 extern "C" {
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 }
 

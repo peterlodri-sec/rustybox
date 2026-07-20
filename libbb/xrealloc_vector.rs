@@ -1,7 +1,6 @@
 use crate::librb::size_t;
 use libc;
 extern "C" {
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
 }

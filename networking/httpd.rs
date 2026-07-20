@@ -59,49 +59,34 @@ extern "C" {
   pub type sockaddr_ax25;
   pub type sockaddr_at;
 
-  #[no_mangle]
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
 
-  #[no_mangle]
   fn execv(__path: *const libc::c_char, __argv: *const *mut libc::c_char) -> libc::c_int;
 
-  #[no_mangle]
   fn _exit(_: libc::c_int) -> !;
 
-  #[no_mangle]
   fn fork() -> pid_t;
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
 
-  #[no_mangle]
   fn socket(__domain: libc::c_int, __type: libc::c_int, __protocol: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   fn connect(__fd: libc::c_int, __addr: __CONST_SOCKADDR_ARG, __len: socklen_t) -> libc::c_int;
 
-  #[no_mangle]
   fn getpeername(__fd: libc::c_int, __addr: __SOCKADDR_ARG, __len: *mut socklen_t) -> libc::c_int;
 
-  #[no_mangle]
   fn accept(__fd: libc::c_int, __addr: __SOCKADDR_ARG, __addr_len: *mut socklen_t) -> libc::c_int;
 
-  #[no_mangle]
   fn shutdown(__fd: libc::c_int, __how: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
 
-  #[no_mangle]
   static mut stdout: *mut FILE;
 
-  #[no_mangle]
   static mut stderr: *mut FILE;
 
-  #[no_mangle]
   fn snprintf(
     _: *mut libc::c_char,
     _: libc::c_ulong,
@@ -109,42 +94,32 @@ extern "C" {
     _: ...
   ) -> libc::c_int;
 
-  #[no_mangle]
   fn dprintf(__fd: libc::c_int, __fmt: *const libc::c_char, _: ...) -> libc::c_int;
 
-  #[no_mangle]
   fn fgets_unlocked(
     __s: *mut libc::c_char,
     __n: libc::c_int,
     __stream: *mut FILE,
   ) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
 
-  #[no_mangle]
   fn setenv(
     __name: *const libc::c_char,
     __value: *const libc::c_char,
     __replace: libc::c_int,
   ) -> libc::c_int;
 
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   fn strncasecmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn strftime(
     __s: *mut libc::c_char,
     __maxsize: size_t,
@@ -152,10 +127,8 @@ extern "C" {
     __tp: *const tm,
   ) -> size_t;
 
-  #[no_mangle]
   fn gmtime_r(__timer: *const time_t, __tp: *mut tm) -> *mut tm;
 
-  #[no_mangle]
   fn setgroups(__n: size_t, __groups: *const gid_t) -> libc::c_int;
   /* Search for an entry with a matching username.  */
 
@@ -174,13 +147,10 @@ extern "C" {
    *    return value is all-ones in this case.
    */
 
-  #[no_mangle]
   fn vfork() -> libc::c_int;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
-  #[no_mangle]
   fn sendfile(
     __out_fd: libc::c_int,
     __in_fd: libc::c_int,

@@ -7,30 +7,19 @@ use libc;
 use libc::openlog;
 use libc::putenv;
 extern "C" {
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn rand() -> libc::c_int;
-  #[no_mangle]
   fn srand(__seed: libc::c_uint);
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
-  #[no_mangle]
   fn inet_ntoa(__in: in_addr) -> *mut libc::c_char;
-  #[no_mangle]
   fn inet_aton(__cp: *const libc::c_char, __inp: *mut in_addr) -> libc::c_int;
 
-  #[no_mangle]
   static mut logmode: smallint;
 
-  #[no_mangle]
   static const_int_0: libc::c_int;
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
 }

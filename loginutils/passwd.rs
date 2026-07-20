@@ -16,16 +16,13 @@ use libc::uid_t;
 use libc::umask;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn setrlimit(__resource: __rlimit_resource_t, __rlimits: *const rlimit) -> libc::c_int;
 
   /* All function names below should be remapped by #defines above
    * in order to not collide with libc names. */
 
-  #[no_mangle]
   static mut logmode: smallint;
 
 }

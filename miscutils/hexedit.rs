@@ -4,15 +4,10 @@ use libc::printf;
 use libc::putchar_unlocked;
 use libc::sprintf;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn ftruncate(__fd: libc::c_int, __length: off64_t) -> libc::c_int;
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
-  #[no_mangle]
   static mut stdout: *mut FILE;
-  #[no_mangle]
   fn setvbuf(
     __stream: *mut FILE,
     __buf: *mut libc::c_char,
@@ -20,7 +15,6 @@ extern "C" {
     __n: size_t,
   ) -> libc::c_int;
 
-  #[no_mangle]
   fn mmap(
     __addr: *mut libc::c_void,
     __len: size_t,
@@ -29,13 +23,10 @@ extern "C" {
     __fd: libc::c_int,
     __offset: off64_t,
   ) -> *mut libc::c_void;
-  #[no_mangle]
   fn munmap(__addr: *mut libc::c_void, __len: size_t) -> libc::c_int;
 
-  #[no_mangle]
   static mut bb_got_signal: smallint;
 
-  #[no_mangle]
   static bb_hexdigits_upcase: [libc::c_char; 0];
 /* Non-aborting kind of convertors: bb_strto[u][l]l */
 /* On exit: errno = 0 only if there was non-empty, '\0' terminated value

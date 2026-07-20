@@ -12,19 +12,14 @@ use libc::time;
 use libc::time_t;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   static mut stderr: *mut FILE;
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> *mut libc::c_char;
 
 }

@@ -3,7 +3,6 @@ use libc::atoi;
 use libc::strtok;
 extern "C" {
 
-  #[no_mangle]
   fn uname(__name: *mut utsname) -> libc::c_int;
 }
 

@@ -9,31 +9,22 @@ use libc::puts;
 use libc::strstr;
 extern "C" {
 
-  #[no_mangle]
   fn exit(_: libc::c_int) -> !;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   static mut stdin: *mut FILE;
 
-  #[no_mangle]
   fn strcasestr(
     __haystack: *const libc::c_char,
     __needle: *const libc::c_char,
   ) -> *mut libc::c_char;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
-  #[no_mangle]
   fn regfree(__preg: *mut regex_t);
 
-  #[no_mangle]
   fn regexec(
     __preg: *const regex_t,
     __string: *const libc::c_char,

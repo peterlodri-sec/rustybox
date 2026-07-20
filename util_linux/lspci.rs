@@ -6,7 +6,6 @@ use libc::stat;
 use libc::strcmp;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   static mut option_mask32: u32;
 }
 

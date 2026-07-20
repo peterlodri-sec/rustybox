@@ -7,15 +7,12 @@ use libc::sprintf;
 use libc::ssize_t;
 extern "C" {
 
-  #[no_mangle]
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
   // NB: will return short read on error, not -1,
   // if some data was read before error occurred
 
-  #[no_mangle]
   fn strnlen(__string: *const libc::c_char, __maxlen: size_t) -> size_t;
 }
 

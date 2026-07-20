@@ -1,7 +1,6 @@
 use libc;
 use libc::mode_t;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
 
 }

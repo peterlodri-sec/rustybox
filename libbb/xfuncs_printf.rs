@@ -41,51 +41,32 @@ extern "C" {
   pub type sockaddr_dl;
   pub type sockaddr_ax25;
   pub type sockaddr_at;
-  #[no_mangle]
   fn rand() -> libc::c_int;
-  #[no_mangle]
   fn srand(__seed: libc::c_uint);
-  #[no_mangle]
   fn malloc(_: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn realloc(_: *mut libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn setenv(
     __name: *const libc::c_char,
     __value: *const libc::c_char,
     __replace: libc::c_int,
   ) -> libc::c_int;
-  #[no_mangle]
   fn unsetenv(__name: *const libc::c_char) -> libc::c_int;
-  #[no_mangle]
   fn mkstemp(__template: *mut libc::c_char) -> libc::c_int;
-  #[no_mangle]
   fn _exit(_: libc::c_int) -> !;
 
-  #[no_mangle]
   fn setuid(__uid: uid_t) -> libc::c_int;
-  #[no_mangle]
   fn seteuid(__uid: uid_t) -> libc::c_int;
-  #[no_mangle]
   fn setgid(__gid: gid_t) -> libc::c_int;
-  #[no_mangle]
   fn setegid(__gid: gid_t) -> libc::c_int;
-  #[no_mangle]
   fn fork() -> pid_t;
-  #[no_mangle]
   fn vfork() -> libc::c_int;
-  #[no_mangle]
   fn ttyname_r(__fd: libc::c_int, __buf: *mut libc::c_char, __buflen: size_t) -> libc::c_int;
 
-  #[no_mangle]
   fn chroot(__path: *const libc::c_char) -> libc::c_int;
 
-  #[no_mangle]
   fn socket(__domain: libc::c_int, __type: libc::c_int, __protocol: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn bind(__fd: libc::c_int, __addr: __CONST_SOCKADDR_ARG, __len: socklen_t) -> libc::c_int;
-  #[no_mangle]
   fn sendto(
     __fd: libc::c_int,
     __buf: *const libc::c_void,
@@ -94,51 +75,35 @@ extern "C" {
     __addr: __CONST_SOCKADDR_ARG,
     __addr_len: socklen_t,
   ) -> ssize_t;
-  #[no_mangle]
   fn listen(__fd: libc::c_int, __n: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   static mut stdout: *mut FILE;
 
-  #[no_mangle]
   fn fflush(__stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn fopen(__filename: *const libc::c_char, __modes: *const libc::c_char) -> *mut FILE;
-  #[no_mangle]
   fn vasprintf(
     __ptr: *mut *mut libc::c_char,
     __f: *const libc::c_char,
     __arg: ::std::ffi::VaList,
   ) -> libc::c_int;
 
-  #[no_mangle]
   fn ferror_unlocked(__stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn fileno_unlocked(__stream: *mut FILE) -> libc::c_int;
 
-  #[no_mangle]
   fn fchdir(__fd: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   fn pipe(__pipedes: *mut libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
 
-  #[no_mangle]
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn strdup(_: *const libc::c_char) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn mempcpy(
     __dest: *mut libc::c_void,
     __src: *const libc::c_void,
     __n: size_t,
   ) -> *mut libc::c_void;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* must be directly before hash[] */
@@ -155,13 +120,10 @@ extern "C" {
    * Therefore now we use #defines.
    */
   /* "BusyBox vN.N.N (timestamp or extra_version)" */
-  #[no_mangle]
   static bb_msg_memory_exhausted: [libc::c_char; 0];
 
-  #[no_mangle]
   fn strerror(_: libc::c_int) -> *mut libc::c_char;
 
-  #[no_mangle]
   static bb_msg_standard_output: [libc::c_char; 0];
 
 }

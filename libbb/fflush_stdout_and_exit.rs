@@ -2,9 +2,7 @@ use crate::libbb::default_error_retval::xfunc_error_retval;
 use libc;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   static mut stdout: *mut FILE;
-  #[no_mangle]
   fn fflush(__stream: *mut FILE) -> libc::c_int;
   /* Prints warning to stderr and returns NULL on failure: */
   /* "Opens" stdin if filename is special, else just opens file: */
@@ -310,7 +308,6 @@ extern "C" {
    * Therefore now we use #defines.
    */
   /* "BusyBox vN.N.N (timestamp or extra_version)" */
-  #[no_mangle]
   static bb_msg_standard_output: [libc::c_char; 0];
 
 }

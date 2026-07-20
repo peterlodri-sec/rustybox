@@ -26,33 +26,23 @@ extern "C" {
   /* This struct is deliberately not defined. */
   /* See docs/keep_data_small.txt */
   pub type globals;
-  #[no_mangle]
   fn ether_aton_r(__asc: *const libc::c_char, __addr: *mut ether_addr) -> *mut ether_addr;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
-  #[no_mangle]
   fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> *mut libc::c_char;
-  #[no_mangle]
   fn strtok_r(
     __s: *mut libc::c_char,
     __delim: *const libc::c_char,
     __save_ptr: *mut *mut libc::c_char,
   ) -> *mut libc::c_char;
-  #[no_mangle]
   fn strnlen(__string: *const libc::c_char, __maxlen: size_t) -> size_t;
 
-  #[no_mangle]
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   fn inet_ntoa(__in: in_addr) -> *mut libc::c_char;
   /* Some useful definitions */
   /* Macros for min/max.  */
@@ -93,10 +83,8 @@ extern "C" {
   /* start_stop_daemon and udhcpc are special - they want
    * to create pidfiles regardless of FEATURE_PIDFILE */
   /* True only if we created pidfile which is *file*, not /dev/null etc */
-  #[no_mangle]
   static mut wrote_pidfile: smallint;
 
-  #[no_mangle]
   static mut logmode: smallint;
 
   /* delims[0] is a comment char (use '\0' to disable), the rest are token delimiters */
@@ -104,9 +92,7 @@ extern "C" {
   /* '*const' ptr makes gcc optimize code much better.
    * Magic prevents ptr_to_globals from going into rodata.
    * If you want to assign a value, use SET_PTR_TO_GLOBALS(x) */
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
   /*
@@ -115,11 +101,8 @@ extern "C" {
    *
    * Licensed under GPLv2 or later, see file LICENSE in this source tree.
    */
-  #[no_mangle]
   static MAC_BCAST_ADDR: [u8; 6];
-  #[no_mangle]
   static dhcp_optflags: [dhcp_optflag; 0];
-  #[no_mangle]
   static dhcp_option_strings: [libc::c_char; 0];
 
   /* Same as above + ensures that option length is 4 bytes
@@ -165,7 +148,6 @@ extern "C" {
   // Site-specific              MAY           MAY         MAY                     MUST NOT     MUST NOT
   // All others                 MAY           MAY         MAY                     MUST NOT     MUST NOT
   /* ** Logging ***/
-  #[no_mangle]
   static mut dhcp_verbose: libc::c_uint;
 /* ** Other shared functions ***/
 /* 2nd param is "u32*" */

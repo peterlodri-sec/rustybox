@@ -6,24 +6,17 @@ use libc::open;
 use libc::putenv;
 extern "C" {
 
-  #[no_mangle]
   fn unsetenv(__name: *const libc::c_char) -> libc::c_int;
-  #[no_mangle]
   fn usleep(__useconds: useconds_t) -> libc::c_int;
 
-  #[no_mangle]
   fn fgets_unlocked(
     __s: *mut libc::c_char,
     __n: libc::c_int,
     __stream: *mut FILE,
   ) -> *mut libc::c_char;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   fn mktime(__tp: *mut tm) -> time_t;
-  #[no_mangle]
   fn tzset();
 
 }

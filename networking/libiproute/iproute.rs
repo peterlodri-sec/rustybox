@@ -10,17 +10,12 @@ use libc::strcmp;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   static mut stderr: *mut FILE;
 
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   static bb_msg_requires_arg: [libc::c_char; 0];
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
   /* UNUSED */
@@ -29,7 +24,6 @@ extern "C" {
   /* UNUSED */
   /*void get_prefix_1(inet_prefix *dst, char *arg, int family) FAST_FUNC;*/
 
-  #[no_mangle]
   static mut _SL_: libc::c_char;
 
   /* We need linux/types.h because older kernels use u32 etc
@@ -48,7 +42,6 @@ extern "C" {
 
   //static: const char *ll_idx_n2a(int idx, char *buf) FAST_FUNC;
 
-  #[no_mangle]
   static mut preferred_family: family_t;
 
 //const char *dnet_ntop(int af, const void *addr, char *str, size_t len);

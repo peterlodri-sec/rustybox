@@ -5,9 +5,7 @@ use libc::open;
 use libc::strcmp;
 extern "C" {
 
-  #[no_mangle]
   fn flock(__fd: libc::c_int, __operation: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   static mut optind: libc::c_int;
 
 }

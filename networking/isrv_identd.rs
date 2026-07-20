@@ -10,22 +10,15 @@ use libc::openlog;
 use libc::strcpy;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
-  #[no_mangle]
   fn dprintf(__fd: libc::c_int, __fmt: *const libc::c_char, _: ...) -> libc::c_int;
 
-  #[no_mangle]
   fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> *mut libc::c_char;
-  #[no_mangle]
   fn strpbrk(_: *const libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
 
-  #[no_mangle]
   static mut logmode: smallint;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
 /* callbacks */

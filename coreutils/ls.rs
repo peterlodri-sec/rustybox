@@ -29,37 +29,26 @@ use libc::DIR;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   fn qsort(__base: *mut libc::c_void, __nmemb: size_t, __size: size_t, __compar: __compar_fn_t);
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn gnu_dev_major(__dev: libc::dev_t) -> libc::c_uint;
 
-  #[no_mangle]
   fn gnu_dev_minor(__dev: libc::dev_t) -> libc::c_uint;
 
-  #[no_mangle]
   static mut stdout: *mut FILE;
 
-  #[no_mangle]
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn strcoll(__s1: *const libc::c_char, __s2: *const libc::c_char) -> libc::c_int;
 
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn strverscmp(__s1: *const libc::c_char, __s2: *const libc::c_char) -> libc::c_int;
 
-  #[no_mangle]
   fn strftime(
     __s: *mut libc::c_char,
     __maxsize: size_t,
@@ -67,16 +56,12 @@ extern "C" {
     __tp: *const tm,
   ) -> size_t;
 
-  #[no_mangle]
   fn localtime(__timer: *const time_t) -> *mut tm;
 
-  #[no_mangle]
   fn ctime(__timer: *const time_t) -> *mut libc::c_char;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

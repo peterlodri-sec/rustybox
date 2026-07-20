@@ -15,7 +15,6 @@ use libc::time;
 use libc::time_t;
 extern "C" {
 
-  #[no_mangle]
   fn snprintf(
     _: *mut libc::c_char,
     _: libc::c_ulong,
@@ -23,13 +22,10 @@ extern "C" {
     _: ...
   ) -> libc::c_int;
 
-  #[no_mangle]
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn ctime(__timer: *const time_t) -> *mut libc::c_char;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
 }

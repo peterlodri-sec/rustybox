@@ -7,24 +7,20 @@ use libc::sockaddr_nl;
 use libc::strcmp;
 extern "C" {
 
-  #[no_mangle]
   fn snprintf(
     _: *mut libc::c_char,
     _: libc::c_ulong,
     _: *const libc::c_char,
     _: ...
   ) -> libc::c_int;
-  #[no_mangle]
   fn strtoul(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_ulong;
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
 //static: const char *ll_idx_n2a(int idx, char *buf) FAST_FUNC;

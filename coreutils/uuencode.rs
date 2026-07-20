@@ -8,13 +8,10 @@ use libc::stat;
 use libc::umask;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   static mut stdout: *mut FILE;
 
-  #[no_mangle]
   fn fflush(__stream: *mut FILE) -> libc::c_int;
 
   /* Guaranteed to NOT be a macro (smallest code). Saves nearly 2k on uclibc.
@@ -23,10 +20,8 @@ extern "C" {
   // NB: will return short read on error, not -1,
   // if some data was read before error occurred
 
-  #[no_mangle]
   static bb_uuenc_tbl_base64: [libc::c_char; 0];
 
-  #[no_mangle]
   static bb_uuenc_tbl_std: [libc::c_char; 0];
 
 }

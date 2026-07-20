@@ -3,17 +3,12 @@ use libc;
 use libc::printf;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn getc_unlocked(__stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn ferror_unlocked(__stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   static bb_msg_standard_input: [libc::c_char; 0];
 }
 

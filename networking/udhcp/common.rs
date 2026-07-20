@@ -15,10 +15,8 @@ use libc::strchr;
 use libc::strtok;
 extern "C" {
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
   /* Some useful definitions */
@@ -50,7 +48,6 @@ extern "C" {
   // #[no_mangle]
   // fn BUG_bb_strtou32_unimplemented() -> u32;
 
-  #[no_mangle]
   fn strnlen(__string: *const libc::c_char, __maxlen: size_t) -> size_t;
 }
 

@@ -12,20 +12,15 @@ use libc::ssize_t;
 use libc::time;
 use libc::time_t;
 extern "C" {
-  #[no_mangle]
   fn recvmsg(__fd: libc::c_int, __message: *mut msghdr, __flags: libc::c_int) -> ssize_t;
-  #[no_mangle]
   fn sendmsg(__fd: libc::c_int, __message: *const msghdr, __flags: libc::c_int) -> ssize_t;
-  #[no_mangle]
   fn recv(
     __fd: libc::c_int,
     __buf: *mut libc::c_void,
     __n: size_t,
     __flags: libc::c_int,
   ) -> ssize_t;
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 }
 

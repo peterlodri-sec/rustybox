@@ -10,20 +10,14 @@ use libc::pid_t;
 use libc::printf;
 extern "C" {
 
-  #[no_mangle]
   fn getsid(__pid: pid_t) -> pid_t;
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
-  #[no_mangle]
   fn regexec(
     __preg: *const regex_t,
     __string: *const libc::c_char,

@@ -5,13 +5,9 @@ use libc::strchr;
 use libc::strcmp;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   static mut stdout: *mut FILE;
-  #[no_mangle]
   fn fflush(__stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn fileno_unlocked(__stream: *mut FILE) -> libc::c_int;
 
   /* Guaranteed to NOT be a macro (smallest code). Saves nearly 2k on uclibc.
@@ -26,7 +22,6 @@ extern "C" {
 
   /* "Opens" stdin if filename is special, else just opens file: */
 
-  #[no_mangle]
   static bb_uuenc_tbl_base64: [libc::c_char; 0];
 
 }

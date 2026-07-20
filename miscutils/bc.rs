@@ -16,56 +16,35 @@ use libc::strcpy;
 use libc::strrchr;
 extern "C" {
 
-  #[no_mangle]
   static mut optarg: *mut libc::c_char;
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   static mut stdin: *mut FILE;
-  #[no_mangle]
   static mut stdout: *mut FILE;
-  #[no_mangle]
   static mut stderr: *mut FILE;
 
-  #[no_mangle]
   fn getc_unlocked(__stream: *mut FILE) -> libc::c_int;
 
-  #[no_mangle]
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn ferror_unlocked(__stream: *mut FILE) -> libc::c_int;
 
-  #[no_mangle]
   fn exit(_: libc::c_int) -> !;
 
-  #[no_mangle]
   fn llabs(_: libc::c_longlong) -> libc::c_longlong;
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
-  #[no_mangle]
   static const_int_0: libc::c_int;
-  #[no_mangle]
   static bb_hexdigits_upcase: [libc::c_char; 0];
 
-  #[no_mangle]
   static mut bb_got_signal: smallint;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 pub type __builtin_va_list = [__va_list_tag; 1];

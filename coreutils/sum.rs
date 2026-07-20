@@ -2,10 +2,8 @@ use libc;
 use libc::close;
 use libc::printf;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

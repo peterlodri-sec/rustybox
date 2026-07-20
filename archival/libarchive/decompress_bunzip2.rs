@@ -6,13 +6,9 @@ use libc::free;
 use libc::sigset_t;
 use libc::ssize_t;
 extern "C" {
-  #[no_mangle]
   fn _setjmp(_: *mut __jmp_buf_tag) -> libc::c_int;
-  #[no_mangle]
   fn longjmp(_: *mut __jmp_buf_tag, _: libc::c_int) -> !;
-  #[no_mangle]
   fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 }
 

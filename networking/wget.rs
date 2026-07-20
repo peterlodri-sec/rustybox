@@ -37,72 +37,49 @@ use libc::FILE;
 extern "C" {
   pub type tls_handshake_data;
 
-  #[no_mangle]
   fn strtoul(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_ulong;
 
-  #[no_mangle]
   fn exit(_: libc::c_int) -> !;
 
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn socketpair(
     __domain: libc::c_int,
     __type: libc::c_int,
     __protocol: libc::c_int,
     __fds: *mut libc::c_int,
   ) -> libc::c_int;
-  #[no_mangle]
   fn shutdown(__fd: libc::c_int, __how: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
-  #[no_mangle]
   static mut stderr: *mut FILE;
 
-  #[no_mangle]
   fn fflush(__stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn fdopen(__fd: libc::c_int, __modes: *const libc::c_char) -> *mut FILE;
 
-  #[no_mangle]
   fn getc_unlocked(__stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn fgets_unlocked(
     __s: *mut libc::c_char,
     __n: libc::c_int,
     __stream: *mut FILE,
   ) -> *mut libc::c_char;
-  #[no_mangle]
   fn fread(__ptr: *mut libc::c_void, __size: size_t, __n: size_t, __stream: *mut FILE) -> size_t;
-  #[no_mangle]
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn clearerr(__stream: *mut FILE);
-  #[no_mangle]
   fn ferror_unlocked(__stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn fileno_unlocked(__stream: *mut FILE) -> libc::c_int;
 
-  #[no_mangle]
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   fn strnlen(__string: *const libc::c_char, __maxlen: size_t) -> size_t;
-  #[no_mangle]
   fn inet_pton(
     __af: libc::c_int,
     __cp: *const libc::c_char,
@@ -121,17 +98,12 @@ extern "C" {
    *    return value is all-ones in this case.
    */
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
-  #[no_mangle]
   static bb_uuenc_tbl_base64: [libc::c_char; 0];
 
-  #[no_mangle]
   fn execvp(__file: *const libc::c_char, __argv: *const *mut libc::c_char) -> libc::c_int;
-  #[no_mangle]
   fn ftruncate(__fd: libc::c_int, __length: off64_t) -> libc::c_int;
-  #[no_mangle]
   fn vfork() -> libc::c_int;
 }
 

@@ -9,7 +9,6 @@ pub type __sighandler_t = Option<unsafe extern "C" fn(_: libc::c_int) -> ()>;
 // This is meaningfully different from libc::sigaction.
 
 extern "C" {
-  #[no_mangle]
   fn sigaction(__sig: libc::c_int, __act: *const sigaction, __oact: *mut sigaction) -> libc::c_int;
 }
 

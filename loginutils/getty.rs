@@ -25,52 +25,32 @@ use libc::termios;
 use libc::uid_t;
 use libc::useconds_t;
 extern "C" {
-  #[no_mangle]
   fn exit(_: libc::c_int) -> !;
 
-  #[no_mangle]
   fn getsid(__pid: pid_t) -> pid_t;
-  #[no_mangle]
   fn tcsetpgrp(__fd: libc::c_int, __pgrp_id: pid_t) -> libc::c_int;
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
-  #[no_mangle]
   fn _exit(_: libc::c_int) -> !;
-  #[no_mangle]
   fn execlp(__file: *const libc::c_char, __arg: *const libc::c_char, _: ...) -> libc::c_int;
-  #[no_mangle]
   fn usleep(__useconds: useconds_t) -> libc::c_int;
-  #[no_mangle]
   fn fchown(__fd: libc::c_int, __owner: uid_t, __group: gid_t) -> libc::c_int;
 
-  #[no_mangle]
   fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
 
-  #[no_mangle]
   fn strsep(__stringp: *mut *mut libc::c_char, __delim: *const libc::c_char) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn cfsetspeed(__termios_p: *mut termios, __speed: speed_t) -> libc::c_int;
-  #[no_mangle]
   fn tcgetattr(__fd: libc::c_int, __termios_p: *mut termios) -> libc::c_int;
-  #[no_mangle]
   fn tcdrain(__fd: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn tcflush(__fd: libc::c_int, __queue_selector: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn tcgetsid(__fd: libc::c_int) -> pid_t;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
-  #[no_mangle]
   static mut msg_eol: *const libc::c_char;
-  #[no_mangle]
   static mut logmode: smallint;
 
 }

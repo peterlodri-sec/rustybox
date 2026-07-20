@@ -6,17 +6,14 @@ use libc::group;
 use libc::strcmp;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
   /* Search for an entry with a matching group ID.  */
 
   /* Search for an entry with a matching group name.  */
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
-  #[no_mangle]
   static bb_msg_perm_denied_are_you_root: [libc::c_char; 0];
 }
 

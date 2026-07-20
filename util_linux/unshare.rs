@@ -16,13 +16,10 @@ use libc::uid_t;
 use libc::unshare;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
 /* xvfork() can't be a _function_, return after vfork in child mangles stack

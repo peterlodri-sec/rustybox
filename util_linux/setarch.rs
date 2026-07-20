@@ -2,10 +2,8 @@ use crate::libbb::appletlib::applet_name;
 use libc;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn personality(__persona: libc::c_ulong) -> libc::c_int;
 }
 

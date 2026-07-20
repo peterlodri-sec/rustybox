@@ -3,11 +3,8 @@ use libc;
 use libc::open;
 extern "C" {
 
-  #[no_mangle]
   fn grantpt(__fd: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn unlockpt(__fd: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn ptsname_r(__fd: libc::c_int, __buf: *mut libc::c_char, __buflen: size_t) -> libc::c_int;
 
 }

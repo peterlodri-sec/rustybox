@@ -11,33 +11,23 @@ use libc::strcmp;
 use libc::tm;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   fn atof(__nptr: *const libc::c_char) -> libc::c_double;
-  #[no_mangle]
   fn strtod(__nptr: *const libc::c_char, __endptr: *mut *mut libc::c_char) -> libc::c_double;
-  #[no_mangle]
   fn strtoul(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_ulong;
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   static mut stderr: *mut FILE;
-  #[no_mangle]
   fn qsort(__base: *mut libc::c_void, __nmemb: size_t, __size: size_t, __compar: __compar_fn_t);
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   fn strverscmp(__s1: *const libc::c_char, __s2: *const libc::c_char) -> libc::c_int;
-  #[no_mangle]
   fn strptime(
     __s: *const libc::c_char,
     __fmt: *const libc::c_char,
     __tp: *mut tm,
   ) -> *mut libc::c_char;
-  #[no_mangle]
   static mut option_mask32: u32;
 
 }

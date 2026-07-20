@@ -5,9 +5,7 @@ use libc::pid_t;
 use libc::strcmp;
 extern "C" {
 
-  #[no_mangle]
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
 }

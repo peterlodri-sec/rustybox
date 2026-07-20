@@ -28,49 +28,32 @@ use libc::strcpy;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   fn fnmatch(
     __pattern: *const libc::c_char,
     __name: *const libc::c_char,
     __flags: libc::c_int,
   ) -> libc::c_int;
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn dup(__fd: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn execlp(__file: *const libc::c_char, __arg: *const libc::c_char, _: ...) -> libc::c_int;
-  #[no_mangle]
   fn _exit(_: libc::c_int) -> !;
 
-  #[no_mangle]
   fn vfork() -> libc::c_int;
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn gnu_dev_major(__dev: libc::dev_t) -> libc::c_uint;
-  #[no_mangle]
   fn gnu_dev_minor(__dev: libc::dev_t) -> libc::c_uint;
-  #[no_mangle]
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
-  #[no_mangle]
   static mut stdout: *mut FILE;
-  #[no_mangle]
   static mut stderr: *mut FILE;
 
-  #[no_mangle]
   fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   static mut bb_got_signal: smallint;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
 }

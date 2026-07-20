@@ -8,15 +8,11 @@ use libc::time_t;
 use libc::timeval;
 use libc::tm;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn utimes(__file: *const libc::c_char, __tvp: *const timeval) -> libc::c_int;
-  #[no_mangle]
   fn lutimes(__file: *const libc::c_char, __tvp: *const timeval) -> libc::c_int;
 
-  #[no_mangle]
   fn localtime_r(__timer: *const time_t, __tp: *mut tm) -> *mut tm;
 
 }

@@ -1,6 +1,5 @@
 use libc;
 extern "C" {
-  #[no_mangle]
   fn gethostbyname(__name: *const libc::c_char) -> *mut hostent;
 // Also mount.c and inetd.c are using gethostbyname(),
 // + inet_common.c has additional IPv4-only stuff

@@ -10,12 +10,9 @@ use libc::sockaddr;
 use libc::sockaddr_in6;
 use libc::strcmp;
 extern "C" {
-  #[no_mangle]
   fn rand() -> libc::c_int;
 
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   /* SO_REUSEADDR allows a server to rebind to an address that is already
@@ -64,11 +61,8 @@ extern "C" {
   // Site-specific              MAY           MAY         MAY                     MUST NOT     MUST NOT
   // All others                 MAY           MAY         MAY                     MUST NOT     MUST NOT
   /* ** Logging ***/
-  #[no_mangle]
   static mut dhcp_verbose: libc::c_uint;
-  #[no_mangle]
   fn getifaddrs(__ifap: *mut *mut ifaddrs) -> libc::c_int;
-  #[no_mangle]
   fn freeifaddrs(__ifa: *mut ifaddrs);
 }
 

@@ -10,12 +10,9 @@ use libc::strcpy;
 use libc::uid_t;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
 }

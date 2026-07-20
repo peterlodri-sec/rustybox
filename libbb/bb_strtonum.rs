@@ -1,28 +1,24 @@
 use crate::libbb::ptr_to_globals::bb_errno;
 use libc;
 extern "C" {
-  #[no_mangle]
   fn strtol(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_long;
 
-  #[no_mangle]
   fn strtoul(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_ulong;
 
-  #[no_mangle]
   fn strtoll(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_longlong;
 
-  #[no_mangle]
   fn strtoull(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,

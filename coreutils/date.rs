@@ -10,31 +10,24 @@ use libc::timespec;
 use libc::tm;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
 
-  #[no_mangle]
   fn strftime(
     __s: *mut libc::c_char,
     __maxsize: size_t,
     __format: *const libc::c_char,
     __tp: *const tm,
   ) -> size_t;
-  #[no_mangle]
   fn strptime(
     __s: *const libc::c_char,
     __fmt: *const libc::c_char,
     __tp: *mut tm,
   ) -> *mut libc::c_char;
-  #[no_mangle]
   fn localtime_r(__timer: *const time_t, __tp: *mut tm) -> *mut tm;
 }
 // glibc removed stime() in 2.31; emulate via clock_settime(CLOCK_REALTIME).
@@ -47,9 +40,7 @@ unsafe fn stime(__when: *const time_t) -> libc::c_int {
 }
 extern "C" {
 
-  #[no_mangle]
   static bb_msg_invalid_date: [libc::c_char; 0];
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

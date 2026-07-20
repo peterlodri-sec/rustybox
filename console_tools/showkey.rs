@@ -10,25 +10,18 @@ use libc::ssize_t;
 use libc::termios;
 extern "C" {
 
-  #[no_mangle]
   fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
-  #[no_mangle]
   fn tcgetattr(__fd: libc::c_int, __termios_p: *mut termios) -> libc::c_int;
-  #[no_mangle]
   fn tcsetattr(
     __fd: libc::c_int,
     __optional_actions: libc::c_int,
     __termios_p: *const termios,
   ) -> libc::c_int;
-  #[no_mangle]
   fn cfmakeraw(__termios_p: *mut termios);
 
-  #[no_mangle]
   static mut bb_got_signal: smallint;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
 }

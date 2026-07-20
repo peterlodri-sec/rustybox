@@ -7,7 +7,6 @@ use libc::rename;
 use libc::stat;
 use libc::unlink;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
 }
 

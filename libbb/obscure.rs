@@ -6,12 +6,10 @@ use libc::printf;
 use libc::strchr;
 extern "C" {
 
-  #[no_mangle]
   fn strcasestr(
     __haystack: *const libc::c_char,
     __needle: *const libc::c_char,
   ) -> *mut libc::c_char;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
 }

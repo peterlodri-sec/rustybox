@@ -22,13 +22,9 @@ extern "C" {
   pub type sockaddr_ax25;
   pub type sockaddr_at;
 
-  #[no_mangle]
   fn usleep(__useconds: useconds_t) -> libc::c_int;
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn connect(__fd: libc::c_int, __addr: __CONST_SOCKADDR_ARG, __len: socklen_t) -> libc::c_int;
-  #[no_mangle]
   fn getservbyport(__port: libc::c_int, __proto: *const libc::c_char) -> *mut servent;
 
 /* Version which dies on error */

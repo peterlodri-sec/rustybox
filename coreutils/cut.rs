@@ -7,19 +7,12 @@ use libc::puts;
 use libc::strchr;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   static mut stdout: *mut FILE;
-  #[no_mangle]
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn qsort(__base: *mut libc::c_void, __nmemb: size_t, __size: size_t, __compar: __compar_fn_t);
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   fn strsep(__stringp: *mut *mut libc::c_char, __delim: *const libc::c_char) -> *mut libc::c_char;
-  #[no_mangle]
   static mut option_mask32: u32;
 }
 

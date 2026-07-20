@@ -13,29 +13,21 @@ use libc::termios;
 use libc::unlink;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn dprintf(__fd: libc::c_int, __fmt: *const libc::c_char, _: ...) -> libc::c_int;
 
-  #[no_mangle]
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn cfsetspeed(__termios_p: *mut termios, __speed: speed_t) -> libc::c_int;
-  #[no_mangle]
   fn tcsetattr(
     __fd: libc::c_int,
     __optional_actions: libc::c_int,
     __termios_p: *const termios,
   ) -> libc::c_int;
-  #[no_mangle]
   fn tcsendbreak(__fd: libc::c_int, __duration: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   static mut bb_got_signal: smallint;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

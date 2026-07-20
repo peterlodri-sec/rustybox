@@ -21,27 +21,20 @@ use libc::strcpy;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   static mut optarg: *mut libc::c_char;
 
-  #[no_mangle]
   static mut stdin: *mut FILE;
 
-  #[no_mangle]
   fn fgets_unlocked(
     __s: *mut libc::c_char,
     __n: libc::c_int,
     __stream: *mut FILE,
   ) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   fn dirname(__path: *mut libc::c_char) -> *mut libc::c_char;
 
 /* Some useful definitions */

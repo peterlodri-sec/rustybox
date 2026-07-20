@@ -25,40 +25,28 @@ use libc::strcpy;
 use libc::unlink;
 extern "C" {
 
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   fn __cmsg_nxthdr(__mhdr: *mut msghdr, __cmsg: *mut cmsghdr) -> *mut cmsghdr;
 
-  #[no_mangle]
   fn recvmsg(__fd: libc::c_int, __message: *mut msghdr, __flags: libc::c_int) -> ssize_t;
 
-  #[no_mangle]
   fn rand() -> libc::c_int;
 
-  #[no_mangle]
   fn srand(__seed: libc::c_uint);
 
-  #[no_mangle]
   fn strnlen(__string: *const libc::c_char, __maxlen: size_t) -> size_t;
 
-  #[no_mangle]
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   fn inet_addr(__cp: *const libc::c_char) -> in_addr_t;
 
-  #[no_mangle]
   fn inet_ntoa(__in: in_addr) -> *mut libc::c_char;
   /* Some useful definitions */
   /* Macros for min/max.  */
@@ -76,7 +64,6 @@ extern "C" {
   /* Same as wait4pid(spawn(argv)), but with NOFORK/NOEXEC if configured: */
 
   /* { "-", NULL } */
-  #[no_mangle]
   static mut option_mask32: u32;
 
   /* BTW, surprisingly, changing API to
@@ -85,21 +72,14 @@ extern "C" {
   /* start_stop_daemon and udhcpc are special - they want
    * to create pidfiles regardless of FEATURE_PIDFILE */
   /* True only if we created pidfile which is *file*, not /dev/null etc */
-  #[no_mangle]
   static mut wrote_pidfile: smallint;
 
-  #[no_mangle]
   static mut logmode: smallint;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
-  #[no_mangle]
   static MAC_BCAST_ADDR: [u8; 6];
-  #[no_mangle]
   static dhcp_optflags: [dhcp_optflag; 0];
-  #[no_mangle]
   static dhcp_option_strings: [libc::c_char; 0];
-  #[no_mangle]
   static dhcp_option_lengths: [u8; 0];
 
   /* Same as above + ensures that option length is 4 bytes
@@ -145,7 +125,6 @@ extern "C" {
   // Site-specific              MAY           MAY         MAY                     MUST NOT     MUST NOT
   // All others                 MAY           MAY         MAY                     MUST NOT     MUST NOT
   /* ** Logging ***/
-  #[no_mangle]
   static mut dhcp_verbose: libc::c_uint;
 
 /* 2nd param is "struct option_set**" */

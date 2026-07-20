@@ -15,27 +15,20 @@ use libc::unlink;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   fn strtol(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_long;
 
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   static mut stdin: *mut FILE;
 
-  #[no_mangle]
   fn dprintf(__fd: libc::c_int, __fmt: *const libc::c_char, _: ...) -> libc::c_int;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
 }

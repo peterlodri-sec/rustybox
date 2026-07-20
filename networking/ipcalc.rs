@@ -6,21 +6,16 @@ use libc::hostent;
 use libc::in_addr;
 use libc::printf;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn gethostbyaddr(
     __addr: *const libc::c_void,
     __len: __socklen_t,
     __type: libc::c_int,
   ) -> *mut hostent;
 
-  #[no_mangle]
   fn inet_ntoa(__in: in_addr) -> *mut libc::c_char;
-  #[no_mangle]
   fn inet_aton(__cp: *const libc::c_char, __inp: *mut in_addr) -> libc::c_int;
 
-  #[no_mangle]
   static mut logmode: smallint;
 
 }

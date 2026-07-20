@@ -4,14 +4,10 @@ use libc::pid_t;
 use libc::sleep;
 extern "C" {
 
-  #[no_mangle]
   fn getppid() -> pid_t;
-  #[no_mangle]
   fn vfork() -> libc::c_int;
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn wait(__stat_loc: *mut libc::c_int) -> pid_t;
 
 }

@@ -1,7 +1,6 @@
 use libc;
 use libc::close;
 extern "C" {
-  #[no_mangle]
   fn readahead(__fd: libc::c_int, __offset: off64_t, __count: size_t) -> ssize_t;
 
 }

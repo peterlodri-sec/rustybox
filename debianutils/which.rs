@@ -6,12 +6,9 @@ use libc::strchr;
 use libc::strcpy;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   static bb_PATH_root_path: [libc::c_char; 0];
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
 }

@@ -2,7 +2,6 @@ use libc;
 use libc::close;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
 }

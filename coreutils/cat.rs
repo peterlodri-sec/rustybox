@@ -7,19 +7,14 @@ use libc::printf;
 use libc::ssize_t;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   static mut stdout: *mut FILE;
 
-  #[no_mangle]
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
 
   /* Applets which are useful from another applets */
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

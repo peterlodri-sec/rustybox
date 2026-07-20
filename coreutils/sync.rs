@@ -2,14 +2,10 @@ use libc;
 use libc::close;
 use libc::sync;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn fsync(__fd: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn syncfs(__fd: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   fn fdatasync(__fildes: libc::c_int) -> libc::c_int;
 
 }

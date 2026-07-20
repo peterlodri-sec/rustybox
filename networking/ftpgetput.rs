@@ -15,14 +15,10 @@ use libc::stat;
 use libc::strcpy;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn fflush(__stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn fdopen(__fd: libc::c_int, __modes: *const libc::c_char) -> *mut FILE;
 
-  #[no_mangle]
   fn fgets_unlocked(
     __s: *mut libc::c_char,
     __n: libc::c_int,
@@ -43,7 +39,6 @@ extern "C" {
 
   /* inet_[ap]ton on steroids */
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

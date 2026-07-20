@@ -9,9 +9,7 @@ use libc::puts;
 use libc::time_t;
 use libc::uid_t;
 extern "C" {
-  #[no_mangle]
   static mut optarg: *mut libc::c_char;
-  #[no_mangle]
   static mut optind: libc::c_int;
 
   /* Non-aborting kind of convertors: bb_strto[u][l]l */
@@ -26,18 +24,12 @@ extern "C" {
    *    return value is all-ones in this case.
    */
 
-  #[no_mangle]
   fn shmctl(__shmid: libc::c_int, __cmd: libc::c_int, __buf: *mut shmid_ds) -> libc::c_int;
-  #[no_mangle]
   fn shmget(__key: key_t, __size: size_t, __shmflg: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn msgctl(__msqid: libc::c_int, __cmd: libc::c_int, __buf: *mut msqid_ds) -> libc::c_int;
-  #[no_mangle]
   fn msgget(__key: key_t, __msgflg: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn semctl(__semid: libc::c_int, __semnum: libc::c_int, __cmd: libc::c_int, _: ...)
     -> libc::c_int;
-  #[no_mangle]
   fn semget(__key: key_t, __nsems: libc::c_int, __semflg: libc::c_int) -> libc::c_int;
 }
 

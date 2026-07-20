@@ -4,10 +4,8 @@ use libc::printf;
 use libc::rmdir;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn dirname(__path: *mut libc::c_char) -> *mut libc::c_char;
 
 }

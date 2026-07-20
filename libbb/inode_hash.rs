@@ -5,7 +5,6 @@ use libc::ino_t;
 use libc::stat;
 use libc::strcpy;
 extern "C" {
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
 }

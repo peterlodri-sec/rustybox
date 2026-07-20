@@ -4,6 +4,16 @@
 #![allow(non_upper_case_globals)]
 #![allow(unused_assignments)]
 #![allow(unused_mut)]
+// Inherited c2rust-transpile noise — these are not bugs in transpiled C, just
+// idiom mismatches. Silenced crate-wide so real diagnostics stay visible.
+#![allow(unused_parens)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(dead_code)]
+#![allow(unused_unsafe)]
+// c2rust accesses `static mut` globals through references pervasively (~3.9k
+// sites). Idiomatic &raw migration is tracked separately; silence for now.
+#![allow(static_mut_refs)]
 #![feature(c_variadic)]
 #![feature(extern_types)]
 

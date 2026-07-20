@@ -6,7 +6,6 @@ use libc::strcmp;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   fn getmntent(__stream: *mut FILE) -> *mut mntent;
 
 }

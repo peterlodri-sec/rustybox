@@ -5,12 +5,9 @@ use libc::close;
 use libc::off_t;
 use libc::printf;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   static bb_msg_standard_input: [libc::c_char; 0];
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

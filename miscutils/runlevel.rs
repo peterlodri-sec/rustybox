@@ -4,9 +4,7 @@ use libc::puts;
 use libc::setutxent;
 extern "C" {
 
-  #[no_mangle]
   fn getutxent() -> *mut utmpx;
-  #[no_mangle]
   fn utmpxname(__file: *const libc::c_char) -> libc::c_int;
 }
 

@@ -13,29 +13,19 @@ use libc::strchr;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   fn unsetenv(__name: *const libc::c_char) -> libc::c_int;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
-  #[no_mangle]
   static mut stdin: *mut FILE;
 
-  #[no_mangle]
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn popen(__command: *const libc::c_char, __modes: *const libc::c_char) -> *mut FILE;
-  #[no_mangle]
   fn pclose(__stream: *mut FILE) -> libc::c_int;
 
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
 //char FAST_FUNC *parse_url(char *url, char **user, char **pass);

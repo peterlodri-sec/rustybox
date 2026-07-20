@@ -2,7 +2,6 @@ use libc;
 use libc::mode_t;
 use libc::umask;
 extern "C" {
-  #[no_mangle]
   fn strtoul(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,

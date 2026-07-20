@@ -20,7 +20,6 @@ extern "C" {
   pub type sockaddr_dl;
   pub type sockaddr_ax25;
   pub type sockaddr_at;
-  #[no_mangle]
   fn select(
     __nfds: libc::c_int,
     __readfds: *mut fd_set,
@@ -28,10 +27,8 @@ extern "C" {
     __exceptfds: *mut fd_set,
     __timeout: *mut timeval,
   ) -> libc::c_int;
-  #[no_mangle]
   fn accept(__fd: libc::c_int, __addr: __SOCKADDR_ARG, __addr_len: *mut socklen_t) -> libc::c_int;
 
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
 }

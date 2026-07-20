@@ -11,10 +11,8 @@ use libc::time_t;
 use libc::utmpx;
 extern "C" {
 
-  #[no_mangle]
   fn ctime(__timer: *const time_t) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn getutxent() -> *mut utmpx;
 
 /* Guaranteed to NOT be a macro (smallest code). Saves nearly 2k on uclibc.

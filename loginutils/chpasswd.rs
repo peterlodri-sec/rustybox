@@ -7,13 +7,10 @@ use libc::strchr;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   static mut stdin: *mut FILE;
 
-  #[no_mangle]
   static mut logmode: smallint;
 
-  #[no_mangle]
   static bb_msg_perm_denied_are_you_root: [libc::c_char; 0];
 }
 

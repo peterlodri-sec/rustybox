@@ -4,10 +4,8 @@ use libc::free;
 use libc::pid_t;
 use libc::printf;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn getppid() -> pid_t;
 }
 

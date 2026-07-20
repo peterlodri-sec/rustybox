@@ -18,23 +18,16 @@ use libc::time_t;
 use libc::useconds_t;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn _exit(_: libc::c_int) -> !;
-  #[no_mangle]
   fn fchdir(__fd: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   fn usleep(__useconds: useconds_t) -> libc::c_int;
-  #[no_mangle]
   fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* Some useful definitions */
@@ -50,7 +43,6 @@ extern "C" {
 
   /* NOMMU friendy fork+exec: */
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

@@ -34,31 +34,21 @@ use libc::termios;
 use libc::uid_t;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn execvp(__file: *const libc::c_char, __argv: *const *mut libc::c_char) -> libc::c_int;
-  #[no_mangle]
   fn _exit(_: libc::c_int) -> !;
 
-  #[no_mangle]
   fn fork() -> pid_t;
-  #[no_mangle]
   fn vfork() -> libc::c_int;
 
-  #[no_mangle]
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
 
-  #[no_mangle]
   fn sigfillset(__set: *mut sigset_t) -> libc::c_int;
-  #[no_mangle]
   fn sigdelset(__set: *mut sigset_t, __signo: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   fn vsnprintf(
     _: *mut libc::c_char,
     _: libc::c_ulong,
@@ -66,23 +56,15 @@ extern "C" {
     _: ::std::ffi::VaList,
   ) -> libc::c_int;
 
-  #[no_mangle]
   fn strpbrk(_: *const libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   fn strsep(__stringp: *mut *mut libc::c_char, __delim: *const libc::c_char) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn setrlimit(__resource: __rlimit_resource_t, __rlimits: *const rlimit) -> libc::c_int;
-  #[no_mangle]
   fn wait(__stat_loc: *mut libc::c_int) -> pid_t;
-  #[no_mangle]
   fn waitpid(__pid: pid_t, __stat_loc: *mut libc::c_int, __options: libc::c_int) -> pid_t;
-  #[no_mangle]
   fn tcgetattr(__fd: libc::c_int, __termios_p: *mut termios) -> libc::c_int;
 
-  #[no_mangle]
   static mut bb_got_signal: smallint;
 
   /* delims[0] is a comment char (use '\0' to disable), the rest are token delimiters */
@@ -93,19 +75,15 @@ extern "C" {
    * filename should not be NULL. */
 
   /* allow default system PATH to be extended via CFLAGS */
-  #[no_mangle]
   static bb_PATH_root_path: [libc::c_char; 0];
   /* At least gcc 3.4.6 on mipsel system needs optimization barrier */
   /* You can change LIBBB_DEFAULT_LOGIN_SHELL, but don't use it,
    * use bb_default_login_shell and following defines.
    * If you change LIBBB_DEFAULT_LOGIN_SHELL,
    * don't forget to change increment constant. */
-  #[no_mangle]
   static bb_default_login_shell: [libc::c_char; 0];
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
-  #[no_mangle]
   fn reboot(__howto: libc::c_int) -> libc::c_int;
 }
 pub type __builtin_va_list = [__va_list_tag; 1];

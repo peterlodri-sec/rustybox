@@ -3,11 +3,8 @@ use libc;
 use libc::close;
 use libc::useconds_t;
 extern "C" {
-  #[no_mangle]
   fn _exit(_: libc::c_int) -> !;
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn usleep(__useconds: useconds_t) -> libc::c_int;
 
 }

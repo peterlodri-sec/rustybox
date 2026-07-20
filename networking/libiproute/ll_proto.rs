@@ -5,9 +5,7 @@ use c2rust_asm_casts::AsmCastTrait;
 use libc;
 use libc::strcasecmp;
 extern "C" {
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   fn snprintf(
     _: *mut libc::c_char,
     _: libc::c_ulong,

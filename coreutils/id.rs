@@ -12,7 +12,6 @@ use libc::printf;
 use libc::uid_t;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
   /* Reentrant versions of some of the functions above. */
@@ -20,10 +19,8 @@ extern "C" {
   *GROUPS.  Also include GROUP.  The actual number of groups found is
   returned in *NGROUPS.  Return -1 if the if *NGROUPS is too small.  */
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
-  #[no_mangle]
   fn getgroups(__size: libc::c_int, __list: *mut gid_t) -> libc::c_int;
 }
 

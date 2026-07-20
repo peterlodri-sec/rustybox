@@ -3,11 +3,8 @@ use libc::mknod;
 use libc::mode_t;
 use libc::strchr;
 extern "C" {
-  #[no_mangle]
   fn gnu_dev_major(__dev: libc::dev_t) -> libc::c_uint;
-  #[no_mangle]
   fn gnu_dev_minor(__dev: libc::dev_t) -> libc::c_uint;
-  #[no_mangle]
   static mut optind: libc::c_int;
 
 /* At least glibc has horrendously large inline for this, so wrap it */

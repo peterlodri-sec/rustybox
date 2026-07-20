@@ -47,22 +47,16 @@ extern "C" {
   pub type sockaddr_ax25;
   pub type sockaddr_at;
 
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn sendto(
     __fd: libc::c_int,
     __buf: *const libc::c_void,
@@ -72,13 +66,10 @@ extern "C" {
     __addr_len: socklen_t,
   ) -> ssize_t;
 
-  #[no_mangle]
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
 
-  #[no_mangle]
   static mut stdin: *mut FILE;
 
-  #[no_mangle]
   fn snprintf(
     _: *mut libc::c_char,
     _: libc::c_ulong,
@@ -86,20 +77,16 @@ extern "C" {
     _: ...
   ) -> libc::c_int;
 
-  #[no_mangle]
   fn fgets_unlocked(
     __s: *mut libc::c_char,
     __n: libc::c_int,
     __stream: *mut FILE,
   ) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   fn ctime(__timer: *const time_t) -> *mut libc::c_char;
   /* Some useful definitions */
   /* Macros for min/max.  */
@@ -110,7 +97,6 @@ extern "C" {
   /* syscalls like read() will be interrupted with EINTR: */
 
   /* Standard handler which just records signo */
-  #[no_mangle]
   static mut bb_got_signal: smallint;
 
   /* Return malloc'ed len_and_sockaddr with socket address of host:port
@@ -123,7 +109,6 @@ extern "C" {
   // if some data was written before error occurred
 
   /* { "-", NULL } */
-  #[no_mangle]
   static mut option_mask32: u32;
 
   /* delims[0] is a comment char (use '\0' to disable), the rest are token delimiters */
@@ -131,30 +116,21 @@ extern "C" {
   /* '*const' ptr makes gcc optimize code much better.
    * Magic prevents ptr_to_globals from going into rodata.
    * If you want to assign a value, use SET_PTR_TO_GLOBALS(x) */
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
   // TODO these are also in libc but we need to get rid of the structs first.
-  #[no_mangle]
   fn shmctl(__shmid: libc::c_int, __cmd: libc::c_int, __buf: *mut shmid_ds) -> libc::c_int;
-  #[no_mangle]
   fn shmget(__key: key_t, __size: size_t, __shmflg: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn shmat(
     __shmid: libc::c_int,
     __shmaddr: *const libc::c_void,
     __shmflg: libc::c_int,
   ) -> *mut libc::c_void;
-  #[no_mangle]
   fn shmdt(__shmaddr: *const libc::c_void) -> libc::c_int;
-  #[no_mangle]
   fn semget(__key: key_t, __nsems: libc::c_int, __semflg: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn semctl(__semid: libc::c_int, __semnum: libc::c_int, __cmd: libc::c_int, _: ...)
     -> libc::c_int;
-  #[no_mangle]
   fn semop(__semid: libc::c_int, __sops: *mut sembuf, __nsops: size_t) -> libc::c_int;
 }
 

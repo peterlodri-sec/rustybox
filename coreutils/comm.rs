@@ -6,10 +6,8 @@ use libc::strcmp;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 }
 

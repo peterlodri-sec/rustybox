@@ -3,7 +3,6 @@ use libc;
 use libc::strstr;
 extern "C" {
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 }
 

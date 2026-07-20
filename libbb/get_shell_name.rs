@@ -6,7 +6,6 @@ extern "C" {
 
   /* Search for an entry with a matching user ID.  */
 
-  #[no_mangle]
   static bb_default_login_shell: [libc::c_char; 0];
 }
 

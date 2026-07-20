@@ -31,15 +31,10 @@ extern "C" {
   pub type sockaddr_ax25;
   pub type sockaddr_at;
 
-  #[no_mangle]
   fn vfork() -> libc::c_int;
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn getsockname(__fd: libc::c_int, __addr: __SOCKADDR_ARG, __len: *mut socklen_t) -> libc::c_int;
-  #[no_mangle]
   fn connect(__fd: libc::c_int, __addr: __CONST_SOCKADDR_ARG, __len: socklen_t) -> libc::c_int;
-  #[no_mangle]
   fn getsockopt(
     __fd: libc::c_int,
     __level: libc::c_int,
@@ -47,30 +42,19 @@ extern "C" {
     __optval: *mut libc::c_void,
     __optlen: *mut socklen_t,
   ) -> libc::c_int;
-  #[no_mangle]
   fn accept(__fd: libc::c_int, __addr: __SOCKADDR_ARG, __addr_len: *mut socklen_t) -> libc::c_int;
-  #[no_mangle]
   fn shutdown(__fd: libc::c_int, __how: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn _setjmp(_: *mut __jmp_buf_tag) -> libc::c_int;
-  #[no_mangle]
   fn longjmp(_: *mut __jmp_buf_tag, _: libc::c_int) -> !;
-  #[no_mangle]
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
-  #[no_mangle]
   static mut stderr: *mut FILE;
 
-  #[no_mangle]
   fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  #[no_mangle]
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
   /* Some useful definitions */
   /* Macros for min/max.  */
@@ -113,16 +97,13 @@ extern "C" {
    */
 
   /* { "-", NULL } */
-  #[no_mangle]
   static mut option_mask32: u32;
 
   /* NB: (bb_hexdigits_upcase[i] | 0x20) -> lowercase hex digit */
-  #[no_mangle]
   static bb_hexdigits_upcase: [libc::c_char; 0];
   /* '*const' ptr makes gcc optimize code much better.
    * Magic prevents ptr_to_globals from going into rodata.
    * If you want to assign a value, use SET_PTR_TO_GLOBALS(x) */
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
 }
 

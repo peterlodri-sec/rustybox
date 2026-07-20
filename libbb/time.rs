@@ -9,30 +9,23 @@ use libc::time_t;
 use libc::timespec;
 extern "C" {
 
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn mktime(__tp: *mut tm) -> time_t;
-  #[no_mangle]
   fn strftime(
     __s: *mut libc::c_char,
     __maxsize: size_t,
     __format: *const libc::c_char,
     __tp: *const tm,
   ) -> size_t;
-  #[no_mangle]
   fn strptime(
     __s: *const libc::c_char,
     __fmt: *const libc::c_char,
     __tp: *mut tm,
   ) -> *mut libc::c_char;
-  #[no_mangle]
   fn localtime(__timer: *const time_t) -> *mut tm;
-  #[no_mangle]
   fn clock_gettime(__clock_id: clockid_t, __tp: *mut timespec) -> libc::c_int;
 
-  #[no_mangle]
   static bb_msg_invalid_date: [libc::c_char; 0];
 
 }

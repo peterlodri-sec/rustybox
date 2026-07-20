@@ -17,7 +17,6 @@ use libc::strchr;
 use libc::unlink;
 extern "C" {
 
-  #[no_mangle]
   fn recv(
     __fd: libc::c_int,
     __buf: *mut libc::c_void,
@@ -25,25 +24,18 @@ extern "C" {
     __flags: libc::c_int,
   ) -> ssize_t;
 
-  #[no_mangle]
   fn setenv(
     __name: *const libc::c_char,
     __value: *const libc::c_char,
     __replace: libc::c_int,
   ) -> libc::c_int;
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   static mut bb_got_signal: smallint;
 
   /* Non-aborting kind of convertors: bb_strto[u][l]l */
@@ -58,18 +50,13 @@ extern "C" {
    *    return value is all-ones in this case.
    */
 
-  #[no_mangle]
   static mut wrote_pidfile: smallint;
 
-  #[no_mangle]
   static mut logmode: smallint;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
-  #[no_mangle]
   static bb_banner: [libc::c_char; 0];
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
 
 }

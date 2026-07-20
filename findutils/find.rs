@@ -14,20 +14,15 @@ use libc::time;
 use libc::unlink;
 extern "C" {
 
-  #[no_mangle]
   fn fnmatch(
     __pattern: *const libc::c_char,
     __name: *const libc::c_char,
     __flags: libc::c_int,
   ) -> libc::c_int;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn exit(_: libc::c_int) -> !;
-  #[no_mangle]
   fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* Specialized: */
@@ -52,14 +47,10 @@ extern "C" {
 
   /* Returns -1 if input is invalid. current_mode is a base for e.g. "u+rw" */
 
-  #[no_mangle]
   static bb_msg_requires_arg: [libc::c_char; 0];
-  #[no_mangle]
   static bb_msg_invalid_arg_to: [libc::c_char; 0];
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
-  #[no_mangle]
   fn regexec(
     __preg: *const regex_t,
     __string: *const libc::c_char,

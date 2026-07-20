@@ -13,22 +13,15 @@ use libc::strchr;
 use libc::DIR;
 extern "C" {
 
-  #[no_mangle]
   fn unsetenv(__name: *const libc::c_char) -> libc::c_int;
-  #[no_mangle]
   fn nice(__inc: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn getrlimit(__resource: __rlimit_resource_t, __rlimits: *mut rlimit) -> libc::c_int;
-  #[no_mangle]
   fn setrlimit(__resource: __rlimit_resource_t, __rlimits: *const rlimit) -> libc::c_int;
-  #[no_mangle]
   fn setgroups(__n: size_t, __groups: *const gid_t) -> libc::c_int;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
 }

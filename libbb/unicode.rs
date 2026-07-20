@@ -2,11 +2,8 @@ use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::size_t;
 use libc;
 extern "C" {
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
 }

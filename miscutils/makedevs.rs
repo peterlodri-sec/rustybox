@@ -17,7 +17,6 @@ use libc::uid_t;
 use libc::umask;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
 }

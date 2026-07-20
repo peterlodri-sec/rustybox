@@ -28,7 +28,6 @@ extern "C" {
   pub type sockaddr_dl;
   pub type sockaddr_ax25;
   pub type sockaddr_at;
-  #[no_mangle]
   fn sendto(
     __fd: libc::c_int,
     __buf: *const libc::c_void,
@@ -37,7 +36,6 @@ extern "C" {
     __addr: __CONST_SOCKADDR_ARG,
     __addr_len: socklen_t,
   ) -> ssize_t;
-  #[no_mangle]
   fn recvfrom(
     __fd: libc::c_int,
     __buf: *mut libc::c_void,
@@ -46,32 +44,22 @@ extern "C" {
     __addr: __SOCKADDR_ARG,
     __addr_len: *mut socklen_t,
   ) -> ssize_t;
-  #[no_mangle]
   fn inet_ntoa(__in: in_addr) -> *mut libc::c_char;
-  #[no_mangle]
   fn inet_aton(__cp: *const libc::c_char, __inp: *mut in_addr) -> libc::c_int;
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn exit(_: libc::c_int) -> !;
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
-  #[no_mangle]
   fn mempcpy(
     __dest: *mut libc::c_void,
     __src: *const libc::c_void,
     __n: size_t,
   ) -> *mut libc::c_void;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
 }
 

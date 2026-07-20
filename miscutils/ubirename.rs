@@ -2,7 +2,6 @@ use libc;
 use libc::strcpy;
 extern "C" {
 
-  #[no_mangle]
   fn strnlen(__string: *const libc::c_char, __maxlen: size_t) -> size_t;
 
 }

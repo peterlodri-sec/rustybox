@@ -4,13 +4,11 @@ use crate::librb::size_t;
 use libc;
 extern "C" {
 
-  #[no_mangle]
   fn regcomp(
     __preg: *mut regex_t,
     __pattern: *const libc::c_char,
     __cflags: libc::c_int,
   ) -> libc::c_int;
-  #[no_mangle]
   fn regerror(
     __errcode: libc::c_int,
     __preg: *const regex_t,

@@ -21,42 +21,27 @@ use libc::timespec;
 use libc::unlink;
 extern "C" {
 
-  #[no_mangle]
   fn flock(__fd: libc::c_int, __operation: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   fn readlink(__path: *const libc::c_char, __buf: *mut libc::c_char, __len: size_t) -> ssize_t;
-  #[no_mangle]
   fn vfork() -> libc::c_int;
-  #[no_mangle]
   fn _exit(_: libc::c_int) -> !;
-  #[no_mangle]
   fn execl(__path: *const libc::c_char, __arg: *const libc::c_char, _: ...) -> libc::c_int;
-  #[no_mangle]
   fn execv(__path: *const libc::c_char, __argv: *const *mut libc::c_char) -> libc::c_int;
 
-  #[no_mangle]
   fn fchdir(__fd: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn stpcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
-  #[no_mangle]
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   fn mkdir(__path: *const libc::c_char, __mode: mode_t) -> libc::c_int;
-  #[no_mangle]
   fn mkfifo(__path: *const libc::c_char, __mode: mode_t) -> libc::c_int;
-  #[no_mangle]
   fn clock_gettime(__clock_id: clockid_t, __tp: *mut timespec) -> libc::c_int;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

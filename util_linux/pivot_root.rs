@@ -29,7 +29,6 @@ extern "C" {
   //usage:#define pivot_root_full_usage "\n\n"
   //usage:       "Move the current root file system to PUT_OLD and make NEW_ROOT\n"
   //usage:       "the new root file system"
-  #[no_mangle]
   fn pivot_root(new_root: *const libc::c_char, put_old: *const libc::c_char) -> libc::c_int;
 }
 pub unsafe fn pivot_root_main(

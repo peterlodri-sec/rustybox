@@ -1,7 +1,6 @@
 use libc;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   static mut stdin: *mut FILE;
 
   /* not FAST_FUNC! */
@@ -305,7 +304,6 @@ extern "C" {
    * Therefore now we use #defines.
    */
   /* "BusyBox vN.N.N (timestamp or extra_version)" */
-  #[no_mangle]
   static bb_msg_standard_input: [libc::c_char; 0];
 
 }

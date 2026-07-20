@@ -4,7 +4,6 @@ use libc::lstat;
 use libc::strchr;
 extern "C" {
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   /*
@@ -20,9 +19,7 @@ extern "C" {
 
   /* Get/set a file flags on an ext2 file system */
 
-  #[no_mangle]
   static e2attr_flags_value: [u32; 0];
-  #[no_mangle]
   static e2attr_flags_sname: [libc::c_char; 0];
 }
 

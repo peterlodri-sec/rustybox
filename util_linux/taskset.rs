@@ -6,20 +6,15 @@ use libc::pid_t;
 use libc::printf;
 use libc::sprintf;
 extern "C" {
-  #[no_mangle]
   fn sched_getaffinity(__pid: pid_t, __cpusetsize: size_t, __cpuset: *mut cpu_set_t)
     -> libc::c_int;
-  #[no_mangle]
   fn sched_setaffinity(
     __pid: pid_t,
     __cpusetsize: size_t,
     __cpuset: *const cpu_set_t,
   ) -> libc::c_int;
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
 
 }

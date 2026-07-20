@@ -12,25 +12,18 @@ use libc::ssize_t;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   fn vfork() -> libc::c_int;
 
-  #[no_mangle]
   static mut stdin: *mut FILE;
 
-  #[no_mangle]
   static mut stdout: *mut FILE;
 
-  #[no_mangle]
   fn fread(__ptr: *mut libc::c_void, __size: size_t, __n: size_t, __stream: *mut FILE) -> size_t;
 
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   static bb_uuenc_tbl_base64: [libc::c_char; 0];
 
 }

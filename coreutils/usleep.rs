@@ -2,7 +2,6 @@ use libc;
 use libc::useconds_t;
 extern "C" {
 
-  #[no_mangle]
   fn usleep(__useconds: useconds_t) -> libc::c_int;
 }
 /*

@@ -4,7 +4,6 @@ use libc;
 use libc::off64_t;
 use libc::off_t;
 extern "C" {
-  #[no_mangle]
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
 
 }

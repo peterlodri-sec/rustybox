@@ -4,10 +4,8 @@ use libc::free;
 use libc::printf;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   static mut logmode: smallint;
 }
 

@@ -9,15 +9,11 @@ use libc::time_t;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   static mut stdout: *mut FILE;
 
-  #[no_mangle]
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
 
-  #[no_mangle]
   fn ctime(__timer: *const time_t) -> *mut libc::c_char;
-  #[no_mangle]
   fn inet_ntoa(__in: in_addr) -> *mut libc::c_char;
 
 // NB: will return short read on error, not -1,

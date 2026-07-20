@@ -4,9 +4,7 @@ use libc;
 use libc::free;
 extern "C" {
 
-  #[no_mangle]
   fn getcwd(__buf: *mut libc::c_char, __size: size_t) -> *mut libc::c_char;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
 }

@@ -15,7 +15,6 @@ use libc::strchr;
 use libc::strcmp;
 extern "C" {
 
-  #[no_mangle]
   fn snprintf(
     _: *mut libc::c_char,
     _: libc::c_ulong,
@@ -23,19 +22,13 @@ extern "C" {
     _: ...
   ) -> libc::c_int;
 
-  #[no_mangle]
   fn feof_unlocked(__stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn inet_ntoa(__in: in_addr) -> *mut libc::c_char;
-  #[no_mangle]
   fn inet_pton(
     __af: libc::c_int,
     __cp: *const libc::c_char,

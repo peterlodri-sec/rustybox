@@ -24,25 +24,19 @@ use libc::strcmp;
 use libc::strstr;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn fgets_unlocked(
     __s: *mut libc::c_char,
     __n: libc::c_int,
     __stream: *mut FILE,
   ) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   fn strerror(_: libc::c_int) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn inet_pton(
     __af: libc::c_int,
     __cp: *const libc::c_char,

@@ -15,12 +15,9 @@ use libc::strrchr;
 use libc::system;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* After v = xrealloc_vector(v, SHIFT, idx) it's ok to use
@@ -34,12 +31,10 @@ extern "C" {
   /* Autodetects .gz etc */
 
   /* { "-", NULL } */
-  #[no_mangle]
   static mut option_mask32: u32;
 
   /* delims[0] is a comment char (use '\0' to disable), the rest are token delimiters */
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

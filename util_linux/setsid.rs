@@ -4,7 +4,6 @@ use libc::pid_t;
 use libc::setsid;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
 }

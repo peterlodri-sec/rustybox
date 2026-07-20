@@ -50,19 +50,14 @@ use libc::umask;
 use libc::unlink;
 extern "C" {
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn gnu_dev_major(__dev: libc::dev_t) -> libc::c_uint;
 
-  #[no_mangle]
   fn gnu_dev_minor(__dev: libc::dev_t) -> libc::c_uint;
 
-  #[no_mangle]
   fn snprintf(
     _: *mut libc::c_char,
     _: libc::c_ulong,
@@ -70,19 +65,14 @@ extern "C" {
     _: ...
   ) -> libc::c_int;
 
-  #[no_mangle]
   fn atoll(__nptr: *const libc::c_char) -> libc::c_longlong;
 
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   fn gettimeofday(__tv: *mut timeval, __tz: __timezone_ptr_t) -> libc::c_int;
 
-  #[no_mangle]
   fn pread(
     __fd: libc::c_int,
     __buf: *mut libc::c_void,
@@ -90,13 +80,10 @@ extern "C" {
     __offset: off64_t,
   ) -> ssize_t;
 
-  #[no_mangle]
   fn readlink(__path: *const libc::c_char, __buf: *mut libc::c_char, __len: size_t) -> ssize_t;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
-  #[no_mangle]
   fn regexec(
     __preg: *const regex_t,
     __string: *const libc::c_char,
@@ -105,7 +92,6 @@ extern "C" {
     __eflags: libc::c_int,
   ) -> libc::c_int;
 
-  #[no_mangle]
   fn regfree(__preg: *mut regex_t);
 
 }

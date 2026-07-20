@@ -6,7 +6,6 @@ use libc::open;
 use libc::ssize_t;
 extern "C" {
 
-  #[no_mangle]
   fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
 
 }

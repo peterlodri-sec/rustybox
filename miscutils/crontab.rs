@@ -14,21 +14,15 @@ use libc::uid_t;
 use libc::unlink;
 extern "C" {
 
-  #[no_mangle]
   fn fchown(__fd: libc::c_int, __owner: uid_t, __group: gid_t) -> libc::c_int;
-  #[no_mangle]
   fn execlp(__file: *const libc::c_char, __arg: *const libc::c_char, _: ...) -> libc::c_int;
 
-  #[no_mangle]
   fn vfork() -> libc::c_int;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn dprintf(__fd: libc::c_int, __fmt: *const libc::c_char, _: ...) -> libc::c_int;
 
-  #[no_mangle]
   static bb_msg_you_must_be_root: [libc::c_char; 0];
 }
 

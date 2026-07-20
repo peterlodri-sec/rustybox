@@ -17,38 +17,28 @@ use libc::timeval;
 use libc::winsize;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   fn execl(__path: *const libc::c_char, __arg: *const libc::c_char, _: ...) -> libc::c_int;
 
-  #[no_mangle]
   fn vfork() -> libc::c_int;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
 
-  #[no_mangle]
   static mut stderr: *mut FILE;
 
-  #[no_mangle]
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   fn gettimeofday(__tv: *mut timeval, __tz: __timezone_ptr_t) -> libc::c_int;
 
-  #[no_mangle]
   fn tcgetattr(__fd: libc::c_int, __termios_p: *mut termios) -> libc::c_int;
 
-  #[no_mangle]
   fn tcsetattr(
     __fd: libc::c_int,
     __optional_actions: libc::c_int,
     __termios_p: *const termios,
   ) -> libc::c_int;
 
-  #[no_mangle]
   fn cfmakeraw(__termios_p: *mut termios);
 
   /* Some useful definitions */
@@ -60,7 +50,6 @@ extern "C" {
   /* more than enough for "/dev/ttyXXX" */
 
   /* Standard handler which just records signo */
-  #[no_mangle]
   static mut bb_got_signal: smallint;
 
   // NB: will return short write on error, not -1,
@@ -71,7 +60,6 @@ extern "C" {
    * if there is a possibility of intervening getpwxxx() calls.
    */
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

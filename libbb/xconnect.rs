@@ -22,15 +22,10 @@ extern "C" {
   pub type sockaddr_dl;
   pub type sockaddr_ax25;
   pub type sockaddr_at;
-  #[no_mangle]
   fn socket(__domain: libc::c_int, __type: libc::c_int, __protocol: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn getsockname(__fd: libc::c_int, __addr: __SOCKADDR_ARG, __len: *mut socklen_t) -> libc::c_int;
-  #[no_mangle]
   fn connect(__fd: libc::c_int, __addr: __CONST_SOCKADDR_ARG, __len: socklen_t) -> libc::c_int;
-  #[no_mangle]
   fn getpeername(__fd: libc::c_int, __addr: __SOCKADDR_ARG, __len: *mut socklen_t) -> libc::c_int;
-  #[no_mangle]
   fn setsockopt(
     __fd: libc::c_int,
     __level: libc::c_int,
@@ -38,23 +33,17 @@ extern "C" {
     __optval: *const libc::c_void,
     __optlen: socklen_t,
   ) -> libc::c_int;
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn getservbyname(__name: *const libc::c_char, __proto: *const libc::c_char) -> *mut servent;
-  #[no_mangle]
   fn getaddrinfo(
     __name: *const libc::c_char,
     __service: *const libc::c_char,
     __req: *const addrinfo,
     __pai: *mut *mut addrinfo,
   ) -> libc::c_int;
-  #[no_mangle]
   fn freeaddrinfo(__ai: *mut addrinfo);
-  #[no_mangle]
   fn getnameinfo(
     __sa: *const sockaddr,
     __salen: socklen_t,
@@ -65,15 +54,12 @@ extern "C" {
     __flags: libc::c_int,
   ) -> libc::c_int;
 
-  #[no_mangle]
   fn inet_ntoa(__in: in_addr) -> *mut libc::c_char;
-  #[no_mangle]
   fn inet_pton(
     __af: libc::c_int,
     __cp: *const libc::c_char,
     __buf: *mut libc::c_void,
   ) -> libc::c_int;
-  #[no_mangle]
   fn inet_aton(__cp: *const libc::c_char, __inp: *mut in_addr) -> libc::c_int;
 
 // "old" (ipv4 only) API

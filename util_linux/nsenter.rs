@@ -6,19 +6,14 @@ use libc::gid_t;
 use libc::pid_t;
 use libc::uid_t;
 extern "C" {
-  #[no_mangle]
   fn setns(__fd: libc::c_int, __nstype: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn setgroups(__n: size_t, __groups: *const gid_t) -> libc::c_int;
 
-  #[no_mangle]
   fn snprintf(
     _: *mut libc::c_char,
     _: libc::c_ulong,

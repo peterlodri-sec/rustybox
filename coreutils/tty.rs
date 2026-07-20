@@ -2,7 +2,6 @@ use crate::libbb::default_error_retval::xfunc_error_retval;
 use libc;
 use libc::puts;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
 }
 

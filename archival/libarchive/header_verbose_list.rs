@@ -6,7 +6,6 @@ use libc::time_t;
 use libc::tm;
 extern "C" {
 
-  #[no_mangle]
   fn localtime_r(__timer: *const time_t, __tp: *mut tm) -> *mut tm;
 //TODO: supply a pointer to char[11] buffer (avoid statics)?
 

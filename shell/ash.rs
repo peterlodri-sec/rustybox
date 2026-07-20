@@ -47,104 +47,69 @@ use libc::umask;
 use libc::DIR;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   fn sigaction(__sig: libc::c_int, __act: *const sigaction, __oact: *mut sigaction) -> libc::c_int;
-  #[no_mangle]
   fn fnmatch(
     __pattern: *const libc::c_char,
     __name: *const libc::c_char,
     __flags: libc::c_int,
   ) -> libc::c_int;
-  #[no_mangle]
   fn times(__buffer: *mut tms) -> clock_t;
-  #[no_mangle]
   fn uname(__name: *mut utsname) -> libc::c_int;
 
-  #[no_mangle]
   fn pipe(__pipedes: *mut libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   fn getcwd(__buf: *mut libc::c_char, __size: size_t) -> *mut libc::c_char;
 
-  #[no_mangle]
   static mut environ: *mut *mut libc::c_char;
-  #[no_mangle]
   fn execve(
     __path: *const libc::c_char,
     __argv: *const *mut libc::c_char,
     __envp: *const *mut libc::c_char,
   ) -> libc::c_int;
-  #[no_mangle]
   fn _exit(_: libc::c_int) -> !;
 
-  #[no_mangle]
   fn getppid() -> pid_t;
-  #[no_mangle]
   fn getpgrp() -> pid_t;
-  #[no_mangle]
   fn setpgid(__pid: pid_t, __pgid: pid_t) -> libc::c_int;
-  #[no_mangle]
   fn fork() -> pid_t;
 
-  #[no_mangle]
   fn tcgetpgrp(__fd: libc::c_int) -> pid_t;
-  #[no_mangle]
   fn tcsetpgrp(__fd: libc::c_int, __pgrp_id: pid_t) -> libc::c_int;
 
-  #[no_mangle]
   fn _setjmp(_: *mut __jmp_buf_tag) -> libc::c_int;
-  #[no_mangle]
   fn longjmp(_: *mut __jmp_buf_tag, _: libc::c_int) -> !;
-  #[no_mangle]
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
-  #[no_mangle]
   fn killpg(__pgrp: pid_t, __sig: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn raise(__sig: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn sigfillset(__set: *mut sigset_t) -> libc::c_int;
 
-  #[no_mangle]
   fn sigsuspend(__set: *const sigset_t) -> libc::c_int;
 
-  #[no_mangle]
   static mut stdout: *mut FILE;
-  #[no_mangle]
   static mut stderr: *mut FILE;
-  #[no_mangle]
   fn fflush(__stream: *mut FILE) -> libc::c_int;
 
-  #[no_mangle]
   fn vfprintf(_: *mut FILE, _: *const libc::c_char, _: ::std::ffi::VaList) -> libc::c_int;
-  #[no_mangle]
   fn vprintf(_: *const libc::c_char, _: ::std::ffi::VaList) -> libc::c_int;
-  #[no_mangle]
   fn vsnprintf(
     _: *mut libc::c_char,
     _: libc::c_ulong,
     _: *const libc::c_char,
     _: ::std::ffi::VaList,
   ) -> libc::c_int;
-  #[no_mangle]
   fn dprintf(__fd: libc::c_int, __fmt: *const libc::c_char, _: ...) -> libc::c_int;
-  #[no_mangle]
   fn putc_unlocked(__c: libc::c_int, __stream: *mut FILE) -> libc::c_int;
 
-  #[no_mangle]
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn clearerr(__stream: *mut FILE);
-  #[no_mangle]
   fn ferror_unlocked(__stream: *mut FILE) -> libc::c_int;
 
-  #[no_mangle]
   fn strtoul(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_ulong;
 
-  #[no_mangle]
   fn bsearch(
     __key: *const libc::c_void,
     __base: *const libc::c_void,
@@ -152,54 +117,35 @@ extern "C" {
     __size: size_t,
     __compar: __compar_fn_t,
   ) -> *mut libc::c_void;
-  #[no_mangle]
   fn qsort(__base: *mut libc::c_void, __nmemb: size_t, __size: size_t, __compar: __compar_fn_t);
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  #[no_mangle]
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  #[no_mangle]
   fn strpbrk(_: *const libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn mempcpy(
     __dest: *mut libc::c_void,
     __src: *const libc::c_void,
     __n: size_t,
   ) -> *mut libc::c_void;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   fn strerror(_: libc::c_int) -> *mut libc::c_char;
-  #[no_mangle]
   fn strsignal(__sig: libc::c_int) -> *mut libc::c_char;
-  #[no_mangle]
   fn stpcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn gettimeofday(__tv: *mut timeval, __tz: __timezone_ptr_t) -> libc::c_int;
-  #[no_mangle]
   fn waitpid(__pid: pid_t, __stat_loc: *mut libc::c_int, __options: libc::c_int) -> pid_t;
   /* Search for an entry with a matching username.  */
 
-  #[no_mangle]
   static bb_msg_memory_exhausted: [libc::c_char; 0];
-  #[no_mangle]
   static bb_msg_requires_arg: [libc::c_char; 0];
 
-  #[no_mangle]
   static bb_PATH_root_path: [libc::c_char; 0];
 
-  #[no_mangle]
   static bb_busybox_exec_path: [libc::c_char; 0];
 
   /* Number of unicode chars. Falls back to strlen() on invalid unicode */
@@ -221,9 +167,7 @@ extern "C" {
    *
    * Licensed under GPLv2 or later, see file LICENSE in this source tree.
    */
-  #[no_mangle]
   static defifsvar: [libc::c_char; 0];
-  #[no_mangle]
   static defoptindvar: [libc::c_char; 0];
   //TODO? do not provide bashisms if not asked for:
   //#if !ENABLE_HUSH_BASH_COMPAT && !ENABLE_ASH_BASH_COMPAT
@@ -231,11 +175,8 @@ extern "C" {
   //	shell_builtin_read(setvar,argv,ifs,read_flags)
   //#endif
 
-  #[no_mangle]
   static ash_ptr_to_globals_misc: *mut globals_misc;
-  #[no_mangle]
   static ash_ptr_to_globals_memstack: *mut globals_memstack;
-  #[no_mangle]
   static ash_ptr_to_globals_var: *mut globals_var;
 }
 

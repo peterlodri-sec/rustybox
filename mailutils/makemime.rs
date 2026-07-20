@@ -5,22 +5,16 @@ use libc::printf;
 use libc::puts;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   fn rand() -> libc::c_int;
-  #[no_mangle]
   fn srand(__seed: libc::c_uint);
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   static mut stdout: *mut FILE;
-  #[no_mangle]
   fn freopen(
     __filename: *const libc::c_char,
     __modes: *const libc::c_char,
     __stream: *mut FILE,
   ) -> *mut FILE;
 
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
 
 }

@@ -7,13 +7,9 @@ use libc::strchr;
 use libc::strcmp;
 use libc::strtok;
 extern "C" {
-  #[no_mangle]
   static mut optarg: *mut libc::c_char;
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   static mut opterr: libc::c_int;
-  #[no_mangle]
   fn getopt_long(
     ___argc: libc::c_int,
     ___argv: *const *mut libc::c_char,
@@ -21,7 +17,6 @@ extern "C" {
     __longopts: *const option,
     __longind: *mut libc::c_int,
   ) -> libc::c_int;
-  #[no_mangle]
   fn getopt_long_only(
     ___argc: libc::c_int,
     ___argv: *const *mut libc::c_char,
@@ -30,13 +25,10 @@ extern "C" {
     __longind: *mut libc::c_int,
   ) -> libc::c_int;
 
-  #[no_mangle]
   fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
 }

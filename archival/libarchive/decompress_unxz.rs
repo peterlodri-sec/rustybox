@@ -5,16 +5,11 @@ use libc;
 use libc::free;
 use libc::strcpy;
 extern "C" {
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn malloc(_: libc::c_ulong) -> *mut libc::c_void;
 
   /* Returns $SHELL, getpwuid(getuid())->pw_shell, or DEFAULT_SHELL.
@@ -136,7 +131,6 @@ extern "C" {
   /* must be directly before hash[] */
   /* always correctly aligned for uint64_t */
   /* TLS benefits from knowing that sha1 and sha256 share these. Give them "agnostic" names too */
-  #[no_mangle]
   static mut global_crc32_table: *mut u32;
 
 }

@@ -57,16 +57,12 @@ extern "C" {
   // This header is in libcap, but the functions are in libc.
   // Comment in the header says this above capset/capget:
   /* system calls - look to libc for function to system call mapping */
-  #[no_mangle]
   fn capset(header: cap_user_header_t, data: cap_user_data_t) -> libc::c_int;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn dprintf(__fd: libc::c_int, __fmt: *const libc::c_char, _: ...) -> libc::c_int;
 
-  #[no_mangle]
   fn execv(__path: *const libc::c_char, __argv: *const *mut libc::c_char) -> libc::c_int;
 
 }

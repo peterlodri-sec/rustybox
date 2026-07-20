@@ -2,13 +2,11 @@ use crate::libbb::ptr_to_globals::bb_errno;
 use libc;
 use libc::strcmp;
 extern "C" {
-  #[no_mangle]
   fn strtoul(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_ulong;
-  #[no_mangle]
   fn strtoull(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,

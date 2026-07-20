@@ -4,11 +4,8 @@ use libc::printf;
 use libc::strchr;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   fn rand() -> libc::c_int;
-  #[no_mangle]
   fn srand(__seed: libc::c_uint);
-  #[no_mangle]
   static mut optind: libc::c_int;
 
 }

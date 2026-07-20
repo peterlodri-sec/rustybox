@@ -4,7 +4,6 @@ use libc::printf;
 use libc::system;
 use libc::time_t;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
 }
 

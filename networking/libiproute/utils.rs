@@ -11,24 +11,19 @@ use libc::strcmp;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   fn strtoul(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_ulong;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn inet_pton(
     __af: libc::c_int,
     __cp: *const libc::c_char,
     __buf: *mut libc::c_void,
   ) -> libc::c_int;
-  #[no_mangle]
   fn inet_ntop(
     __af: libc::c_int,
     __cp: *const libc::c_void,
@@ -36,7 +31,6 @@ extern "C" {
     __len: socklen_t,
   ) -> *const libc::c_char;
 
-  #[no_mangle]
   static bb_msg_invalid_arg_to: [libc::c_char; 0];
 }
 

@@ -2,26 +2,20 @@ use libc;
 use libc::pid_t;
 use libc::printf;
 extern "C" {
-  #[no_mangle]
   fn sched_getparam(__pid: pid_t, __param: *mut sched_param) -> libc::c_int;
 
-  #[no_mangle]
   fn sched_setscheduler(
     __pid: pid_t,
     __policy: libc::c_int,
     __param: *const sched_param,
   ) -> libc::c_int;
 
-  #[no_mangle]
   fn sched_getscheduler(__pid: pid_t) -> libc::c_int;
 
-  #[no_mangle]
   fn sched_get_priority_max(__algorithm: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   fn sched_get_priority_min(__algorithm: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
 }

@@ -5,10 +5,8 @@ use libc::puts;
 use libc::strcpy;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn uname(__name: *mut utsname) -> libc::c_int;
 }
 

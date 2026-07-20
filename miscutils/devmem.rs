@@ -3,12 +3,9 @@ use crate::libbb::ptr_to_globals::bb_errno;
 use libc;
 use libc::printf;
 extern "C" {
-  #[no_mangle]
   fn getpagesize() -> libc::c_int;
 
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  #[no_mangle]
   fn mmap(
     __addr: *mut libc::c_void,
     __len: size_t,
@@ -17,7 +14,6 @@ extern "C" {
     __fd: libc::c_int,
     __offset: off64_t,
   ) -> *mut libc::c_void;
-  #[no_mangle]
   fn munmap(__addr: *mut libc::c_void, __len: size_t) -> libc::c_int;
 
 /* Non-aborting kind of convertors: bb_strto[u][l]l */

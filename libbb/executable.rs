@@ -8,7 +8,6 @@ use libc::stat;
 use libc::strchr;
 extern "C" {
 
-  #[no_mangle]
   fn execvp(__file: *const libc::c_char, __argv: *const *mut libc::c_char) -> libc::c_int;
 
 }

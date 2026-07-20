@@ -3,18 +3,13 @@ use libc;
 use libc::sockaddr;
 use libc::sscanf;
 extern "C" {
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn ether_aton_r(__asc: *const libc::c_char, __addr: *mut ether_addr) -> *mut ether_addr;
-  #[no_mangle]
   fn ether_hostton(__hostname: *const libc::c_char, __addr: *mut ether_addr) -> libc::c_int;
 }
 

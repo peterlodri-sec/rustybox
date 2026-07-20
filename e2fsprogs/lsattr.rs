@@ -4,12 +4,9 @@ use libc::lstat;
 use libc::printf;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   static mut stdout: *mut FILE;
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
 /*

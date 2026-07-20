@@ -28,17 +28,12 @@ extern "C" {
 
   /* "Opens" stdin if filename is special, else just opens file: */
 
-  #[no_mangle]
   static mut stdin: *mut FILE;
-  #[no_mangle]
   static mut stdout: *mut FILE;
-  #[no_mangle]
   static mut stderr: *mut FILE;
 
-  #[no_mangle]
   fn fflush(__stream: *mut FILE) -> libc::c_int;
 
-  #[no_mangle]
   fn snprintf(
     _: *mut libc::c_char,
     _: libc::c_ulong,
@@ -46,85 +41,56 @@ extern "C" {
     _: ...
   ) -> libc::c_int;
 
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
-  #[no_mangle]
   fn strtod(__nptr: *const libc::c_char, __endptr: *mut *mut libc::c_char) -> libc::c_double;
-  #[no_mangle]
   fn strtoull(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_ulonglong;
-  #[no_mangle]
   fn rand() -> libc::c_int;
-  #[no_mangle]
   fn srand(__seed: libc::c_uint);
 
-  #[no_mangle]
   fn exit(_: libc::c_int) -> !;
 
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memchr(_: *const libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  #[no_mangle]
   fn strpbrk(_: *const libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   fn strerror(_: libc::c_int) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn strncasecmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn mktime(__tp: *mut tm) -> time_t;
-  #[no_mangle]
   fn strftime(
     __s: *mut libc::c_char,
     __maxsize: size_t,
     __format: *const libc::c_char,
     __tp: *const tm,
   ) -> size_t;
-  #[no_mangle]
   fn localtime(__timer: *const time_t) -> *mut tm;
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   static mut environ: *mut *mut libc::c_char;
 
-  #[no_mangle]
   fn fread(__ptr: *mut libc::c_void, __size: size_t, __n: size_t, __stream: *mut FILE) -> size_t;
-  #[no_mangle]
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn popen(__command: *const libc::c_char, __modes: *const libc::c_char) -> *mut FILE;
-  #[no_mangle]
   fn fileno_unlocked(__stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn pclose(__stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn regfree(__preg: *mut regex_t);
 
-  #[no_mangle]
   fn regcomp(
     __preg: *mut regex_t,
     __pattern: *const libc::c_char,
     __cflags: libc::c_int,
   ) -> libc::c_int;
-  #[no_mangle]
   fn regexec(
     __preg: *const regex_t,
     __string: *const libc::c_char,
@@ -132,19 +98,12 @@ extern "C" {
     __pmatch: *mut regmatch_t,
     __eflags: libc::c_int,
   ) -> libc::c_int;
-  #[no_mangle]
   fn atan2(_: libc::c_double, _: libc::c_double) -> libc::c_double;
-  #[no_mangle]
   fn cos(_: libc::c_double) -> libc::c_double;
-  #[no_mangle]
   fn sin(_: libc::c_double) -> libc::c_double;
-  #[no_mangle]
   fn exp(_: libc::c_double) -> libc::c_double;
-  #[no_mangle]
   fn log(_: libc::c_double) -> libc::c_double;
-  #[no_mangle]
   fn pow(_: libc::c_double, _: libc::c_double) -> libc::c_double;
-  #[no_mangle]
   fn sqrt(_: libc::c_double) -> libc::c_double;
 }
 

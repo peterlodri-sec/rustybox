@@ -12,27 +12,17 @@ use libc::sleep;
 use libc::sync;
 extern "C" {
 
-  #[no_mangle]
   static mut optarg: *mut libc::c_char;
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn fsync(__fd: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   fn exit(_: libc::c_int) -> !;
-  #[no_mangle]
   fn abs(_: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   fn mlock(__addr: *const libc::c_void, __len: size_t) -> libc::c_int;
-  #[no_mangle]
   fn munlock(__addr: *const libc::c_void, __len: size_t) -> libc::c_int;
 
   /* Some useful definitions */
@@ -57,7 +47,6 @@ extern "C" {
   // fn print_flags(ml: *const masks_labels_t, flags: libc::c_int)
   //  -> libc::c_int;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

@@ -5,7 +5,6 @@ use libc::off_t;
 use libc::ssize_t;
 extern "C" {
 
-  #[no_mangle]
   fn sendfile(
     __out_fd: libc::c_int,
     __in_fd: libc::c_int,

@@ -2,15 +2,12 @@ use crate::libbb::ptr_to_globals::bb_errno;
 use libc;
 use libc::open;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn ftruncate(__fd: libc::c_int, __length: off64_t) -> libc::c_int;
 
   /* Close fd, but check for failures (some types of write errors) */
 
-  #[no_mangle]
   static cwbkMG_suffixes: [suffix_mult; 0];
 
 }

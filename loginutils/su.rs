@@ -8,16 +8,12 @@ use libc::strcmp;
 use libc::syslog;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
   /* Search for an entry with a matching user ID.  */
 
-  #[no_mangle]
   fn endusershell();
-  #[no_mangle]
   fn getusershell() -> *mut libc::c_char;
-  #[no_mangle]
   fn getlogin_r(__name: *mut libc::c_char, __name_len: size_t) -> libc::c_int;
 
 }

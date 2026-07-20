@@ -1,9 +1,7 @@
 use libc;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   static cwbkMG_suffixes: [suffix_mult; 0];
 
 }

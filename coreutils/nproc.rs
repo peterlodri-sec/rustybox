@@ -8,11 +8,9 @@ use libc::readdir;
 use libc::strstr;
 extern "C" {
 
-  #[no_mangle]
   fn sched_getaffinity(__pid: pid_t, __cpusetsize: size_t, __cpuset: *mut cpu_set_t)
     -> libc::c_int;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
 }

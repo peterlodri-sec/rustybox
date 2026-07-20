@@ -1,6 +1,5 @@
 use libc;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
 
 }

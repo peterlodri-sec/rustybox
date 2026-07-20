@@ -12,26 +12,17 @@ use libc::sprintf;
 use libc::strrchr;
 extern "C" {
 
-  #[no_mangle]
   fn fork() -> pid_t;
-  #[no_mangle]
   static mut optarg: *mut libc::c_char;
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn daemon(__nochdir: libc::c_int, __noclose: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   static const_int_0: libc::c_int;
-  #[no_mangle]
   fn getopt_long_only(
     ___argc: libc::c_int,
     ___argv: *const *mut libc::c_char,

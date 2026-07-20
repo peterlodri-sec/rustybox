@@ -18,7 +18,6 @@ use libc::DIR;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   static mut stderr: *mut FILE;
 
 }

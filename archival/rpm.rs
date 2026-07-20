@@ -25,13 +25,10 @@ use libc::time_t;
 use libc::tm;
 use libc::uid_t;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn getpagesize() -> libc::c_int;
 
-  #[no_mangle]
   fn bsearch(
     __key: *const libc::c_void,
     __base: *const libc::c_void,
@@ -40,9 +37,7 @@ extern "C" {
     __compar: __compar_fn_t,
   ) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   fn mmap(
     __addr: *mut libc::c_void,
     __len: size_t,
@@ -51,32 +46,26 @@ extern "C" {
     __fd: libc::c_int,
     __offset: off64_t,
   ) -> *mut libc::c_void;
-  #[no_mangle]
   fn munmap(__addr: *mut libc::c_void, __len: size_t) -> libc::c_int;
 
-  #[no_mangle]
   fn strftime(
     __s: *mut libc::c_char,
     __maxsize: size_t,
     __format: *const libc::c_char,
     __tp: *const tm,
   ) -> size_t;
-  #[no_mangle]
   fn localtime(__timer: *const time_t) -> *mut tm;
   /* Search for an entry with a matching username.  */
 
   /* Search for an entry with a matching group name.  */
 
-  #[no_mangle]
   static mut bb_got_signal: smallint;
 
   /* Autodetects gzip/bzip2 formats. fd may be in the middle of the file! */
 
   /* lzma has no signature, need a little helper. NB: exist only for ENABLE_FEATURE_SEAMLESS_LZMA=y */
 
-  #[no_mangle]
   static bb_msg_standard_output: [libc::c_char; 0];
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

@@ -5,10 +5,8 @@ use libc::printf;
 use libc::sprintf;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn strerror(_: libc::c_int) -> *mut libc::c_char;
 
 }

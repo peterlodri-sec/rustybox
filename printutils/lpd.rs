@@ -13,7 +13,6 @@ use libc::strchr;
 use libc::unlink;
 extern "C" {
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
 }

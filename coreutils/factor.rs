@@ -6,7 +6,6 @@ use libc::printf;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   static mut stdin: *mut FILE;
 
 /* Guaranteed to NOT be a macro (smallest code). Saves nearly 2k on uclibc.

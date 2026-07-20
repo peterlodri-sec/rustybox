@@ -3,11 +3,8 @@ use crate::librb::smallint;
 use libc;
 use libc::strcpy;
 extern "C" {
-  #[no_mangle]
   static mut optarg: *mut libc::c_char;
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn getopt_long(
     ___argc: libc::c_int,
     ___argv: *const *mut libc::c_char,
@@ -15,10 +12,8 @@ extern "C" {
     __longopts: *const option,
     __longind: *mut libc::c_int,
   ) -> libc::c_int;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
 }

@@ -4,32 +4,23 @@ use libc::kill;
 use libc::printf;
 use libc::sleep;
 extern "C" {
-  #[no_mangle]
   fn exit(_: libc::c_int) -> !;
 
-  #[no_mangle]
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
-  #[no_mangle]
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn tcgetattr(__fd: libc::c_int, __termios_p: *mut termios) -> libc::c_int;
-  #[no_mangle]
   fn tcsetattr(
     __fd: libc::c_int,
     __optional_actions: libc::c_int,
     __termios_p: *const termios,
   ) -> libc::c_int;
-  #[no_mangle]
   fn cfmakeraw(__termios_p: *mut termios);
 
   /* Standard handler which just records signo */
-  #[no_mangle]
   static mut bb_got_signal: smallint;
 
   /* On Linux this never fails. */
@@ -46,7 +37,6 @@ extern "C" {
 
   /* NB: typically you want to pass fd 0, not 1. Think 'applet | grep something' */
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

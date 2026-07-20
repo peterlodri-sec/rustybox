@@ -21,25 +21,18 @@ use libc::sync;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn _setjmp(_: *mut __jmp_buf_tag) -> libc::c_int;
 
-  #[no_mangle]
   fn longjmp(_: *mut __jmp_buf_tag, _: libc::c_int) -> !;
 
-  #[no_mangle]
   fn snprintf(
     _: *mut libc::c_char,
     _: libc::c_ulong,
@@ -47,31 +40,26 @@ extern "C" {
     _: ...
   ) -> libc::c_int;
 
-  #[no_mangle]
   fn fgets_unlocked(
     __s: *mut libc::c_char,
     __n: libc::c_int,
     __stream: *mut FILE,
   ) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn strtoul(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_ulong;
 
-  #[no_mangle]
   fn strtoull(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_ulonglong;
 
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* Non-aborting kind of convertors: bb_strto[u][l]l */
@@ -86,97 +74,66 @@ extern "C" {
    *    return value is all-ones in this case.
    */
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
-  #[no_mangle]
   fn exit(_: libc::c_int) -> !;
 
-  #[no_mangle]
   fn bsd_select();
 
-  #[no_mangle]
   fn xbsd_print_disklabel(_: libc::c_int);
 
-  #[no_mangle]
   fn gpt_list_table(xtra: libc::c_int);
 
-  #[no_mangle]
   static sgi_sys_types: [*const libc::c_char; 0];
 
-  #[no_mangle]
   fn sgi_delete_partition(i: libc::c_int);
 
-  #[no_mangle]
   fn sgi_change_sysid(i: libc::c_int, sys: libc::c_int);
 
-  #[no_mangle]
   fn sgi_list_table(xtra: libc::c_int);
 
-  #[no_mangle]
   fn sgi_set_xcyl();
 
-  #[no_mangle]
   fn verify_sgi(verbose: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   fn sgi_add_partition(n: libc::c_int, sys: libc::c_int);
 
-  #[no_mangle]
   fn sgi_set_swappartition(i: libc::c_int);
 
-  #[no_mangle]
   fn sgi_get_bootfile() -> *const libc::c_char;
 
-  #[no_mangle]
   fn sgi_set_bootfile(aFile: *const libc::c_char);
 
-  #[no_mangle]
   fn create_sgiinfo();
 
-  #[no_mangle]
   fn sgi_write_table();
 
-  #[no_mangle]
   fn sgi_set_bootpartition(i: libc::c_int);
 
-  #[no_mangle]
   fn sun_delete_partition(i: libc::c_int);
 
-  #[no_mangle]
   fn sun_change_sysid(i: libc::c_int, sys: libc::c_int);
 
-  #[no_mangle]
   fn sun_list_table(xtra: libc::c_int);
 
-  #[no_mangle]
   fn add_sun_partition(n: libc::c_int, sys: libc::c_int);
 
-  #[no_mangle]
   fn sun_set_alt_cyl();
 
-  #[no_mangle]
   fn sun_set_ncyl(cyl: libc::c_int);
 
-  #[no_mangle]
   fn sun_set_xcyl();
 
-  #[no_mangle]
   fn sun_set_ilfact();
 
-  #[no_mangle]
   fn sun_set_rspeed();
 
-  #[no_mangle]
   fn sun_set_pcylcount();
 
-  #[no_mangle]
   fn toggle_sunflags(i: libc::c_int, mask: libc::c_uchar);
 
-  #[no_mangle]
   fn verify_sun();
 
-  #[no_mangle]
   fn sun_write_table();
 }
 

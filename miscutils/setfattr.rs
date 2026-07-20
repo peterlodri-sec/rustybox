@@ -1,11 +1,8 @@
 use crate::librb::size_t;
 use libc;
 extern "C" {
-  #[no_mangle]
   fn lremovexattr(__path: *const libc::c_char, __name: *const libc::c_char) -> libc::c_int;
-  #[no_mangle]
   fn removexattr(__path: *const libc::c_char, __name: *const libc::c_char) -> libc::c_int;
-  #[no_mangle]
   fn lsetxattr(
     __path: *const libc::c_char,
     __name: *const libc::c_char,
@@ -13,7 +10,6 @@ extern "C" {
     __size: size_t,
     __flags: libc::c_int,
   ) -> libc::c_int;
-  #[no_mangle]
   fn setxattr(
     __path: *const libc::c_char,
     __name: *const libc::c_char,
@@ -21,9 +17,7 @@ extern "C" {
     __size: size_t,
     __flags: libc::c_int,
   ) -> libc::c_int;
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 }
 

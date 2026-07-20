@@ -21,10 +21,8 @@ use libc::strtok;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   fn fopen(__filename: *const libc::c_char, __modes: *const libc::c_char) -> *mut FILE;
 
-  #[no_mangle]
   fn fgets_unlocked(
     __s: *mut libc::c_char,
     __n: libc::c_int,
@@ -32,15 +30,10 @@ extern "C" {
   ) -> *mut libc::c_char;
 
   // These come from libresolv...
-  #[no_mangle]
   fn ns_get16(_: *const libc::c_uchar) -> libc::c_uint;
-  #[no_mangle]
   fn ns_get32(_: *const libc::c_uchar) -> libc::c_ulong;
-  #[no_mangle]
   fn ns_initparse(_: *const libc::c_uchar, _: libc::c_int, _: *mut ns_msg) -> libc::c_int;
-  #[no_mangle]
   fn ns_parserr(_: *mut ns_msg, _: ns_sect, _: libc::c_int, _: *mut ns_rr) -> libc::c_int;
-  #[no_mangle]
   fn ns_name_uncompress(
     _: *const libc::c_uchar,
     _: *const libc::c_uchar,
@@ -48,7 +41,6 @@ extern "C" {
     _: *mut libc::c_char,
     _: size_t,
   ) -> libc::c_int;
-  #[no_mangle]
   fn res_mkquery(
     _: libc::c_int,
     _: *const libc::c_char,
@@ -62,25 +54,18 @@ extern "C" {
   ) -> libc::c_int;
   // ...end resolv externs
 
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn inet_pton(
     __af: libc::c_int,
     __cp: *const libc::c_char,
     __buf: *mut libc::c_void,
   ) -> libc::c_int;
-  #[no_mangle]
   fn inet_ntop(
     __af: libc::c_int,
     __cp: *const libc::c_void,
@@ -110,17 +95,13 @@ extern "C" {
   /* Guaranteed to NOT be a macro (smallest code). Saves nearly 2k on uclibc.
    * But potentially slow, don't use in one-billion-times loops */
 
-  #[no_mangle]
   fn read(__fd: libc::c_int, __buf: *mut libc::c_void, __nbytes: size_t) -> ssize_t;
   /* { "-", NULL } */
-  #[no_mangle]
   static mut option_mask32: u32;
 
   /* NB: (bb_hexdigits_upcase[i] | 0x20) -> lowercase hex digit */
-  #[no_mangle]
   static bb_hexdigits_upcase: [libc::c_char; 0];
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

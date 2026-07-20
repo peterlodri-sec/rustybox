@@ -2,7 +2,6 @@ use libc;
 use libc::sleep;
 extern "C" {
 
-  #[no_mangle]
   fn strncasecmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
 }

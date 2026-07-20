@@ -3,7 +3,6 @@ use crate::librb::size_t;
 use libc;
 use libc::strcmp;
 extern "C" {
-  #[no_mangle]
   fn qsort(__base: *mut libc::c_void, __nmemb: size_t, __size: size_t, __compar: __compar_fn_t);
 }
 unsafe extern "C" fn bb_pstrcmp(a: *const libc::c_void, b: *const libc::c_void) -> libc::c_int {

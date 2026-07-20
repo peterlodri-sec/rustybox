@@ -3,7 +3,6 @@ use libc::printf;
 use libc::sscanf;
 use libc::strcasecmp;
 extern "C" {
-  #[no_mangle]
   fn capget(header: cap_user_header_t, data: cap_user_data_t) -> libc::c_int;
 
 }

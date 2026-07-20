@@ -12,10 +12,8 @@ use libc::termios;
 use libc::winsize;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   static mut stdout: *mut FILE;
 
-  #[no_mangle]
   fn vsnprintf(
     _: *mut libc::c_char,
     _: libc::c_ulong,
@@ -23,24 +21,15 @@ extern "C" {
     _: ::std::ffi::VaList,
   ) -> libc::c_int;
 
-  #[no_mangle]
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn cfgetospeed(__termios_p: *const termios) -> speed_t;
-  #[no_mangle]
   fn cfgetispeed(__termios_p: *const termios) -> speed_t;
-  #[no_mangle]
   fn cfsetospeed(__termios_p: *mut termios, __speed: speed_t) -> libc::c_int;
-  #[no_mangle]
   fn cfsetispeed(__termios_p: *mut termios, __speed: speed_t) -> libc::c_int;
-  #[no_mangle]
   fn tcgetattr(__fd: libc::c_int, __termios_p: *mut termios) -> libc::c_int;
-  #[no_mangle]
   fn tcsetattr(
     __fd: libc::c_int,
     __optional_actions: libc::c_int,
@@ -57,11 +46,8 @@ extern "C" {
 
   /* NB: typically you want to pass fd 0, not 1. Think 'applet | grep something' */
 
-  #[no_mangle]
   static bb_msg_requires_arg: [libc::c_char; 0];
-  #[no_mangle]
   static bb_msg_standard_input: [libc::c_char; 0];
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 pub type __builtin_va_list = [__va_list_tag; 1];

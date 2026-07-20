@@ -13,16 +13,12 @@ use libc::strchr;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   static mut optarg: *mut libc::c_char;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   static mut stdin: *mut FILE;
 
-  #[no_mangle]
   static bkm_suffixes: [suffix_mult; 0];
 
 /*

@@ -1,7 +1,6 @@
 use libc;
 use libc::strchr;
 extern "C" {
-  #[no_mangle]
   fn strtoul(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,

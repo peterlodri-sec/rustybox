@@ -1,8 +1,6 @@
 use libc;
 extern "C" {
-  #[no_mangle]
   fn __h_errno_location() -> *mut libc::c_int;
-  #[no_mangle]
   fn hstrerror(__err_num: libc::c_int) -> *const libc::c_char;
 
 }

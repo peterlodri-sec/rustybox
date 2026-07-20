@@ -9,9 +9,7 @@ use libc::setsid;
 use libc::sprintf;
 extern "C" {
 
-  #[no_mangle]
   fn vfork() -> libc::c_int;
-  #[no_mangle]
   static mut optind: libc::c_int;
 
 }

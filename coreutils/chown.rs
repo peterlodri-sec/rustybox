@@ -7,9 +7,7 @@ use libc::printf;
 use libc::stat;
 use libc::uid_t;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   static mut option_mask32: u32;
 }
 

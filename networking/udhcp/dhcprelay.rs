@@ -27,7 +27,6 @@ extern "C" {
   pub type sockaddr_ax25;
   pub type sockaddr_at;
 
-  #[no_mangle]
   fn select(
     __nfds: libc::c_int,
     __readfds: *mut fd_set,
@@ -35,7 +34,6 @@ extern "C" {
     __exceptfds: *mut fd_set,
     __timeout: *mut timeval,
   ) -> libc::c_int;
-  #[no_mangle]
   fn sendto(
     __fd: libc::c_int,
     __buf: *const libc::c_void,
@@ -44,7 +42,6 @@ extern "C" {
     __addr: __CONST_SOCKADDR_ARG,
     __addr_len: socklen_t,
   ) -> ssize_t;
-  #[no_mangle]
   fn recvfrom(
     __fd: libc::c_int,
     __buf: *mut libc::c_void,
@@ -54,7 +51,6 @@ extern "C" {
     __addr_len: *mut socklen_t,
   ) -> ssize_t;
 
-  #[no_mangle]
   fn inet_aton(__cp: *const libc::c_char, __inp: *mut in_addr) -> libc::c_int;
   /* Some useful definitions */
   /* Macros for min/max.  */
@@ -62,7 +58,6 @@ extern "C" {
   /* glibc uses __errno_location() to get a ptr to errno */
   /* We can just memorize it once - no multithreading in busybox :) */
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

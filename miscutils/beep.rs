@@ -2,10 +2,8 @@ use libc;
 use libc::getopt;
 use libc::ioctl;
 extern "C" {
-  #[no_mangle]
   static mut optarg: *mut libc::c_char;
 
-  #[no_mangle]
   fn usleep(__useconds: useconds_t) -> libc::c_int;
 
 }

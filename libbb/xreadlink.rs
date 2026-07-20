@@ -5,14 +5,10 @@ use libc::strcpy;
 use libc::strrchr;
 extern "C" {
 
-  #[no_mangle]
   fn readlink(__path: *const libc::c_char, __buf: *mut libc::c_char, __len: size_t) -> ssize_t;
-  #[no_mangle]
   fn realpath(__name: *const libc::c_char, __resolved: *mut libc::c_char) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   fn strerror(_: libc::c_int) -> *mut libc::c_char;
 
 }

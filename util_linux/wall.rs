@@ -7,7 +7,6 @@ use libc::getuid;
 use libc::setutxent;
 use libc::utmpx;
 extern "C" {
-  #[no_mangle]
   fn getutxent() -> *mut utmpx;
 
 }

@@ -10,10 +10,8 @@ use libc::printf;
 use libc::puts;
 extern "C" {
 
-  #[no_mangle]
   fn getsid(__pid: pid_t) -> pid_t;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
 }

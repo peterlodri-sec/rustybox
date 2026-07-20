@@ -1,6 +1,5 @@
 use libc;
 extern "C" {
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
 
 }

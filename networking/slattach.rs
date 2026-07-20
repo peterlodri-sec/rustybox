@@ -10,35 +10,24 @@ use libc::tcflag_t;
 use libc::termios;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn exit(_: libc::c_int) -> !;
 
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn cfgetospeed(__termios_p: *const termios) -> speed_t;
-  #[no_mangle]
   fn cfgetispeed(__termios_p: *const termios) -> speed_t;
-  #[no_mangle]
   fn cfsetospeed(__termios_p: *mut termios, __speed: speed_t) -> libc::c_int;
-  #[no_mangle]
   fn cfsetispeed(__termios_p: *mut termios, __speed: speed_t) -> libc::c_int;
-  #[no_mangle]
   fn tcgetattr(__fd: libc::c_int, __termios_p: *mut termios) -> libc::c_int;
-  #[no_mangle]
   fn tcsetattr(
     __fd: libc::c_int,
     __optional_actions: libc::c_int,
     __termios_p: *const termios,
   ) -> libc::c_int;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
 }

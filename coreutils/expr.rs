@@ -9,24 +9,18 @@ use libc::printf;
 use libc::puts;
 use libc::strcmp;
 extern "C" {
-  #[no_mangle]
   fn strtoll(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_longlong;
 
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
-  #[no_mangle]
   fn regexec(
     __preg: *const regex_t,
     __string: *const libc::c_char,
@@ -34,7 +28,6 @@ extern "C" {
     __pmatch: *mut regmatch_t,
     __eflags: libc::c_int,
   ) -> libc::c_int;
-  #[no_mangle]
   fn regfree(__preg: *mut regex_t);
 
 }

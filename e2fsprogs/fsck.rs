@@ -16,26 +16,18 @@ use libc::strcmp;
 use libc::strstr;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   static mut stdout: *mut FILE;
-  #[no_mangle]
   fn setbuf(__stream: *mut FILE, __buf: *mut libc::c_char);
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   fn waitpid(__pid: pid_t, __stat_loc: *mut libc::c_int, __options: libc::c_int) -> pid_t;
-  #[no_mangle]
   fn getmntent_r(
     __stream: *mut FILE,
     __result: *mut mntent,
     __buffer: *mut libc::c_char,
     __bufsize: libc::c_int,
   ) -> *mut mntent;
-  #[no_mangle]
   static mut bb_got_signal: smallint;
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

@@ -28,20 +28,15 @@ extern "C" {
   pub type sockaddr_ax25;
   pub type sockaddr_at;
 
-  #[no_mangle]
   fn vfork() -> libc::c_int;
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn getsockname(__fd: libc::c_int, __addr: __SOCKADDR_ARG, __len: *mut socklen_t) -> libc::c_int;
-  #[no_mangle]
   fn send(
     __fd: libc::c_int,
     __buf: *const libc::c_void,
     __n: size_t,
     __flags: libc::c_int,
   ) -> ssize_t;
-  #[no_mangle]
   fn getsockopt(
     __fd: libc::c_int,
     __level: libc::c_int,
@@ -49,15 +44,11 @@ extern "C" {
     __optval: *mut libc::c_void,
     __optlen: *mut socklen_t,
   ) -> libc::c_int;
-  #[no_mangle]
   fn accept(__fd: libc::c_int, __addr: __SOCKADDR_ARG, __addr_len: *mut socklen_t) -> libc::c_int;
-  #[no_mangle]
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
 /* Returns number of already opened connects to this ips, including this one.

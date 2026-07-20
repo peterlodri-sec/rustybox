@@ -40,128 +40,80 @@ use libc::timeval;
 use libc::umask;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   fn sigaction(__sig: libc::c_int, __act: *const sigaction, __oact: *mut sigaction) -> libc::c_int;
-  #[no_mangle]
   fn getc_unlocked(__stream: *mut FILE) -> libc::c_int;
 
-  #[no_mangle]
   fn glob(
     __pattern: *const libc::c_char,
     __flags: libc::c_int,
     __errfunc: Option<unsafe extern "C" fn(_: *const libc::c_char, _: libc::c_int) -> libc::c_int>,
     __pglob: *mut glob_t,
   ) -> libc::c_int;
-  #[no_mangle]
   fn globfree(__pglob: *mut glob_t);
-  #[no_mangle]
   fn fnmatch(
     __pattern: *const libc::c_char,
     __name: *const libc::c_char,
     __flags: libc::c_int,
   ) -> libc::c_int;
-  #[no_mangle]
   fn times(__buffer: *mut tms) -> clock_t;
-  #[no_mangle]
   fn uname(__name: *mut utsname) -> libc::c_int;
 
-  #[no_mangle]
   fn dup(__fd: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   static mut environ: *mut *mut libc::c_char;
-  #[no_mangle]
   fn execvp(__file: *const libc::c_char, __argv: *const *mut libc::c_char) -> libc::c_int;
-  #[no_mangle]
   fn _exit(_: libc::c_int) -> !;
 
-  #[no_mangle]
   fn getppid() -> pid_t;
-  #[no_mangle]
   fn getpgrp() -> pid_t;
-  #[no_mangle]
   fn setpgid(__pid: pid_t, __pgid: pid_t) -> libc::c_int;
-  #[no_mangle]
   fn setpgrp() -> libc::c_int;
-  #[no_mangle]
   fn fork() -> pid_t;
-  #[no_mangle]
   fn vfork() -> libc::c_int;
 
-  #[no_mangle]
   fn tcgetpgrp(__fd: libc::c_int) -> pid_t;
-  #[no_mangle]
   fn tcsetpgrp(__fd: libc::c_int, __pgrp_id: pid_t) -> libc::c_int;
-  #[no_mangle]
   static mut optarg: *mut libc::c_char;
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   static mut opterr: libc::c_int;
-  #[no_mangle]
   static mut optopt: libc::c_int;
 
-  #[no_mangle]
   fn raise(__sig: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn sigfillset(__set: *mut sigset_t) -> libc::c_int;
 
-  #[no_mangle]
   fn sigdelset(__set: *mut sigset_t, __signo: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn sigismember(__set: *const sigset_t, __signo: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn sigisemptyset(__set: *const sigset_t) -> libc::c_int;
 
-  #[no_mangle]
   fn sigsuspend(__set: *const sigset_t) -> libc::c_int;
 
-  #[no_mangle]
   fn unsetenv(__name: *const libc::c_char) -> libc::c_int;
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
-  #[no_mangle]
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  #[no_mangle]
   fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  #[no_mangle]
   fn mempcpy(
     __dest: *mut libc::c_void,
     __src: *const libc::c_void,
     __n: size_t,
   ) -> *mut libc::c_void;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   fn strnlen(__string: *const libc::c_char, __maxlen: size_t) -> size_t;
-  #[no_mangle]
   fn stpcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn gettimeofday(__tv: *mut timeval, __tz: __timezone_ptr_t) -> libc::c_int;
-  #[no_mangle]
   fn wait(__stat_loc: *mut libc::c_int) -> pid_t;
-  #[no_mangle]
   fn waitpid(__pid: pid_t, __stat_loc: *mut libc::c_int, __options: libc::c_int) -> pid_t;
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn run_nofork_applet(applet_no: libc::c_int, argv: *mut *mut libc::c_char) -> libc::c_int;
-  #[no_mangle]
   fn find_applet_by_name(name: *const libc::c_char) -> libc::c_int;
 
-  #[no_mangle]
   static bb_msg_unknown: [libc::c_char; 0];
 
-  #[no_mangle]
   static bb_banner: [libc::c_char; 0];
 
   /* NB: (bb_hexdigits_upcase[i] | 0x20) -> lowercase hex digit */
@@ -178,9 +130,7 @@ extern "C" {
   /* '*const' ptr makes gcc optimize code much better.
    * Magic prevents ptr_to_globals from going into rodata.
    * If you want to assign a value, use SET_PTR_TO_GLOBALS(x) */
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
-  #[no_mangle]
   static bb_PATH_root_path: [libc::c_char; 0];
   /* Number of unicode chars. Falls back to strlen() on invalid unicode */
 
@@ -201,7 +151,6 @@ extern "C" {
    *
    * Licensed under GPLv2 or later, see file LICENSE in this source tree.
    */
-  #[no_mangle]
   static defifsvar: [libc::c_char; 0];
 //TODO? do not provide bashisms if not asked for:
 //#if !ENABLE_HUSH_BASH_COMPAT && !ENABLE_ASH_BASH_COMPAT

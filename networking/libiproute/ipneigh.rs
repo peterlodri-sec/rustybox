@@ -9,20 +9,14 @@ use libc::puts;
 use libc::sockaddr_nl;
 use libc::strcmp;
 extern "C" {
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   static bb_msg_requires_arg: [libc::c_char; 0];
-  #[no_mangle]
   static bb_msg_invalid_arg_to: [libc::c_char; 0];
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
-  #[no_mangle]
   static mut preferred_family: family_t;
 
 /* We need linux/types.h because older kernels use u32 etc

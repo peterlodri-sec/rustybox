@@ -1,10 +1,8 @@
 use crate::libbb::xfuncs_printf::xmalloc;
 use libc;
 extern "C" {
-  #[no_mangle]
   fn execv(__path: *const libc::c_char, __argv: *const *mut libc::c_char) -> libc::c_int;
 
-  #[no_mangle]
   static bb_default_login_shell: [libc::c_char; 0];
 }
 /*

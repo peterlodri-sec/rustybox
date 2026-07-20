@@ -30,64 +30,43 @@ use libc::useconds_t;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   fn atof(__nptr: *const libc::c_char) -> libc::c_double;
 
-  #[no_mangle]
   fn mkdtemp(__template: *mut libc::c_char) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn execl(__path: *const libc::c_char, __arg: *const libc::c_char, _: ...) -> libc::c_int;
 
-  #[no_mangle]
   fn getppid() -> pid_t;
-  #[no_mangle]
   fn vfork() -> libc::c_int;
 
-  #[no_mangle]
   fn acct(__name: *const libc::c_char) -> libc::c_int;
 
-  #[no_mangle]
   fn raise(__sig: libc::c_int) -> libc::c_int;
 
-  #[no_mangle]
   fn fflush(__stream: *mut FILE) -> libc::c_int;
 
-  #[no_mangle]
   fn putc_unlocked(__c: libc::c_int, __stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn fileno_unlocked(__stream: *mut FILE) -> libc::c_int;
-  #[no_mangle]
   fn usleep(__useconds: useconds_t) -> libc::c_int;
 
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   fn waitpid(__pid: pid_t, __stat_loc: *mut libc::c_int, __options: libc::c_int) -> pid_t;
 
-  #[no_mangle]
   fn strftime(
     __s: *mut libc::c_char,
     __maxsize: size_t,
     __format: *const libc::c_char,
     __tp: *const tm,
   ) -> size_t;
-  #[no_mangle]
   fn localtime_r(__timer: *const time_t, __tp: *mut tm) -> *mut tm;
 
-  #[no_mangle]
   static mut bb_got_signal: smallint;
 
-  #[no_mangle]
   static bb_PATH_root_path: [libc::c_char; 0];
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
-  #[no_mangle]
   fn uname(__name: *mut utsname) -> libc::c_int;
 
 }

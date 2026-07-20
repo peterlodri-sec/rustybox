@@ -24,10 +24,8 @@ use libc::uid_t;
 use libc::unlink;
 extern "C" {
 
-  #[no_mangle]
   fn mkdir(__path: *const libc::c_char, __mode: mode_t) -> libc::c_int;
 
-  #[no_mangle]
   fn utimes(__file: *const libc::c_char, __tvp: *const timeval) -> libc::c_int;
 
 }

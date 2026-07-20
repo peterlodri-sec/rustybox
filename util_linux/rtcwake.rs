@@ -9,19 +9,15 @@ use libc::tm;
 use libc::useconds_t;
 extern "C" {
 
-  #[no_mangle]
   fn snprintf(
     _: *mut libc::c_char,
     _: libc::c_ulong,
     _: *const libc::c_char,
     _: ...
   ) -> libc::c_int;
-  #[no_mangle]
   fn usleep(__useconds: useconds_t) -> libc::c_int;
 
-  #[no_mangle]
   fn localtime(__timer: *const time_t) -> *mut tm;
-  #[no_mangle]
   fn ctime(__timer: *const time_t) -> *mut libc::c_char;
 
 /*

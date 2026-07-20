@@ -1,6 +1,5 @@
 use libc;
 extern "C" {
-  #[no_mangle]
   fn sysconf(__name: libc::c_int) -> libc::c_long;
 }
 pub type C2RustUnnamed = libc::c_uint;

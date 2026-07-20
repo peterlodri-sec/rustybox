@@ -84,16 +84,12 @@ extern "C" {
   // Comment in the header says this above capset/capget:
   /* system calls - look to libc for function to system call mapping */
 
-  #[no_mangle]
   fn capset(header: cap_user_header_t, data: cap_user_data_t) -> libc::c_int;
 
-  #[no_mangle]
   fn getresuid(__ruid: *mut uid_t, __euid: *mut uid_t, __suid: *mut uid_t) -> libc::c_int;
 
-  #[no_mangle]
   fn getresgid(__rgid: *mut gid_t, __egid: *mut gid_t, __sgid: *mut gid_t) -> libc::c_int;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
 }

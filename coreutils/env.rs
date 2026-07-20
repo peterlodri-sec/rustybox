@@ -5,11 +5,8 @@ use libc::puts;
 use libc::strchr;
 extern "C" {
 
-  #[no_mangle]
   fn clearenv() -> libc::c_int;
-  #[no_mangle]
   static mut environ: *mut *mut libc::c_char;
-  #[no_mangle]
   static mut optind: libc::c_int;
 
 }

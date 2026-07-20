@@ -8,11 +8,8 @@ use libc::printf;
 use libc::time;
 use libc::time_t;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
-  #[no_mangle]
   fn ctime(__timer: *const time_t) -> *mut libc::c_char;
 }
 // glibc removed stime() in 2.31; emulate via clock_settime(CLOCK_REALTIME).

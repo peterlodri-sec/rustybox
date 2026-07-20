@@ -2,7 +2,6 @@ use crate::libbb::ptr_to_globals::bb_errno;
 use libc;
 use libc::gid_t;
 extern "C" {
-  #[no_mangle]
   fn getgroups(__size: libc::c_int, __list: *mut gid_t) -> libc::c_int;
 
 }

@@ -5,12 +5,9 @@ use libc::strchr;
 use libc::time_t;
 use libc::timespec;
 extern "C" {
-  #[no_mangle]
   fn strtod(__nptr: *const libc::c_char, __endptr: *mut *mut libc::c_char) -> libc::c_double;
 
-  #[no_mangle]
   fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  #[no_mangle]
   fn nanosleep(__requested_time: *const timespec, __remaining: *mut timespec) -> libc::c_int;
 
 }

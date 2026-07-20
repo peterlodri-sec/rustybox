@@ -9,16 +9,11 @@ use libc::puts;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn sethostname(__name: *const libc::c_char, __len: size_t) -> libc::c_int;
 
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
-  #[no_mangle]
   fn inet_ntoa(__in: in_addr) -> *mut libc::c_char;
 // "old" (ipv4 only) API
 // users: traceroute.c hostname.c - use _list_ of all IPs

@@ -7,15 +7,11 @@ use libc::printf;
 use libc::time_t;
 use libc::uid_t;
 extern "C" {
-  #[no_mangle]
   fn semctl(__semid: libc::c_int, __semnum: libc::c_int, __cmd: libc::c_int, _: ...)
     -> libc::c_int;
-  #[no_mangle]
   fn msgctl(__msqid: libc::c_int, __cmd: libc::c_int, __buf: *mut msqid_ds) -> libc::c_int;
-  #[no_mangle]
   fn shmctl(__shmid: libc::c_int, __cmd: libc::c_int, __buf: *mut shmid_ds) -> libc::c_int;
 
-  #[no_mangle]
   fn ctime(__timer: *const time_t) -> *mut libc::c_char;
 /* Search for an entry with a matching user ID.  */
 

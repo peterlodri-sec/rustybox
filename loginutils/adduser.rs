@@ -15,13 +15,10 @@ use libc::uid_t;
 use libc::umask;
 extern "C" {
 
-  #[no_mangle]
   fn execlp(__file: *const libc::c_char, __arg: *const libc::c_char, _: ...) -> libc::c_int;
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn mkdir(__path: *const libc::c_char, __mode: mode_t) -> libc::c_int;
 
   /* Search for an entry with a matching user ID.  */
@@ -32,13 +29,10 @@ extern "C" {
 
   /* Search for an entry with a matching group name.  */
 
-  #[no_mangle]
   static mut option_mask32: u32;
 
-  #[no_mangle]
   static mut logmode: smallint;
 
-  #[no_mangle]
   static bb_msg_perm_denied_are_you_root: [libc::c_char; 0];
 }
 

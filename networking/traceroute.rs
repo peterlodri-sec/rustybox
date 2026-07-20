@@ -21,7 +21,6 @@ use libc::sockaddr_in6;
 use libc::timeval;
 use libc::useconds_t;
 extern "C" {
-  #[no_mangle]
   fn setsockopt(
     __fd: libc::c_int,
     __level: libc::c_int,
@@ -29,20 +28,15 @@ extern "C" {
     __optval: *const libc::c_void,
     __optlen: socklen_t,
   ) -> libc::c_int;
-  #[no_mangle]
   fn inet_ntoa(__in: in_addr) -> *mut libc::c_char;
-  #[no_mangle]
   fn inet_ntop(
     __af: libc::c_int,
     __cp: *const libc::c_void,
     __buf: *mut libc::c_char,
     __len: socklen_t,
   ) -> *const libc::c_char;
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> libc::c_int;
-  #[no_mangle]
   static mut optind: libc::c_int;
 
   /* not FAST_FUNC! */
@@ -66,18 +60,14 @@ extern "C" {
   /* Useful for reading port numbers */
 
   /* { "-", NULL } */
-  #[no_mangle]
   static mut option_mask32: u32;
 
-  #[no_mangle]
   static bb_msg_you_must_be_root: [libc::c_char; 0];
   /* '*const' ptr makes gcc optimize code much better.
    * Magic prevents ptr_to_globals from going into rodata.
    * If you want to assign a value, use SET_PTR_TO_GLOBALS(x) */
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
 
-  #[no_mangle]
   fn usleep(__useconds: useconds_t) -> libc::c_int;
 }
 

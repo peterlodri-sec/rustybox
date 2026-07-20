@@ -9,10 +9,8 @@ use libc::ssize_t;
 use libc::strchr;
 extern "C" {
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
-  #[no_mangle]
   fn mmap(
     __addr: *mut libc::c_void,
     __len: size_t,
@@ -21,10 +19,8 @@ extern "C" {
     __fd: libc::c_int,
     __offset: off64_t,
   ) -> *mut libc::c_void;
-  #[no_mangle]
   fn munmap(__addr: *mut libc::c_void, __len: size_t) -> libc::c_int;
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

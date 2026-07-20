@@ -4,20 +4,13 @@ use libc;
 use libc::ssize_t;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
-  #[no_mangle]
   static mut stdin: *mut FILE;
-  #[no_mangle]
   static mut stdout: *mut FILE;
-  #[no_mangle]
   fn setbuf(__stream: *mut FILE, __buf: *mut libc::c_char);
-  #[no_mangle]
   static bb_msg_standard_input: [libc::c_char; 0];
 
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

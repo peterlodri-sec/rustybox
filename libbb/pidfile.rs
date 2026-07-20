@@ -9,7 +9,6 @@ use libc::stat;
 use libc::unlink;
 extern "C" {
 
-  #[no_mangle]
   fn snprintf(
     _: *mut libc::c_char,
     _: libc::c_ulong,

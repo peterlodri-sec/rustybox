@@ -7,11 +7,8 @@ use libc::off_t;
 use libc::open;
 use libc::stat;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
-  #[no_mangle]
   fn ftruncate(__fd: libc::c_int, __length: off64_t) -> libc::c_int;
-  #[no_mangle]
   fn fdatasync(__fildes: libc::c_int) -> libc::c_int;
 
 }

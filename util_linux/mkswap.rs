@@ -5,14 +5,10 @@ use libc;
 use libc::off_t;
 use libc::printf;
 extern "C" {
-  #[no_mangle]
   static mut optind: libc::c_int;
 
-  #[no_mangle]
   fn fsync(__fd: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn getpagesize() -> libc::c_int;
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

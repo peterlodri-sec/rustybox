@@ -3,7 +3,6 @@ use libc;
 use libc::puts;
 extern "C" {
 
-  #[no_mangle]
   fn getlogin_r(__name: *mut libc::c_char, __name_len: size_t) -> libc::c_int;
 }
 /*

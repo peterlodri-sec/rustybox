@@ -15,7 +15,6 @@ use libc::timeval;
 use libc::unlink;
 extern "C" {
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* After v = xrealloc_vector(v, SHIFT, idx) it's ok to use
@@ -52,7 +51,6 @@ extern "C" {
   /* NOMMU friendy fork+exec: */
 
   /* { "-", NULL } */
-  #[no_mangle]
   static mut option_mask32: u32;
 
   /* BTW, surprisingly, changing API to
@@ -61,10 +59,8 @@ extern "C" {
   /* start_stop_daemon and udhcpc are special - they want
    * to create pidfiles regardless of FEATURE_PIDFILE */
   /* True only if we created pidfile which is *file*, not /dev/null etc */
-  #[no_mangle]
   static mut wrote_pidfile: smallint;
 
-  #[no_mangle]
   static mut logmode: smallint;
 
   /* delims[0] is a comment char (use '\0' to disable), the rest are token delimiters */
@@ -72,7 +68,6 @@ extern "C" {
   /* '*const' ptr makes gcc optimize code much better.
    * Magic prevents ptr_to_globals from going into rodata.
    * If you want to assign a value, use SET_PTR_TO_GLOBALS(x) */
-  #[no_mangle]
   static ptr_to_globals: *mut globals;
 
 }

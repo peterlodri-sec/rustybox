@@ -42,42 +42,31 @@ use libc::uid_t;
 use libc::DIR;
 use libc::FILE;
 extern "C" {
-  #[no_mangle]
   fn sigaction(__sig: libc::c_int, __act: *const sigaction, __oact: *mut sigaction) -> libc::c_int;
-  #[no_mangle]
   fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   static mut stdin: *mut FILE;
-  #[no_mangle]
   static mut stdout: *mut FILE;
 
-  #[no_mangle]
   fn fgets_unlocked(
     __s: *mut libc::c_char,
     __n: libc::c_int,
     __stream: *mut FILE,
   ) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
 
-  #[no_mangle]
   fn strtoul(
     __nptr: *const libc::c_char,
     __endptr: *mut *mut libc::c_char,
     __base: libc::c_int,
   ) -> libc::c_ulong;
 
-  #[no_mangle]
   fn strcat(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn strlen(__s: *const libc::c_char) -> size_t;
 
   /* Copyright (C) 1991,92,95,96,97,98,99,2001 Free Software Foundation, Inc.
@@ -116,14 +105,11 @@ extern "C" {
 
   /* Search for an entry with a matching username.  */
 
-  #[no_mangle]
   static bb_msg_unknown: [libc::c_char; 0];
-  #[no_mangle]
   static const_int_0: libc::c_int;
   /* Width on terminal */
 
   /* See lineedit_ptr_hack.c */
-  #[no_mangle]
   static lineedit_ptr_to_statics: *mut lineedit_statics;
 }
 

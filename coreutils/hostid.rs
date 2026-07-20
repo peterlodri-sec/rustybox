@@ -1,7 +1,6 @@
 use libc;
 use libc::printf;
 extern "C" {
-  #[no_mangle]
   fn gethostid() -> libc::c_long;
 
 }

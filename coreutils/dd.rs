@@ -15,30 +15,19 @@ use libc::strchr;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   fn fsync(__fd: libc::c_int) -> libc::c_int;
-  #[no_mangle]
   fn ftruncate(__fd: libc::c_int, __length: off64_t) -> libc::c_int;
-  #[no_mangle]
   static mut stderr: *mut FILE;
 
-  #[no_mangle]
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
-  #[no_mangle]
   fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
-  #[no_mangle]
   static cwbkMG_suffixes: [suffix_mult; 0];
 
-  #[no_mangle]
   static bb_msg_invalid_arg_to: [libc::c_char; 0];
-  #[no_mangle]
   static bb_msg_standard_input: [libc::c_char; 0];
-  #[no_mangle]
   static bb_msg_standard_output: [libc::c_char; 0];
-  #[no_mangle]
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 

@@ -11,10 +11,8 @@ use libc::putchar_unlocked;
 use libc::strchr;
 use libc::strstr;
 extern "C" {
-  #[no_mangle]
   fn strtod(__nptr: *const libc::c_char, __endptr: *mut *mut libc::c_char) -> libc::c_double;
 
-  #[no_mangle]
   fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
 
 /* Non-aborting kind of convertors: bb_strto[u][l]l */

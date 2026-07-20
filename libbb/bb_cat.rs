@@ -3,7 +3,6 @@ use libc::close;
 use libc::off_t;
 extern "C" {
 
-  #[no_mangle]
   static bb_argv_dash: [*const libc::c_char; 0];
 }
 

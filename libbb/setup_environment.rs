@@ -4,12 +4,9 @@ use libc::getenv;
 use libc::passwd;
 extern "C" {
 
-  #[no_mangle]
   fn clearenv() -> libc::c_int;
 
-  #[no_mangle]
   static bb_PATH_root_path: [libc::c_char; 0];
-  #[no_mangle]
   static bb_default_login_shell: [libc::c_char; 0];
 }
 

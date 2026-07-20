@@ -5,9 +5,7 @@ use libc::passwd;
 use libc::strchr;
 extern "C" {
 
-  #[no_mangle]
   fn getpriority(__which: __priority_which_t, __who: id_t) -> libc::c_int;
-  #[no_mangle]
   fn setpriority(__which: __priority_which_t, __who: id_t, __prio: libc::c_int) -> libc::c_int;
 /* Search for an entry with a matching username.  */
 

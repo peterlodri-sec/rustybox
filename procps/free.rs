@@ -5,14 +5,12 @@ use libc::sscanf;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   fn fgets_unlocked(
     __s: *mut libc::c_char,
     __n: libc::c_int,
     __stream: *mut FILE,
   ) -> *mut libc::c_char;
 
-  #[no_mangle]
   fn sysinfo(__info: *mut sysinfo) -> libc::c_int;
 }
 

@@ -9,7 +9,6 @@ extern "C" {
 
   /* Search for an entry with a matching group name.  */
 
-  #[no_mangle]
   static bb_msg_perm_denied_are_you_root: [libc::c_char; 0];
 }
 

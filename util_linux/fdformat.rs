@@ -6,7 +6,6 @@ use libc::puts;
 use libc::stat;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
 }

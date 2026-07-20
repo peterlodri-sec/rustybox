@@ -15,7 +15,6 @@ use libc::strstr;
 use libc::FILE;
 extern "C" {
 
-  #[no_mangle]
   static mut optind: libc::c_int;
 
 }

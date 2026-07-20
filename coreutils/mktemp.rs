@@ -2,13 +2,9 @@ use libc;
 use libc::getenv;
 use libc::puts;
 extern "C" {
-  #[no_mangle]
   fn mktemp(__template: *mut libc::c_char) -> *mut libc::c_char;
-  #[no_mangle]
   fn mkstemp(__template: *mut libc::c_char) -> libc::c_int;
-  #[no_mangle]
   fn mkdtemp(__template: *mut libc::c_char) -> *mut libc::c_char;
-  #[no_mangle]
   static mut optind: libc::c_int;
 }
 
