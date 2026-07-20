@@ -88,7 +88,24 @@ is nearly free.
     (losetup(8) it yourself first), CIFS/NFS fstab shorthand auto-detection,
     and the `mount.<fstype>` helper-program fallback (already dead code
     upstream).
-  - `ip`/`init`/`ash` — not yet started. `ash` in particular (15k transpiled
+  - `ip` ✅ (partial) — `modern/ip.rs`, feature `modern-ip`. Unlike the other
+    Phase 3 applets, the transpiled `ip` already has a correct, full
+    netlink-based implementation (`networking/libiproute/`) — there's no bug
+    to fix in the parts left uncovered, only unsafe-vs-safe style. So this
+    covers just the read-only, most-used surface with zero ioctls/netlink at
+    all — `ip addr show`, `ip link show` (via `getifaddrs`, same as
+    `ifconfig`), `ip route show` (IPv4 only, via `/proc/net/route`) — plus
+    one narrow, low-risk mutation, `ip link set IFACE up|down` (same confined
+    ioctl helper pattern as `ifconfig`). `ip::run` returns `Option<i32>`
+    instead of always-`Some`, so any subcommand it doesn't recognize (`addr
+    add/del/change`, `link set mtu/address/…`, `route add/del`, `rule`/
+    `tunnel`/`neigh`, anything with a selector this file doesn't parse)
+    returns `None` and falls through to the transpiled `ip_main` per the
+    same `try_run` contract `modern.rs` already uses per-applet — just
+    exercised per-subcommand here. Verified e2e in the build container
+    (addr/link/route show, link set up/down against `lo`, and the
+    fallthrough path via `ip rule show`).
+  - `init`/`ash` — not yet started. `ash` in particular (15k transpiled
     lines, full POSIX shell semantics) is a multi-session project on its
     own, not a quick swap.
 - **Phase 4 — retire transpiled code.** Once an applet's modern backend is the

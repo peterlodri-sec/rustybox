@@ -249,6 +249,44 @@ fn mount_umount_tmpfs_roundtrip() {
 }
 
 #[test]
+fn ip_addr_show_lo() {
+  let out = cmd!(exe(), "ip", "addr", "show", "lo").read().unwrap();
+  assert!(out.contains("lo"), "got: {out}");
+  assert!(out.contains("127.0.0.1"), "got: {out}");
+}
+
+#[test]
+fn ip_link_show_bare_device() {
+  let out = cmd!(exe(), "ip", "link", "show", "lo").read().unwrap();
+  assert!(out.contains("LOOPBACK"), "got: {out}");
+}
+
+#[test]
+fn ip_route_show_runs() {
+  let status = cmd!(exe(), "ip", "route", "show").unchecked().stdout_null().run().unwrap();
+  assert_eq!(status.status.code(), Some(0));
+}
+
+#[test]
+fn ip_unknown_device_errors() {
+  let status = cmd!(exe(), "ip", "link", "show", "there-is-no-such-iface")
+    .unchecked()
+    .stdout_null()
+    .stderr_null()
+    .run()
+    .unwrap();
+  assert_ne!(status.status.code(), Some(0));
+}
+
+#[test]
+fn ip_unsupported_subcommand_falls_through() {
+  // `ip rule` isn't covered by the modern backend; it must fall through to
+  // the transpiled ip_main rather than erroring.
+  let status = cmd!(exe(), "ip", "rule", "show").unchecked().stdout_null().run().unwrap();
+  assert_eq!(status.status.code(), Some(0));
+}
+
+#[test]
 fn true_false_exit_codes() {
   let t = cmd!(exe(), "true").unchecked().run().unwrap();
   assert_eq!(t.status.code(), Some(0));
