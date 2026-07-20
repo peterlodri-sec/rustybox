@@ -1,0 +1,10 @@
+# Pinned nightly: rustybox still needs a handful of unstable features
+# (c_variadic, extern_types) that c2rust emitted. Kept intentionally minimal.
+[toolchain]
+channel = "nightly-2026-07-20"
+components = ["rust-src", "clippy", "rustfmt"]
+targets = [
+  "x86_64-unknown-linux-musl",
+  "aarch64-unknown-linux-musl",
+]
+profile = "minimal"

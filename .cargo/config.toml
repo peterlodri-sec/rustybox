@@ -1,0 +1,17 @@
+# Build config.
+#
+# Default build is container-native x86_64/aarch64 linux-gnu (matches the
+# original c2rust transpile assumptions and the CI runners).
+#
+# The musl targets produce the fully-static, dual-arch binaries embedded into
+# entheai. They link with rust-lld (target-agnostic), so `cargo build
+# --target <arch>-unknown-linux-musl` works from ANY host — including
+# cross-building x86_64 from an arm64 mac and vice-versa — without a
+# per-arch cross cc.
+[target.x86_64-unknown-linux-musl]
+linker = "rust-lld"
+rustflags = ["-C", "target-feature=+crt-static", "-C", "linker-flavor=ld.lld"]
+
+[target.aarch64-unknown-linux-musl]
+linker = "rust-lld"
+rustflags = ["-C", "target-feature=+crt-static", "-C", "linker-flavor=ld.lld"]
