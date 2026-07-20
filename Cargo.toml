@@ -4,6 +4,8 @@ authors = ["Samuel Ainsworth"]
 version = "0.0.0"
 publish = false
 edition = "2021"
+# BusyBox lineage: the transpiled tree is a GPLv2 derivative and stays GPLv2.
+license = "GPL-2.0-only"
 autobins = false
 
 # [lib]
