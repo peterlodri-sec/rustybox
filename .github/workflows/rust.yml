@@ -43,6 +43,9 @@ jobs:
           printf 'a\nb\nc\n' | $BIN wc -l
           printf 'b\na\nb\n' | $BIN sort | $BIN uniq
 
+      - name: Modern backend tests
+        run: cargo test --no-default-features --features "modern" --test modern
+
   format:
     runs-on: ubuntu-latest
     steps:
