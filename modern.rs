@@ -9,9 +9,14 @@
 //! into the single multicall binary. `argv[0]` is the applet name, which is the
 //! program-name convention uutils' `uumain` expects.
 
+#[cfg(feature = "modern-grep")]
+mod grep;
+
 #[allow(unused_variables)]
 pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
   match name {
+    #[cfg(feature = "modern-grep")]
+    "grep" | "egrep" | "fgrep" => Some(grep::run(name, argv)),
     #[cfg(feature = "modern-cat")]
     "cat" => Some(uu_cat::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-echo")]
