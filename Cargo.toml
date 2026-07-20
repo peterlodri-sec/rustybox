@@ -106,7 +106,7 @@ ignore = { version = "0.4", optional = true }
 # Phase 3 (MIGRATION.md): no drop-in crate exists for ifconfig/mount/ip/init,
 # so these get idiomatic in-house rewrites with syscalls via nix instead of
 # the transpiled unsafe FFI.
-nix = { version = "0.29", optional = true, features = ["net", "ioctl", "mount", "user"] }
+nix = { version = "0.29", optional = true, features = ["net", "ioctl", "mount", "user", "fs", "process", "signal"] }
 
 [dev-dependencies]
 duct = "0.13.3"
@@ -124,7 +124,7 @@ strip = false        # keep symbols — size comes from build flags + UPX, not s
 
 [features]
 # Modern memory-safe backends (MIGRATION.md). `modern` = all wired so far.
-modern = ["modern-cat", "modern-echo", "modern-ls", "modern-cp", "modern-mv", "modern-rm", "modern-mkdir", "modern-rmdir", "modern-ln", "modern-pwd", "modern-touch", "modern-true", "modern-false", "modern-head", "modern-tail", "modern-wc", "modern-sort", "modern-uniq", "modern-cut", "modern-tr", "modern-chmod", "modern-chown", "modern-df", "modern-du", "modern-env", "modern-printenv", "modern-date", "modern-basename", "modern-dirname", "modern-readlink", "modern-stat", "modern-seq", "modern-sleep", "modern-id", "modern-whoami", "modern-yes", "modern-tac", "modern-nl", "modern-tee", "modern-mktemp", "modern-realpath", "modern-nproc", "modern-printf", "modern-link", "modern-unlink", "modern-logname", "modern-factor", "modern-grep", "modern-find", "modern-gzip", "modern-bzip2", "modern-xz", "modern-tar", "modern-timeout", "modern-nohup", "modern-shuf", "modern-nice", "modern-dd", "modern-truncate", "modern-fold", "modern-expand", "modern-unexpand", "modern-comm", "modern-split", "modern-cksum", "modern-paste", "modern-sync", "modern-uname", "modern-sum", "modern-base64", "modern-ifconfig", "modern-mount", "modern-umount", "modern-mountpoint", "modern-ip"]
+modern = ["modern-cat", "modern-echo", "modern-ls", "modern-cp", "modern-mv", "modern-rm", "modern-mkdir", "modern-rmdir", "modern-ln", "modern-pwd", "modern-touch", "modern-true", "modern-false", "modern-head", "modern-tail", "modern-wc", "modern-sort", "modern-uniq", "modern-cut", "modern-tr", "modern-chmod", "modern-chown", "modern-df", "modern-du", "modern-env", "modern-printenv", "modern-date", "modern-basename", "modern-dirname", "modern-readlink", "modern-stat", "modern-seq", "modern-sleep", "modern-id", "modern-whoami", "modern-yes", "modern-tac", "modern-nl", "modern-tee", "modern-mktemp", "modern-realpath", "modern-nproc", "modern-printf", "modern-link", "modern-unlink", "modern-logname", "modern-factor", "modern-grep", "modern-find", "modern-gzip", "modern-bzip2", "modern-xz", "modern-tar", "modern-timeout", "modern-nohup", "modern-shuf", "modern-nice", "modern-dd", "modern-truncate", "modern-fold", "modern-expand", "modern-unexpand", "modern-comm", "modern-split", "modern-cksum", "modern-paste", "modern-sync", "modern-uname", "modern-sum", "modern-base64", "modern-ifconfig", "modern-mount", "modern-umount", "modern-mountpoint", "modern-ip", "modern-init"]
 modern-cat = ["dep:uu_cat", "cat"]
 modern-echo = ["dep:uu_echo", "echo"]
 modern-ls = ["dep:uu_ls", "ls"]
@@ -200,6 +200,7 @@ modern-mount = ["dep:nix", "mount"]
 modern-umount = ["dep:nix", "umount"]
 modern-mountpoint = ["dep:nix", "mountpoint"]
 modern-ip = ["dep:nix", "ip"]
+modern-init = ["dep:nix", "init", "linuxrc"]
 
 test-bracket1 = []
 test-bracket2 = []

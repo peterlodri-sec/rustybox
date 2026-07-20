@@ -105,9 +105,45 @@ is nearly free.
     exercised per-subcommand here. Verified e2e in the build container
     (addr/link/route show, link set up/down against `lo`, and the
     fallthrough path via `ip rule show`).
-  - `init`/`ash` — not yet started. `ash` in particular (15k transpiled
-    lines, full POSIX shell semantics) is a multi-session project on its
-    own, not a quick swap.
+  - `init` ✅ (+ `linuxrc` alias) — `modern/init.rs`, feature `modern-init`.
+    Full behavioral port of the PID-1 supervisor: inittab parsing (`id:
+    runlevels:action:process`, `runlevels` parsed-but-ignored matching
+    upstream, actions `sysinit`/`wait`/`once`/`respawn`/`askfirst`/
+    `ctrlaltdel`/`shutdown`/`restart`), the same hardcoded default inittab
+    when `/etc/inittab` is missing, spawn/respawn/zombie-reap via
+    `nix::unistd::fork`/`nix::sys::wait::waitpid`, delayed-signal handling
+    (SIGHUP/SIGINT/SIGQUIT/SIGTERM/SIGUSR1/SIGUSR2 recorded via atomic
+    flags in an async-signal-safe handler, acted on in the main loop — same
+    design as upstream's `record_signo`), and shutdown/reboot/halt/poweroff
+    via the confined `reboot(2)` FFI call. Two intentional simplifications
+    (documented in the module): always `fork()` instead of upstream's
+    `vfork()`/`fork()` split (a NOMMU-embedded-only optimization, irrelevant
+    on any MMU target this project ships for), and no SIGTSTP/SIGSTOP
+    job-control freeze handler (legacy interactive-console feature). One
+    intentional **hardening beyond upstream**: the PID-1 check is enforced
+    unconditionally, including for `linuxrc` — upstream waives it for that
+    name, which would let an accidental `rustybox linuxrc` invocation on a
+    dev machine hijack the process into an infinite supervisor loop with
+    hijacked signal handlers instead of safely erroring.
+    Verified as **real PID 1** via `unshare --pid --mount --fork
+    --mount-proc` in the build container (not testable via a plain
+    `cargo test` subprocess): sysinit→once ordering, respawn-without-
+    zombie-leaks over multiple cycles, the default-inittab fallback
+    degrading gracefully when `rcS`/ttys are missing, and — the hardest
+    path to test — a child process sending real `SIGTERM` to PID 1
+    correctly triggering the full shutdown-and-reboot sequence and tearing
+    down the namespace. This process caught two real bugs before they
+    shipped: `linuxrc` bypassing the PID-1 check entirely (matching
+    upstream's literal behavior, but dangerous — see the hardening above)
+    hung a live invocation into an infinite supervisor loop; and testing
+    `init -q` (which sends a real `SIGHUP` to whatever is PID 1) inside the
+    test suite killed the *test container's own* PID 1 and took the whole
+    suite down with it — removed from the automated suite (signal delivery
+    to an unrelated PID 1 is inherently environment-dependent, matching
+    upstream, not something to automate) and verified once manually inside
+    a disposable namespace instead.
+  - `ash` — not yet started; 15k transpiled lines, full POSIX shell
+    semantics, a multi-session project on its own, not a quick swap.
 - **Phase 4 — retire transpiled code.** Once an applet's modern backend is the
   default and parity-tested, delete the transpiled `*_main` and its `unsafe`.
 

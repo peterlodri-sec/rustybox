@@ -287,6 +287,34 @@ fn ip_unsupported_subcommand_falls_through() {
 }
 
 #[test]
+fn init_rejects_non_pid1() {
+  // The test process is never PID 1, so this must safely refuse rather
+  // than attempt to become a supervisor. Full PID-1 behavior (inittab
+  // parsing, spawn/respawn/reap, shutdown/reboot signal handling) was
+  // verified manually via `unshare --pid --fork --mount-proc` during
+  // development — not something a plain `cargo test` process can safely
+  // exercise (it would require real PID-namespace privileges in CI).
+  let status = cmd!(exe(), "init").unchecked().stdout_null().stderr_null().run().unwrap();
+  assert_ne!(status.status.code(), Some(0));
+}
+
+#[test]
+fn linuxrc_alias_rejects_non_pid1() {
+  let status = cmd!(exe(), "linuxrc").unchecked().stdout_null().stderr_null().run().unwrap();
+  assert_ne!(status.status.code(), Some(0));
+}
+
+// `init -q` sends a real SIGHUP to whatever process happens to be PID 1 —
+// in a genuine deployment that's the running init being asked to reload,
+// but there is no environment (dev machine, CI, this test binary's own
+// container) where "PID 1" is ever *our* init rather than some unrelated
+// process. A previous version of this test suite sent SIGHUP to the test
+// container's own PID 1 (the `cargo test` process tree itself) and killed
+// the entire container instantly. Verified manually instead, inside a
+// disposable `unshare --pid --fork` namespace where PID 1 is ours to kill;
+// not something to automate here.
+
+#[test]
 fn true_false_exit_codes() {
   let t = cmd!(exe(), "true").unchecked().run().unwrap();
   assert_eq!(t.status.code(), Some(0));

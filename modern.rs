@@ -27,6 +27,8 @@ mod umount;
 mod mountpoint;
 #[cfg(feature = "modern-ip")]
 mod ip;
+#[cfg(feature = "modern-init")]
+mod init;
 
 #[allow(unused_variables)]
 pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
@@ -53,6 +55,8 @@ pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
     "mountpoint" => Some(mountpoint::run(argv)),
     #[cfg(feature = "modern-ip")]
     "ip" => ip::run(argv),
+    #[cfg(feature = "modern-init")]
+    "init" | "linuxrc" => Some(init::run(argv)),
     #[cfg(feature = "modern-cat")]
     "cat" => Some(uu_cat::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-echo")]
