@@ -315,6 +315,76 @@ fn linuxrc_alias_rejects_non_pid1() {
 // not something to automate here.
 
 #[test]
+fn md5sum_known_vector() {
+  let out = cmd!(exe(), "md5sum").stdin_bytes("abc").read().unwrap();
+  assert_eq!(out, "900150983cd24fb0d6963f7d28e17f72  -");
+}
+
+#[test]
+fn sha256sum_known_vector() {
+  let out = cmd!(exe(), "sha256sum").stdin_bytes("abc").read().unwrap();
+  assert_eq!(out, "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad  -");
+}
+
+#[test]
+fn sha1sum_known_vector() {
+  let out = cmd!(exe(), "sha1sum").stdin_bytes("abc").read().unwrap();
+  assert_eq!(out, "a9993e364706816aba3e25717850c26c9cd0d89d  -");
+}
+
+#[test]
+fn sha512sum_known_vector() {
+  let out = cmd!(exe(), "sha512sum").stdin_bytes("abc").read().unwrap();
+  assert_eq!(
+    out,
+    "ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f  -"
+  );
+}
+
+#[test]
+fn sha3sum_default_width_known_vector() {
+  let out = cmd!(exe(), "sha3sum").stdin_bytes("abc").read().unwrap();
+  assert_eq!(out, "e642824c3f8cf24ad09234ee7d3c766fc9a3a5168d0c94ad73b46fdf  -");
+}
+
+#[test]
+fn sha3sum_rejects_non_standard_width() {
+  let status = cmd!(exe(), "sha3sum", "-a300").unchecked().stdin_bytes("").stdout_null().stderr_null().run().unwrap();
+  assert_ne!(status.status.code(), Some(0));
+}
+
+#[test]
+fn md5sum_check_mode_roundtrip() {
+  let dir = tempfile::tempdir().unwrap();
+  let file = dir.path().join("f.txt");
+  std::fs::write(&file, "hello").unwrap();
+  let sums = cmd!(exe(), "md5sum", file.to_str().unwrap()).read().unwrap();
+  let sums_file = dir.path().join("sums.md5");
+  std::fs::write(&sums_file, format!("{sums}\n")).unwrap();
+
+  let ok = cmd!(exe(), "md5sum", "-c", sums_file.to_str().unwrap()).read().unwrap();
+  assert!(ok.ends_with("OK"), "got: {ok}");
+
+  std::fs::write(&sums_file, sums.replacen(char::is_numeric, "0", 1) + "\n").unwrap();
+  let status = cmd!(exe(), "md5sum", "-c", sums_file.to_str().unwrap()).unchecked().stdout_null().run().unwrap();
+  assert_ne!(status.status.code(), Some(0));
+}
+
+#[test]
+fn md5sum_check_empty_file_fails() {
+  let dir = tempfile::tempdir().unwrap();
+  let empty = dir.path().join("empty.md5");
+  std::fs::write(&empty, "").unwrap();
+  let status = cmd!(exe(), "md5sum", "-c", empty.to_str().unwrap())
+    .unchecked()
+    .stdout_null()
+    .stderr_null()
+    .run()
+    .unwrap();
+  assert_ne!(status.status.code(), Some(0), "GNU compat: empty checksum file must fail");
+}
+
+#[test]
 fn true_false_exit_codes() {
   let t = cmd!(exe(), "true").unchecked().run().unwrap();
   assert_eq!(t.status.code(), Some(0));

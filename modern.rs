@@ -29,6 +29,8 @@ mod mountpoint;
 mod ip;
 #[cfg(feature = "modern-init")]
 mod init;
+#[cfg(feature = "modern-hashsum")]
+mod hashsum;
 
 #[allow(unused_variables)]
 pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
@@ -57,6 +59,8 @@ pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
     "ip" => ip::run(argv),
     #[cfg(feature = "modern-init")]
     "init" | "linuxrc" => Some(init::run(argv)),
+    #[cfg(feature = "modern-hashsum")]
+    "md5sum" | "sha1sum" | "sha256sum" | "sha512sum" | "sha3sum" => Some(hashsum::run(name, argv)),
     #[cfg(feature = "modern-cat")]
     "cat" => Some(uu_cat::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-echo")]

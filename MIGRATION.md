@@ -63,6 +63,22 @@ is nearly free.
 - **Phase 2 — specialty engines.** grep (grep-* libs), find (`ignore`/`walkdir`),
   dump family (`hexyl`), archives (`tar`/`flate2`/…). Each is its own PR + parity
   tests.
+  - `md5sum`/`sha1sum`/`sha256sum`/`sha512sum`/`sha3sum` ✅ — `modern/hashsum.rs`,
+    feature `modern-hashsum`. The planned dependency was uutils' `uu_hashsum`,
+    but it's been stuck at 0.5 for 7+ months (checked crates.io directly)
+    while the rest of the uutils family here is at 0.9 — genuinely blocked,
+    not worth waiting on further. Used RustCrypto's `md-5`/`sha1`/`sha2`/
+    `sha3` crates directly instead — audited, far more widely used than a
+    single coreutils wrapper, and all expose the same `Digest` trait, so one
+    small dispatcher covers all five algorithms. Covers plain hashing,
+    `-c` check mode (both `HASH  file` and `HASH *file` separators), `-s`/
+    `-w`, `-b`/`-t` (GNU no-ops), and sha3sum's `-a WIDTH` restricted to the
+    four values that are actually standardized SHA3 (224/256/384/512 per
+    FIPS 202) rather than the transpiled version's looser "any multiple of
+    32". Verified against upstream's own `testsuite/md5sum.tests` chained-
+    hash scenario (0..999-byte inputs hashed individually, then the
+    concatenated results hashed again) for all five algorithms, plus direct
+    cross-checks against Python's `hashlib` — all exact matches.
 - **Phase 3 — no-crate applets.** Hand-written safe rewrites for the things with
   no good library (`mount`, `ifconfig`, `ip`, `init`, the `ash` shell), using
   `rustix`/`nix` for syscalls instead of the transpiled `unsafe` FFI.
