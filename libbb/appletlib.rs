@@ -194,8 +194,10 @@ unsafe fn run_applet_no_and_exit(applet_no: usize, name: &str, argv: &[&str]) ->
 
   // Modern memory-safe backend (MIGRATION.md): if one is wired for this
   // applet, it handles the invocation and we exit with its status; otherwise
-  // fall through to the transpiled entrypoint below.
-  if let Some(code) = crate::modern::try_run(main_name, argv) {
+  // fall through to the transpiled entrypoint below. Route on the INVOKED name
+  // (`name`), not the canonical `main_name` — busybox aliases e.g. zcat→gunzip,
+  // fgrep→grep, and the invoked name is what selects behavior (`-c`, fixed).
+  if let Some(code) = crate::modern::try_run(name, argv) {
     ::std::process::exit(code);
   }
 

@@ -1989,6 +1989,7 @@ dependencies = [
  "c2rust-asm-casts",
  "c2rust-bitfields",
  "duct",
+ "flate2",
  "globset",
  "grep-regex",
  "grep-searcher",

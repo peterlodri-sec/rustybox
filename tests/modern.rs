@@ -142,6 +142,16 @@ fn base64_roundtrip() {
 }
 
 #[test]
+fn gzip_roundtrip() {
+  let out = cmd!(exe(), "gzip")
+    .stdin_bytes("compress me please")
+    .pipe(cmd!(exe(), "gunzip"))
+    .read()
+    .unwrap();
+  assert_eq!(out, "compress me please");
+}
+
+#[test]
 fn true_false_exit_codes() {
   let t = cmd!(exe(), "true").unchecked().run().unwrap();
   assert_eq!(t.status.code(), Some(0));
