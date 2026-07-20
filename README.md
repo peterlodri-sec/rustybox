@@ -49,6 +49,20 @@ cargo build --release --target aarch64-unknown-linux-musl --all-features
 - **Idiomatic core** — replace the transpiled `unsafe` internals of the common applets with safe Rust, and trim the inherited warning pile.
 - **Modern equivalents** — where a best-in-class Rust CLI already exists (`ripgrep`, `bat`, `fd`, `eza`, `uutils`…), offer it as a drop-in behind the familiar applet name. See [MIGRATION.md](MIGRATION.md).
 
+## Editions & licensing
+
+rustybox ships in two editions:
+
+- **`rustybox` (full)** — the complete BusyBox-lineage toolbox (300+ applets, incl. `awk`, `ash`, `vi`, networking, archives). Because it descends from BusyBox (transpiled via c2rust), it is a **GPL-2.0-only** derivative and stays GPLv2. This is the default binary.
+- **`rustybox-core` (MIT)** — a memory-safe multicall built **entirely on permissive crates** (the [uutils](https://github.com/uutils/coreutils) coreutils, [ripgrep](https://github.com/BurntSushi/ripgrep)'s search libraries, `walkdir`/`globset`) plus rustybox's own dispatch/`grep`/`find` code. **No BusyBox/GPL code is compiled**, so this binary is distributable under **MIT**. Covers the ~66 migrated applets (coreutils family + `grep`/`find` + agent tools like `timeout`).
+
+```sh
+cargo build -p rustybox-core --release        # the MIT edition
+target/release/rustybox-core grep -rn TODO .   # multicall; also works via symlinks
+```
+
+Which to use: want maximum parity → `rustybox` (GPLv2). Want an MIT-licensable, dependency-clean toolbox for embedding/redistribution → `rustybox-core`.
+
 ## Acknowledgements
 
 None of this exists without the [BusyBox](https://busybox.net/) and [c2rust](https://github.com/immunant/c2rust) teams. Much of the code here is transpiled from the work of the BusyBox [AUTHORS](https://github.com/mirror/busybox/blob/master/AUTHORS).

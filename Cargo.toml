@@ -1,3 +1,7 @@
+[workspace]
+members = ["crates/rustybox-core"]
+resolver = "2"
+
 [package]
 name = "rustybox"
 authors = ["Samuel Ainsworth"]
