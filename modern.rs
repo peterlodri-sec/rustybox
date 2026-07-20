@@ -15,6 +15,8 @@ mod grep;
 mod find;
 #[cfg(any(feature = "modern-gzip", feature = "modern-bzip2", feature = "modern-xz"))]
 mod compress;
+#[cfg(feature = "modern-tar")]
+mod tar;
 
 #[allow(unused_variables)]
 pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
@@ -29,6 +31,8 @@ pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
     "bzip2" | "bunzip2" | "bzcat" => Some(compress::run(name, argv, &compress::BZIP2)),
     #[cfg(feature = "modern-xz")]
     "xz" | "unxz" | "xzcat" => Some(compress::run(name, argv, &compress::XZ)),
+    #[cfg(feature = "modern-tar")]
+    "tar" => Some(tar::run(argv)),
     #[cfg(feature = "modern-cat")]
     "cat" => Some(uu_cat::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-echo")]

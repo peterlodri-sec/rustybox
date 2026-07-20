@@ -172,6 +172,29 @@ fn xz_roundtrip() {
 }
 
 #[test]
+fn tar_create_list_extract() {
+  let src = tempfile::tempdir().unwrap();
+  std::fs::write(src.path().join("f.txt"), "tarred content").unwrap();
+  let arc = src.path().join("a.tar");
+  let arc_s = arc.to_str().unwrap();
+
+  cmd!(exe(), "tar", "-cf", arc_s, "-C", src.path().to_str().unwrap(), "f.txt")
+    .run()
+    .unwrap();
+  let listing = cmd!(exe(), "tar", "-tf", arc_s).read().unwrap();
+  assert!(listing.contains("f.txt"), "listing: {listing}");
+
+  let out = tempfile::tempdir().unwrap();
+  cmd!(exe(), "tar", "-xf", arc_s, "-C", out.path().to_str().unwrap())
+    .run()
+    .unwrap();
+  assert_eq!(
+    std::fs::read_to_string(out.path().join("f.txt")).unwrap(),
+    "tarred content"
+  );
+}
+
+#[test]
 fn true_false_exit_codes() {
   let t = cmd!(exe(), "true").unchecked().run().unwrap();
   assert_eq!(t.status.code(), Some(0));
