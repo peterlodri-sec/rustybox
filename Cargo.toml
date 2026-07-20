@@ -23,7 +23,53 @@ lazy_static = "1.4"
 
 # Modern, memory-safe applet backends (see MIGRATION.md). Optional; each is
 # wired behind a `modern-<applet>` feature and routed by name in `modern.rs`.
-uu_cat = { version = "0", optional = true }
+uu_cat = { version = "0.9", optional = true }
+uu_echo = { version = "0.9", optional = true }
+uu_ls = { version = "0.9", optional = true }
+uu_cp = { version = "0.9", optional = true }
+uu_mv = { version = "0.9", optional = true }
+uu_rm = { version = "0.9", optional = true }
+uu_mkdir = { version = "0.9", optional = true }
+uu_rmdir = { version = "0.9", optional = true }
+uu_ln = { version = "0.9", optional = true }
+uu_pwd = { version = "0.9", optional = true }
+uu_touch = { version = "0.9", optional = true }
+uu_true = { version = "0.9", optional = true }
+uu_false = { version = "0.9", optional = true }
+uu_head = { version = "0.9", optional = true }
+uu_tail = { version = "0.9", optional = true }
+uu_wc = { version = "0.9", optional = true }
+uu_sort = { version = "0.9", optional = true }
+uu_uniq = { version = "0.9", optional = true }
+uu_cut = { version = "0.9", optional = true }
+uu_tr = { version = "0.9", optional = true }
+uu_chmod = { version = "0.9", optional = true }
+uu_chown = { version = "0.9", optional = true }
+uu_df = { version = "0.9", optional = true }
+uu_du = { version = "0.9", optional = true }
+uu_env = { version = "0.9", optional = true }
+uu_printenv = { version = "0.9", optional = true }
+uu_date = { version = "0.9", optional = true }
+uu_basename = { version = "0.9", optional = true }
+uu_dirname = { version = "0.9", optional = true }
+uu_readlink = { version = "0.9", optional = true }
+uu_stat = { version = "0.9", optional = true }
+uu_seq = { version = "0.9", optional = true }
+uu_sleep = { version = "0.9", optional = true }
+uu_id = { version = "0.9", optional = true }
+uu_whoami = { version = "0.9", optional = true }
+uu_yes = { version = "0.9", optional = true }
+uu_tac = { version = "0.9", optional = true }
+uu_nl = { version = "0.9", optional = true }
+uu_tee = { version = "0.9", optional = true }
+uu_mktemp = { version = "0.9", optional = true }
+uu_realpath = { version = "0.9", optional = true }
+uu_nproc = { version = "0.9", optional = true }
+uu_printf = { version = "0.9", optional = true }
+uu_link = { version = "0.9", optional = true }
+uu_unlink = { version = "0.9", optional = true }
+uu_logname = { version = "0.9", optional = true }
+uu_factor = { version = "0.9", optional = true }
 
 [dev-dependencies]
 duct = "0.13.3"
@@ -37,8 +83,54 @@ codegen-units = 1
 
 [features]
 # Modern memory-safe backends (MIGRATION.md). `modern` = all wired so far.
-modern = ["modern-cat"]
+modern = ["modern-cat", "modern-echo", "modern-ls", "modern-cp", "modern-mv", "modern-rm", "modern-mkdir", "modern-rmdir", "modern-ln", "modern-pwd", "modern-touch", "modern-true", "modern-false", "modern-head", "modern-tail", "modern-wc", "modern-sort", "modern-uniq", "modern-cut", "modern-tr", "modern-chmod", "modern-chown", "modern-df", "modern-du", "modern-env", "modern-printenv", "modern-date", "modern-basename", "modern-dirname", "modern-readlink", "modern-stat", "modern-seq", "modern-sleep", "modern-id", "modern-whoami", "modern-yes", "modern-tac", "modern-nl", "modern-tee", "modern-mktemp", "modern-realpath", "modern-nproc", "modern-printf", "modern-link", "modern-unlink", "modern-logname", "modern-factor"]
 modern-cat = ["dep:uu_cat", "cat"]
+modern-echo = ["dep:uu_echo", "echo"]
+modern-ls = ["dep:uu_ls", "ls"]
+modern-cp = ["dep:uu_cp", "cp"]
+modern-mv = ["dep:uu_mv", "mv"]
+modern-rm = ["dep:uu_rm", "rm"]
+modern-mkdir = ["dep:uu_mkdir", "mkdir"]
+modern-rmdir = ["dep:uu_rmdir", "rmdir"]
+modern-ln = ["dep:uu_ln", "ln"]
+modern-pwd = ["dep:uu_pwd", "pwd"]
+modern-touch = ["dep:uu_touch", "touch"]
+modern-true = ["dep:uu_true", "true"]
+modern-false = ["dep:uu_false", "false"]
+modern-head = ["dep:uu_head", "head"]
+modern-tail = ["dep:uu_tail", "tail"]
+modern-wc = ["dep:uu_wc", "wc"]
+modern-sort = ["dep:uu_sort", "sort"]
+modern-uniq = ["dep:uu_uniq", "uniq"]
+modern-cut = ["dep:uu_cut", "cut"]
+modern-tr = ["dep:uu_tr", "tr"]
+modern-chmod = ["dep:uu_chmod", "chmod"]
+modern-chown = ["dep:uu_chown", "chown"]
+modern-df = ["dep:uu_df", "df"]
+modern-du = ["dep:uu_du", "du"]
+modern-env = ["dep:uu_env", "env"]
+modern-printenv = ["dep:uu_printenv", "printenv"]
+modern-date = ["dep:uu_date", "date"]
+modern-basename = ["dep:uu_basename", "basename"]
+modern-dirname = ["dep:uu_dirname", "dirname"]
+modern-readlink = ["dep:uu_readlink", "readlink"]
+modern-stat = ["dep:uu_stat", "stat"]
+modern-seq = ["dep:uu_seq", "seq"]
+modern-sleep = ["dep:uu_sleep", "sleep"]
+modern-id = ["dep:uu_id", "id"]
+modern-whoami = ["dep:uu_whoami", "whoami"]
+modern-yes = ["dep:uu_yes", "yes"]
+modern-tac = ["dep:uu_tac", "tac"]
+modern-nl = ["dep:uu_nl", "nl"]
+modern-tee = ["dep:uu_tee", "tee"]
+modern-mktemp = ["dep:uu_mktemp", "mktemp"]
+modern-realpath = ["dep:uu_realpath", "realpath"]
+modern-nproc = ["dep:uu_nproc", "nproc"]
+modern-printf = ["dep:uu_printf", "printf"]
+modern-link = ["dep:uu_link", "link"]
+modern-unlink = ["dep:uu_unlink", "unlink"]
+modern-logname = ["dep:uu_logname", "logname"]
+modern-factor = ["dep:uu_factor", "factor"]
 
 test-bracket1 = []
 test-bracket2 = []
