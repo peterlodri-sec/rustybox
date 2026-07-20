@@ -1,0 +1,67 @@
+name: Release
+
+# Publishes fully-static, dual-architecture musl binaries as release assets.
+# Built NATIVELY per arch (not cross): some deps (e.g. blake3, via uutils'
+# hashing) have cc-based build scripts that need a target C compiler, which the
+# native musl toolchain provides. Cross-building those from another arch fails.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+          - runner: ubuntu-24.04-arm
+            target: aarch64-unknown-linux-musl
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install musl toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends musl-tools musl-dev clang
+
+      - name: Toolchain
+        run: |
+          rustup show
+          rustup target add ${{ matrix.target }}
+
+      - name: Cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.target }}
+
+      # Native musl C compiler so cc-based build scripts (blake3, ...) resolve.
+      - name: Build (static, all applets)
+        env:
+          CC_x86_64_unknown_linux_musl: musl-gcc
+          CC_aarch64_unknown_linux_musl: musl-gcc
+        run: cargo build --release --target ${{ matrix.target }} --all-features
+
+      - name: Package
+        run: |
+          BIN=target/${{ matrix.target }}/release/rustybox
+          strip -s "$BIN"
+          OUT="rustybox-${{ matrix.target }}"
+          cp "$BIN" "$OUT"
+          sha256sum "$OUT" > "$OUT.sha256"
+          ls -la "$OUT"*
+
+      - name: Upload assets
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            rustybox-${{ matrix.target }}
+            rustybox-${{ matrix.target }}.sha256

@@ -57,6 +57,14 @@ pub fn run(name: &str, argv: &[&str]) -> i32 {
           "no-filename" => o.no_filename = true,
           "with-filename" => o.with_filename = true,
           "no-messages" => o.no_messages = true,
+          "version" => {
+            println!("grep (rustybox, ripgrep engine)");
+            return 0;
+          }
+          "help" => {
+            println!("usage: grep [-ivnclqFwrHhs] [-e PATTERN] PATTERN [FILE...]");
+            return 0;
+          }
           "regexp" => {
             if let Some(p) = args.next() {
               o.patterns.push((*p).to_string());
