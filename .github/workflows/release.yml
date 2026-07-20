@@ -43,20 +43,25 @@ jobs:
           key: ${{ matrix.target }}
 
       # Native musl C compiler so cc-based build scripts (blake3, ...) resolve.
-      - name: Build (static, all applets)
+      # rustybox (full, GPL-2.0) — all applets; rustybox-core (MIT) — permissive.
+      - name: Build (static)
         env:
           CC_x86_64_unknown_linux_musl: musl-gcc
           CC_aarch64_unknown_linux_musl: musl-gcc
-        run: cargo build --release --target ${{ matrix.target }} --all-features
+        run: |
+          cargo build --release --target ${{ matrix.target }} --all-features
+          cargo build --release --target ${{ matrix.target }} -p rustybox-core
 
       - name: Package
         run: |
-          BIN=target/${{ matrix.target }}/release/rustybox
-          strip -s "$BIN"
-          OUT="rustybox-${{ matrix.target }}"
-          cp "$BIN" "$OUT"
-          sha256sum "$OUT" > "$OUT.sha256"
-          ls -la "$OUT"*
+          for name in rustybox rustybox-core; do
+            BIN="target/${{ matrix.target }}/release/$name"
+            strip -s "$BIN"
+            OUT="$name-${{ matrix.target }}"
+            cp "$BIN" "$OUT"
+            sha256sum "$OUT" > "$OUT.sha256"
+          done
+          ls -la rustybox*-${{ matrix.target }}*
 
       - name: Upload assets
         uses: softprops/action-gh-release@v2
@@ -65,3 +70,5 @@ jobs:
           files: |
             rustybox-${{ matrix.target }}
             rustybox-${{ matrix.target }}.sha256
+            rustybox-core-${{ matrix.target }}
+            rustybox-core-${{ matrix.target }}.sha256
