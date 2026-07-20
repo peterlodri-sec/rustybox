@@ -663,7 +663,7 @@ pub unsafe fn sort_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char
               b"unknown key option\x00" as *const u8 as *const libc::c_char,
             );
           }
-          flag = 1i32 << idx.wrapping_offset_from(sort_opt_str.as_ptr().offset(1)) as libc::c_long;
+          flag = 1i32 << idx.offset_from(sort_opt_str.as_ptr().offset(1)) as libc::c_long;
           if flag & !(FLAG_allowed_for_k as libc::c_int) != 0 {
             crate::libbb::verror_msg::bb_simple_error_msg_and_die(
               b"unknown sort type\x00" as *const u8 as *const libc::c_char,

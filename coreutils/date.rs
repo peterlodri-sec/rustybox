@@ -36,8 +36,16 @@ extern "C" {
   ) -> *mut libc::c_char;
   #[no_mangle]
   fn localtime_r(__timer: *const time_t, __tp: *mut tm) -> *mut tm;
-  #[no_mangle]
-  fn stime(__when: *const time_t) -> libc::c_int;
+}
+// glibc removed stime() in 2.31; emulate via clock_settime(CLOCK_REALTIME).
+unsafe fn stime(__when: *const time_t) -> libc::c_int {
+  let ts = libc::timespec {
+    tv_sec: *__when,
+    tv_nsec: 0,
+  };
+  libc::clock_settime(libc::CLOCK_REALTIME, &ts)
+}
+extern "C" {
 
   #[no_mangle]
   static bb_msg_invalid_date: [libc::c_char; 0];

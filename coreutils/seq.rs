@@ -106,7 +106,7 @@ pub unsafe fn seq_main(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) 
   frac_part = 0 as libc::c_uint;
   loop {
     let mut dot: *mut libc::c_char = strchrnul(*argv, '.' as i32);
-    let mut w: libc::c_int = dot.wrapping_offset_from(*argv) as libc::c_long as libc::c_int;
+    let mut w: libc::c_int = dot.offset_from(*argv) as libc::c_long as libc::c_int;
     let mut f: libc::c_int = strlen(dot) as libc::c_int;
     if width < w as libc::c_uint {
       width = w as libc::c_uint

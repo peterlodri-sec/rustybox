@@ -885,7 +885,7 @@ pub unsafe extern "C" fn shell_builtin_ulimit(mut argv: *mut *mut libc::c_char) 
       /* if "ulimit NNN", -f is assumed */
       opt_char_0 = 'f' as i32
     }
-    i = strchrnul(limit_chars.as_ptr(), opt_char_0).wrapping_offset_from(limit_chars.as_ptr())
+    i = strchrnul(limit_chars.as_ptr(), opt_char_0).offset_from(limit_chars.as_ptr())
       as libc::c_long as libc::c_uint;
     //if (i >= ARRAY_SIZE(limits_tbl)) - bad option, impossible
     val_str = optarg; /* ++ skips NN in "-c NN" case */

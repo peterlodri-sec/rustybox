@@ -116,7 +116,7 @@ unsafe fn read_stduu(
       *line_ptr = (*line_ptr as libc::c_int - 0x20i32 & 0x3fi32) as libc::c_char;
       line_ptr = line_ptr.offset(1)
     }
-    str_len = line_ptr.wrapping_offset_from(line) as libc::c_long as libc::c_int;
+    str_len = line_ptr.offset_from(line) as libc::c_long as libc::c_int;
     encoded_len = *line.offset(0) as libc::c_int * 4i32 / 3i32;
     /* Check that line is not too short. (we tolerate
      * overly _long_ line to accommodate possible extra "`").
@@ -166,7 +166,7 @@ unsafe fn read_stduu(
       libc::fwrite(
         line as *const libc::c_void,
         1,
-        dst.wrapping_offset_from(line) as usize,
+        dst.offset_from(line) as usize,
         dst_stream,
       );
       free(line as *mut libc::c_void);

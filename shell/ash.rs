@@ -1071,7 +1071,7 @@ unsafe extern "C" fn raise_exception(mut e: libc::c_int) -> ! {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   (*ash_ptr_to_globals_misc).exception_type = e as smallint;
   longjmp(
     (*(*ash_ptr_to_globals_misc).exception_handler)
@@ -1110,7 +1110,7 @@ unsafe extern "C" fn raise_interrupt() -> ! {
 }
 #[inline]
 unsafe extern "C" fn int_on() {
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   ::std::ptr::write_volatile(
     &mut (*ash_ptr_to_globals_misc).suppress_int as *mut libc::c_int,
     ::std::ptr::read_volatile::<libc::c_int>(
@@ -1127,7 +1127,7 @@ unsafe extern "C" fn int_on() {
 }
 #[inline]
 unsafe extern "C" fn force_int_on() {
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   ::std::ptr::write_volatile(
     &mut (*ash_ptr_to_globals_misc).suppress_int as *mut libc::c_int,
     0,
@@ -1144,7 +1144,7 @@ unsafe extern "C" fn outstr(mut p: *const libc::c_char, mut file: *mut FILE) {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   fputs_unlocked(p, file);
   int_on();
 }
@@ -1155,7 +1155,7 @@ unsafe extern "C" fn flush_stdout_stderr() {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   crate::libbb::xfuncs_printf::fflush_all();
   int_on();
 }
@@ -1167,13 +1167,13 @@ unsafe extern "C" fn newline_and_flush(mut dest: *mut FILE) {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   putc_unlocked('\n' as i32, dest);
   fflush(dest);
   int_on();
 }
 unsafe extern "C" fn out1fmt(mut fmt: *const libc::c_char, mut args: ...) -> libc::c_int {
-  let mut ap: ::std::ffi::VaListImpl;
+  let mut ap: ::std::ffi::VaList;
   let mut r: libc::c_int = 0;
   ::std::ptr::write_volatile(
     &mut (*ash_ptr_to_globals_misc).suppress_int as *mut libc::c_int,
@@ -1181,9 +1181,9 @@ unsafe extern "C" fn out1fmt(mut fmt: *const libc::c_char, mut args: ...) -> lib
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   ap = args.clone();
-  r = vprintf(fmt, ap.as_va_list());
+  r = vprintf(fmt, ap);
   int_on();
   return r;
 }
@@ -1193,7 +1193,7 @@ unsafe extern "C" fn fmtstr(
   mut fmt: *const libc::c_char,
   mut args: ...
 ) -> libc::c_int {
-  let mut ap: ::std::ffi::VaListImpl;
+  let mut ap: ::std::ffi::VaList;
   let mut ret: libc::c_int = 0;
   ::std::ptr::write_volatile(
     &mut (*ash_ptr_to_globals_misc).suppress_int as *mut libc::c_int,
@@ -1201,9 +1201,9 @@ unsafe extern "C" fn fmtstr(
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   ap = args.clone();
-  ret = vsnprintf(outbuf, length, fmt, ap.as_va_list());
+  ret = vsnprintf(outbuf, length, fmt, ap);
   int_on();
   return ret;
 }
@@ -1280,7 +1280,7 @@ unsafe extern "C" fn ash_vmsg(mut msg: *const libc::c_char, mut ap: ::std::ffi::
       );
     }
   }
-  vfprintf(stderr, msg, ap.as_va_list());
+  vfprintf(stderr, msg, ap);
   newline_and_flush(stderr);
 }
 unsafe extern "C" fn ash_vmsg_and_raise(
@@ -1288,15 +1288,15 @@ unsafe extern "C" fn ash_vmsg_and_raise(
   mut msg: *const libc::c_char,
   mut ap: ::std::ffi::VaList,
 ) -> ! {
-  ash_vmsg(msg, ap.as_va_list());
+  ash_vmsg(msg, ap);
   flush_stdout_stderr();
   raise_exception(cond);
 }
 unsafe extern "C" fn ash_msg_and_raise_error(mut msg: *const libc::c_char, mut args: ...) -> ! {
-  let mut ap: ::std::ffi::VaListImpl;
+  let mut ap: ::std::ffi::VaList;
   (*ash_ptr_to_globals_misc).exitstatus = 2i32 as u8;
   ap = args.clone();
-  ash_vmsg_and_raise(1i32, msg, ap.as_va_list());
+  ash_vmsg_and_raise(1i32, msg, ap);
 }
 unsafe extern "C" fn raise_error_syntax(mut msg: *const libc::c_char) -> ! {
   (*ash_ptr_to_globals_misc).errlinno = (*g_parsefile).linno;
@@ -1310,14 +1310,14 @@ unsafe extern "C" fn ash_msg_and_raise(
   mut msg: *const libc::c_char,
   mut args: ...
 ) -> ! {
-  let mut ap: ::std::ffi::VaListImpl;
+  let mut ap: ::std::ffi::VaList;
   ap = args.clone();
-  ash_vmsg_and_raise(cond, msg, ap.as_va_list());
+  ash_vmsg_and_raise(cond, msg, ap);
 }
 unsafe extern "C" fn ash_msg(mut fmt: *const libc::c_char, mut args: ...) {
-  let mut ap: ::std::ffi::VaListImpl;
+  let mut ap: ::std::ffi::VaList;
   ap = args.clone();
-  ash_vmsg(fmt, ap.as_va_list());
+  ash_vmsg(fmt, ap);
 }
 unsafe extern "C" fn errmsg(
   mut e: libc::c_int,
@@ -1353,7 +1353,7 @@ unsafe extern "C" fn stalloc(mut nbytes: size_t) -> *mut libc::c_void {
         &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
       ) + 1,
     );
-    llvm_asm!("" : : : "memory" : "volatile");
+    ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
     sp = xmalloc(len) as *mut stack_block;
     (*sp).prev = (*ash_ptr_to_globals_memstack).g_stackp;
     (*ash_ptr_to_globals_memstack).g_stacknxt = (*sp).space.as_mut_ptr();
@@ -1381,7 +1381,7 @@ unsafe extern "C" fn stunalloc(mut p: *mut libc::c_void) {
     ((*ash_ptr_to_globals_memstack).g_stacknleft as libc::c_ulong).wrapping_add(
       (*ash_ptr_to_globals_memstack)
         .g_stacknxt
-        .wrapping_offset_from(p as *mut libc::c_char) as libc::c_long as libc::c_ulong,
+        .offset_from(p as *mut libc::c_char) as libc::c_long as libc::c_ulong,
     ) as size_t as size_t;
   (*ash_ptr_to_globals_memstack).g_stacknxt = p as *mut libc::c_char;
 }
@@ -1422,7 +1422,7 @@ unsafe extern "C" fn popstackmark(mut mark: *mut stackmark) {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   while (*ash_ptr_to_globals_memstack).g_stackp != (*mark).stackp {
     sp = (*ash_ptr_to_globals_memstack).g_stackp;
     (*ash_ptr_to_globals_memstack).g_stackp = (*sp).prev;
@@ -1460,7 +1460,7 @@ unsafe extern "C" fn growstackblock() {
         &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
       ) + 1,
     );
-    llvm_asm!("" : : : "memory" : "volatile");
+    ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
     sp = (*ash_ptr_to_globals_memstack).g_stackp;
     prevstackp = (*sp).prev;
     grosslen = newlen
@@ -1499,7 +1499,7 @@ unsafe extern "C" fn makestrspace(
   mut p: *mut libc::c_char,
 ) -> *mut libc::c_char {
   let mut len: size_t =
-    p.wrapping_offset_from((*ash_ptr_to_globals_memstack).g_stacknxt) as libc::c_long as size_t;
+    p.offset_from((*ash_ptr_to_globals_memstack).g_stacknxt) as libc::c_long as size_t;
   let mut size: size_t = 0;
   loop {
     let mut nleft: size_t = 0;
@@ -1579,7 +1579,7 @@ unsafe extern "C" fn single_quote(mut s: *const libc::c_char) -> *mut libc::c_ch
   loop {
     let mut q: *mut libc::c_char = std::ptr::null_mut::<libc::c_char>();
     let mut len: size_t = 0;
-    len = strchrnul(s, '\'' as i32).wrapping_offset_from(s) as libc::c_long as size_t;
+    len = strchrnul(s, '\'' as i32).offset_from(s) as libc::c_long as size_t;
     p = makestrspace(len.wrapping_add(3i32 as libc::c_ulong), p);
     q = p;
     let fresh4 = q;
@@ -1590,7 +1590,7 @@ unsafe extern "C" fn single_quote(mut s: *const libc::c_char) -> *mut libc::c_ch
     q = q.offset(1);
     *fresh5 = '\'' as i32 as libc::c_char;
     s = s.offset(len as isize);
-    p = p.offset(q.wrapping_offset_from(p) as libc::c_long as isize);
+    p = p.offset(q.offset_from(p) as libc::c_long as isize);
     if *s as libc::c_int != '\'' as i32 {
       break;
     }
@@ -1615,7 +1615,7 @@ unsafe extern "C" fn single_quote(mut s: *const libc::c_char) -> *mut libc::c_ch
     let fresh7 = q;
     q = q.offset(1);
     *fresh7 = '\"' as i32 as libc::c_char;
-    p = p.offset(q.wrapping_offset_from(p) as libc::c_long as isize);
+    p = p.offset(q.offset_from(p) as libc::c_long as isize);
     if !(*s != 0) {
       break;
     }
@@ -2001,7 +2001,7 @@ unsafe extern "C" fn setvareq(mut s: *mut libc::c_char, mut flags: libc::c_int) 
       (*ash_ptr_to_globals_misc).exitstatus = 1i32 as u8;
       ash_msg_and_raise_error(
         b"%.*s: is read only\x00" as *const u8 as *const libc::c_char,
-        strchrnul(n, '=' as i32).wrapping_offset_from(n) as libc::c_long,
+        strchrnul(n, '=' as i32).offset_from(n) as libc::c_long,
         n,
       );
     }
@@ -2067,7 +2067,7 @@ unsafe extern "C" fn setvar(
   let mut vp: *mut var = std::ptr::null_mut();
   q = crate::libbb::endofname::endofname(name);
   p = strchrnul(q, '=' as i32);
-  namelen = p.wrapping_offset_from(name) as libc::c_long as size_t;
+  namelen = p.offset_from(name) as libc::c_long as size_t;
   if namelen == 0 || p != q as *mut libc::c_char {
     ash_msg_and_raise_error(
       b"%.*s: bad variable name\x00" as *const u8 as *const libc::c_char,
@@ -2087,7 +2087,7 @@ unsafe extern "C" fn setvar(
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   nameeq = crate::libbb::xfuncs_printf::xzalloc(
     namelen
       .wrapping_add(vallen)
@@ -2125,7 +2125,7 @@ unsafe extern "C" fn listsetvar(mut list_set_var: *mut strlist, mut flags: libc:
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   loop {
     setvareq((*lp).text, flags);
     lp = (*lp).next;
@@ -2176,7 +2176,7 @@ unsafe extern "C" fn listvars(
   let fresh16 = ep;
   ep = ep.offset(1);
   *fresh16 = std::ptr::null_mut::<libc::c_char>();
-  return stalloc((ep as *mut libc::c_char).wrapping_offset_from(
+  return stalloc((ep as *mut libc::c_char).offset_from(
     (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char,
   ) as libc::c_long as size_t) as *mut *mut libc::c_char;
 }
@@ -2198,7 +2198,7 @@ unsafe extern "C" fn path_advance(
   {
     p = p.offset(1)
   }
-  len = (p.wrapping_offset_from(start) as libc::c_long as libc::c_ulong)
+  len = (p.offset_from(start) as libc::c_long as libc::c_ulong)
     .wrapping_add(strlen(name))
     .wrapping_add(2i32 as libc::c_ulong);
   while (*ash_ptr_to_globals_memstack).g_stacknleft < len {
@@ -2209,7 +2209,7 @@ unsafe extern "C" fn path_advance(
     q = mempcpy(
       q as *mut libc::c_void,
       start as *const libc::c_void,
-      p.wrapping_offset_from(start) as libc::c_long as size_t,
+      p.offset_from(start) as libc::c_long as size_t,
     ) as *mut libc::c_char;
     let fresh17 = q;
     q = q.offset(1);
@@ -2389,7 +2389,7 @@ unsafe extern "C" fn setpwd(mut val: *const libc::c_char, mut setold: libc::c_in
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   if (*ash_ptr_to_globals_misc).physdir != (*ash_ptr_to_globals_misc).nullstr.as_mut_ptr() {
     if (*ash_ptr_to_globals_misc).physdir != oldcur {
       free((*ash_ptr_to_globals_misc).physdir as *mut libc::c_void);
@@ -2421,7 +2421,7 @@ unsafe extern "C" fn docd(mut dest: *const libc::c_char, mut flags: libc::c_int)
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   if flags & 1i32 == 0 {
     dir = updatepwd(dest);
     if !dir.is_null() {
@@ -2610,7 +2610,7 @@ unsafe extern "C" fn SIT(mut c: libc::c_int, mut syntax: libc::c_int) -> libc::c
     if *s as libc::c_int == '\u{0}' as i32 {
       return 0;
     }
-    indx = syntax_index_table[s.wrapping_offset_from(spec_symbls.as_ptr()) as libc::c_long as usize]
+    indx = syntax_index_table[s.offset_from(spec_symbls.as_ptr()) as libc::c_long as usize]
       as libc::c_int
   }
   return S_I_T[indx as usize] as libc::c_int >> syntax * 4i32 & 0xfi32;
@@ -2671,7 +2671,7 @@ unsafe extern "C" fn setalias(mut name: *const libc::c_char, mut val: *const lib
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   if !ap.is_null() {
     if (*ap).flag & 1i32 == 0 {
       free((*ap).val as *mut libc::c_void);
@@ -2697,7 +2697,7 @@ unsafe extern "C" fn unalias(mut name: *const libc::c_char) -> libc::c_int {
         &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
       ) + 1,
     );
-    llvm_asm!("" : : : "memory" : "volatile");
+    ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
     *app = freealias(*app);
     int_on();
     return 0;
@@ -2714,7 +2714,7 @@ unsafe extern "C" fn rmaliases() {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   i = 0;
   while i < 39i32 {
     app = &mut *atab.offset(i as isize) as *mut *mut alias;
@@ -2985,7 +2985,7 @@ unsafe extern "C" fn set_curjob(mut jp: *mut job, mut mode: libc::c_uint) {
   };
 }
 unsafe extern "C" fn jobno(mut jp: *const job) -> libc::c_int {
-  return (jp.wrapping_offset_from(jobtab) as libc::c_long + 1) as libc::c_int;
+  return (jp.offset_from(jobtab) as libc::c_long + 1) as libc::c_int;
 }
 unsafe extern "C" fn getjob(mut name: *const libc::c_char, mut getctl: libc::c_int) -> *mut job {
   let mut current_block: u64;
@@ -3137,7 +3137,7 @@ unsafe extern "C" fn freejob(mut jp: *mut job) {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   i = (*jp).nprocs as libc::c_int;
   ps = (*jp).ps;
   loop {
@@ -3345,7 +3345,7 @@ unsafe extern "C" fn restartjob(mut jp: *mut job, mut mode: libc::c_int) -> libc
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   if !((*jp).state() as libc::c_int == 2i32) {
     (*jp).set_state(0i32 as libc::c_uint);
     pgid = (*(*jp).ps.offset(0)).ps_pid;
@@ -3507,7 +3507,7 @@ unsafe extern "C" fn dowait(mut block: libc::c_int, mut job: *mut job) -> libc::
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   if block == 2i32 {
     pid = wait_block_or_sig(&mut status)
   } else {
@@ -3885,7 +3885,7 @@ unsafe extern "C" fn growjobtab() -> *mut job {
       (4i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<job>() as libc::c_ulong),
     ),
   ) as *mut job;
-  offset = (jp as *mut libc::c_char).wrapping_offset_from(jq as *mut libc::c_char);
+  offset = (jp as *mut libc::c_char).offset_from(jq as *mut libc::c_char);
   if offset != 0 {
     let mut l: size_t = len;
     jq = (jq as *mut libc::c_char).offset(l as isize) as *mut job;
@@ -4345,7 +4345,7 @@ unsafe extern "C" fn clear_traps() {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   tp = (*ash_ptr_to_globals_misc).trap.as_mut_ptr();
   while tp
     < &mut *(*ash_ptr_to_globals_misc)
@@ -4358,10 +4358,10 @@ unsafe extern "C" fn clear_traps() {
         free(*tp as *mut libc::c_void);
       }
       *tp = std::ptr::null_mut::<libc::c_char>();
-      if tp.wrapping_offset_from((*ash_ptr_to_globals_misc).trap.as_mut_ptr()) as libc::c_long != 0
+      if tp.offset_from((*ash_ptr_to_globals_misc).trap.as_mut_ptr()) as libc::c_long != 0
       {
         setsignal(
-          tp.wrapping_offset_from((*ash_ptr_to_globals_misc).trap.as_mut_ptr()) as libc::c_long
+          tp.offset_from((*ash_ptr_to_globals_misc).trap.as_mut_ptr()) as libc::c_long
             as libc::c_int,
         );
       }
@@ -4510,7 +4510,7 @@ unsafe extern "C" fn waitforjob(mut jp: *mut job) -> libc::c_int {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   while (*jp).state() as libc::c_int == 0 {
     dowait(1i32, jp);
   }
@@ -4912,7 +4912,7 @@ unsafe extern "C" fn redirect(mut redir: *mut node, mut flags: libc::c_int) {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   if flags & 0o1i32 != 0 {
     sv = (*ash_ptr_to_globals_var).redirlist
   }
@@ -5030,7 +5030,7 @@ unsafe extern "C" fn redirectsafe(mut redir: *mut node, mut flags: libc::c_int) 
       1i32,
     );
   }
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   ::std::ptr::write_volatile(
     &mut (*ash_ptr_to_globals_misc).suppress_int as *mut libc::c_int,
     saveint,
@@ -5093,7 +5093,7 @@ unsafe extern "C" fn popredir(mut drop_0: libc::c_int) {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   rp = (*ash_ptr_to_globals_var).redirlist;
   i = 0;
   while i < (*rp).pair_count {
@@ -5139,7 +5139,7 @@ unsafe extern "C" fn ash_arith(mut s: *const libc::c_char) -> arith_t {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   result = crate::shell::math::arith(&mut math_state, s);
   if !math_state.errmsg.is_null() {
     ash_msg_and_raise_error(math_state.errmsg);
@@ -5328,7 +5328,7 @@ unsafe extern "C" fn ifsfree() {
         &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
       ) + 1,
     );
-    llvm_asm!("" : : : "memory" : "volatile");
+    ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
     loop {
       let mut ifsp: *mut ifsregion = std::ptr::null_mut();
       ifsp = (*p).next;
@@ -5384,12 +5384,12 @@ unsafe extern "C" fn rmescapes(
   q = p;
   r = str;
   if flag & 0x1i32 != 0 {
-    let mut len: size_t = p.wrapping_offset_from(str) as libc::c_long as size_t;
+    let mut len: size_t = p.offset_from(str) as libc::c_long as size_t;
     let mut fulllen: size_t = len
       .wrapping_add(strlen(p))
       .wrapping_add(1i32 as libc::c_ulong);
     if flag & 0x8i32 != 0 {
-      let mut strloc: libc::c_int = str.wrapping_offset_from(
+      let mut strloc: libc::c_int = str.offset_from(
         (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char,
       ) as libc::c_long as libc::c_int;
       r = makestrspace(fulllen, expdest);
@@ -5456,7 +5456,7 @@ unsafe extern "C" fn rmescapes(
         } else if !slash_position.is_null() && p == str.offset(*slash_position as isize) {
           /* stop handling globbing */
           globbing = 0 as libc::c_uint;
-          *slash_position = q.wrapping_offset_from(r) as libc::c_long as libc::c_int;
+          *slash_position = q.offset_from(r) as libc::c_long as libc::c_int;
           slash_position = std::ptr::null_mut()
         }
         protect_against_glob = globbing
@@ -5471,7 +5471,7 @@ unsafe extern "C" fn rmescapes(
   *q = '\u{0}' as i32 as libc::c_char;
   if flag & 0x8i32 != 0 {
     expdest = r;
-    expdest = expdest.offset((q.wrapping_offset_from(r) as libc::c_long + 1) as isize)
+    expdest = expdest.offset((q.offset_from(r) as libc::c_long + 1) as isize)
   }
   return r;
 }
@@ -5574,7 +5574,7 @@ unsafe extern "C" fn recordregion(
         &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
       ) + 1,
     );
-    llvm_asm!("" : : : "memory" : "volatile");
+    ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
     ifsp = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<ifsregion>() as libc::c_ulong)
       as *mut ifsregion;
     /*ifsp->next = NULL; - ckzalloc did it */
@@ -5599,7 +5599,7 @@ unsafe extern "C" fn removerecordregions(mut endoff: libc::c_int) {
           &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
         ) + 1,
       );
-      llvm_asm!("" : : : "memory" : "volatile");
+      ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
       ifsp = (*ifsfirst.next).next;
       free(ifsfirst.next as *mut libc::c_void);
       ifsfirst.next = ifsp;
@@ -5625,7 +5625,7 @@ unsafe extern "C" fn removerecordregions(mut endoff: libc::c_int) {
         &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
       ) + 1,
     );
-    llvm_asm!("" : : : "memory" : "volatile");
+    ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
     ifsp_0 = (*(*ifslastp).next).next;
     free((*ifslastp).next as *mut libc::c_void);
     (*ifslastp).next = ifsp_0;
@@ -5767,8 +5767,8 @@ unsafe extern "C" fn expbackq(mut cmd: *mut node, mut flag: libc::c_int) {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
-  startloc = expdest.wrapping_offset_from(
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
+  startloc = expdest.offset_from(
     (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char,
   ) as libc::c_long as libc::c_int;
   pushstackmark(&mut smark, startloc as size_t);
@@ -5821,7 +5821,7 @@ unsafe extern "C" fn expbackq(mut cmd: *mut node, mut flag: libc::c_int) {
   if flag & 0x100i32 == 0 {
     recordregion(
       startloc,
-      dest.wrapping_offset_from(
+      dest.offset_from(
         (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char,
       ) as libc::c_long as libc::c_int,
       0,
@@ -5858,7 +5858,7 @@ unsafe extern "C" fn expari(mut flag: libc::c_int) {
     }
     p = p.offset(-((esc + 1i32) as isize))
   }
-  begoff = p.wrapping_offset_from(start) as libc::c_long as libc::c_int;
+  begoff = p.offset_from(start) as libc::c_long as libc::c_int;
   removerecordregions(begoff);
   expdest = p;
   if flag & (0x1i32 | 0x10i32) != 0 {
@@ -5917,7 +5917,7 @@ unsafe extern "C" fn argstr(mut p: *mut libc::c_char, mut flags: libc::c_int) {
         current_block = 13038395059501912860;
       }
       _ => {
-        startloc = expdest.wrapping_offset_from(
+        startloc = expdest.offset_from(
           (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char,
         ) as libc::c_long as libc::c_int;
         loop {
@@ -5937,7 +5937,7 @@ unsafe extern "C" fn argstr(mut p: *mut libc::c_char, mut flags: libc::c_int) {
           if length > 0 as libc::c_ulong {
             let mut newloc: libc::c_int = 0;
             expdest = stack_nputstr(p, length, expdest);
-            newloc = expdest.wrapping_offset_from(
+            newloc = expdest.offset_from(
               (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char,
             ) as libc::c_long as libc::c_int;
             if breakall != 0 && inquotes == 0 && newloc > startloc {
@@ -6140,7 +6140,7 @@ unsafe extern "C" fn varunset(
   }
   ash_msg_and_raise_error(
     b"%.*s: %s%s\x00" as *const u8 as *const libc::c_char,
-    (end.wrapping_offset_from(var) as libc::c_long - 1) as libc::c_int,
+    (end.offset_from(var) as libc::c_long - 1) as libc::c_int,
     var,
     msg,
     tail,
@@ -6228,7 +6228,7 @@ unsafe extern "C" fn subevalvar(
   //bb_error_msg("str0:'%s'", (char *)stackblock() + strloc);
   slash_pos = -1i32;
   if !repl.is_null() {
-    slash_pos = expdest.wrapping_offset_from(
+    slash_pos = expdest.offset_from(
       ((*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char)
         .offset(strloc as isize),
     ) as libc::c_long as libc::c_int;
@@ -6245,7 +6245,7 @@ unsafe extern "C" fn subevalvar(
   match subtype {
     5 => {
       setvar0(varname, startp);
-      amount = startp.wrapping_offset_from(expdest) as libc::c_long as libc::c_int;
+      amount = startp.offset_from(expdest) as libc::c_long as libc::c_int;
       expdest = expdest.offset(amount as isize);
       return startp;
       /* BASH_SUBSTR */
@@ -6272,7 +6272,7 @@ unsafe extern "C" fn subevalvar(
         *colon = ':' as i32 as libc::c_char
       }
       /* Read LEN in ${var:POS:LEN} */
-      len = (str.wrapping_offset_from(startp) as libc::c_long - 1) as libc::c_int;
+      len = (str.offset_from(startp) as libc::c_long - 1) as libc::c_int;
       /* *loc != '\0', guaranteed by parser */
       if quotes != 0 {
         let mut ptr: *mut libc::c_char = std::ptr::null_mut::<libc::c_char>();
@@ -6353,13 +6353,13 @@ unsafe extern "C" fn subevalvar(
         len -= 1
       }
       *loc = '\u{0}' as i32 as libc::c_char;
-      amount = loc.wrapping_offset_from(expdest) as libc::c_long as libc::c_int;
+      amount = loc.offset_from(expdest) as libc::c_long as libc::c_int;
       expdest = expdest.offset(amount as isize);
       return loc;
     }
     _ => {}
   }
-  resetloc = expdest.wrapping_offset_from(
+  resetloc = expdest.offset_from(
     (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char,
   ) as libc::c_long as libc::c_int;
   repl = std::ptr::null_mut::<libc::c_char>();
@@ -6370,7 +6370,7 @@ unsafe extern "C" fn subevalvar(
    * areas each time
    */
   {
-    amount = expdest.wrapping_offset_from(
+    amount = expdest.offset_from(
       ((*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char)
         .offset(resetloc as isize),
     ) as libc::c_long as libc::c_int;
@@ -6415,7 +6415,7 @@ unsafe extern "C" fn subevalvar(
         &mut slash_pos
       },
     );
-    workloc = expdest.wrapping_offset_from(
+    workloc = expdest.offset_from(
       (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char,
     ) as libc::c_long as libc::c_int;
     if subtype == 0xdi32 || subtype == 0xei32 {
@@ -6574,14 +6574,14 @@ unsafe extern "C" fn subevalvar(
           memmove(
             startp as *mut libc::c_void,
             loc as *const libc::c_void,
-            str.wrapping_offset_from(loc) as libc::c_long as libc::c_ulong,
+            str.offset_from(loc) as libc::c_long as libc::c_ulong,
           );
           loc = startp
-            .offset(str.wrapping_offset_from(loc) as libc::c_long as isize)
+            .offset(str.offset_from(loc) as libc::c_long as isize)
             .offset(-1)
         }
         *loc = '\u{0}' as i32 as libc::c_char;
-        amount = loc.wrapping_offset_from(expdest) as libc::c_long as libc::c_int;
+        amount = loc.offset_from(expdest) as libc::c_long as libc::c_int;
         expdest = expdest.offset(amount as isize)
       }
       return loc;
@@ -6601,7 +6601,7 @@ unsafe extern "C" fn subevalvar(
   );
   //bb_error_msg("startp:'%s'", startp);
   amount =
-    expdest.wrapping_offset_from(startp.offset(len_0 as isize)) as libc::c_long as libc::c_int;
+    expdest.offset_from(startp.offset(len_0 as isize)) as libc::c_long as libc::c_int;
   expdest = expdest.offset(-amount as isize);
   return startp;
 }
@@ -6815,7 +6815,7 @@ unsafe extern "C" fn evalvar(mut p: *mut libc::c_char, mut flag: libc::c_int) ->
   }
   quoted = flag & 0x100i32;
   var = p;
-  startloc = expdest.wrapping_offset_from(
+  startloc = expdest.offset_from(
     (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char,
   ) as libc::c_long as libc::c_int;
   p = strchr(p, '=' as i32).offset(1);
@@ -6885,7 +6885,7 @@ unsafe extern "C" fn evalvar(mut p: *mut libc::c_char, mut flag: libc::c_int) ->
          * right after it
          */
         expdest = _STPUTC('\u{0}' as i32, expdest);
-        patloc = expdest.wrapping_offset_from(
+        patloc = expdest.offset_from(
           (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char,
         ) as libc::c_long as libc::c_int;
         if subevalvar(
@@ -6899,7 +6899,7 @@ unsafe extern "C" fn evalvar(mut p: *mut libc::c_char, mut flag: libc::c_int) ->
         )
         .is_null()
         {
-          let mut amount: libc::c_int = expdest.wrapping_offset_from(
+          let mut amount: libc::c_int = expdest.offset_from(
             ((*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char)
               .offset(patloc as isize)
               .offset(-1),
@@ -6937,7 +6937,7 @@ unsafe extern "C" fn evalvar(mut p: *mut libc::c_char, mut flag: libc::c_int) ->
         _ => {
           recordregion(
             startloc,
-            expdest.wrapping_offset_from(
+            expdest.offset_from(
               (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char,
             ) as libc::c_long as libc::c_int,
             quoted,
@@ -7164,7 +7164,7 @@ unsafe extern "C" fn expmeta(
   }
   *enddir = '\u{0}' as i32 as libc::c_char;
   cp = (*exp).dir;
-  expdir_len = enddir.wrapping_offset_from(cp) as libc::c_long as libc::c_uint;
+  expdir_len = enddir.offset_from(cp) as libc::c_long as libc::c_uint;
   if expdir_len == 0 {
     cp = b".\x00" as *const u8 as *const libc::c_char
   }
@@ -7180,7 +7180,7 @@ unsafe extern "C" fn expmeta(
     endname = endname.offset((esc + 1i32) as isize)
   }
   name_len =
-    (name_len as libc::c_long - endname.wrapping_offset_from(name) as libc::c_long) as libc::c_uint;
+    (name_len as libc::c_long - endname.offset_from(name) as libc::c_long) as libc::c_uint;
   matchdot = 0;
   p = start;
   if *p as libc::c_int == '\\' as i32 {
@@ -7205,7 +7205,7 @@ unsafe extern "C" fn expmeta(
         let mut len: libc::c_uint = 0;
         p = stpcpy(enddir, (*dp).d_name.as_mut_ptr());
         *p = '/' as i32 as libc::c_char;
-        offset = (p.wrapping_offset_from((*exp).dir) as libc::c_long + 1) as libc::c_uint;
+        offset = (p.offset_from((*exp).dir) as libc::c_long + 1) as libc::c_uint;
         len = offset
           .wrapping_add(name_len)
           .wrapping_add(255i32 as libc::c_uint);
@@ -7316,7 +7316,7 @@ unsafe extern "C" fn expandmeta(mut str: *mut strlist)
           &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
         ) + 1,
       );
-      llvm_asm!("" : : : "memory" : "volatile");
+      ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
       p = preglob((*str).text, 0x1i32 | 0x10i32);
       len = strlen(p) as libc::c_uint;
       exp.dir_max = len.wrapping_add(4096i32 as libc::c_uint);
@@ -7375,7 +7375,7 @@ unsafe extern "C" fn expandarg(
   p = _STPUTC('\u{0}' as i32, expdest);
   expdest = p.offset(-1);
   if !arglist.is_null() {
-    p = stalloc(p.wrapping_offset_from(
+    p = stalloc(p.offset_from(
       (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char,
     ) as libc::c_long as size_t) as *mut libc::c_char;
     exparg.lastp = &mut exparg.list;
@@ -7410,7 +7410,7 @@ unsafe extern "C" fn expandhere(mut arg: *mut node, mut fd: libc::c_int) {
   crate::libbb::full_write::full_write(
     fd,
     (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void,
-    expdest.wrapping_offset_from(
+    expdest.offset_from(
       (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char,
     ) as libc::c_long as size_t,
   );
@@ -7605,7 +7605,7 @@ unsafe extern "C" fn clearcmdentry(mut firstchange: libc::c_int) {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   tblp = cmdtable;
   while tblp < &mut *cmdtable.offset(31) as *mut *mut tblentry {
     pp = tblp;
@@ -7686,7 +7686,7 @@ unsafe extern "C" fn delete_cmd_entry() {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   cmdp = *lastcmdentry;
   *lastcmdentry = (*cmdp).next;
   if (*cmdp).cmdtype as libc::c_int == 1i32 {
@@ -8355,7 +8355,7 @@ unsafe extern "C" fn defun(mut func: *mut node) {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   entry.cmdtype = 1i32 as smallint;
   entry.u.func = copyfunc(func);
   addcmdentry((*func).ndefun.text, &mut entry);
@@ -8387,7 +8387,7 @@ unsafe extern "C" fn dotrap() {
     &mut (*ash_ptr_to_globals_misc).pending_sig as *mut smallint,
     0 as smallint,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   sig = 1i32;
   g = (*ash_ptr_to_globals_misc).gotsig.as_mut_ptr();
   while sig < 64i32 + 1i32 {
@@ -8700,7 +8700,7 @@ unsafe extern "C" fn evalsubshell(mut n: *mut node, mut flags: libc::c_int) -> l
         &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
       ) + 1,
     );
-    llvm_asm!("" : : : "memory" : "volatile");
+    ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
 
     // TODO: why was this translated this way?
     // (backgnd) == 0;
@@ -8804,7 +8804,7 @@ unsafe extern "C" fn evalpipe(mut n: *mut node, mut flags: libc::c_int) -> libc:
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
 
   // TODO: why was this translated this way?
   // ((*n).npipe.pipe_backgnd as libc::c_int) == 0;
@@ -8898,7 +8898,7 @@ unsafe extern "C" fn poplocalvars(mut keep: libc::c_int) {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   ll = localvar_stack;
   localvar_stack = (*ll).next;
   next = (*ll).lv;
@@ -8961,7 +8961,7 @@ unsafe extern "C" fn pushlocalvars() -> *mut localvar_list {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   ll = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<localvar_list>() as libc::c_ulong)
     as *mut localvar_list;
   /*ll->lv = NULL; - zalloc did it */
@@ -9015,7 +9015,7 @@ unsafe extern "C" fn evalfun(
         &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
       ) + 1,
     );
-    llvm_asm!("" : : : "memory" : "volatile");
+    ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
     (*ash_ptr_to_globals_misc).exception_handler = &mut jmploc;
     (*ash_ptr_to_globals_var).shellparam.malloced = 0 as libc::c_uchar;
     (*func).count += 1;
@@ -9033,7 +9033,7 @@ unsafe extern "C" fn evalfun(
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   funcline = savefuncline;
   freefunc(func);
   freeparam(&mut (*ash_ptr_to_globals_var).shellparam as *mut shparam as *mut shparam);
@@ -9062,7 +9062,7 @@ unsafe extern "C" fn mklocal(mut name: *mut libc::c_char) {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   /* Cater for duplicate "local". Examples:
    * x=0; f() { local x=1; echo $x; local x; echo $x; }; f; echo $x
    * x=0; f() { local x=1; echo $x; local x=2; echo $x; }; f; echo $x
@@ -9842,7 +9842,7 @@ unsafe extern "C" fn evalcommand(mut cmd: *mut node, mut flags: libc::c_int) -> 
         (*ash_ptr_to_globals_var).preverrout_fd,
         b"%s%.*s%s\x00" as *const u8 as *const libc::c_char,
         pfx,
-        eq.wrapping_offset_from(varval) as libc::c_long as libc::c_int,
+        eq.offset_from(varval) as libc::c_long as libc::c_int,
         varval,
         maybe_single_quote(eq),
       );
@@ -9933,7 +9933,7 @@ unsafe extern "C" fn evalcommand(mut cmd: *mut node, mut flags: libc::c_int) -> 
          * nargv => "PROG". path is updated if -p.
          */
         argc =
-          (argc as libc::c_long - nargv.wrapping_offset_from(argv) as libc::c_long) as libc::c_int;
+          (argc as libc::c_long - nargv.offset_from(argv) as libc::c_long) as libc::c_int;
         argv = nargv;
         cmd_flag |= 0x4i32
       }
@@ -9995,7 +9995,7 @@ unsafe extern "C" fn evalcommand(mut cmd: *mut node, mut flags: libc::c_int) -> 
                   &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
                 ) + 1,
               );
-              llvm_asm!("" : : : "memory" : "volatile");
+              ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
               jp = makejob(1i32);
               if forkshell(jp, cmd, 0) != 0 {
                 /* fall through to exec'ing external program */
@@ -10211,7 +10211,7 @@ unsafe extern "C" fn pushstring(mut s: *mut libc::c_char, mut ap: *mut alias) {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   if !(*g_parsefile).strpush.is_null() {
     sp = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<strpush>() as libc::c_ulong)
       as *mut strpush;
@@ -10246,7 +10246,7 @@ unsafe extern "C" fn popstring() {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   if !(*sp).ap.is_null() {
     if *(*g_parsefile).next_to_pgetc.offset(-1i32 as isize) as libc::c_int == ' ' as i32
       || *(*g_parsefile).next_to_pgetc.offset(-1i32 as isize) as libc::c_int == '\t' as i32
@@ -10413,7 +10413,7 @@ unsafe extern "C" fn preadbuffer() -> libc::c_int {
           } else {
             q = q.offset(1);
             if c as libc::c_int == '\n' as i32 {
-              (*g_parsefile).left_in_line = (q.wrapping_offset_from((*g_parsefile).next_to_pgetc)
+              (*g_parsefile).left_in_line = (q.offset_from((*g_parsefile).next_to_pgetc)
                 as libc::c_long
                 - 1) as libc::c_int;
               break 's_104;
@@ -10422,7 +10422,7 @@ unsafe extern "C" fn preadbuffer() -> libc::c_int {
           if !(more <= 0) {
             continue;
           }
-          (*g_parsefile).left_in_line = (q.wrapping_offset_from((*g_parsefile).next_to_pgetc)
+          (*g_parsefile).left_in_line = (q.offset_from((*g_parsefile).next_to_pgetc)
             as libc::c_long
             - 1) as libc::c_int;
           if (*g_parsefile).left_in_line < 0 {
@@ -10562,7 +10562,7 @@ unsafe extern "C" fn popfile() {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   if (*pf).pf_fd >= 0 {
     close((*pf).pf_fd);
   }
@@ -10632,7 +10632,7 @@ unsafe extern "C" fn setinputfile(
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   fd = open(fname, 0 | 0o2000000i32);
   if fd < 0 {
     if !(flags & INPUT_NOFILE_OK as libc::c_int != 0) {
@@ -10664,7 +10664,7 @@ unsafe extern "C" fn setinputstring(mut string: *mut libc::c_char) {
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   pushfile();
   (*g_parsefile).next_to_pgetc = string;
   (*g_parsefile).left_in_line = strlen(string) as libc::c_int;
@@ -10973,7 +10973,7 @@ unsafe extern "C" fn shiftcmd(
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   (*ash_ptr_to_globals_var).shellparam.nparam -= n;
   ap1 = (*ash_ptr_to_globals_var).shellparam.p;
   loop {
@@ -11020,7 +11020,7 @@ unsafe extern "C" fn showvars(
   ep = listvars(on, off, &mut epend);
   qsort(
     ep as *mut libc::c_void,
-    epend.wrapping_offset_from(ep) as libc::c_long as size_t,
+    epend.offset_from(ep) as libc::c_long as size_t,
     ::std::mem::size_of::<*mut libc::c_char>() as libc::c_ulong,
     Some(
       vpcmp as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> libc::c_int,
@@ -11052,7 +11052,7 @@ unsafe extern "C" fn showvars(
       b"%s%s%.*s%s\n\x00" as *const u8 as *const libc::c_char,
       sep_prefix,
       sep,
-      p.wrapping_offset_from(*ep) as libc::c_long as libc::c_int,
+      p.offset_from(*ep) as libc::c_long as libc::c_int,
       *ep,
       q,
     );
@@ -11077,7 +11077,7 @@ unsafe extern "C" fn setcmd(
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   retval = options(0 as *mut libc::c_int);
   if retval == 0 {
     /* if no parse error... */
@@ -11289,7 +11289,7 @@ unsafe extern "C" fn getopts(
     }
     _ => {}
   }
-  ind = (optnext.wrapping_offset_from(optfirst) as libc::c_long + 1) as libc::c_int;
+  ind = (optnext.offset_from(optfirst) as libc::c_long + 1) as libc::c_int;
   setvar(
     b"OPTIND\x00" as *const u8 as *const libc::c_char,
     crate::libbb::xfuncs::itoa(ind),
@@ -11299,7 +11299,7 @@ unsafe extern "C" fn getopts(
   /*sbuf[1] = '\0'; - already is */
   setvar0(optvar, sbuf.as_mut_ptr());
   (*ash_ptr_to_globals_var).shellparam.optoff = if !p.is_null() {
-    p.wrapping_offset_from(*optnext.offset(-1)) as libc::c_long
+    p.offset_from(*optnext.offset(-1)) as libc::c_long
   } else {
     -1i32 as libc::c_long
   } as libc::c_int;
@@ -12217,7 +12217,7 @@ unsafe extern "C" fn readtoken1(
           c = pgetc_without_PEOA()
         }
       }
-      markloc = out.wrapping_offset_from(
+      markloc = out.offset_from(
         (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char,
       ) as libc::c_long as libc::c_int;
       p = eofmark;
@@ -12260,7 +12260,7 @@ unsafe extern "C" fn readtoken1(
           p = ((*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char)
             .offset(markloc as isize)
             .offset(1);
-          len_here = out.wrapping_offset_from(p) as libc::c_long as libc::c_int;
+          len_here = out.offset_from(p) as libc::c_long as libc::c_int;
           if len_here != 0 {
             len_here -= (c >= 256i32) as libc::c_int;
             c = *p.offset(-1i32 as isize) as libc::c_int;
@@ -12283,7 +12283,7 @@ unsafe extern "C" fn readtoken1(
       out = out.offset(
         ((*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char)
           .offset(markloc as isize)
-          .wrapping_offset_from(out) as libc::c_long as isize,
+          .offset_from(out) as libc::c_long as isize,
       )
     }
     loop
@@ -12294,7 +12294,7 @@ unsafe extern "C" fn readtoken1(
       let mut l: size_t = 4i32 as size_t;
       let mut m: size_t = (*ash_ptr_to_globals_memstack)
         .sstrend
-        .wrapping_offset_from(q) as libc::c_long as size_t;
+        .offset_from(q) as libc::c_long as size_t;
       if l > m {
         out = makestrspace(l, q)
       }
@@ -12513,7 +12513,7 @@ unsafe extern "C" fn readtoken1(
             let fresh101 = out;
             out = out.offset(1);
             *fresh101 = '\u{82}' as i32 as libc::c_uchar as libc::c_char;
-            typeloc = out.wrapping_offset_from(
+            typeloc = out.offset_from(
               (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char,
             ) as libc::c_long as libc::c_int;
             out = out.offset(1);
@@ -12667,7 +12667,7 @@ unsafe extern "C" fn readtoken1(
                         current_block = 15462824429697920828;
                       } else {
                         subtype = (subtype as libc::c_long
-                          | p_0.wrapping_offset_from(types.as_ptr()) as libc::c_long
+                          | p_0.offset_from(types.as_ptr()) as libc::c_long
                             + 0x1i32 as libc::c_long)
                           as libc::c_uchar;
                         current_block = 15462824429697920828;
@@ -12833,7 +12833,7 @@ unsafe extern "C" fn readtoken1(
           let mut savelen: size_t = 0;
           let mut saveprompt: smallint = 0 as smallint;
           str_0 = std::ptr::null_mut::<libc::c_char>();
-          savelen = out.wrapping_offset_from(
+          savelen = out.offset_from(
             (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char,
           ) as libc::c_long as size_t;
           if savelen > 0 as libc::c_ulong {
@@ -12914,11 +12914,11 @@ unsafe extern "C" fn readtoken1(
               }
             }
             pout = _STPUTC('\u{0}' as i32, pout);
-            psavelen = pout.wrapping_offset_from(
+            psavelen = pout.offset_from(
               (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char,
             ) as libc::c_long as size_t;
             if psavelen > 0 as libc::c_ulong {
-              pstr = stalloc(pout.wrapping_offset_from(
+              pstr = stalloc(pout.offset_from(
                 (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char,
               ) as libc::c_long as size_t) as *mut libc::c_char;
               setinputstring(pstr);
@@ -13016,7 +13016,7 @@ unsafe extern "C" fn readtoken1(
   let fresh98 = out;
   out = out.offset(1);
   *fresh98 = '\u{0}' as i32 as libc::c_char;
-  len = out.wrapping_offset_from(
+  len = out.offset_from(
     (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char,
   ) as libc::c_long as size_t;
   out = (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char;
@@ -13180,7 +13180,7 @@ unsafe extern "C" fn xxreadtoken() -> libc::c_int {
         if p.is_null() {
           break;
         }
-        if p.wrapping_offset_from(xxreadtoken_chars.as_ptr()) as libc::c_long as libc::c_int >= 3i32
+        if p.offset_from(xxreadtoken_chars.as_ptr()) as libc::c_long as libc::c_int >= 3i32
         {
           let mut cc: libc::c_int = pgetc_eatbnl();
           if cc == c {
@@ -13197,7 +13197,7 @@ unsafe extern "C" fn xxreadtoken() -> libc::c_int {
         }
       }
       lasttoken = xxreadtoken_tokens
-        [p.wrapping_offset_from(xxreadtoken_chars.as_ptr()) as libc::c_long as usize]
+        [p.offset_from(xxreadtoken_chars.as_ptr()) as libc::c_long as usize]
         as token_id_t;
       return lasttoken as libc::c_int;
     }
@@ -13230,7 +13230,7 @@ unsafe extern "C" fn readtoken() -> libc::c_int {
       let mut pp: *const *const libc::c_char = std::ptr::null();
       pp = findkwd(wordtext);
       if !pp.is_null() {
-        t = pp.wrapping_offset_from(tokname_array.as_ptr()) as libc::c_long as libc::c_int;
+        t = pp.offset_from(tokname_array.as_ptr()) as libc::c_long as libc::c_int;
         lasttoken = t as token_id_t;
         break;
       }
@@ -13335,7 +13335,7 @@ unsafe extern "C" fn expandstr(
     );
   }
   (*ash_ptr_to_globals_misc).exception_handler = savehandler;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   ::std::ptr::write_volatile(
     &mut (*ash_ptr_to_globals_misc).suppress_int as *mut libc::c_int,
     saveint,
@@ -13366,7 +13366,7 @@ unsafe extern "C" fn expandstr(
     exitshell();
   }
   (*ash_ptr_to_globals_misc).exception_handler = savehandler;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   ::std::ptr::write_volatile(
     &mut (*ash_ptr_to_globals_misc).suppress_int as *mut libc::c_int,
     saveint,
@@ -13479,7 +13479,7 @@ unsafe extern "C" fn evalcmd(
         concat = _STPUTC(' ' as i32, concat)
       }
       concat = _STPUTC('\u{0}' as i32, concat);
-      p = stalloc(concat.wrapping_offset_from(
+      p = stalloc(concat.offset_from(
         (*ash_ptr_to_globals_memstack).g_stacknxt as *mut libc::c_void as *mut libc::c_char,
       ) as libc::c_long as size_t) as *mut libc::c_char
     }
@@ -13839,7 +13839,7 @@ unsafe extern "C" fn find_command(
                     &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
                   ) + 1,
                 );
-                llvm_asm!("" : : : "memory" : "volatile");
+                ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
                 cmdp = cmdlookup(name, 1i32);
                 (*cmdp).cmdtype = 0 as smallint;
                 (*cmdp).param.index = idx;
@@ -13899,7 +13899,7 @@ unsafe extern "C" fn find_command(
               &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
             ) + 1,
           );
-          llvm_asm!("" : : : "memory" : "volatile");
+          ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
           cmdp = cmdlookup(name, 1i32);
           (*cmdp).cmdtype = 2i32 as smallint;
           (*cmdp).param.cmd = bcmd;
@@ -13983,7 +13983,7 @@ unsafe extern "C" fn trapcmd(
           &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
         ) + 1,
       );
-      llvm_asm!("" : : : "memory" : "volatile");
+      ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
       if !action.is_null() {
         if *action.offset(0) as libc::c_int == '-' as i32 && *action.offset(1) == 0 {
           action = std::ptr::null_mut::<libc::c_char>()
@@ -14301,7 +14301,7 @@ unsafe extern "C" fn readcmd(
         &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
       ) + 1,
     );
-    llvm_asm!("" : : : "memory" : "volatile");
+    ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
     r = crate::shell::shell_common::shell_builtin_read(&mut params);
     int_on();
     if !(r as uintptr_t == 1i32 as libc::c_ulong && *bb_errno == 4i32) {
@@ -14335,7 +14335,7 @@ unsafe extern "C" fn umaskcmd(
       &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
     ) + 1,
   );
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   mask = umask(0i32 as mode_t);
   umask(mask);
   int_on();
@@ -14994,7 +14994,7 @@ pub unsafe fn ash_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char)
   *fresh118 =
     crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals_misc>() as libc::c_ulong)
       as *mut globals_misc;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   (*ash_ptr_to_globals_misc).curdir = (*ash_ptr_to_globals_misc).nullstr.as_mut_ptr();
   (*ash_ptr_to_globals_misc).physdir = (*ash_ptr_to_globals_misc).nullstr.as_mut_ptr();
   (*ash_ptr_to_globals_misc).trap_ptr = (*ash_ptr_to_globals_misc).trap.as_mut_ptr();
@@ -15004,7 +15004,7 @@ pub unsafe fn ash_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char)
   *fresh119 = crate::libbb::xfuncs_printf::xzalloc(
     ::std::mem::size_of::<globals_memstack>() as libc::c_ulong
   ) as *mut globals_memstack;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   (*ash_ptr_to_globals_memstack).g_stackp = &mut (*ash_ptr_to_globals_memstack).stackbase;
   (*ash_ptr_to_globals_memstack).g_stacknxt =
     (*ash_ptr_to_globals_memstack).stackbase.space.as_mut_ptr();
@@ -15021,7 +15021,7 @@ pub unsafe fn ash_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char)
   *fresh120 =
     crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals_var>() as libc::c_ulong)
       as *mut globals_var;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   i = 0 as libc::c_uint;
   while i
     < (::std::mem::size_of::<[C2RustUnnamed_11; 13]>() as libc::c_ulong)
@@ -15147,7 +15147,7 @@ pub unsafe fn ash_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char)
                   &(*ash_ptr_to_globals_misc).suppress_int as *const libc::c_int,
                 ) + 1,
               );
-              llvm_asm!("" : : : "memory" : "volatile");
+              ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
               hp_0 = crate::libbb::concat_path_file::concat_path_file(
                 hp_0,
                 b".ash_history\x00" as *const u8 as *const libc::c_char,

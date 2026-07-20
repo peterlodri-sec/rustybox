@@ -91,7 +91,7 @@ pub unsafe fn bb_verror_msg(
    * ~40% speedup.
    */
   if ::std::mem::size_of::<[libc::c_char; 80]>() as libc::c_ulong as libc::c_int - applet_len > 0 {
-    let mut p2: ::std::ffi::VaListImpl;
+    let mut p2: ::std::ffi::VaList;
     /* It is not portable to use va_list twice, need to va_copy it */
     p2 = p.clone();
     used = vsnprintf(
@@ -99,7 +99,7 @@ pub unsafe fn bb_verror_msg(
       (::std::mem::size_of::<[libc::c_char; 80]>() as libc::c_ulong as libc::c_int - applet_len)
         as libc::c_ulong,
       s,
-      p2.as_va_list(),
+      p2,
     );
     msg = stack_msg.as_mut_ptr();
     used += applet_len;
@@ -118,7 +118,7 @@ pub unsafe fn bb_verror_msg(
   }
   match current_block {
     8236137900636309791 => {
-      used = vasprintf(&mut msg, s, p.as_va_list());
+      used = vasprintf(&mut msg, s, p);
       if used < 0 {
         return;
       }
@@ -192,25 +192,25 @@ pub unsafe fn bb_verror_msg(
   };
 }
 pub unsafe extern "C" fn bb_error_msg_and_die(mut s: *const libc::c_char, mut args: ...) -> ! {
-  let mut p: ::std::ffi::VaListImpl;
+  let mut p: ::std::ffi::VaList;
   p = args.clone();
-  bb_verror_msg(s, p.as_va_list(), 0 as *const libc::c_char);
+  bb_verror_msg(s, p, 0 as *const libc::c_char);
   crate::libbb::xfunc_die::xfunc_die();
 }
 pub unsafe extern "C" fn bb_error_msg(mut s: *const libc::c_char, mut args: ...) {
-  let mut p: ::std::ffi::VaListImpl;
+  let mut p: ::std::ffi::VaList;
   p = args.clone();
-  bb_verror_msg(s, p.as_va_list(), 0 as *const libc::c_char);
+  bb_verror_msg(s, p, 0 as *const libc::c_char);
 }
 pub unsafe fn bb_vinfo_msg(mut s: *const libc::c_char, mut p: ::std::ffi::VaList) {
   syslog_level = 6i32 as smallint;
-  bb_verror_msg(s, p.as_va_list(), 0 as *const libc::c_char);
+  bb_verror_msg(s, p, 0 as *const libc::c_char);
   syslog_level = 3i32 as smallint;
 }
 pub unsafe extern "C" fn bb_info_msg(mut s: *const libc::c_char, mut args: ...) {
-  let mut p: ::std::ffi::VaListImpl;
+  let mut p: ::std::ffi::VaList;
   p = args.clone();
-  bb_vinfo_msg(s, p.as_va_list());
+  bb_vinfo_msg(s, p);
 }
 pub unsafe fn bb_simple_info_msg(mut s: *const libc::c_char) {
   bb_info_msg(b"%s\x00" as *const u8 as *const libc::c_char, s);

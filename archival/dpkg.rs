@@ -2439,16 +2439,16 @@ pub unsafe fn dpkg_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char
     99, 111, 110, 102, 105, 103, 117, 114, 101, 0, 0, 67, 102, 111, 114, 99, 101, 0, 1, 70, 105,
     110, 115, 116, 97, 108, 108, 0, 0, 105, 108, 105, 115, 116, 0, 0, 108, 112, 117, 114, 103, 101,
     0, 0, 80, 114, 101, 109, 111, 118, 101, 0, 0, 114, 117, 110, 112, 97, 99, 107, 0, 0, 117, 102,
-    111, 114, 99, 101, 45, 100, 101, 112, 101, 110, 100, 115, 0, 0, -1, 102, 111, 114, 99, 101, 45,
-    99, 111, 110, 102, 110, 101, 119, 0, 0, -2, 102, 111, 114, 99, 101, 45, 99, 111, 110, 102, 111,
-    108, 100, 0, 0, -3, 0,
+    111, 114, 99, 101, 45, 100, 101, 112, 101, 110, 100, 115, 0, 0, 255u8 as libc::c_char, 102, 111, 114, 99, 101, 45,
+    99, 111, 110, 102, 110, 101, 119, 0, 0, 254u8 as libc::c_char, 102, 111, 114, 99, 101, 45, 99, 111, 110, 102, 111,
+    108, 100, 0, 0, 253u8 as libc::c_char, 0,
   ];
   let ref mut fresh11 =
     *(not_const_pp(&ptr_to_globals as *const *mut globals as *const libc::c_void)
       as *mut *mut globals);
   *fresh11 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   opt = crate::libbb::getopt32::getopt32long(
     argv,
     b"CilPruF:\x00" as *const u8 as *const libc::c_char,

@@ -322,7 +322,7 @@ pub unsafe fn tail_main(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char)
                     s_0 = s_0.offset(1)
                   }
                   taillen = (taillen as libc::c_long
-                    + (nread as libc::c_long - s_0.wrapping_offset_from(tailbuf) as libc::c_long))
+                    + (nread as libc::c_long - s_0.offset_from(tailbuf) as libc::c_long))
                     as libc::c_int;
                   memmove(
                     tailbuf as *mut libc::c_void,

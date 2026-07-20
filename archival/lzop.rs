@@ -307,7 +307,7 @@ unsafe fn lzo1x_optimize(
               copy2(
                 ip.offset(-2),
                 m_pos,
-                op.wrapping_offset_from(m_pos) as libc::c_long as libc::c_uint,
+                op.offset_from(m_pos) as libc::c_long as libc::c_uint,
               );
               o_m1_a = o_m1_a.wrapping_add(1);
               current_block = 1563163433588720361;
@@ -326,7 +326,7 @@ unsafe fn lzo1x_optimize(
               copy2(
                 ip.offset(-3).offset(1),
                 m_pos,
-                op.wrapping_offset_from(m_pos) as libc::c_long as libc::c_uint,
+                op.offset_from(m_pos) as libc::c_long as libc::c_uint,
               );
               litp = litp.offset(2);
               if lit > 0 as libc::c_uint {
@@ -408,7 +408,7 @@ unsafe fn lzo1x_optimize(
               copy3(
                 ip.offset(-1).offset(-2),
                 m_pos,
-                op.wrapping_offset_from(m_pos) as libc::c_long as libc::c_uint,
+                op.offset_from(m_pos) as libc::c_long as libc::c_uint,
               );
               lit = lit.wrapping_add(
                 (3i32 as libc::c_uint)
@@ -498,7 +498,7 @@ unsafe fn lzo1x_optimize(
               copy3(
                 ip.offset(-3),
                 m_pos,
-                op.wrapping_offset_from(m_pos) as libc::c_long as libc::c_uint,
+                op.offset_from(m_pos) as libc::c_long as libc::c_uint,
               );
               o_m3_a = o_m3_a.wrapping_add(1);
               current_block = 65461189516158820;
@@ -519,7 +519,7 @@ unsafe fn lzo1x_optimize(
               copy3(
                 ip.offset(-4).offset(1),
                 m_pos,
-                op.wrapping_offset_from(m_pos) as libc::c_long as libc::c_uint,
+                op.offset_from(m_pos) as libc::c_long as libc::c_uint,
               );
               litp = litp.offset(2);
               if lit > 0 as libc::c_uint {
@@ -631,7 +631,7 @@ unsafe fn lzo1x_optimize(
   }
   match current_block {
     8050654829899665499 => {
-      *out_len = op.wrapping_offset_from(out) as libc::c_long as libc::c_uint;
+      *out_len = op.offset_from(out) as libc::c_long as libc::c_uint;
       return if ip == ip_end {
         0
       } else if ip < ip_end {
@@ -641,7 +641,7 @@ unsafe fn lzo1x_optimize(
       };
     }
     _ => {
-      *out_len = op.wrapping_offset_from(out) as libc::c_long as libc::c_uint;
+      *out_len = op.offset_from(out) as libc::c_long as libc::c_uint;
       return -7i32;
     }
   };
@@ -748,12 +748,7 @@ unsafe fn read32() -> u32 {
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh61 = &mut __v;
-      let fresh62;
-      let fresh63 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh62) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh61, fresh63)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh61, fresh63, fresh62);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -786,12 +781,7 @@ unsafe fn f_read32() -> u32 {
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh64 = &mut __v;
-      let fresh65;
-      let fresh66 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh65) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh64, fresh66)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh64, fresh66, fresh65);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -806,12 +796,7 @@ unsafe fn write32(mut v: u32) {
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh67 = &mut __v;
-      let fresh68;
-      let fresh69 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh68) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh67, fresh69)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh67, fresh69, fresh68);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -887,12 +872,7 @@ unsafe fn lzo_compress(mut h: *const header_t) -> libc::c_int {
             | (__x & 0xff00i32 as libc::c_uint) << 8i32
             | (__x & 0xffi32 as libc::c_uint) << 24i32
         } else {
-          let fresh70 = &mut __v;
-          let fresh71;
-          let fresh72 = __x;
-          llvm_asm!("bswap $0" : "=r" (fresh71) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh70, fresh72)) :);
-          c2rust_asm_casts::AsmCast::cast_out(fresh70, fresh72, fresh71);
+          __v = (__x).swap_bytes();
         }
         __v
       };
@@ -956,12 +936,7 @@ unsafe fn lzo_compress(mut h: *const header_t) -> libc::c_int {
               | (__x & 0xff00i32 as libc::c_uint) << 8i32
               | (__x & 0xffi32 as libc::c_uint) << 24i32
           } else {
-            let fresh74 = &mut __v;
-            let fresh75;
-            let fresh76 = __x;
-            llvm_asm!("bswap $0" : "=r" (fresh75) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh74, fresh76)) :);
-            c2rust_asm_casts::AsmCast::cast_out(fresh74, fresh76, fresh75);
+            __v = (__x).swap_bytes();
           }
           __v
         }
@@ -978,12 +953,7 @@ unsafe fn lzo_compress(mut h: *const header_t) -> libc::c_int {
               | (__x & 0xff00i32 as libc::c_uint) << 8i32
               | (__x & 0xffi32 as libc::c_uint) << 24i32
           } else {
-            let fresh78 = &mut __v;
-            let fresh79;
-            let fresh80 = __x;
-            llvm_asm!("bswap $0" : "=r" (fresh79) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh78, fresh80)) :);
-            c2rust_asm_casts::AsmCast::cast_out(fresh78, fresh80, fresh79);
+            __v = (__x).swap_bytes();
           }
           __v
         }
@@ -1001,12 +971,7 @@ unsafe fn lzo_compress(mut h: *const header_t) -> libc::c_int {
               | (__x & 0xff00i32 as libc::c_uint) << 8i32
               | (__x & 0xffi32 as libc::c_uint) << 24i32
           } else {
-            let fresh82 = &mut __v;
-            let fresh83;
-            let fresh84 = __x;
-            llvm_asm!("bswap $0" : "=r" (fresh83) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh82, fresh84)) :);
-            c2rust_asm_casts::AsmCast::cast_out(fresh82, fresh84, fresh83);
+            __v = (__x).swap_bytes();
           }
           __v
         }
@@ -1023,12 +988,7 @@ unsafe fn lzo_compress(mut h: *const header_t) -> libc::c_int {
               | (__x & 0xff00i32 as libc::c_uint) << 8i32
               | (__x & 0xffi32 as libc::c_uint) << 24i32
           } else {
-            let fresh86 = &mut __v;
-            let fresh87;
-            let fresh88 = __x;
-            llvm_asm!("bswap $0" : "=r" (fresh87) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh86, fresh88)) :);
-            c2rust_asm_casts::AsmCast::cast_out(fresh86, fresh88, fresh87);
+            __v = (__x).swap_bytes();
           }
           __v
         }
@@ -1047,12 +1007,7 @@ unsafe fn lzo_compress(mut h: *const header_t) -> libc::c_int {
                 | (__x & 0xff00i32 as libc::c_uint) << 8i32
                 | (__x & 0xffi32 as libc::c_uint) << 24i32
             } else {
-              let fresh90 = &mut __v;
-              let fresh91;
-              let fresh92 = __x;
-              llvm_asm!("bswap $0" : "=r" (fresh91) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh90, fresh92)) :);
-              c2rust_asm_casts::AsmCast::cast_out(fresh90, fresh92, fresh91);
+              __v = (__x).swap_bytes();
             }
             __v
           }
@@ -1069,12 +1024,7 @@ unsafe fn lzo_compress(mut h: *const header_t) -> libc::c_int {
                 | (__x & 0xff00i32 as libc::c_uint) << 8i32
                 | (__x & 0xffi32 as libc::c_uint) << 24i32
             } else {
-              let fresh94 = &mut __v;
-              let fresh95;
-              let fresh96 = __x;
-              llvm_asm!("bswap $0" : "=r" (fresh95) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh94, fresh96)) :);
-              c2rust_asm_casts::AsmCast::cast_out(fresh94, fresh96, fresh95);
+              __v = (__x).swap_bytes();
             }
             __v
           }
@@ -1084,7 +1034,7 @@ unsafe fn lzo_compress(mut h: *const header_t) -> libc::c_int {
         1i32,
         wordbuf.as_mut_ptr() as *const libc::c_void,
         (wordptr as *mut libc::c_char)
-          .wrapping_offset_from(wordbuf.as_mut_ptr() as *mut libc::c_char) as libc::c_long
+          .offset_from(wordbuf.as_mut_ptr() as *mut libc::c_char) as libc::c_long
           as size_t,
       );
       if dst_len < src_len {
@@ -1342,7 +1292,7 @@ unsafe fn write_header(mut h: *mut header_t) {
   /*h->len_and_name[0] = end - (h->len_and_name+1); - zero already */
   f_write(
     &mut (*h).version_be16 as *mut u16 as *const libc::c_void,
-    end.wrapping_offset_from(&mut (*h).version_be16 as *mut u16 as *mut libc::c_char)
+    end.offset_from(&mut (*h).version_be16 as *mut u16 as *mut libc::c_char)
       as libc::c_long as libc::c_int,
   ); /* native endianness for lzo_compress() */
   (*h).flags32 = {
@@ -1354,12 +1304,7 @@ unsafe fn write_header(mut h: *mut header_t) {
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh98 = &mut __v;
-      let fresh99;
-      let fresh100 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh99) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh98, fresh100)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh98, fresh100, fresh99);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -1383,7 +1328,7 @@ unsafe fn read_header(mut h: *mut header_t) -> libc::c_int {
   f_read(
     &mut (*h).version_be16 as *mut u16 as *mut libc::c_void,
     (&mut *(*h).len_and_name.as_mut_ptr().offset(1) as *mut libc::c_char)
-      .wrapping_offset_from(&mut (*h).version_be16 as *mut u16 as *mut libc::c_char)
+      .offset_from(&mut (*h).version_be16 as *mut u16 as *mut libc::c_char)
       as libc::c_long as libc::c_int,
   );
   h_version = ({
@@ -1393,12 +1338,7 @@ unsafe fn read_header(mut h: *mut header_t) -> libc::c_int {
       __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
         as libc::c_ushort
     } else {
-      let fresh101 = &mut __v;
-      let fresh102;
-      let fresh103 = __x;
-      llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh102) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh101, fresh103)) : "cc");
-      c2rust_asm_casts::AsmCast::cast_out(fresh101, fresh103, fresh102);
+      __v = (__x).swap_bytes();
     }
     __v
   }) as libc::c_uint;
@@ -1412,12 +1352,7 @@ unsafe fn read_header(mut h: *mut header_t) -> libc::c_int {
       __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
         as libc::c_ushort
     } else {
-      let fresh104 = &mut __v;
-      let fresh105;
-      let fresh106 = __x;
-      llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh105) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh104, fresh106)) : "cc");
-      c2rust_asm_casts::AsmCast::cast_out(fresh104, fresh106, fresh105);
+      __v = (__x).swap_bytes();
     }
     __v
   }) as libc::c_uint;
@@ -1459,12 +1394,7 @@ unsafe fn read_header(mut h: *mut header_t) -> libc::c_int {
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh107 = &mut __v;
-      let fresh108;
-      let fresh109 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh108) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh107, fresh109)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh107, fresh109, fresh108);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -1556,12 +1486,7 @@ unsafe fn do_lzo_compress() -> libc::c_int {
       __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
         as libc::c_ushort
     } else {
-      let fresh110 = &mut __v;
-      let fresh111;
-      let fresh112 = __x;
-      llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh111) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh110, fresh112)) : "cc");
-      c2rust_asm_casts::AsmCast::cast_out(fresh110, fresh112, fresh111);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -1572,12 +1497,7 @@ unsafe fn do_lzo_compress() -> libc::c_int {
       __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
         as libc::c_ushort
     } else {
-      let fresh113 = &mut __v;
-      let fresh114;
-      let fresh115 = __x;
-      llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh114) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh113, fresh115)) : "cc");
-      c2rust_asm_casts::AsmCast::cast_out(fresh113, fresh115, fresh114);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -1588,12 +1508,7 @@ unsafe fn do_lzo_compress() -> libc::c_int {
       __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
         as libc::c_ushort
     } else {
-      let fresh116 = &mut __v;
-      let fresh117;
-      let fresh118 = __x;
-      llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh117) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh116, fresh118)) : "cc");
-      c2rust_asm_casts::AsmCast::cast_out(fresh116, fresh118, fresh117);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -1606,12 +1521,7 @@ unsafe fn do_lzo_compress() -> libc::c_int {
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh119 = &mut __v;
-      let fresh120;
-      let fresh121 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh120) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh119, fresh121)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh119, fresh121, fresh120);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -1627,12 +1537,7 @@ unsafe fn do_lzo_compress() -> libc::c_int {
           | (__x & 0xff00i32 as libc::c_uint) << 8i32
           | (__x & 0xffi32 as libc::c_uint) << 24i32
       } else {
-        let fresh122 = &mut __v;
-        let fresh123;
-        let fresh124 = __x;
-        llvm_asm!("bswap $0" : "=r" (fresh123) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh122, fresh124)) :);
-        c2rust_asm_casts::AsmCast::cast_out(fresh122, fresh124, fresh123);
+        __v = (__x).swap_bytes();
       }
       __v
     };
@@ -1646,12 +1551,7 @@ unsafe fn do_lzo_compress() -> libc::c_int {
             | (__x & 0xff00i32 as libc::c_uint) << 8i32
             | (__x & 0xffi32 as libc::c_uint) << 24i32
         } else {
-          let fresh125 = &mut __v;
-          let fresh126;
-          let fresh127 = __x;
-          llvm_asm!("bswap $0" : "=r" (fresh126) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh125, fresh127)) :);
-          c2rust_asm_casts::AsmCast::cast_out(fresh125, fresh127, fresh126);
+          __v = (__x).swap_bytes();
         }
         __v
       }

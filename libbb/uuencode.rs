@@ -274,7 +274,7 @@ pub unsafe fn decode_base64(
       }
       /* Convert encoded character to decimal */
       ch =
-        table_ptr.wrapping_offset_from(bb_uuenc_tbl_base64.as_ptr()) as libc::c_long as libc::c_int;
+        table_ptr.offset_from(bb_uuenc_tbl_base64.as_ptr()) as libc::c_long as libc::c_int;
       /* ch is 64 if char was '=', otherwise 0..63 */
       if ch == 64i32 {
         break;
@@ -915,7 +915,7 @@ pub unsafe fn read_base64(
     in_tail = decode_base64(&mut out_tail, in_buf.as_mut_ptr());
     libc::fwrite(
       out_buf.as_mut_ptr() as *const libc::c_void,
-      out_tail.wrapping_offset_from(out_buf.as_mut_ptr()) as usize,
+      out_tail.offset_from(out_buf.as_mut_ptr()) as usize,
       1,
       dst_stream,
     );

@@ -119,7 +119,7 @@ unsafe fn smtp_checkp(
     if (*ptr_to_globals).verbose != 0 {
       crate::libbb::verror_msg::bb_error_msg(
         b"recv:\'%.*s\'\x00" as *const u8 as *const libc::c_char,
-        strchrnul(answer, '\r' as i32).wrapping_offset_from(answer) as libc::c_long as libc::c_int,
+        strchrnul(answer, '\r' as i32).offset_from(answer) as libc::c_long as libc::c_int,
         answer,
       );
     }
@@ -259,7 +259,7 @@ pub unsafe fn sendmail_main(
     as *mut *mut globals);
   *fresh1 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   (*ptr_to_globals).opt_charset =
     b"us-ascii\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
   // default HOST[:PORT] is $SMTPHOST, or localhost

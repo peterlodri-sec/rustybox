@@ -215,7 +215,7 @@ unsafe extern "C" fn find_keyword(
     }
     ptr = ptr.offset(1);
     len = (len as libc::c_ulong)
-      .wrapping_sub(ptr.wrapping_offset_from(old) as libc::c_long as libc::c_ulong)
+      .wrapping_sub(ptr.offset_from(old) as libc::c_long as libc::c_ulong)
       as size_t as size_t
   }
   return std::ptr::null_mut::<libc::c_char>();
@@ -437,7 +437,7 @@ unsafe extern "C" fn parse_module(
       }
       _ => {}
     } /* remove last ' ' */
-    pos = ptr.wrapping_offset_from(module_image) as libc::c_long as size_t
+    pos = ptr.offset_from(module_image) as libc::c_long as size_t
   }
   bksp();
   (*info).aliases = copy_stringbuf();
@@ -1196,7 +1196,7 @@ pub unsafe fn modprobe_main(
       as *mut *mut globals);
   *fresh14 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   /* Prevent ugly corner cases with no modules at all */
   (*ptr_to_globals).modinfo =
     crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<module_info>() as libc::c_ulong)

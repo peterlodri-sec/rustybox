@@ -74,7 +74,7 @@ pub unsafe fn setsid_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_ch
   }
   if opt != 0 {
     /* -c: set (with stealing) controlling tty */
-    ioctl(0i32, 0x540ei32 as libc::c_ulong, 1i32);
+    ioctl(0i32, 0x540ei32 as _, 1i32);
   }
   crate::libbb::executable::BB_EXECVP_or_die(argv);
 }

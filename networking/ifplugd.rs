@@ -576,7 +576,7 @@ unsafe extern "C" fn network_ioctl(
   mut data: *mut libc::c_void,
   mut errmsg: *const libc::c_char,
 ) -> libc::c_int {
-  let mut r: libc::c_int = ioctl(ioctl_fd as libc::c_int, request as libc::c_ulong, data);
+  let mut r: libc::c_int = ioctl(ioctl_fd as libc::c_int, request as _, data);
   if r < 0 && !errmsg.is_null() {
     crate::libbb::perror_msg::bb_perror_msg(
       b"%s failed\x00" as *const u8 as *const libc::c_char,
@@ -1150,7 +1150,7 @@ pub unsafe fn ifplugd_main(
     as *mut *mut globals);
   *fresh0 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   (*ptr_to_globals).iface_last_status = -1i32 as smallint;
   (*ptr_to_globals).iface_exists = 1i32 as smallint;
   (*ptr_to_globals).poll_time = 1i32 as libc::c_uint;
@@ -1205,7 +1205,7 @@ pub unsafe fn ifplugd_main(
     );
   }
   (*ptr_to_globals).api_method_num =
-    api_mode_found.wrapping_offset_from(api_modes.as_ptr()) as libc::c_long as smallint;
+    api_mode_found.offset_from(api_modes.as_ptr()) as libc::c_long as smallint;
   if opts & FLAG_NO_DAEMON as libc::c_int as libc::c_uint == 0 {
     crate::libbb::vfork_daemon_rexec::bb_daemonize_or_rexec(DAEMON_CHDIR_ROOT as libc::c_int);
   }

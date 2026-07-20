@@ -217,11 +217,11 @@ pub unsafe fn hexdump_main(mut argc: libc::c_int, mut argv: *mut *mut libc::c_ch
         if p.is_null() {
           crate::libbb::appletlib::bb_show_usage();
         }
-        if (p.wrapping_offset_from(hexdump_opts.as_ptr()) as libc::c_long) < 5i32 as libc::c_long {
+        if (p.offset_from(hexdump_opts.as_ptr()) as libc::c_long) < 5i32 as libc::c_long {
           crate::libbb::dump::bb_dump_add(dumper, add_first.as_ptr());
           crate::libbb::dump::bb_dump_add(
             dumper,
-            add_strings[p.wrapping_offset_from(hexdump_opts.as_ptr()) as libc::c_long as libc::c_int
+            add_strings[p.offset_from(hexdump_opts.as_ptr()) as libc::c_long as libc::c_int
               as usize],
           );
         }

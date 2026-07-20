@@ -510,7 +510,7 @@ unsafe extern "C" fn d6_find_option(
 ) -> *mut libc::c_void {
   /* "length minus 4" */
   let mut len_m4: libc::c_int =
-    (option_end.wrapping_offset_from(option) as libc::c_long - 4i32 as libc::c_long) as libc::c_int;
+    (option_end.offset_from(option) as libc::c_long - 4i32 as libc::c_long) as libc::c_int;
   while len_m4 >= 0 {
     /* Next option's len is too big? */
     if *option.offset(3) as libc::c_int > len_m4 {
@@ -639,7 +639,7 @@ unsafe extern "C" fn option_to_env(mut option: *const u8, mut option_end: *const
   let mut option_offset: libc::c_int = 0;
   /* "length minus 4" */
   let mut len_m4: libc::c_int =
-    (option_end.wrapping_offset_from(option) as libc::c_long - 4i32 as libc::c_long) as libc::c_int;
+    (option_end.offset_from(option) as libc::c_long - 4i32 as libc::c_long) as libc::c_int;
   while len_m4 >= 0 {
     let mut v32: u32 = 0;
     let mut ipv6str: [libc::c_char; 40] = [0; 40];
@@ -976,12 +976,7 @@ unsafe extern "C" fn random_xid() -> u32 {
           | (__x & 0xff00i32 as libc::c_uint) << 8i32
           | (__x & 0xffi32 as libc::c_uint) << 24i32
       } else {
-        let fresh19 = &mut __v;
-        let fresh20;
-        let fresh21 = __x;
-        llvm_asm!("bswap $0" : "=r" (fresh20) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh19, fresh21)) :);
-        c2rust_asm_casts::AsmCast::cast_out(fresh19, fresh21, fresh20);
+        __v = (__x).swap_bytes();
       }
       __v
     });
@@ -1016,12 +1011,7 @@ unsafe extern "C" fn init_d6_packet(
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh22 = &mut __v;
-      let fresh23;
-      let fresh24 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh23) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh22, fresh24)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh22, fresh24, fresh23);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -1068,12 +1058,7 @@ unsafe extern "C" fn init_d6_packet(
         __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
           as libc::c_ushort
       } else {
-        let fresh25 = &mut __v;
-        let fresh26;
-        let fresh27 = __x;
-        llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh26) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh25, fresh27)) : "cc");
-        c2rust_asm_casts::AsmCast::cast_out(fresh25, fresh27, fresh26);
+        __v = (__x).swap_bytes();
       }
       __v
     }) as libc::c_int
@@ -1115,13 +1100,13 @@ unsafe extern "C" fn add_d6_client_options(mut ptr: *mut u8) -> *mut u8 {
     }
     option = option.wrapping_add(1)
   }
-  if ptr.wrapping_offset_from(start) as libc::c_long - 4i32 as libc::c_long != 0 {
+  if ptr.offset_from(start) as libc::c_long - 4i32 as libc::c_long != 0 {
     *start.offset(0) = (6i32 >> 8i32) as u8;
     *start.offset(1) = 6i32 as u8;
     *start.offset(2) =
-      (ptr.wrapping_offset_from(start) as libc::c_long - 4i32 as libc::c_long >> 8i32) as u8;
+      (ptr.offset_from(start) as libc::c_long - 4i32 as libc::c_long >> 8i32) as u8;
     *start.offset(3) =
-      (ptr.wrapping_offset_from(start) as libc::c_long - 4i32 as libc::c_long) as u8
+      (ptr.offset_from(start) as libc::c_long - 4i32 as libc::c_long) as u8
   } else {
     ptr = start
   }
@@ -1173,7 +1158,7 @@ unsafe extern "C" fn d6_mcast_from_client_data_ifindex(
   ];
   return crate::networking::udhcp::d6_packet::d6_send_raw_packet(
     packet,
-    end.wrapping_offset_from(packet as *mut u8) as libc::c_long as libc::c_uint,
+    end.offset_from(packet as *mut u8) as libc::c_long as libc::c_uint,
     &mut (*(&mut *bb_common_bufsiz1.as_mut_ptr().offset(
       (COMMON_BUFSIZE as libc::c_int as libc::c_ulong)
         .wrapping_sub(::std::mem::size_of::<client6_data_t>() as libc::c_ulong) as isize,
@@ -1705,7 +1690,7 @@ unsafe extern "C" fn send_d6_renew(
   if !server_ipv6.is_null() {
     return crate::networking::udhcp::d6_packet::d6_send_kernel_packet(
       &mut packet,
-      opt_ptr.wrapping_offset_from(&mut packet as *mut d6_packet as *mut u8) as libc::c_long
+      opt_ptr.offset_from(&mut packet as *mut d6_packet as *mut u8) as libc::c_long
         as libc::c_uint,
       our_cur_ipv6,
       546i32,
@@ -1803,7 +1788,7 @@ unsafe extern "C" fn send_d6_release(
   );
   return crate::networking::udhcp::d6_packet::d6_send_kernel_packet(
     &mut packet,
-    opt_ptr.wrapping_offset_from(&mut packet as *mut d6_packet as *mut u8) as libc::c_long
+    opt_ptr.offset_from(&mut packet as *mut d6_packet as *mut u8) as libc::c_long
       as libc::c_uint,
     our_cur_ipv6,
     546i32,
@@ -1860,12 +1845,7 @@ unsafe extern "C" fn d6_recv_raw_packet(
           __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
             as libc::c_ushort
         } else {
-          let fresh32 = &mut __v;
-          let fresh33;
-          let fresh34 = __x;
-          llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh33) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh32, fresh34)) : "cc");
-          c2rust_asm_casts::AsmCast::cast_out(fresh32, fresh34, fresh33);
+          __v = (__x).swap_bytes();
         }
         __v
       }) as libc::c_ulong,
@@ -1889,12 +1869,7 @@ unsafe extern "C" fn d6_recv_raw_packet(
         __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
           as libc::c_ushort
       } else {
-        let fresh35 = &mut __v;
-        let fresh36;
-        let fresh37 = __x;
-        llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh36) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh35, fresh37)) : "cc");
-        c2rust_asm_casts::AsmCast::cast_out(fresh35, fresh37, fresh36);
+        __v = (__x).swap_bytes();
       }
       __v
     }) as libc::c_ulong,
@@ -1910,12 +1885,7 @@ unsafe extern "C" fn d6_recv_raw_packet(
           __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
             as libc::c_ushort
         } else {
-          let fresh38 = &mut __v;
-          let fresh39;
-          let fresh40 = __x;
-          llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh39) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh38, fresh40)) : "cc");
-          c2rust_asm_casts::AsmCast::cast_out(fresh38, fresh40, fresh39);
+          __v = (__x).swap_bytes();
         }
         __v
       }) as libc::c_int
@@ -2009,12 +1979,7 @@ unsafe extern "C" fn d6_raw_socket(mut ifindex: libc::c_int) -> libc::c_int {
         __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
           as libc::c_ushort
       } else {
-        let fresh41 = &mut __v;
-        let fresh42;
-        let fresh43 = __x;
-        llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh42) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh41, fresh43)) : "cc");
-        c2rust_asm_casts::AsmCast::cast_out(fresh41, fresh43, fresh42);
+        __v = (__x).swap_bytes();
       }
       __v
     }) as libc::c_int,
@@ -2032,12 +1997,7 @@ unsafe extern "C" fn d6_raw_socket(mut ifindex: libc::c_int) -> libc::c_int {
       __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
         as libc::c_ushort
     } else {
-      let fresh44 = &mut __v;
-      let fresh45;
-      let fresh46 = __x;
-      llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh45) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh44, fresh46)) : "cc");
-      c2rust_asm_casts::AsmCast::cast_out(fresh44, fresh46, fresh45);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -3137,12 +3097,7 @@ pub unsafe fn udhcpc6_main(
                   | (__x & 0xff00i32 as libc::c_uint) << 8i32
                   | (__x & 0xffi32 as libc::c_uint) << 24i32
               } else {
-                let fresh52 = &mut __v;
-                let fresh53;
-                let fresh54 = __x;
-                llvm_asm!("bswap $0" : "=r" (fresh53) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh52, fresh54)) :);
-                c2rust_asm_casts::AsmCast::cast_out(fresh52, fresh54, fresh53);
+                __v = (__x).swap_bytes();
               }
               __v
             })
@@ -3161,12 +3116,7 @@ pub unsafe fn udhcpc6_main(
                         | (__x & 0xff00i32 as libc::c_uint) << 8i32
                         | (__x & 0xffi32 as libc::c_uint) << 24i32
                     } else {
-                      let fresh55 = &mut __v;
-                      let fresh56;
-                      let fresh57 = __x;
-                      llvm_asm!("bswap $0" : "=r" (fresh56) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh55, fresh57)) :);
-                      c2rust_asm_casts::AsmCast::cast_out(fresh55, fresh57, fresh56);
+                      __v = (__x).swap_bytes();
                     }
                     __v
                   }),
@@ -3516,12 +3466,7 @@ pub unsafe fn udhcpc6_main(
                               | (__x & 0xff00i32 as libc::c_uint) << 8i32
                               | (__x & 0xffi32 as libc::c_uint) << 24i32
                           } else {
-                            let fresh60 = &mut __v;
-                            let fresh61;
-                            let fresh62 = __x;
-                            llvm_asm!("bswap $0" : "=r" (fresh61) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh60, fresh62)) :);
-                            c2rust_asm_casts::AsmCast::cast_out(fresh60, fresh62, fresh61);
+                            __v = (__x).swap_bytes();
                           }
                           __v
                         };
@@ -3654,12 +3599,7 @@ pub unsafe fn udhcpc6_main(
                               | (__x & 0xff00i32 as libc::c_uint) << 8i32
                               | (__x & 0xffi32 as libc::c_uint) << 24i32
                           } else {
-                            let fresh64 = &mut __v;
-                            let fresh65;
-                            let fresh66 = __x;
-                            llvm_asm!("bswap $0" : "=r" (fresh65) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh64, fresh66)) :);
-                            c2rust_asm_casts::AsmCast::cast_out(fresh64, fresh66, fresh65);
+                            __v = (__x).swap_bytes();
                           }
                           __v
                         };

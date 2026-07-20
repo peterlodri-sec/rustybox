@@ -99,7 +99,7 @@ pub unsafe fn devmem_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_ch
         bhwl.as_ptr(),
         *(*argv.offset(2)).offset(0) as libc::c_int | 0x20i32,
       )
-      .wrapping_offset_from(bhwl.as_ptr()) as libc::c_long as libc::c_uint;
+      .offset_from(bhwl.as_ptr()) as libc::c_long as libc::c_uint;
       width = sizes[width as usize] as libc::c_uint
     }
     /* VALUE */

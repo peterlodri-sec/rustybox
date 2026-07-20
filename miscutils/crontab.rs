@@ -241,7 +241,7 @@ pub unsafe fn crontab_main(
       b"%s\n\x00" as *const u8 as *const libc::c_char,
       (*pas).pw_name,
     );
-    if fstat(fd, &mut st) != 0 || st.st_nlink != 0 as libc::c_ulong {
+    if fstat(fd, &mut st) != 0 || st.st_nlink as libc::c_ulong != 0 as libc::c_ulong {
       break;
     }
     /* loop */

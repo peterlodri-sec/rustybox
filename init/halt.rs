@@ -164,7 +164,7 @@ unsafe fn write_wtmp() {
     0,
     ::std::mem::size_of::<utmpx>() as libc::c_ulong,
   ); /* it is wide enough */
-  utmp.ut_tv.tv_sec = time(0 as *mut time_t) as i32; /* = strcpy(utmp.ut_id, "~~"); */
+  utmp.ut_tv.tv_sec = time(0 as *mut time_t) as _; /* = strcpy(utmp.ut_id, "~~"); */
   strcpy(
     utmp.ut_user.as_mut_ptr(),
     b"shutdown\x00" as *const u8 as *const libc::c_char,

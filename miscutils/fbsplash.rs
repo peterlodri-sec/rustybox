@@ -573,7 +573,7 @@ unsafe fn fb_drawimage() {
     let mut rem: libc::c_int = bb_common_bufsiz1
       .as_mut_ptr()
       .offset(COMMON_BUFSIZE as libc::c_int as isize)
-      .wrapping_offset_from(read_ptr) as libc::c_long as libc::c_int;
+      .offset_from(read_ptr) as libc::c_long as libc::c_int;
     if rem < 2i32 || fgets_unlocked(read_ptr, rem, theme_file).is_null() {
       crate::libbb::verror_msg::bb_error_msg_and_die(
         b"bad PPM file \'%s\'\x00" as *const u8 as *const libc::c_char,
@@ -712,7 +712,7 @@ pub unsafe fn fbsplash_main(
     as *mut *mut globals);
   *fresh0 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   // parse command line options
   fb_device = b"/dev/fb0\x00" as *const u8 as *const libc::c_char;
   cfg_filename = std::ptr::null();

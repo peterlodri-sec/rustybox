@@ -476,7 +476,7 @@ unsafe extern "C" fn tftp_protocol(
           if blksize == 512i32 && want_transfer_size == 0 {
             current_block = 1653815207292225316;
           } else if ((&mut *xbuf.offset((io_bufsize - 1i32) as isize) as *mut libc::c_char)
-            .wrapping_offset_from(cp) as libc::c_long as libc::c_ulong)
+            .offset_from(cp) as libc::c_long as libc::c_ulong)
             < (::std::mem::size_of::<[libc::c_char; 21]>() as libc::c_ulong).wrapping_add(
               (::std::mem::size_of::<off_t>() as libc::c_ulong).wrapping_mul(3i32 as libc::c_ulong),
             )
@@ -564,12 +564,7 @@ unsafe extern "C" fn tftp_protocol(
                       | (__x as libc::c_int & 0xffi32) << 8i32)
                       as libc::c_ushort
                   } else {
-                    let fresh1 = &mut __v;
-                    let fresh2;
-                    let fresh3 = __x;
-                    llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh2) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh1, fresh3)) : "cc");
-                    c2rust_asm_casts::AsmCast::cast_out(fresh1, fresh3, fresh2);
+                    __v = (__x).swap_bytes();
                   }
                   __v
                 };
@@ -616,16 +611,11 @@ unsafe extern "C" fn tftp_protocol(
                       | (__x as libc::c_int & 0xffi32) << 8i32)
                       as libc::c_ushort
                   } else {
-                    let fresh5 = &mut __v;
-                    let fresh6;
-                    let fresh7 = __x;
-                    llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh6) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh5, fresh7)) : "cc");
-                    c2rust_asm_casts::AsmCast::cast_out(fresh5, fresh7, fresh6);
+                    __v = (__x).swap_bytes();
                   }
                   __v
                 };
-                send_len = cp.wrapping_offset_from(xbuf) as libc::c_long as libc::c_int;
+                send_len = cp.offset_from(xbuf) as libc::c_long as libc::c_int;
                 /* Send packet */
                 /* NB: send_len value is preserved in code below
                  * for potential resend */
@@ -722,12 +712,7 @@ unsafe extern "C" fn tftp_protocol(
                                 | (__x as libc::c_int & 0xffi32) << 8i32)
                                 as libc::c_ushort
                             } else {
-                              let fresh8 = &mut __v;
-                              let fresh9;
-                              let fresh10 = __x;
-                              llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh9) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh8, fresh10)) : "cc");
-                              c2rust_asm_casts::AsmCast::cast_out(fresh8, fresh10, fresh9);
+                              __v = (__x).swap_bytes();
                             }
                             __v
                           };
@@ -739,12 +724,7 @@ unsafe extern "C" fn tftp_protocol(
                                 | (__x as libc::c_int & 0xffi32) << 8i32)
                                 as libc::c_ushort
                             } else {
-                              let fresh11 = &mut __v;
-                              let fresh12;
-                              let fresh13 = __x;
-                              llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh12) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh11, fresh13)) : "cc");
-                              c2rust_asm_casts::AsmCast::cast_out(fresh11, fresh13, fresh12);
+                              __v = (__x).swap_bytes();
                             }
                             __v
                           };
@@ -1181,12 +1161,7 @@ pub unsafe fn tftpd_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_cha
       __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
         as libc::c_ushort
     } else {
-      let fresh21 = &mut __v;
-      let fresh22;
-      let fresh23 = __x;
-      llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh22) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh21, fresh23)) : "cc");
-      c2rust_asm_casts::AsmCast::cast_out(fresh21, fresh23, fresh22);
+      __v = (__x).swap_bytes();
     }
     __v
   }) as libc::c_int;
@@ -1232,7 +1207,7 @@ pub unsafe fn tftpd_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_cha
           .block_buf
           .as_mut_ptr()
           .offset(result as isize)
-          .wrapping_offset_from(opt_str) as libc::c_long
+          .offset_from(opt_str) as libc::c_long
           as libc::c_int;
         if opt_len > 0 {
           res = tftp_get_option(

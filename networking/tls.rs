@@ -745,11 +745,11 @@ unsafe extern "C" fn hmac_sha_precomputed_v(
   /* pre->hashed_key_xor_opad contains unclosed "H((key XOR opad) +" state */
   /* calculate out = H((key XOR ipad) + text) */
   {
-    text = va.arg::<*mut u8>();
+    text = va.next_arg::<*mut u8>();
     if text.is_null() {
       break;
     }
-    let mut text_size: libc::c_uint = va.arg::<libc::c_uint>();
+    let mut text_size: libc::c_uint = va.next_arg::<libc::c_uint>();
     crate::libbb::hash_md5_sha::md5_hash(
       &mut (*pre).hashed_key_xor_ipad,
       text as *const libc::c_void,
@@ -788,11 +788,11 @@ unsafe extern "C" fn hmac_sha_precomputed(
       hash: [0; 8],
     },
   };
-  let mut va: ::std::ffi::VaListImpl;
+  let mut va: ::std::ffi::VaList;
   let mut len: libc::c_uint = 0;
   va = args.clone();
   pre = *pre_init;
-  len = hmac_sha_precomputed_v(&mut pre, out, va.as_va_list());
+  len = hmac_sha_precomputed_v(&mut pre, out, va);
   return len;
 }
 unsafe extern "C" fn hmac(
@@ -815,11 +815,11 @@ unsafe extern "C" fn hmac(
       hash: [0; 8],
     },
   };
-  let mut va: ::std::ffi::VaListImpl;
+  let mut va: ::std::ffi::VaList;
   let mut len: libc::c_uint = 0;
   va = args.clone();
   hmac_begin(&mut pre, key, key_size);
-  len = hmac_sha_precomputed_v(&mut pre, out, va.as_va_list());
+  len = hmac_sha_precomputed_v(&mut pre, out, va);
   return len;
 }
 // RFC 5246:
@@ -1065,12 +1065,7 @@ unsafe extern "C" fn xwrite_encrypted_and_hmac_signed(
           | (__x_0 as libc::c_ulonglong & 0xff00u64) << 40i32
           | (__x_0 as libc::c_ulonglong & 0xffu64) << 56i32) as u64
       } else {
-        let fresh5 = &mut __v_0;
-        let fresh6;
-        let fresh7 = __x_0;
-        llvm_asm!("bswap ${0:q}" : "=r" (fresh6) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh5, fresh7)) :);
-        c2rust_asm_casts::AsmCast::cast_out(fresh5, fresh7, fresh6);
+        __v_0 = (__x_0).swap_bytes();
       }
       __v_0
     });
@@ -1084,12 +1079,7 @@ unsafe extern "C" fn xwrite_encrypted_and_hmac_signed(
         | (__x as libc::c_ulonglong & 0xff00u64) << 40i32
         | (__x as libc::c_ulonglong & 0xffu64) << 56i32) as u64
     } else {
-      let fresh8 = &mut __v;
-      let fresh9;
-      let fresh10 = __x;
-      llvm_asm!("bswap ${0:q}" : "=r" (fresh9) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh8, fresh10)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh8, fresh10, fresh9);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -1277,12 +1267,7 @@ unsafe extern "C" fn xwrite_encrypted_aesgcm(
           | (__x_0 as libc::c_ulonglong & 0xff00u64) << 40i32
           | (__x_0 as libc::c_ulonglong & 0xffu64) << 56i32) as u64
       } else {
-        let fresh12 = &mut __v_0;
-        let fresh13;
-        let fresh14 = __x_0;
-        llvm_asm!("bswap ${0:q}" : "=r" (fresh13) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh12, fresh14)) :);
-        c2rust_asm_casts::AsmCast::cast_out(fresh12, fresh14, fresh13);
+        __v_0 = (__x_0).swap_bytes();
       }
       __v_0
     });
@@ -1296,12 +1281,7 @@ unsafe extern "C" fn xwrite_encrypted_aesgcm(
         | (__x as libc::c_ulonglong & 0xff00u64) << 40i32
         | (__x as libc::c_ulonglong & 0xffu64) << 56i32) as u64
     } else {
-      let fresh15 = &mut __v;
-      let fresh16;
-      let fresh17 = __x;
-      llvm_asm!("bswap ${0:q}" : "=r" (fresh16) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh15, fresh17)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh15, fresh17, fresh16);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -1319,12 +1299,7 @@ unsafe extern "C" fn xwrite_encrypted_aesgcm(
           | (__x & 0xff00i32 as libc::c_uint) << 8i32
           | (__x & 0xffi32 as libc::c_uint) << 24i32
       } else {
-        let fresh18 = &mut __v;
-        let fresh19;
-        let fresh20 = __x;
-        llvm_asm!("bswap $0" : "=r" (fresh19) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh18, fresh20)) :);
-        c2rust_asm_casts::AsmCast::cast_out(fresh18, fresh20, fresh19);
+        __v = (__x).swap_bytes();
       }
       __v
     };
@@ -1362,12 +1337,7 @@ unsafe extern "C" fn xwrite_encrypted_aesgcm(
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh21 = &mut __v;
-      let fresh22;
-      let fresh23 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh22) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh21, fresh23)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh21, fresh23, fresh22);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -1511,12 +1481,7 @@ unsafe extern "C" fn tls_aesgcm_decrypt(
           | (__x & 0xff00i32 as libc::c_uint) << 8i32
           | (__x & 0xffi32 as libc::c_uint) << 24i32
       } else {
-        let fresh24 = &mut __v;
-        let fresh25;
-        let fresh26 = __x;
-        llvm_asm!("bswap $0" : "=r" (fresh25) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh24, fresh26)) :);
-        c2rust_asm_casts::AsmCast::cast_out(fresh24, fresh26, fresh25);
+        __v = (__x).swap_bytes();
       }
       __v
     };
@@ -1767,7 +1732,7 @@ unsafe extern "C" fn get_der_len(
 ) -> libc::c_uint {
   let mut len: libc::c_uint = 0;
   let mut len1: libc::c_uint = 0;
-  if (end.wrapping_offset_from(der) as libc::c_long) < 2i32 as libc::c_long {
+  if (end.offset_from(der) as libc::c_long) < 2i32 as libc::c_long {
     crate::libbb::xfunc_die::xfunc_die();
   }
   //	if ((der[0] & 0x1f) == 0x1f) /* not single-byte item code? */
@@ -1776,7 +1741,7 @@ unsafe extern "C" fn get_der_len(
   if len >= 0x80i32 as libc::c_uint {
     /* no, it's long */
     if len == 0x80i32 as libc::c_uint
-      || (end.wrapping_offset_from(der) as libc::c_long)
+      || (end.offset_from(der) as libc::c_long)
         < len.wrapping_sub(0x7ei32 as libc::c_uint) as libc::c_int as libc::c_long
     {
       /* 0x80 is "0 bytes of len", invalid DER: must use short len if can */
@@ -1802,7 +1767,7 @@ unsafe extern "C" fn get_der_len(
     len = len1
   }
   der = der.offset(2);
-  if (end.wrapping_offset_from(der) as libc::c_long) < len as libc::c_int as libc::c_long {
+  if (end.offset_from(der) as libc::c_long) < len as libc::c_int as libc::c_long {
     crate::libbb::xfunc_die::xfunc_die();
   }
   *bodyp = der;
@@ -2010,7 +1975,7 @@ unsafe extern "C" fn find_key_in_der_cert(
     /* enter subjectPublicKeyInfo.publicKey */
     //die_if_not_this_der_type(der, end, 0x03); /* must be BITSTRING */
     der = enter_der_item(der, &mut end);
-    if (end.wrapping_offset_from(der) as libc::c_long) < 14i32 as libc::c_long {
+    if (end.offset_from(der) as libc::c_long) < 14i32 as libc::c_long {
       crate::libbb::xfunc_die::xfunc_die();
     }
     /* example format:
@@ -2417,12 +2382,7 @@ unsafe extern "C" fn process_server_key(mut tls: *mut tls_state_t, mut len: libc
           | (__x & 0xff00i32 as libc::c_uint) << 8i32
           | (__x & 0xffi32 as libc::c_uint) << 24i32
       } else {
-        let fresh29 = &mut __v;
-        let fresh30;
-        let fresh31 = __x;
-        llvm_asm!("bswap $0" : "=r" (fresh30) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh29, fresh31)) :);
-        c2rust_asm_casts::AsmCast::cast_out(fresh29, fresh31, fresh30);
+        __v = (__x).swap_bytes();
       }
       __v
     })

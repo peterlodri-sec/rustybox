@@ -503,16 +503,16 @@ unsafe fn not_const_pp(mut p: *const libc::c_void) -> *mut libc::c_void {
   return p as *mut libc::c_void;
 }
 static mut tokenlist: [libc::c_char; 448] = [
-  1, 40, -1, 1, 41, -1, 1, 47, -1, 2, 62, 62, 1, 62, 1, 124, -1, 2, 43, 43, 2, 45, 45, -1, 2, 43,
-  43, 2, 45, 45, 1, 36, -1, 2, 61, 61, 1, 61, 2, 43, 61, 2, 45, 61, 2, 42, 61, 2, 47, 61, 2, 37,
+  1, 40, 255u8 as libc::c_char, 1, 41, 255u8 as libc::c_char, 1, 47, 255u8 as libc::c_char, 2, 62, 62, 1, 62, 1, 124, 255u8 as libc::c_char, 2, 43, 43, 2, 45, 45, 255u8 as libc::c_char, 2, 43,
+  43, 2, 45, 45, 1, 36, 255u8 as libc::c_char, 2, 61, 61, 1, 61, 2, 43, 61, 2, 45, 61, 2, 42, 61, 2, 47, 61, 2, 37,
   61, 2, 94, 61, 1, 43, 1, 45, 3, 42, 42, 61, 2, 42, 42, 1, 47, 1, 37, 1, 94, 1, 42, 2, 33, 61, 2,
-  62, 61, 2, 60, 61, 1, 62, 1, 60, 2, 33, 126, 1, 126, 2, 38, 38, 2, 124, 124, 1, 63, 1, 58, -1, 2,
-  105, 110, -1, 1, 44, -1, 1, 124, -1, 1, 43, 1, 45, 1, 33, -1, 1, 93, -1, 1, 123, -1, 1, 125, -1,
-  1, 59, -1, 1, 10, -1, 2, 105, 102, 2, 100, 111, 3, 102, 111, 114, 5, 98, 114, 101, 97, 107, 8,
+  62, 61, 2, 60, 61, 1, 62, 1, 60, 2, 33, 126, 1, 126, 2, 38, 38, 2, 124, 124, 1, 63, 1, 58, 255u8 as libc::c_char, 2,
+  105, 110, 255u8 as libc::c_char, 1, 44, 255u8 as libc::c_char, 1, 124, 255u8 as libc::c_char, 1, 43, 1, 45, 1, 33, 255u8 as libc::c_char, 1, 93, 255u8 as libc::c_char, 1, 123, 255u8 as libc::c_char, 1, 125, 255u8 as libc::c_char,
+  1, 59, 255u8 as libc::c_char, 1, 10, 255u8 as libc::c_char, 2, 105, 102, 2, 100, 111, 3, 102, 111, 114, 5, 98, 114, 101, 97, 107, 8,
   99, 111, 110, 116, 105, 110, 117, 101, 6, 100, 101, 108, 101, 116, 101, 5, 112, 114, 105, 110,
   116, 6, 112, 114, 105, 110, 116, 102, 4, 110, 101, 120, 116, 8, 110, 101, 120, 116, 102, 105,
-  108, 101, 6, 114, 101, 116, 117, 114, 110, 4, 101, 120, 105, 116, -1, 5, 119, 104, 105, 108, 101,
-  -1, 4, 101, 108, 115, 101, -1, 3, 97, 110, 100, 5, 99, 111, 109, 112, 108, 6, 108, 115, 104, 105,
+  108, 101, 6, 114, 101, 116, 117, 114, 110, 4, 101, 120, 105, 116, 255u8 as libc::c_char, 5, 119, 104, 105, 108, 101,
+  255u8 as libc::c_char, 4, 101, 108, 115, 101, 255u8 as libc::c_char, 3, 97, 110, 100, 5, 99, 111, 109, 112, 108, 6, 108, 115, 104, 105,
   102, 116, 2, 111, 114, 6, 114, 115, 104, 105, 102, 116, 3, 120, 111, 114, 5, 99, 108, 111, 115,
   101, 6, 115, 121, 115, 116, 101, 109, 6, 102, 102, 108, 117, 115, 104, 5, 97, 116, 97, 110, 50,
   3, 99, 111, 115, 3, 101, 120, 112, 3, 105, 110, 116, 3, 108, 111, 103, 4, 114, 97, 110, 100, 3,
@@ -521,8 +521,8 @@ static mut tokenlist: [libc::c_char; 448] = [
   105, 116, 7, 115, 112, 114, 105, 110, 116, 102, 3, 115, 117, 98, 6, 115, 117, 98, 115, 116, 114,
   7, 115, 121, 115, 116, 105, 109, 101, 8, 115, 116, 114, 102, 116, 105, 109, 101, 6, 109, 107,
   116, 105, 109, 101, 7, 116, 111, 108, 111, 119, 101, 114, 7, 116, 111, 117, 112, 112, 101, 114,
-  -1, 6, 108, 101, 110, 103, 116, 104, -1, 7, 103, 101, 116, 108, 105, 110, 101, -1, 4, 102, 117,
-  110, 99, 8, 102, 117, 110, 99, 116, 105, 111, 110, -1, 5, 66, 69, 71, 73, 78, -1, 3, 69, 78, 68,
+  255u8 as libc::c_char, 6, 108, 101, 110, 103, 116, 104, 255u8 as libc::c_char, 7, 103, 101, 116, 108, 105, 110, 101, 255u8 as libc::c_char, 4, 102, 117,
+  110, 99, 8, 102, 117, 110, 99, 116, 105, 111, 110, 255u8 as libc::c_char, 5, 66, 69, 71, 73, 78, 255u8 as libc::c_char, 3, 69, 78, 68,
   0,
 ];
 static mut tokeninfo: [u32; 100] = [
@@ -664,7 +664,7 @@ static mut vNames: [libc::c_char; 107] = [
   73, 82, 79, 78, 0, 0, 0,
 ];
 static mut vValues: [libc::c_char; 25] = [
-  37, 46, 54, 103, 0, 37, 46, 54, 103, 0, 32, 0, 32, 0, 10, 0, 10, 0, 0, 0, 28, 0, 0, -1, 0,
+  37, 46, 54, 103, 0, 37, 46, 54, 103, 0, 32, 0, 32, 0, 10, 0, 10, 0, 0, 0, 28, 0, 0, 255u8 as libc::c_char, 0,
 ];
 static mut PRIMES: [u16; 5] = [
   251i32 as u16,
@@ -1111,7 +1111,7 @@ unsafe fn nvalloc(mut n: libc::c_int) -> *mut var {
     pb = (*ptr_to_globals.offset(-1i32 as isize)).g_cb;
     if (*(*ptr_to_globals.offset(-1i32 as isize)).g_cb)
       .pos
-      .wrapping_offset_from(
+      .offset_from(
         (*(*ptr_to_globals.offset(-1i32 as isize)).g_cb)
           .nv
           .as_mut_ptr(),
@@ -2503,11 +2503,11 @@ unsafe fn handle_special(mut v: *mut var) {
     setvar_i(
       (*(ptr_to_globals as *mut globals2)).intvar[NF as libc::c_int as usize],
       if n as libc::c_long
-        > v.wrapping_offset_from((*ptr_to_globals.offset(-1i32 as isize)).Fields) as libc::c_long
+        > v.offset_from((*ptr_to_globals.offset(-1i32 as isize)).Fields) as libc::c_long
       {
         n as libc::c_long
       } else {
-        (v.wrapping_offset_from((*ptr_to_globals.offset(-1i32 as isize)).Fields) as libc::c_long)
+        (v.offset_from((*ptr_to_globals.offset(-1i32 as isize)).Fields) as libc::c_long)
           + 1
       } as libc::c_double,
     );
@@ -2644,7 +2644,7 @@ unsafe fn awk_getline(mut rsm: *mut rstream, mut v: *mut var) -> libc::c_int {
           ) as *mut libc::c_char
         }
         if !s.is_null() {
-          eo = s.wrapping_offset_from(b) as libc::c_long as libc::c_int;
+          eo = s.offset_from(b) as libc::c_long as libc::c_int;
           so = eo;
           eo += 1;
           break;
@@ -2658,7 +2658,7 @@ unsafe fn awk_getline(mut rsm: *mut rstream, mut v: *mut var) -> libc::c_int {
           b"\n\n\x00" as *const u8 as *const libc::c_char,
         );
         if !s.is_null() {
-          eo = s.wrapping_offset_from(b) as libc::c_long as libc::c_int;
+          eo = s.offset_from(b) as libc::c_long as libc::c_int;
           so = eo;
           while *b.offset(eo as isize) as libc::c_int == '\n' as i32 {
             eo += 1
@@ -2807,7 +2807,7 @@ unsafe fn awk_printf(mut n: *mut node) -> *mut libc::c_char {
       }
       f = f.offset(1)
     }
-    incr = (f.wrapping_offset_from(s) as libc::c_long + 240i32 as libc::c_long) as libc::c_int;
+    incr = (f.offset_from(s) as libc::c_long + 240i32 as libc::c_long) as libc::c_int;
     b = qrealloc(b, incr + i, &mut bsize);
     c = *f;
     if c as libc::c_int != '\u{0}' as i32 {
@@ -3194,7 +3194,7 @@ unsafe fn exec_builtin(mut op: *mut node, mut res: *mut var) -> *mut var {
         if (*ptr_to_globals.offset(-1i32 as isize)).icase == 0 {
           let mut s_2: *mut libc::c_char = strstr(as_0[0], as_0[1]);
           if !s_2.is_null() {
-            n = (s_2.wrapping_offset_from(as_0[0]) as libc::c_long + 1) as libc::c_int
+            n = (s_2.offset_from(as_0[0]) as libc::c_long + 1) as libc::c_int
           }
         } else {
           /* this piece of code is terribly slow and
@@ -3582,7 +3582,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -4177,7 +4177,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -4748,7 +4748,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -5319,7 +5319,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -5890,7 +5890,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -6461,7 +6461,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -7032,7 +7032,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -7603,7 +7603,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -8174,7 +8174,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -8745,7 +8745,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -9316,7 +9316,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -9887,7 +9887,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -10458,7 +10458,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -11029,7 +11029,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -11600,7 +11600,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -12171,7 +12171,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -12742,7 +12742,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -13313,7 +13313,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -13884,7 +13884,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -14455,7 +14455,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -15026,7 +15026,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -15597,7 +15597,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -16168,7 +16168,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -16739,7 +16739,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -17310,7 +17310,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -17881,7 +17881,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -18452,7 +18452,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -19023,7 +19023,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -19594,7 +19594,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -20165,7 +20165,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -20736,7 +20736,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.wrapping_offset_from(vbeg) as libc::c_long
+                if v_1.offset_from(vbeg) as libc::c_long
                   >= (*(*op).r.f).nargs as libc::c_long
                 {
                   break;
@@ -21159,7 +21159,7 @@ unsafe fn is_assignment(mut expr: *const libc::c_char) -> libc::c_int {
     return 0;
   }
   exprc = crate::libbb::xfuncs_printf::xstrdup(expr);
-  val = exprc.offset(val.wrapping_offset_from(expr) as libc::c_long as isize);
+  val = exprc.offset(val.offset_from(expr) as libc::c_long as isize);
   let fresh63 = val;
   val = val.offset(1);
   *fresh63 = '\u{0}' as i32 as libc::c_char;
@@ -21254,7 +21254,7 @@ pub unsafe fn awk_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char)
   ) as *mut libc::c_char)
     .offset(::std::mem::size_of::<globals>() as libc::c_ulong as isize)
     as *mut libc::c_void as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   (*(ptr_to_globals as *mut globals2)).next_token__ltclass = (1i32 << 14i32 | 1i32 << 15i32) as u32;
   (*(ptr_to_globals as *mut globals2)).evaluate__seed = 1i32 as libc::c_uint;
   /* Undo busybox.c, or else strtod may eat ','! This breaks parsing:

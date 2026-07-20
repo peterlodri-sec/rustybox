@@ -269,14 +269,14 @@ pub unsafe fn nbdclient_main(
         (0u32 << 0 + 8i32 + 8i32 + 14i32
           | (0xabi32 << 0 + 8i32) as libc::c_uint
           | (8i32 << 0) as libc::c_uint
-          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as libc::c_ulong,
+          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as _,
       );
       ioctl(
         nbd,
         (0u32 << 0 + 8i32 + 8i32 + 14i32
           | (0xabi32 << 0 + 8i32) as libc::c_uint
           | (4i32 << 0) as libc::c_uint
-          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as libc::c_ulong,
+          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as _,
       );
       return 0;
     }
@@ -373,12 +373,7 @@ pub unsafe fn nbdclient_main(
             | (__x as libc::c_ulonglong & 0xff00u64) << 40i32
             | (__x as libc::c_ulonglong & 0xffu64) << 56i32) as u64
         } else {
-          let fresh0 = &mut __v;
-          let fresh1;
-          let fresh2 = __x;
-          llvm_asm!("bswap ${0:q}" : "=r" (fresh1) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh0, fresh2)) :);
-          c2rust_asm_casts::AsmCast::cast_out(fresh0, fresh2, fresh1);
+          __v = (__x).swap_bytes();
         }
         __v
       })
@@ -388,7 +383,7 @@ pub unsafe fn nbdclient_main(
         (0u32 << 0 + 8i32 + 8i32 + 14i32
           | (0xabi32 << 0 + 8i32) as libc::c_uint
           | (1i32 << 0) as libc::c_uint
-          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as libc::c_ulong,
+          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as _,
         blksize as libc::c_ulong,
       );
       ioctl(
@@ -396,7 +391,7 @@ pub unsafe fn nbdclient_main(
         (0u32 << 0 + 8i32 + 8i32 + 14i32
           | (0xabi32 << 0 + 8i32) as libc::c_uint
           | (7i32 << 0) as libc::c_uint
-          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as libc::c_ulong,
+          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as _,
         size_blocks,
       );
       ioctl(
@@ -404,7 +399,7 @@ pub unsafe fn nbdclient_main(
         (0u32 << 0 + 8i32 + 8i32 + 14i32
           | (0xabi32 << 0 + 8i32) as libc::c_uint
           | (4i32 << 0) as libc::c_uint
-          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as libc::c_ulong,
+          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as _,
       );
       ro = (old_nbd_header.flags
         & ({
@@ -414,12 +409,7 @@ pub unsafe fn nbdclient_main(
             __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
               as libc::c_ushort
           } else {
-            let fresh3 = &mut __v;
-            let fresh4;
-            let fresh5 = __x;
-            llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh4) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh3, fresh5)) : "cc");
-            c2rust_asm_casts::AsmCast::cast_out(fresh3, fresh5, fresh4);
+            __v = (__x).swap_bytes();
           }
           __v
         }) as libc::c_uint
@@ -452,12 +442,7 @@ pub unsafe fn nbdclient_main(
             | (__x & 0xff00i32 as libc::c_uint) << 8i32
             | (__x & 0xffi32 as libc::c_uint) << 24i32
         } else {
-          let fresh6 = &mut __v;
-          let fresh7;
-          let fresh8 = __x;
-          llvm_asm!("bswap $0" : "=r" (fresh7) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh6, fresh8)) :);
-          c2rust_asm_casts::AsmCast::cast_out(fresh6, fresh8, fresh7);
+          __v = (__x).swap_bytes();
         }
         __v
       };
@@ -471,12 +456,7 @@ pub unsafe fn nbdclient_main(
             | (__x & 0xff00i32 as libc::c_uint) << 8i32
             | (__x & 0xffi32 as libc::c_uint) << 24i32
         } else {
-          let fresh9 = &mut __v;
-          let fresh10;
-          let fresh11 = __x;
-          llvm_asm!("bswap $0" : "=r" (fresh10) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh9, fresh11)) :);
-          c2rust_asm_casts::AsmCast::cast_out(fresh9, fresh11, fresh10);
+          __v = (__x).swap_bytes();
         }
         __v
       };
@@ -508,12 +488,7 @@ pub unsafe fn nbdclient_main(
             | (__x as libc::c_ulonglong & 0xff00u64) << 40i32
             | (__x as libc::c_ulonglong & 0xffu64) << 56i32) as u64
         } else {
-          let fresh12 = &mut __v;
-          let fresh13;
-          let fresh14 = __x;
-          llvm_asm!("bswap ${0:q}" : "=r" (fresh13) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh12, fresh14)) :);
-          c2rust_asm_casts::AsmCast::cast_out(fresh12, fresh14, fresh13);
+          __v = (__x).swap_bytes();
         }
         __v
       })
@@ -523,7 +498,7 @@ pub unsafe fn nbdclient_main(
         (0u32 << 0 + 8i32 + 8i32 + 14i32
           | (0xabi32 << 0 + 8i32) as libc::c_uint
           | (1i32 << 0) as libc::c_uint
-          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as libc::c_ulong,
+          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as _,
         blksize as libc::c_ulong,
       );
       ioctl(
@@ -531,7 +506,7 @@ pub unsafe fn nbdclient_main(
         (0u32 << 0 + 8i32 + 8i32 + 14i32
           | (0xabi32 << 0 + 8i32) as libc::c_uint
           | (7i32 << 0) as libc::c_uint
-          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as libc::c_ulong,
+          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as _,
         size_blocks,
       );
       ioctl(
@@ -539,14 +514,14 @@ pub unsafe fn nbdclient_main(
         (0u32 << 0 + 8i32 + 8i32 + 14i32
           | (0xabi32 << 0 + 8i32) as libc::c_uint
           | (4i32 << 0) as libc::c_uint
-          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as libc::c_ulong,
+          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as _,
       );
       ioctl(
         nbd_0,
         (0u32 << 0 + 8i32 + 8i32 + 14i32
           | (0xabi32 << 0 + 8i32) as libc::c_uint
           | (10i32 << 0) as libc::c_uint
-          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as libc::c_ulong,
+          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as _,
         ({
           let mut __v: libc::c_ushort = 0;
           let mut __x: libc::c_ushort = new_nbd_header.transmission_flags;
@@ -554,12 +529,7 @@ pub unsafe fn nbdclient_main(
             __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
               as libc::c_ushort
           } else {
-            let fresh15 = &mut __v;
-            let fresh16;
-            let fresh17 = __x;
-            llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh16) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh15, fresh17)) : "cc");
-            c2rust_asm_casts::AsmCast::cast_out(fresh15, fresh17, fresh16);
+            __v = (__x).swap_bytes();
           }
           __v
         }) as libc::c_int,
@@ -572,12 +542,7 @@ pub unsafe fn nbdclient_main(
             __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
               as libc::c_ushort
           } else {
-            let fresh18 = &mut __v;
-            let fresh19;
-            let fresh20 = __x;
-            llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh19) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh18, fresh20)) : "cc");
-            c2rust_asm_casts::AsmCast::cast_out(fresh18, fresh20, fresh19);
+            __v = (__x).swap_bytes();
           }
           __v
         }) as libc::c_int
@@ -589,7 +554,7 @@ pub unsafe fn nbdclient_main(
       (0u32 << 0 + 8i32 + 8i32 + 14i32
         | (0x12i32 << 0 + 8i32) as libc::c_uint
         | (93i32 << 0) as libc::c_uint
-        | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as libc::c_ulong,
+        | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as _,
       &mut ro as *mut libc::c_int,
     ) < 0
     {
@@ -603,7 +568,7 @@ pub unsafe fn nbdclient_main(
         (0u32 << 0 + 8i32 + 8i32 + 14i32
           | (0xabi32 << 0 + 8i32) as libc::c_uint
           | (9i32 << 0) as libc::c_uint
-          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as libc::c_ulong,
+          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as _,
         timeout as libc::c_ulong,
       ) != 0
       {
@@ -617,7 +582,7 @@ pub unsafe fn nbdclient_main(
       (0u32 << 0 + 8i32 + 8i32 + 14i32
         | (0xabi32 << 0 + 8i32) as libc::c_uint
         | (0i32 << 0) as libc::c_uint
-        | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as libc::c_ulong,
+        | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as _,
       sock,
     ) != 0
     {
@@ -664,7 +629,7 @@ pub unsafe fn nbdclient_main(
       (0u32 << 0 + 8i32 + 8i32 + 14i32
         | (0xabi32 << 0 + 8i32) as libc::c_uint
         | (3i32 << 0) as libc::c_uint
-        | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as libc::c_ulong,
+        | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as _,
     ) >= 0
       || *bb_errno == 53i32
     {
@@ -674,14 +639,14 @@ pub unsafe fn nbdclient_main(
         (0u32 << 0 + 8i32 + 8i32 + 14i32
           | (0xabi32 << 0 + 8i32) as libc::c_uint
           | (5i32 << 0) as libc::c_uint
-          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as libc::c_ulong,
+          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as _,
       );
       ioctl(
         nbd_0,
         (0u32 << 0 + 8i32 + 8i32 + 14i32
           | (0xabi32 << 0 + 8i32) as libc::c_uint
           | (4i32 << 0) as libc::c_uint
-          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as libc::c_ulong,
+          | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as _,
       );
       break;
     } else {

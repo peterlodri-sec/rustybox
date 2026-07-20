@@ -370,12 +370,7 @@ unsafe extern "C" fn pass_to_client(
           | (__x & 0xff00i32 as libc::c_uint) << 8i32
           | (__x & 0xffi32 as libc::c_uint) << 24i32
       } else {
-        let fresh5 = &mut __v;
-        let fresh6;
-        let fresh7 = __x;
-        llvm_asm!("bswap $0" : "=r" (fresh6) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh5, fresh7)) :);
-        c2rust_asm_casts::AsmCast::cast_out(fresh5, fresh7, fresh6);
+        __v = (__x).swap_bytes();
       }
       __v
     })
@@ -389,12 +384,7 @@ unsafe extern "C" fn pass_to_client(
           | (__x & 0xff00i32 as libc::c_uint) << 8i32
           | (__x & 0xffi32 as libc::c_uint) << 24i32
       } else {
-        let fresh8 = &mut __v;
-        let fresh9;
-        let fresh10 = __x;
-        llvm_asm!("bswap $0" : "=r" (fresh9) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh8, fresh10)) :);
-        c2rust_asm_casts::AsmCast::cast_out(fresh8, fresh10, fresh9);
+        __v = (__x).swap_bytes();
       }
       __v
     }
@@ -437,12 +427,7 @@ pub unsafe fn dhcprelay_main(
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh11 = &mut __v;
-      let fresh12;
-      let fresh13 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh12) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh11, fresh13)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh11, fresh13, fresh12);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -453,12 +438,7 @@ pub unsafe fn dhcprelay_main(
       __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
         as libc::c_ushort
     } else {
-      let fresh14 = &mut __v;
-      let fresh15;
-      let fresh16 = __x;
-      llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh15) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh14, fresh16)) : "cc");
-      c2rust_asm_casts::AsmCast::cast_out(fresh14, fresh16, fresh15);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -504,18 +484,11 @@ pub unsafe fn dhcprelay_main(
     let mut __d0: libc::c_int = 0;
     let mut __d1: libc::c_int = 0;
     let fresh17 = &mut __d0;
-    let fresh18;
     let fresh19 = &mut __d1;
-    let fresh20;
     let fresh21 = (::std::mem::size_of::<fd_set>() as libc::c_ulong)
       .wrapping_div(::std::mem::size_of::<__fd_mask>() as libc::c_ulong);
     let fresh22 = &mut *rfds.fds_bits.as_mut_ptr().offset(0) as *mut __fd_mask;
-    llvm_asm!("cld; rep; stosq" : "={cx}" (fresh18), "={di}" (fresh20) : "{ax}" (0i32),
-     "0" (c2rust_asm_casts::AsmCast::cast_in(fresh17, fresh21)), "1"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh19, fresh22)) : "memory" :
-     "volatile");
-    c2rust_asm_casts::AsmCast::cast_out(fresh17, fresh21, fresh18);
-    c2rust_asm_casts::AsmCast::cast_out(fresh19, fresh22, fresh20);
+    ::core::ptr::write_bytes(fresh22, 0u8, fresh21 as usize);
     i = 0;
     while i < num_sockets {
       rfds.fds_bits[(*fds.offset(i as isize)
@@ -641,7 +614,7 @@ pub unsafe fn dhcprelay_main(
             if crate::networking::udhcp::socket::udhcp_read_interface(
               *iface_list.offset(i as isize),
               0 as *mut libc::c_int,
-              &mut dhcp_msg.gateway_nip,
+              &raw mut dhcp_msg.gateway_nip,
               0 as *mut u8,
             ) != 0
             {

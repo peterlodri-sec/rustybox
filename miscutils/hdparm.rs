@@ -273,7 +273,7 @@ unsafe extern "C" fn ioctl_alt_func(
   mut alt: libc::c_int,
   mut string: *const libc::c_char,
 ) -> libc::c_int {
-  if ioctl(fd as libc::c_int, cmd as libc::c_ulong, args) == 0 {
+  if ioctl(fd as libc::c_int, cmd as _, args) == 0 {
     return 0;
   }
   *args.offset(0) = alt as libc::c_uchar;
@@ -1687,7 +1687,7 @@ unsafe extern "C" fn flush_buffer_cache()
   sleep(1i32 as libc::c_uint);
   if ioctl(
     fd as libc::c_int,
-    0x31fi32 as libc::c_ulong,
+    0x31fi32 as _,
     0 as *mut libc::c_void,
   ) != 0
     && *bb_errno != 22i32
@@ -1725,10 +1725,10 @@ unsafe extern "C" fn dev_size_mb() -> libc::c_uint
   if 0
     == ioctl(
       fd as libc::c_int,
-      (2u32 << 0 + 8i32 + 8i32 + 14i32
+      ((2u32 << 0 + 8i32 + 8i32 + 14i32
         | (0x12i32 << 0 + 8i32) as libc::c_uint
         | (114i32 << 0) as libc::c_uint) as libc::c_ulong
-        | (::std::mem::size_of::<size_t>() as libc::c_ulong) << 0 + 8i32 + 8i32,
+        | (::std::mem::size_of::<size_t>() as libc::c_ulong) << 0 + 8i32 + 8i32) as _,
       &mut u.blksize64 as *mut libc::c_ulonglong,
     )
   {
@@ -2484,7 +2484,7 @@ unsafe extern "C" fn process_dev(mut devname: *mut libc::c_char) {
     multcount = -1i32 as libc::c_long;
     if ioctl(
       fd as libc::c_int,
-      0x304i32 as libc::c_ulong,
+      0x304i32 as _,
       &mut multcount as *mut libc::c_long,
     ) != 0
     {
@@ -2816,7 +2816,7 @@ unsafe extern "C" fn process_dev(mut devname: *mut libc::c_char) {
     };
     if ioctl(
       fd as libc::c_int,
-      0x30di32 as libc::c_ulong,
+      0x30di32 as _,
       &mut id as *mut hd_driveid,
     ) == 0
     {

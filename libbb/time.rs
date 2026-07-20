@@ -219,7 +219,7 @@ pub unsafe fn parse_datestr(mut date_str: *const libc::c_char, mut ptm: *mut tm)
        * (IOW: this function assumes "touch -t" format).
        */
       let mut cur_year: libc::c_uint = (*ptm).tm_year as libc::c_uint;
-      let mut len: libc::c_int = strchrnul(date_str, '.' as i32).wrapping_offset_from(date_str)
+      let mut len: libc::c_int = strchrnul(date_str, '.' as i32).offset_from(date_str)
         as libc::c_long as libc::c_int;
       /* MM[.SS] */
       if len == 2i32

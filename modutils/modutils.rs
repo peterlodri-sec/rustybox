@@ -231,7 +231,7 @@ pub unsafe fn parse_cmdline_module_options(
     optlen += sprintf(
       options.offset(optlen as isize),
       fmt,
-      val.wrapping_offset_from(var) as libc::c_long as libc::c_int,
+      val.offset_from(var) as libc::c_long as libc::c_int,
       var,
       val,
     )

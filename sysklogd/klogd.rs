@@ -239,7 +239,7 @@ pub unsafe fn klogd_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_cha
           /* This line is incomplete */
           /* move it to the front of the buffer */
           crate::libbb::safe_strncpy::overlapping_strcpy(bb_common_bufsiz1.as_mut_ptr(), start);
-          used = newline.wrapping_offset_from(start) as libc::c_long as libc::c_int;
+          used = newline.offset_from(start) as libc::c_long as libc::c_int;
           if used < KLOGD_LOGBUF_SIZE as libc::c_int - 1i32 {
             break;
           }

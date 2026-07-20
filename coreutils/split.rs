@@ -234,7 +234,7 @@ pub unsafe fn split_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_cha
         ) as *mut libc::c_char;
         if !end.is_null() {
           remaining -= 1;
-          to_write = end.wrapping_offset_from(src) + 1
+          to_write = end.offset_from(src) + 1
         } else {
           to_write = bytes_read
         }

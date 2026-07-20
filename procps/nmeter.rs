@@ -226,7 +226,7 @@ unsafe extern "C" fn reset_outbuf() {
 unsafe extern "C" fn print_outbuf() {
   let mut sz: libc::c_int = (*ptr_to_globals)
     .cur_outbuf
-    .wrapping_offset_from(bb_common_bufsiz1.as_mut_ptr())
+    .offset_from(bb_common_bufsiz1.as_mut_ptr())
     as libc::c_long as libc::c_int;
   if sz > 0 {
     crate::libbb::xfuncs_printf::xwrite(
@@ -242,7 +242,7 @@ unsafe extern "C" fn put(mut s: *const libc::c_char) {
   let mut sz: libc::c_int = bb_common_bufsiz1
     .as_mut_ptr()
     .offset(COMMON_BUFSIZE as libc::c_int as isize)
-    .wrapping_offset_from(p) as libc::c_long as libc::c_int;
+    .offset_from(p) as libc::c_long as libc::c_int;
   while *s as libc::c_int != 0 && {
     sz -= 1;
     (sz) >= 0
@@ -314,7 +314,7 @@ unsafe extern "C" fn get_file(mut pf: *mut proc_file) -> *const libc::c_char {
     (*pf).last_gen = (*ptr_to_globals).gen;
     readfile_z(
       pf,
-      proc_name[pf.wrapping_offset_from(&mut (*ptr_to_globals).proc_stat) as libc::c_long as usize],
+      proc_name[pf.offset_from(&mut (*ptr_to_globals).proc_stat) as libc::c_long as usize],
     );
   }
   return (*pf).file;
@@ -431,7 +431,7 @@ unsafe extern "C" fn rdval_diskstats(
         /* skip entire line */
         } else {
           /* It is not. Remember the name for future checks */
-          devname_len = end.wrapping_offset_from(p) as libc::c_long as libc::c_uint;
+          devname_len = end.offset_from(p) as libc::c_long as libc::c_uint;
           if devname_len as libc::c_ulong
             > (::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong)
               .wrapping_sub(1i32 as libc::c_ulong)
@@ -1092,7 +1092,7 @@ pub unsafe fn nmeter_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_ch
     as *mut *mut globals);
   *fresh8 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   (*ptr_to_globals).cur_outbuf = bb_common_bufsiz1.as_mut_ptr();
   (*ptr_to_globals).final_char = '\n' as i32 as libc::c_char;
   (*ptr_to_globals).delta = 1000000i32;
@@ -1189,7 +1189,7 @@ pub unsafe fn nmeter_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_ch
     if p.is_null() {
       crate::libbb::appletlib::bb_show_usage();
     }
-    s = init_functions[p.wrapping_offset_from(options.as_ptr()) as libc::c_long as usize]
+    s = init_functions[p.offset_from(options.as_ptr()) as libc::c_long as usize]
       .expect("non-null function pointer")(param);
     if !s.is_null() {
       (*s).label = prev;

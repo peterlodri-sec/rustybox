@@ -425,7 +425,7 @@ unsafe fn vgetopt32(
     (*on_off).switch_on = 1u32 << c;
     s = s.offset(1);
     if *s as libc::c_int == ':' as i32 {
-      (*on_off).optarg = p.arg::<*mut *mut libc::c_void>();
+      (*on_off).optarg = p.next_arg::<*mut *mut libc::c_void>();
       if *s.offset(1) as libc::c_int == '+' as i32 || *s.offset(1) as libc::c_int == '*' as i32 {
         /* 'o:+' or 'o:*' */
         (*on_off).param_type = if *s.offset(1) as libc::c_int == '+' as i32 {
@@ -516,7 +516,7 @@ unsafe fn vgetopt32(
             (*on_off).opt_char = (*l_o).val as libc::c_uchar;
             (*on_off).switch_on = 1u32 << c;
             if (*l_o).has_arg != 0 {
-              (*on_off).optarg = p.arg::<*mut *mut libc::c_void>()
+              (*on_off).optarg = p.next_arg::<*mut *mut libc::c_void>()
             }
             c += 1
           }
@@ -591,7 +591,7 @@ unsafe fn vgetopt32(
                 s = s.offset(1)
               } else {
                 if c == *s as libc::c_int {
-                  (*on_off).counter = p.arg::<*mut libc::c_int>();
+                  (*on_off).counter = p.next_arg::<*mut libc::c_int>();
                   s = s.offset(1)
                 }
                 pair = on_off;
@@ -738,9 +738,9 @@ pub unsafe extern "C" fn getopt32(
   mut args: ...
 ) -> u32 {
   let mut opt: u32 = 0;
-  let mut p: ::std::ffi::VaListImpl;
+  let mut p: ::std::ffi::VaList;
   p = args.clone();
-  opt = vgetopt32(argv, applet_opts, 0 as *const libc::c_char, p.as_va_list());
+  opt = vgetopt32(argv, applet_opts, 0 as *const libc::c_char, p);
   return opt;
 }
 
@@ -1103,8 +1103,8 @@ pub unsafe extern "C" fn getopt32long(
   mut args: ...
 ) -> u32 {
   let mut opt: u32 = 0;
-  let mut p: ::std::ffi::VaListImpl;
+  let mut p: ::std::ffi::VaList;
   p = args.clone();
-  opt = vgetopt32(argv, applet_opts, longopts, p.as_va_list());
+  opt = vgetopt32(argv, applet_opts, longopts, p);
   return opt;
 }

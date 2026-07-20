@@ -63,7 +63,7 @@ pub unsafe fn get_console_fd_or_die() -> libc::c_int {
       arg = 0 as libc::c_char;
       if ioctl(
         choice_fd,
-        KDGKBTYPE as libc::c_int as libc::c_ulong,
+        KDGKBTYPE as libc::c_int as _,
         &mut arg as *mut libc::c_char,
       ) == 0
       {

@@ -769,7 +769,7 @@ unsafe extern "C" fn parse_conf(mut path: *const libc::c_char, mut flag: libc::c
       ch = *p0 as libc::c_uchar
     }
     *p = '\u{0}' as i32 as libc::c_char;
-    strlen_buf = p.wrapping_offset_from(buf.as_mut_ptr()) as libc::c_long as libc::c_uint;
+    strlen_buf = p.offset_from(buf.as_mut_ptr()) as libc::c_long as libc::c_uint;
     if strlen_buf == 0 as libc::c_uint {
       continue;
     }
@@ -907,7 +907,7 @@ unsafe extern "C" fn parse_conf(mut path: *const libc::c_char, mut flag: libc::c
           p_0 = (*cur)
             .before_colon
             .as_mut_ptr()
-            .offset(after_colon.wrapping_offset_from(buf.as_mut_ptr()) as libc::c_long as isize);
+            .offset(after_colon.offset_from(buf.as_mut_ptr()) as libc::c_long as isize);
           *p_0.offset(-1i32 as isize) = '\u{0}' as i32 as libc::c_char;
           (*cur).after_colon = p_0;
           if ch as libc::c_int == '.' as i32 {
@@ -938,14 +938,14 @@ unsafe extern "C" fn parse_conf(mut path: *const libc::c_char, mut flag: libc::c
             (*cur_0).before_colon.as_mut_ptr(),
             b"/%s%.*s\x00" as *const u8 as *const libc::c_char,
             path,
-            (after_colon.wrapping_offset_from(buf.as_mut_ptr()) as libc::c_long - 1) as libc::c_int,
+            (after_colon.offset_from(buf.as_mut_ptr()) as libc::c_long - 1) as libc::c_int,
             buf.as_mut_ptr(),
           );
           /* canonicalize it */
           p_1 = crate::libbb::simplify_path::bb_simplify_abs_path_inplace(
             (*cur_0).before_colon.as_mut_ptr(),
           );
-          file_len = p_1.wrapping_offset_from((*cur_0).before_colon.as_mut_ptr()) as libc::c_long
+          file_len = p_1.offset_from((*cur_0).before_colon.as_mut_ptr()) as libc::c_long
             as libc::c_uint;
           /* add "user:pass" after NUL */
           p_1 = p_1.offset(1);
@@ -2135,7 +2135,7 @@ unsafe extern "C" fn check_user_passwd(
           && strncmp(
             (*cur).after_colon,
             user_and_passwd,
-            (colon_after_user.wrapping_offset_from(user_and_passwd) as libc::c_long + 1)
+            (colon_after_user.offset_from(user_and_passwd) as libc::c_long + 1)
               as libc::c_ulong,
           ) != 0
         {
@@ -2233,7 +2233,7 @@ unsafe extern "C" fn check_user_passwd(
             if r == 0 {
               (*ptr_to_globals).remoteuser = crate::libbb::xfuncs_printf::xstrndup(
                 user_and_passwd,
-                strchrnul(user_and_passwd, ':' as i32).wrapping_offset_from(user_and_passwd)
+                strchrnul(user_and_passwd, ':' as i32).offset_from(user_and_passwd)
                   as libc::c_long as libc::c_int,
               );
               return 1i32;
@@ -2298,12 +2298,7 @@ unsafe extern "C" fn handle_incoming_and_exit(mut fromAddr: *const len_and_socka
           | (__x & 0xff00i32 as libc::c_uint) << 8i32
           | (__x & 0xffi32 as libc::c_uint) << 24i32
       } else {
-        let fresh14 = &mut __v;
-        let fresh15;
-        let fresh16 = __x;
-        llvm_asm!("bswap $0" : "=r" (fresh15) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh14, fresh16)) :);
-        c2rust_asm_casts::AsmCast::cast_out(fresh14, fresh16, fresh15);
+        __v = (__x).swap_bytes();
       }
       __v
     }
@@ -2425,7 +2420,7 @@ unsafe extern "C" fn handle_incoming_and_exit(mut fromAddr: *const len_and_socka
   /* Copy URL from after "GET "/"POST " to stack-allocated char[] */
   let mut fresh25 = ::std::vec::from_elem(
     0,
-    ((HTTP_slash.wrapping_offset_from(urlp) as libc::c_long + 2i32 as libc::c_long)
+    ((HTTP_slash.offset_from(urlp) as libc::c_long + 2i32 as libc::c_long)
       as libc::c_ulong)
       .wrapping_add(strlen((*ptr_to_globals).index_page)) as usize,
   );
@@ -2808,7 +2803,7 @@ unsafe extern "C" fn handle_incoming_and_exit(mut fromAddr: *const len_and_socka
           } else {
             b"HTTP_%.*s=%s\x00" as *const u8 as *const libc::c_char
           },
-          colon.wrapping_offset_from((*ptr_to_globals).iobuf) as libc::c_long as libc::c_int,
+          colon.offset_from((*ptr_to_globals).iobuf) as libc::c_long as libc::c_int,
           (*ptr_to_globals).iobuf,
           skip_whitespace(colon.offset(1)),
         );
@@ -2961,7 +2956,7 @@ pub unsafe fn httpd_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_cha
       as *mut *mut globals);
   *fresh28 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   (*ptr_to_globals).g_realm = b"Web Server Authentication\x00" as *const u8 as *const libc::c_char;
   (*ptr_to_globals).range_start = -1i32 as off_t;
   (*ptr_to_globals).bind_addr_or_port = b"80\x00" as *const u8 as *const libc::c_char;

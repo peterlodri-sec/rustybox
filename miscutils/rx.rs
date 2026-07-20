@@ -472,8 +472,14 @@ pub unsafe fn rx_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char) 
     c_lflag: 0,
     c_line: 0,
     c_cc: [0; 32],
+    #[cfg(not(target_env = "musl"))]
     c_ispeed: 0,
+    #[cfg(not(target_env = "musl"))]
     c_ospeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ispeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ospeed: 0,
   };
   let mut orig_tty: termios = termios {
     c_iflag: 0,
@@ -482,8 +488,14 @@ pub unsafe fn rx_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char) 
     c_lflag: 0,
     c_line: 0,
     c_cc: [0; 32],
+    #[cfg(not(target_env = "musl"))]
     c_ispeed: 0,
+    #[cfg(not(target_env = "musl"))]
     c_ospeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ispeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ospeed: 0,
   };
   let mut termios_err: libc::c_int = 0;
   let mut file_fd: libc::c_int = 0;

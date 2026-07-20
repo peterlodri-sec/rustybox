@@ -494,9 +494,9 @@ unsafe fn unicode_conv_to_printable2(
       }
     }
     if !stats.is_null() {
-      (*stats).byte_count = d.wrapping_offset_from(dst) as libc::c_long as libc::c_uint;
-      (*stats).unicode_count = d.wrapping_offset_from(dst) as libc::c_long as libc::c_uint;
-      (*stats).unicode_width = d.wrapping_offset_from(dst) as libc::c_long as libc::c_uint
+      (*stats).byte_count = d.offset_from(dst) as libc::c_long as libc::c_uint;
+      (*stats).unicode_count = d.offset_from(dst) as libc::c_long as libc::c_uint;
+      (*stats).unicode_width = d.offset_from(dst) as libc::c_long as libc::c_uint
     }
     return dst;
   }

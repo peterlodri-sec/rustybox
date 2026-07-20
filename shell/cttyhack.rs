@@ -167,7 +167,7 @@ pub unsafe fn cttyhack_main(
       }
     } else if ioctl(
       0,
-      VT_GETSTATE as libc::c_int as libc::c_ulong,
+      VT_GETSTATE as libc::c_int as _,
       &mut u.vt as *mut vt_stat,
     ) == 0
     {
@@ -179,7 +179,7 @@ pub unsafe fn cttyhack_main(
       );
     } else if ioctl(
       0,
-      0x541ei32 as libc::c_ulong,
+      0x541ei32 as _,
       &mut u.sr as *mut serial_struct,
     ) == 0
     {
@@ -226,7 +226,7 @@ pub unsafe fn cttyhack_main(
       /* Some other session may have it as ctty,
        * try to steal it from them:
        */
-      ioctl(0i32, 0x540ei32 as libc::c_ulong, 1i32);
+      ioctl(0i32, 0x540ei32 as _, 1i32);
     }
     _ => {}
   }

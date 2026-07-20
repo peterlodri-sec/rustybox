@@ -25,12 +25,12 @@ pub type va_list = __builtin_va_list;
  * Licensed under GPLv2 or later, see file LICENSE in this source tree.
  */
 pub unsafe extern "C" fn bb_perror_msg(mut s: *const libc::c_char, mut args: ...) {
-  let mut p: ::std::ffi::VaListImpl;
+  let mut p: ::std::ffi::VaList;
   p = args.clone();
   /* Guard against "<error message>: Success" */
   crate::libbb::verror_msg::bb_verror_msg(
     s,
-    p.as_va_list(),
+    p,
     if *bb_errno != 0 {
       strerror(*bb_errno)
     } else {
@@ -39,12 +39,12 @@ pub unsafe extern "C" fn bb_perror_msg(mut s: *const libc::c_char, mut args: ...
   );
 }
 pub unsafe extern "C" fn bb_perror_msg_and_die(mut s: *const libc::c_char, mut args: ...) -> ! {
-  let mut p: ::std::ffi::VaListImpl;
+  let mut p: ::std::ffi::VaList;
   p = args.clone();
   /* Guard against "<error message>: Success" */
   crate::libbb::verror_msg::bb_verror_msg(
     s,
-    p.as_va_list(),
+    p,
     if *bb_errno != 0 {
       strerror(*bb_errno)
     } else {

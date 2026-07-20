@@ -550,10 +550,10 @@ pub unsafe fn copy_file(
             if flags & FILEUTILS_REFLINK as libc::c_int != 0 {
               retval = ioctl(
                 dst_fd,
-                (1u32 << 0 + 8i32 + 8i32 + 14i32
+                ((1u32 << 0 + 8i32 + 8i32 + 14i32
                   | (0x94i32 << 0 + 8i32) as libc::c_uint
                   | (9i32 << 0) as libc::c_uint) as libc::c_ulong
-                  | (::std::mem::size_of::<libc::c_int>() as libc::c_ulong) << 0 + 8i32 + 8i32,
+                  | (::std::mem::size_of::<libc::c_int>() as libc::c_ulong) << 0 + 8i32 + 8i32) as _,
                 src_fd,
               );
               if retval == 0 {

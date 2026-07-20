@@ -382,7 +382,7 @@ pub unsafe fn nameif_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_ch
     );
     eth_settings.cmd = 0x1i32 as u32;
     ifr.ifr_ifru.ifru_data = &mut eth_settings as *mut ethtool_cmd as caddr_t;
-    ioctl(ctl_sk, 0x8946i32 as libc::c_ulong, &mut ifr as *mut ifreq);
+    ioctl(ctl_sk, 0x8946i32 as _, &mut ifr as *mut ifreq);
     /* Check for driver etc. */
     memset(
       &mut drvinfo as *mut ethtool_drvinfo as *mut libc::c_void,
@@ -392,8 +392,8 @@ pub unsafe fn nameif_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_ch
     drvinfo.cmd = 0x3i32 as u32;
     ifr.ifr_ifru.ifru_data = &mut drvinfo as *mut ethtool_drvinfo as caddr_t;
     /* Get driver and businfo first, so we have it in drvinfo */
-    ioctl(ctl_sk, 0x8946i32 as libc::c_ulong, &mut ifr as *mut ifreq);
-    ioctl(ctl_sk, 0x8927i32 as libc::c_ulong, &mut ifr as *mut ifreq);
+    ioctl(ctl_sk, 0x8946i32 as _, &mut ifr as *mut ifreq);
+    ioctl(ctl_sk, 0x8927i32 as _, &mut ifr as *mut ifreq);
     /* Search the list for a matching device */
     ch = clist;
     loop {

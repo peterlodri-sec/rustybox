@@ -72,7 +72,7 @@ unsafe fn eject_scsi(mut dev: *const libc::c_char) {
   let mut io_hdr: sg_io_hdr_t = std::mem::zeroed();
   if ioctl(
     3i32,
-    0x2282i32 as libc::c_ulong,
+    0x2282i32 as _,
     &mut i as *mut libc::c_uint,
   ) < 0
     || i < 30000i32 as libc::c_uint
@@ -112,13 +112,13 @@ unsafe fn eject_scsi(mut dev: *const libc::c_char) {
     (0u32 << 0 + 8i32 + 8i32 + 14i32
       | (0x12i32 << 0 + 8i32) as libc::c_uint
       | (95i32 << 0) as libc::c_uint
-      | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as libc::c_ulong,
+      | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as _,
   );
 }
 unsafe fn eject_cdrom(mut flags: libc::c_uint, mut dev: *const libc::c_char) {
   let mut cmd: libc::c_int = 0x5309i32;
   if flags & 1i32 as libc::c_uint != 0
-    || flags & 2i32 as libc::c_uint != 0 && ioctl(3i32, 0x5326i32 as libc::c_ulong) == 2i32
+    || flags & 2i32 as libc::c_uint != 0 && ioctl(3i32, 0x5326i32 as _) == 2i32
   {
     cmd = 0x5319i32
   }

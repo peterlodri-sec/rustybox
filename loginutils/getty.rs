@@ -505,7 +505,7 @@ unsafe fn get_logname() -> *mut libc::c_char {
       }
       /* fall through and ignore it */
       if !((c as libc::c_uchar as libc::c_int) < ' ' as i32) {
-        if (bp.wrapping_offset_from((*ptr_to_globals).line_buf.as_mut_ptr()) as libc::c_long
+        if (bp.offset_from((*ptr_to_globals).line_buf.as_mut_ptr()) as libc::c_long
           as libc::c_int as libc::c_ulong)
           < (::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong)
             .wrapping_sub(1i32 as libc::c_ulong)
@@ -544,7 +544,7 @@ pub unsafe fn getty_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_cha
     as *mut *mut globals);
   *fresh1 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   (*ptr_to_globals).login = b"/bin/login\x00" as *const u8 as *const libc::c_char;
   (*ptr_to_globals).issue = b"/etc/issue\x00" as *const u8 as *const libc::c_char;
   (*ptr_to_globals).eol = '\r' as i32 as libc::c_uchar;
@@ -605,7 +605,7 @@ pub unsafe fn getty_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_cha
         1i32,
         ::std::mem::transmute::<libc::intptr_t, __sighandler_t>(1i32 as libc::intptr_t),
       );
-      ioctl(fd, 0x5422i32 as libc::c_ulong);
+      ioctl(fd, 0x5422i32 as _);
       close(fd);
       signal(1i32, old);
     }
@@ -637,7 +637,7 @@ pub unsafe fn getty_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_cha
   /* Steal ctty if we don't have it yet */
   tsid = tcgetsid(0i32);
   if tsid < 0 || pid != tsid {
-    if ioctl(0i32, 0x540ei32 as libc::c_ulong, 1) < 0 {
+    if ioctl(0i32, 0x540ei32 as _, 1) < 0 {
       crate::libbb::perror_msg::bb_simple_perror_msg_and_die(
         b"TIOCSCTTY\x00" as *const u8 as *const libc::c_char,
       );

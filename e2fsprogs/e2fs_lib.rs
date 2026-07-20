@@ -75,19 +75,19 @@ pub unsafe fn fgetsetversion(
     ver = set_version as libc::c_int;
     r = ioctl(
       fd,
-      (1u32 << 0 + 8i32 + 8i32 + 14i32
+      ((1u32 << 0 + 8i32 + 8i32 + 14i32
         | (('v' as i32) << 0 + 8i32) as libc::c_uint
         | (2i32 << 0) as libc::c_uint) as libc::c_ulong
-        | (::std::mem::size_of::<libc::c_long>() as libc::c_ulong) << 0 + 8i32 + 8i32,
+        | (::std::mem::size_of::<libc::c_long>() as libc::c_ulong) << 0 + 8i32 + 8i32) as _,
       &mut ver as *mut libc::c_int,
     )
   } else {
     r = ioctl(
       fd,
-      (2u32 << 0 + 8i32 + 8i32 + 14i32
+      ((2u32 << 0 + 8i32 + 8i32 + 14i32
         | (('v' as i32) << 0 + 8i32) as libc::c_uint
         | (1i32 << 0) as libc::c_uint) as libc::c_ulong
-        | (::std::mem::size_of::<libc::c_long>() as libc::c_ulong) << 0 + 8i32 + 8i32,
+        | (::std::mem::size_of::<libc::c_long>() as libc::c_ulong) << 0 + 8i32 + 8i32) as _,
       &mut ver as *mut libc::c_int,
     );
     *get_version = ver as libc::c_ulong
@@ -134,19 +134,19 @@ pub unsafe fn fgetsetflags(
       f = set_flags as libc::c_int;
       r = ioctl(
         fd,
-        (1u32 << 0 + 8i32 + 8i32 + 14i32
+        ((1u32 << 0 + 8i32 + 8i32 + 14i32
           | (('f' as i32) << 0 + 8i32) as libc::c_uint
           | (2i32 << 0) as libc::c_uint) as libc::c_ulong
-          | (::std::mem::size_of::<libc::c_long>() as libc::c_ulong) << 0 + 8i32 + 8i32,
+          | (::std::mem::size_of::<libc::c_long>() as libc::c_ulong) << 0 + 8i32 + 8i32) as _,
         &mut f as *mut libc::c_int,
       )
     } else {
       r = ioctl(
         fd,
-        (2u32 << 0 + 8i32 + 8i32 + 14i32
+        ((2u32 << 0 + 8i32 + 8i32 + 14i32
           | (('f' as i32) << 0 + 8i32) as libc::c_uint
           | (1i32 << 0) as libc::c_uint) as libc::c_ulong
-          | (::std::mem::size_of::<libc::c_long>() as libc::c_ulong) << 0 + 8i32 + 8i32,
+          | (::std::mem::size_of::<libc::c_long>() as libc::c_ulong) << 0 + 8i32 + 8i32) as _,
         &mut f as *mut libc::c_int,
       );
       *get_flags = f as libc::c_ulong

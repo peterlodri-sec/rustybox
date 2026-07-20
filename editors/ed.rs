@@ -155,7 +155,7 @@ unsafe fn findString(
     if ncp.is_null() {
       return -1i32;
     }
-    left = (left as libc::c_long - ncp.wrapping_offset_from(cp) as libc::c_long) as libc::c_int;
+    left = (left as libc::c_long - ncp.offset_from(cp) as libc::c_long) as libc::c_int;
     cp = ncp;
     if memcmp(
       cp as *const libc::c_void,
@@ -163,7 +163,7 @@ unsafe fn findString(
       len as libc::c_ulong,
     ) == 0
     {
-      return cp.wrapping_offset_from((*lp).data.as_ptr()) as libc::c_long as libc::c_int;
+      return cp.offset_from((*lp).data.as_ptr()) as libc::c_long as libc::c_int;
     }
     cp = cp.offset(1);
     left -= 1
@@ -278,7 +278,7 @@ unsafe fn getNum(
           let fresh0 = endStr;
           endStr = endStr.offset(1);
           *fresh0 = '\u{0}' as i32 as libc::c_char;
-          cp = cp.offset(endStr.wrapping_offset_from(str.as_mut_ptr()) as libc::c_long as isize)
+          cp = cp.offset(endStr.offset_from(str.as_mut_ptr()) as libc::c_long as isize)
         } else {
           cp = b"\x00" as *const u8 as *const libc::c_char
         }
@@ -464,7 +464,7 @@ unsafe fn readLines(mut file: *const libc::c_char, mut num: libc::c_int) -> libc
       (*ptr_to_globals).bufUsed as libc::c_ulong,
     ) as *mut libc::c_char;
     if !cp.is_null() {
-      len = (cp.wrapping_offset_from((*ptr_to_globals).bufPtr) as libc::c_long + 1) as libc::c_int;
+      len = (cp.offset_from((*ptr_to_globals).bufPtr) as libc::c_long + 1) as libc::c_int;
       if insertLine(num, (*ptr_to_globals).bufPtr, len) == 0 {
         close(fd);
         return 0;
@@ -1204,7 +1204,7 @@ pub unsafe fn ed_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char) 
       as *mut *mut globals);
   *fresh14 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   (*ptr_to_globals).bufSize = INITBUF_SIZE as libc::c_int;
   (*ptr_to_globals).bufBase = xmalloc((*ptr_to_globals).bufSize as size_t) as *mut libc::c_char;
   (*ptr_to_globals).bufPtr = (*ptr_to_globals).bufBase;

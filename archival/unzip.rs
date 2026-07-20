@@ -338,7 +338,7 @@ unsafe fn find_cdf_offset() -> u32 {
        * where cdf_offset points past EOF - ??
        * This check ignores such CDEs:
        */
-      if (cde.fmt.cdf_offset as libc::c_long) < end + p.wrapping_offset_from(buf) as libc::c_long {
+      if (cde.fmt.cdf_offset as libc::c_long) < end + p.offset_from(buf) as libc::c_long {
         found = cde.fmt.cdf_offset
         /*
          * We do not "break" here because only the last CDE is valid.

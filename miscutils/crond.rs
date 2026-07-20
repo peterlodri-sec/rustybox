@@ -197,23 +197,23 @@ unsafe fn crondlog(
      * need not touch syslog_level
      * (they are ok with LOG_ERR default).
      */
-    crate::libbb::verror_msg::bb_vinfo_msg(msg, va.as_va_list());
+    crate::libbb::verror_msg::bb_vinfo_msg(msg, va);
   };
 }
 unsafe extern "C" fn log5(mut msg: *const libc::c_char, mut args: ...) {
-  let mut va: ::std::ffi::VaListImpl;
+  let mut va: ::std::ffi::VaList;
   va = args.clone();
-  crondlog(4i32 as libc::c_uint, msg, va.as_va_list());
+  crondlog(4i32 as libc::c_uint, msg, va);
 }
 unsafe extern "C" fn log7(mut msg: *const libc::c_char, mut args: ...) {
-  let mut va: ::std::ffi::VaListImpl;
+  let mut va: ::std::ffi::VaList;
   va = args.clone();
-  crondlog(7i32 as libc::c_uint, msg, va.as_va_list());
+  crondlog(7i32 as libc::c_uint, msg, va);
 }
 unsafe extern "C" fn log8(mut msg: *const libc::c_char, mut args: ...) {
-  let mut va: ::std::ffi::VaListImpl;
+  let mut va: ::std::ffi::VaList;
   va = args.clone();
-  crondlog(8i32 as libc::c_uint, msg, va.as_va_list());
+  crondlog(8i32 as libc::c_uint, msg, va);
 }
 static mut DowAry: [libc::c_char; 22] = [
   115, 117, 110, 109, 111, 110, 116, 117, 101, 119, 101, 100, 116, 104, 117, 102, 114, 105, 115,
@@ -1052,7 +1052,7 @@ unsafe fn process_finished_job(mut user: *const libc::c_char, mut line: *mut Cro
   }
   if fstat(mailFd, &mut sbuf) < 0
     || sbuf.st_uid != 0 as libc::c_uint
-    || sbuf.st_nlink != 0 as libc::c_ulong
+    || sbuf.st_nlink as libc::c_ulong != 0 as libc::c_ulong
     || sbuf.st_size == (*line).cl_empty_mail_size as libc::c_long
     || !(sbuf.st_mode & 0o170000i32 as libc::c_uint == 0o100000i32 as libc::c_uint)
   {

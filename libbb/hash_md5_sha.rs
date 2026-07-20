@@ -114,12 +114,7 @@ unsafe fn common64_end(mut ctx: *mut md5_ctx_t, mut swap_needed: libc::c_int) {
               | (__x as libc::c_ulonglong & 0xff00u64) << 40i32
               | (__x as libc::c_ulonglong & 0xffu64) << 56i32) as u64
           } else {
-            let fresh1 = &mut __v;
-            let fresh2;
-            let fresh3 = __x;
-            llvm_asm!("bswap ${0:q}" : "=r" (fresh2) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh1, fresh3)) :);
-            c2rust_asm_casts::AsmCast::cast_out(fresh1, fresh3, fresh2);
+            __v = (__x).swap_bytes();
           }
           __v
         }
@@ -570,12 +565,7 @@ unsafe fn sha1_process_block64(mut ctx: *mut sha1_ctx_t) {
           | (__x & 0xff00i32 as libc::c_uint) << 8i32
           | (__x & 0xffi32 as libc::c_uint) << 24i32
       } else {
-        let fresh32 = &mut __v;
-        let fresh33;
-        let fresh34 = __x;
-        llvm_asm!("bswap $0" : "=r" (fresh33) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh32, fresh34)) :);
-        c2rust_asm_casts::AsmCast::cast_out(fresh32, fresh34, fresh33);
+        __v = (__x).swap_bytes();
       }
       __v
     };
@@ -760,12 +750,7 @@ unsafe fn sha256_process_block64(mut ctx: *mut sha256_ctx_t) {
           | (__x & 0xff00i32 as libc::c_uint) << 8i32
           | (__x & 0xffi32 as libc::c_uint) << 24i32
       } else {
-        let fresh35 = &mut __v;
-        let fresh36;
-        let fresh37 = __x;
-        llvm_asm!("bswap $0" : "=r" (fresh36) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh35, fresh37)) :);
-        c2rust_asm_casts::AsmCast::cast_out(fresh35, fresh37, fresh36);
+        __v = (__x).swap_bytes();
       }
       __v
     };
@@ -878,12 +863,7 @@ unsafe fn sha512_process_block128(mut ctx: *mut sha512_ctx_t) {
           | (__x as libc::c_ulonglong & 0xff00u64) << 40i32
           | (__x as libc::c_ulonglong & 0xffu64) << 56i32) as u64
       } else {
-        let fresh38 = &mut __v;
-        let fresh39;
-        let fresh40 = __x;
-        llvm_asm!("bswap ${0:q}" : "=r" (fresh39) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh38, fresh40)) :);
-        c2rust_asm_casts::AsmCast::cast_out(fresh38, fresh40, fresh39);
+        __v = (__x).swap_bytes();
       }
       __v
     };
@@ -1073,12 +1053,7 @@ pub unsafe fn sha1_end(mut ctx: *mut sha1_ctx_t, mut resbuf: *mut libc::c_void) 
           | (__x & 0xff00i32 as libc::c_uint) << 8i32
           | (__x & 0xffi32 as libc::c_uint) << 24i32
       } else {
-        let fresh41 = &mut __v;
-        let fresh42;
-        let fresh43 = __x;
-        llvm_asm!("bswap $0" : "=r" (fresh42) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh41, fresh43)) :);
-        c2rust_asm_casts::AsmCast::cast_out(fresh41, fresh43, fresh42);
+        __v = (__x).swap_bytes();
       }
       __v
     };
@@ -1127,12 +1102,7 @@ pub unsafe fn sha512_end(
             | (__x as libc::c_ulonglong & 0xff00u64) << 40i32
             | (__x as libc::c_ulonglong & 0xffu64) << 56i32) as u64
         } else {
-          let fresh45 = &mut __v;
-          let fresh46;
-          let fresh47 = __x;
-          llvm_asm!("bswap ${0:q}" : "=r" (fresh46) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh45, fresh47)) :);
-          c2rust_asm_casts::AsmCast::cast_out(fresh45, fresh47, fresh46);
+          __v = (__x).swap_bytes();
         }
         __v
       };
@@ -1152,12 +1122,7 @@ pub unsafe fn sha512_end(
             | (__x as libc::c_ulonglong & 0xff00u64) << 40i32
             | (__x as libc::c_ulonglong & 0xffu64) << 56i32) as u64
         } else {
-          let fresh48 = &mut __v;
-          let fresh49;
-          let fresh50 = __x;
-          llvm_asm!("bswap ${0:q}" : "=r" (fresh49) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh48, fresh50)) :);
-          c2rust_asm_casts::AsmCast::cast_out(fresh48, fresh50, fresh49);
+          __v = (__x).swap_bytes();
         }
         __v
       };
@@ -1191,12 +1156,7 @@ pub unsafe fn sha512_end(
           | (__x as libc::c_ulonglong & 0xff00u64) << 40i32
           | (__x as libc::c_ulonglong & 0xffu64) << 56i32) as u64
       } else {
-        let fresh51 = &mut __v;
-        let fresh52;
-        let fresh53 = __x;
-        llvm_asm!("bswap ${0:q}" : "=r" (fresh52) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh51, fresh53)) :);
-        c2rust_asm_casts::AsmCast::cast_out(fresh51, fresh53, fresh52);
+        __v = (__x).swap_bytes();
       }
       __v
     };

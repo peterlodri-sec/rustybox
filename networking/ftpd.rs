@@ -342,7 +342,7 @@ unsafe extern "C" fn escape_text(
   strcpy(ret, prepend);
   loop {
     found = strchrnul(str, escapee as libc::c_int);
-    chunklen = (found.wrapping_offset_from(str) as libc::c_long + 1) as libc::c_uint;
+    chunklen = (found.offset_from(str) as libc::c_long + 1) as libc::c_uint;
     /* Copy chunk up to and including escapee (or NUL) to ret */
     memcpy(
       ret.offset(retlen as isize) as *mut libc::c_void,
@@ -377,7 +377,7 @@ unsafe extern "C" fn replace_char(
     }
     p = p.offset(1)
   }
-  return p.wrapping_offset_from(str) as libc::c_long as libc::c_uint;
+  return p.offset_from(str) as libc::c_long as libc::c_uint;
 }
 unsafe extern "C" fn verbose_log(mut str: *const libc::c_char) {
   crate::libbb::verror_msg::bb_error_msg(
@@ -660,12 +660,7 @@ unsafe extern "C" fn bind_for_passive_mode() -> libc::c_uint {
       __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
         as libc::c_ushort
     } else {
-      let fresh2 = &mut __v;
-      let fresh3;
-      let fresh4 = __x;
-      llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh3) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh2, fresh4)) : "cc");
-      c2rust_asm_casts::AsmCast::cast_out(fresh2, fresh4, fresh3);
+      __v = (__x).swap_bytes();
     }
     __v
   }) as libc::c_uint;
@@ -747,12 +742,7 @@ unsafe extern "C" fn handle_port() {
                     | (__x as libc::c_int & 0xffi32) << 8i32)
                     as libc::c_ushort
                 } else {
-                  let fresh5 = &mut __v;
-                  let fresh6;
-                  let fresh7 = __x;
-                  llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh6) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh5, fresh7)) : "cc");
-                  c2rust_asm_casts::AsmCast::cast_out(fresh5, fresh7, fresh6);
+                  __v = (__x).swap_bytes();
                 }
                 __v
               }) as libc::c_uint,
@@ -1337,7 +1327,7 @@ unsafe extern "C" fn cmdio_get_cmd_and_arg() -> u32 {
     }
     *cmd.offset(len as isize) = '\u{0}' as i32 as libc::c_char
   }
-  src = strchrnul(cmd, 0xffi32).wrapping_offset_from(cmd) as libc::c_long as libc::c_int;
+  src = strchrnul(cmd, 0xffi32).offset_from(cmd) as libc::c_long as libc::c_int;
   /* 99,99% there are neither NULs nor 255s and src == len */
   if src < len {
     dst = src;
@@ -1407,7 +1397,7 @@ pub unsafe fn ftpd_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char
       as *mut *mut globals);
   *fresh11 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   abs_timeout = (1i32 * 60i32 * 60i32) as libc::c_uint;
   verbose_S = 0 as libc::c_uint;
   (*ptr_to_globals).timeout = (2i32 * 60i32) as libc::c_uint;

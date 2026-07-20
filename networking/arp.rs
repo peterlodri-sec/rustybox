@@ -266,7 +266,7 @@ unsafe extern "C" fn arp_del(mut args: *mut *mut libc::c_char) -> libc::c_int {
     }
     err = ioctl(
       sockfd as libc::c_int,
-      0x8953i32 as libc::c_ulong,
+      0x8953i32 as _,
       &mut req as *mut arpreq,
     );
     if err < 0 {
@@ -310,7 +310,7 @@ unsafe extern "C" fn arp_del(mut args: *mut *mut libc::c_char) -> libc::c_int {
       }
       if ioctl(
         sockfd as libc::c_int,
-        0x8953i32 as libc::c_ulong,
+        0x8953i32 as _,
         &mut req as *mut arpreq,
       ) < 0
       {

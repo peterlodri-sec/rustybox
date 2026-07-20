@@ -52,7 +52,7 @@ unsafe extern "C" fn get_line(
     sz = 0
   }
   *buf.offset(sz as isize) = '\u{0}' as i32 as libc::c_char;
-  sz = crate::libbb::trim::trim(buf).wrapping_offset_from(buf) + 1;
+  sz = crate::libbb::trim::trim(buf).offset_from(buf) + 1;
   bufsize -= sz as u32;
   buf = buf.offset(sz as isize);
   *buf.offset(0) = '\u{0}' as i32 as libc::c_char;

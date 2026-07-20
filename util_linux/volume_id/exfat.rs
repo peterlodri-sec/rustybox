@@ -215,7 +215,7 @@ pub unsafe fn volume_id_probe_exfat(mut id: *mut volume_id) -> libc::c_int
       // Volume Label Directory Entry
       crate::util_linux::volume_id::util::volume_id_set_label_unicode16(
         id,
-        (*de).type_0.label.vol_label.as_mut_ptr() as *mut u8,
+        (&raw mut (*de).type_0.label.vol_label) as *mut u8,
         LE,
         (2i32 * (*de).type_0.label.char_count as libc::c_int) as size_t,
       );

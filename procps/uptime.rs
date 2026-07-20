@@ -36,7 +36,7 @@ pub fn uptime_main(_argc: libc::c_int, argv: *mut *mut libc::c_char) -> libc::c_
 
   if opts != 0 {
     // -s
-    current_secs -= info.uptime
+    current_secs -= info.uptime as i64
   }
 
   let current_time = unsafe { *localtime(&current_secs) };

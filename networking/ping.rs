@@ -607,12 +607,7 @@ unsafe extern "C" fn sendping4(mut _junk: libc::c_int) {
       __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
         as libc::c_ushort
     } else {
-      let fresh2 = &mut __v;
-      let fresh3;
-      let fresh4 = __x;
-      llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh3) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh2, fresh4)) : "cc");
-      c2rust_asm_casts::AsmCast::cast_out(fresh2, fresh4, fresh3);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -657,12 +652,7 @@ unsafe extern "C" fn sendping6(mut _junk: libc::c_int) {
       __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
         as libc::c_ushort
     } else {
-      let fresh6 = &mut __v;
-      let fresh7;
-      let fresh8 = __x;
-      llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh7) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh6, fresh8)) : "cc");
-      c2rust_asm_casts::AsmCast::cast_out(fresh6, fresh8, fresh7);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -808,12 +798,7 @@ unsafe extern "C" fn unpack4(
         __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
           as libc::c_ushort
       } else {
-        let fresh13 = &mut __v;
-        let fresh14;
-        let fresh15 = __x;
-        llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh14) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh13, fresh15)) : "cc");
-        c2rust_asm_casts::AsmCast::cast_out(fresh13, fresh15, fresh14);
+        __v = (__x).swap_bytes();
       }
       __v
     };
@@ -870,12 +855,7 @@ unsafe extern "C" fn unpack6(
         __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
           as libc::c_ushort
       } else {
-        let fresh16 = &mut __v;
-        let fresh17;
-        let fresh18 = __x;
-        llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh17) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh16, fresh18)) : "cc");
-        c2rust_asm_casts::AsmCast::cast_out(fresh16, fresh18, fresh17);
+        __v = (__x).swap_bytes();
       }
       __v
     };

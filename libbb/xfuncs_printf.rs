@@ -535,11 +535,11 @@ pub unsafe extern "C" fn xasprintf(
   mut format: *const libc::c_char,
   mut args: ...
 ) -> *mut libc::c_char {
-  let mut p: ::std::ffi::VaListImpl;
+  let mut p: ::std::ffi::VaList;
   let mut r: libc::c_int = 0;
   let mut string_ptr: *mut libc::c_char = std::ptr::null_mut::<libc::c_char>();
   p = args.clone();
-  r = vasprintf(&mut string_ptr, format, p.as_va_list());
+  r = vasprintf(&mut string_ptr, format, p);
   if r < 0 {
     bb_die_memory_exhausted();
   }
@@ -564,7 +564,7 @@ pub unsafe fn bb_unsetenv(mut var: *const libc::c_char) {
      * sees "VAR" instead of "VAR=VAL" and does not remove it!
      * Horror :(
      */
-    let mut sz: libc::c_uint = tp.wrapping_offset_from(var) as libc::c_long as libc::c_uint;
+    let mut sz: libc::c_uint = tp.offset_from(var) as libc::c_long as libc::c_uint;
     if (sz as libc::c_ulong) < ::std::mem::size_of::<[libc::c_char; 112]>() as libc::c_ulong {
       *(mempcpy(
         onstack.as_mut_ptr() as *mut libc::c_void,
@@ -766,11 +766,11 @@ pub unsafe extern "C" fn ioctl_or_perror_and_die(
   mut args: ...
 ) -> libc::c_int {
   let mut ret: libc::c_int = 0;
-  let mut p: ::std::ffi::VaListImpl;
-  ret = ioctl(fd, request as libc::c_ulong, argp);
+  let mut p: ::std::ffi::VaList;
+  ret = ioctl(fd, request as _, argp);
   if ret < 0 {
     p = args.clone();
-    crate::libbb::verror_msg::bb_verror_msg(fmt, p.as_va_list(), strerror(*bb_errno));
+    crate::libbb::verror_msg::bb_verror_msg(fmt, p, strerror(*bb_errno));
     /* xfunc_die can actually longjmp, so be nice */
     crate::libbb::xfunc_die::xfunc_die();
   }
@@ -783,11 +783,11 @@ pub unsafe extern "C" fn ioctl_or_perror(
   mut fmt: *const libc::c_char,
   mut args: ...
 ) -> libc::c_int {
-  let mut p: ::std::ffi::VaListImpl;
-  let mut ret: libc::c_int = ioctl(fd, request as libc::c_ulong, argp);
+  let mut p: ::std::ffi::VaList;
+  let mut ret: libc::c_int = ioctl(fd, request as _, argp);
   if ret < 0 {
     p = args.clone();
-    crate::libbb::verror_msg::bb_verror_msg(fmt, p.as_va_list(), strerror(*bb_errno));
+    crate::libbb::verror_msg::bb_verror_msg(fmt, p, strerror(*bb_errno));
   }
   return ret;
 }
@@ -798,7 +798,7 @@ pub unsafe fn bb_ioctl_or_warn(
   mut ioctl_name: *const libc::c_char,
 ) -> libc::c_int {
   let mut ret: libc::c_int = 0;
-  ret = ioctl(fd, request as libc::c_ulong, argp);
+  ret = ioctl(fd, request as _, argp);
   if ret < 0 {
     crate::libbb::perror_msg::bb_simple_perror_msg(ioctl_name);
   }
@@ -813,7 +813,7 @@ pub unsafe fn bb_xioctl(
   mut ioctl_name: *const libc::c_char,
 ) -> libc::c_int {
   let mut ret: libc::c_int = 0;
-  ret = ioctl(fd, request as libc::c_ulong, argp);
+  ret = ioctl(fd, request as _, argp);
   if ret < 0 {
     crate::libbb::perror_msg::bb_simple_perror_msg_and_die(ioctl_name);
   }

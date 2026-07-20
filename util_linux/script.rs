@@ -147,8 +147,14 @@ pub unsafe fn script_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_ch
     c_lflag: 0,
     c_line: 0,
     c_cc: [0; 32],
+    #[cfg(not(target_env = "musl"))]
     c_ispeed: 0,
+    #[cfg(not(target_env = "musl"))]
     c_ospeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ispeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ospeed: 0,
   };
   let mut rtt: termios = termios {
     c_iflag: 0,
@@ -157,8 +163,14 @@ pub unsafe fn script_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_ch
     c_lflag: 0,
     c_line: 0,
     c_cc: [0; 32],
+    #[cfg(not(target_env = "musl"))]
     c_ispeed: 0,
+    #[cfg(not(target_env = "musl"))]
     c_ospeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ispeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ospeed: 0,
   };
   let mut win: winsize = winsize {
     ws_row: 0,
@@ -218,7 +230,7 @@ pub unsafe fn script_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_ch
   attr_ok = tcgetattr(0i32, &mut tt);
   winsz_ok = ioctl(
     0,
-    0x5413i32 as libc::c_ulong,
+    0x5413i32 as _,
     &mut win as *mut winsize as *mut libc::c_char,
   );
   rtt = tt;
@@ -407,13 +419,13 @@ pub unsafe fn script_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_ch
   if winsz_ok == 0 {
     ioctl(
       0,
-      0x5414i32 as libc::c_ulong,
+      0x5414i32 as _,
       &mut win as *mut winsize as *mut libc::c_char,
     );
   }
   /* set pty as a controlling tty */
   setsid();
-  ioctl(0i32, 0x540ei32 as libc::c_ulong, 0);
+  ioctl(0i32, 0x540ei32 as _, 0);
   /* Non-ignored signals revert to SIG_DFL on exec anyway */
   /*signal(SIGCHLD, SIG_DFL);*/
   execl(

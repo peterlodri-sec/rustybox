@@ -939,12 +939,7 @@ unsafe extern "C" fn prepare_ftp_session(
               __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
                 as libc::c_ushort
             } else {
-              let fresh3 = &mut __v;
-              let fresh4;
-              let fresh5 = __x;
-              llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh4) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh3, fresh5)) : "cc");
-              c2rust_asm_casts::AsmCast::cast_out(fresh3, fresh5, fresh4);
+              __v = (__x).swap_bytes();
             }
             __v
           }) as libc::c_uint,
@@ -1735,20 +1730,20 @@ pub unsafe fn wget_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char
     45, 102, 105, 108, 101, 0, 1, 111, 100, 105, 114, 101, 99, 116, 111, 114, 121, 45, 112, 114,
     101, 102, 105, 120, 0, 1, 80, 112, 114, 111, 120, 121, 0, 1, 89, 117, 115, 101, 114, 45, 97,
     103, 101, 110, 116, 0, 1, 85, 116, 105, 109, 101, 111, 117, 116, 0, 1, 84, 116, 114, 105, 101,
-    115, 0, 1, 116, 104, 101, 97, 100, 101, 114, 0, 1, -1, 112, 111, 115, 116, 45, 100, 97, 116,
-    97, 0, 1, -2, 115, 112, 105, 100, 101, 114, 0, 0, -3, 110, 111, 45, 99, 104, 101, 99, 107, 45,
-    99, 101, 114, 116, 105, 102, 105, 99, 97, 116, 101, 0, 0, -4, 112, 97, 115, 115, 105, 118, 101,
-    45, 102, 116, 112, 0, 0, -16, 110, 111, 45, 99, 97, 99, 104, 101, 0, 0, -16, 110, 111, 45, 118,
-    101, 114, 98, 111, 115, 101, 0, 0, -16, 110, 111, 45, 99, 108, 111, 98, 98, 101, 114, 0, 0,
-    -16, 110, 111, 45, 104, 111, 115, 116, 45, 100, 105, 114, 101, 99, 116, 111, 114, 105, 101,
-    115, 0, 0, -16, 110, 111, 45, 112, 97, 114, 101, 110, 116, 0, 0, -16, 0,
+    115, 0, 1, 116, 104, 101, 97, 100, 101, 114, 0, 1, 255u8 as libc::c_char, 112, 111, 115, 116, 45, 100, 97, 116,
+    97, 0, 1, 254u8 as libc::c_char, 115, 112, 105, 100, 101, 114, 0, 0, 253u8 as libc::c_char, 110, 111, 45, 99, 104, 101, 99, 107, 45,
+    99, 101, 114, 116, 105, 102, 105, 99, 97, 116, 101, 0, 0, 252u8 as libc::c_char, 112, 97, 115, 115, 105, 118, 101,
+    45, 102, 116, 112, 0, 0, 240u8 as libc::c_char, 110, 111, 45, 99, 97, 99, 104, 101, 0, 0, 240u8 as libc::c_char, 110, 111, 45, 118,
+    101, 114, 98, 111, 115, 101, 0, 0, 240u8 as libc::c_char, 110, 111, 45, 99, 108, 111, 98, 98, 101, 114, 0, 0,
+    240u8 as libc::c_char, 110, 111, 45, 104, 111, 115, 116, 45, 100, 105, 114, 101, 99, 116, 111, 114, 105, 101,
+    115, 0, 0, 240u8 as libc::c_char, 110, 111, 45, 112, 97, 114, 101, 110, 116, 0, 0, 240u8 as libc::c_char, 0,
   ];
   let mut headers_llist: *mut llist_t = std::ptr::null_mut();
   let ref mut fresh6 = *(not_const_pp(&ptr_to_globals as *const *mut globals as *const libc::c_void)
     as *mut *mut globals);
   *fresh6 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   (*ptr_to_globals).timeout_seconds = 900i32 as libc::c_uint;
   signal(
     14i32,

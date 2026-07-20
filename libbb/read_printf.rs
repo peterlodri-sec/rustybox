@@ -252,7 +252,7 @@ pub unsafe fn xmalloc_reads(mut fd: libc::c_int, mut maxsz_p: *mut size_t) -> *m
       if !(sz < maxsz) {
         break 'c_6940;
       }
-      if p.wrapping_offset_from(buf) as libc::c_long as size_t == sz {
+      if p.offset_from(buf) as libc::c_long as size_t == sz {
         continue 'c_6940;
       }
     }
@@ -266,12 +266,12 @@ pub unsafe fn xmalloc_reads(mut fd: libc::c_int, mut maxsz_p: *mut size_t) -> *m
   }
   *p = '\u{0}' as i32 as libc::c_char;
   if !maxsz_p.is_null() {
-    *maxsz_p = p.wrapping_offset_from(buf) as libc::c_long as size_t
+    *maxsz_p = p.offset_from(buf) as libc::c_long as size_t
   }
   p = p.offset(1);
   return crate::libbb::xfuncs_printf::xrealloc(
     buf as *mut libc::c_void,
-    p.wrapping_offset_from(buf) as libc::c_long as size_t,
+    p.offset_from(buf) as libc::c_long as size_t,
   ) as *mut libc::c_char;
 }
 // Read (potentially big) files in one go. File size is estimated

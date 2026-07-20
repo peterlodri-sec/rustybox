@@ -600,7 +600,7 @@ unsafe extern "C" fn rewrite(mut dumper: *mut priv_dumper_t, mut fs: *mut FS) {
          * copy to PR format string, set conversion character
          * pointer, update original.
          */
-        len = (p1.wrapping_offset_from(fmtp) as libc::c_long + 1) as libc::c_uint;
+        len = (p1.offset_from(fmtp) as libc::c_long + 1) as libc::c_uint;
         (*pr).fmt = crate::libbb::xfuncs_printf::xstrndup(fmtp, len as libc::c_int);
         /* DBU:[dave@cray.com] w/o this, trailing fmt text, space is lost.
          * Skip subsequent text and up to the next % sign and tack the
@@ -611,11 +611,11 @@ unsafe extern "C" fn rewrite(mut dumper: *mut priv_dumper_t, mut fs: *mut FS) {
         while *p3 as libc::c_int != 0 && *p3 as libc::c_int != '%' as i32 {
           p3 = p3.offset(1)
         }
-        if p3.wrapping_offset_from(p2) as libc::c_long != 0 {
+        if p3.offset_from(p2) as libc::c_long != 0 {
           let mut d: *mut libc::c_char = std::ptr::null_mut::<libc::c_char>();
           d = crate::libbb::xfuncs_printf::xrealloc(
             (*pr).fmt as *mut libc::c_void,
-            (len as libc::c_long + p3.wrapping_offset_from(p2) as libc::c_long + 1) as size_t,
+            (len as libc::c_long + p3.offset_from(p2) as libc::c_long + 1) as size_t,
           ) as *mut libc::c_char;
           (*pr).fmt = d;
           d = d.offset(len as isize);
@@ -1318,7 +1318,7 @@ pub unsafe fn bb_dump_add(mut pub_dumper: *mut dumper_t, mut fmt: *const libc::c
     }
     (*tfu).fmt = crate::libbb::xfuncs_printf::xstrndup(
       savep,
-      p.wrapping_offset_from(savep) as libc::c_long as libc::c_int,
+      p.offset_from(savep) as libc::c_long as libc::c_int,
     );
     /* alphabetic escape sequences have to be done in place */
     crate::libbb::process_escape_sequence::strcpy_and_process_escape_sequences(

@@ -106,7 +106,7 @@ unsafe fn du(mut filename: *const libc::c_char) -> libc::c_ulonglong {
     }
   }
   if option_mask32 & OPT_l_hardlinks as libc::c_int as libc::c_uint == 0
-    && statbuf.st_nlink > 1i32 as libc::c_ulong
+    && statbuf.st_nlink as libc::c_ulong > 1i32 as libc::c_ulong
   {
     /* Add files/directories with links only once */
     if !crate::libbb::inode_hash::is_in_ino_dev_hashtable(&mut statbuf).is_null() {

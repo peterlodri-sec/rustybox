@@ -130,7 +130,7 @@ unsafe fn unescape(mut s: *mut libc::c_char, mut nocr: *mut libc::c_int) -> size
     s = s.offset(1)
   }
   *p = '\u{0}' as i32 as libc::c_char;
-  return p.wrapping_offset_from(start) as libc::c_long as size_t;
+  return p.offset_from(start) as libc::c_long as size_t;
 }
 pub unsafe fn chat_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> libc::c_int {
   let mut current_block: u64;

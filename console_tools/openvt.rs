@@ -106,7 +106,7 @@ unsafe fn not_vt_fd(mut fd: libc::c_int) -> libc::c_int {
     v_signal: 0,
     v_state: 0,
   };
-  return ioctl(fd, 0x5603i32 as libc::c_ulong, &mut vtstat as *mut vt_stat);
+  return ioctl(fd, 0x5603i32 as _, &mut vtstat as *mut vt_stat);
   /* !0: error, it's not VT fd */
 }
 /* Helper: get a fd suitable for VT_xxx */
@@ -138,7 +138,7 @@ unsafe fn find_free_vtno() -> libc::c_int {
   /*xfunc_error_retval = 3; - do we need compat? */
   if ioctl(
     fd,
-    0x5600i32 as libc::c_ulong,
+    0x5600i32 as _,
     &mut vtno as *mut libc::c_int,
   ) != 0
     || vtno <= 0
@@ -162,7 +162,7 @@ unsafe fn vfork_child(mut argv: *mut *mut libc::c_char) {
     /* CHILD */
     /* Try to make this VT our controlling tty */
     setsid(); /* lose old ctty */
-    ioctl(0i32, 0x540ei32 as libc::c_ulong, 0);
+    ioctl(0i32, 0x540ei32 as _, 0);
     //bb_error_msg("our sid %d", getsid(0));
     //bb_error_msg("our pgrp %d", getpgrp());
     //bb_error_msg("VT's sid %d", tcgetsid(0));

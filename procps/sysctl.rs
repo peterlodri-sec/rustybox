@@ -209,7 +209,7 @@ unsafe fn sysctl_act_on_setting(mut setting: *mut libc::c_char) -> libc::c_int {
         current_block = 14594744208347999533;
       } else {
         *cptr = '\u{0}' as i32 as libc::c_char;
-        *outname.offset(cptr.wrapping_offset_from(setting) as libc::c_long as isize) =
+        *outname.offset(cptr.offset_from(setting) as libc::c_long as isize) =
           '\u{0}' as i32 as libc::c_char;
         /* procps 3.2.7 actually uses these flags */
         fd = open(setting, 0o1i32 | 0o100i32 | 0o1000i32, 0o666i32);

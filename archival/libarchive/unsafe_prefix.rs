@@ -32,7 +32,7 @@ pub unsafe fn strip_unsafe_prefix(mut str: *const libc::c_char) -> *const libc::
       warned = 1i32 as smallint;
       crate::libbb::verror_msg::bb_error_msg(
         b"removing leading \'%.*s\' from member names\x00" as *const u8 as *const libc::c_char,
-        cp.wrapping_offset_from(str) as libc::c_long as libc::c_int,
+        cp.offset_from(str) as libc::c_long as libc::c_int,
         str,
       );
     }

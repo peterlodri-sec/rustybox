@@ -600,7 +600,7 @@ pub unsafe fn echo_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char
   crate::libbb::full_write::full_write(
     1i32,
     buffer as *const libc::c_void,
-    out.wrapping_offset_from(buffer) as libc::c_long as size_t,
+    out.offset_from(buffer) as libc::c_long as size_t,
   );
   free(buffer as *mut libc::c_void);
   if *bb_errno != 0 {

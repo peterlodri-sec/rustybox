@@ -67,10 +67,10 @@ unsafe fn get_label_uuid(
   vid = crate::util_linux::volume_id::volume_id::volume_id_open_node(fd); /* also closes fd */
   if ioctl(
     fd,
-    (2u32 << 0 + 8i32 + 8i32 + 14i32
+    ((2u32 << 0 + 8i32 + 8i32 + 14i32
       | (0x12i32 << 0 + 8i32) as libc::c_uint
       | (114i32 << 0) as libc::c_uint) as libc::c_ulong
-      | (::std::mem::size_of::<size_t>() as libc::c_ulong) << 0 + 8i32 + 8i32,
+      | (::std::mem::size_of::<size_t>() as libc::c_ulong) << 0 + 8i32 + 8i32) as _,
     &mut size as *mut u64,
   ) != 0
   {

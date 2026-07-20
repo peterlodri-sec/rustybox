@@ -197,12 +197,7 @@ pub unsafe fn volume_id_probe_sysv(mut id: *mut volume_id) -> libc::c_int
               | (__x & 0xff00i32 as libc::c_uint) << 8i32
               | (__x & 0xffi32 as libc::c_uint) << 24i32
           } else {
-            let fresh0 = &mut __v;
-            let fresh1;
-            let fresh2 = __x;
-            llvm_asm!("bswap $0" : "=r" (fresh1) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh0, fresh2)) :);
-            c2rust_asm_casts::AsmCast::cast_out(fresh0, fresh2, fresh1);
+            __v = (__x).swap_bytes();
           }
           __v
         })
@@ -247,12 +242,7 @@ pub unsafe fn volume_id_probe_sysv(mut id: *mut volume_id) -> libc::c_int
                   | (__x & 0xff00i32 as libc::c_uint) << 8i32
                   | (__x & 0xffi32 as libc::c_uint) << 24i32
               } else {
-                let fresh3 = &mut __v;
-                let fresh4;
-                let fresh5 = __x;
-                llvm_asm!("bswap $0" : "=r" (fresh4) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh3, fresh5)) :);
-                c2rust_asm_casts::AsmCast::cast_out(fresh3, fresh5, fresh4);
+                __v = (__x).swap_bytes();
               }
               __v
             })

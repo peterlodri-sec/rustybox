@@ -133,7 +133,7 @@ pub unsafe fn volume_id_probe_linux_raid(mut id: *mut volume_id, mut size: u64) 
   *(uuid.as_mut_ptr() as *mut aliased_u32) = (*mdp).set_uuid0;
   memcpy(
     &mut *uuid.as_mut_ptr().offset(4) as *mut u8 as *mut libc::c_void,
-    &mut (*mdp).set_uuid1 as *mut u32 as *const libc::c_void,
+    &raw mut (*mdp).set_uuid1 as *mut u32 as *const libc::c_void,
     12i32 as libc::c_ulong,
   );
   crate::util_linux::volume_id::util::volume_id_set_uuid(id, uuid.as_mut_ptr(), UUID_DCE);

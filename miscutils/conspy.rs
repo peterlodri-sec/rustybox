@@ -425,8 +425,14 @@ unsafe fn start_shell_in_child(mut tty_name: *const libc::c_char) {
       c_lflag: 0,
       c_line: 0,
       c_cc: [0; 32],
+      #[cfg(not(target_env = "musl"))]
       c_ispeed: 0,
+      #[cfg(not(target_env = "musl"))]
       c_ospeed: 0,
+      #[cfg(target_env = "musl")]
+      __c_ispeed: 0,
+      #[cfg(target_env = "musl")]
+      __c_ospeed: 0,
     };
     let mut shell: *const libc::c_char = crate::libbb::get_shell_name::get_shell_name();
     signal(
@@ -440,7 +446,7 @@ unsafe fn start_shell_in_child(mut tty_name: *const libc::c_char) {
     crate::libbb::xfuncs_printf::xopen(tty_name, 0o2i32);
     crate::libbb::xfuncs_printf::xdup2(0i32, 1i32);
     crate::libbb::xfuncs_printf::xdup2(0i32, 2i32);
-    ioctl(0i32, 0x540ei32 as libc::c_ulong, 1i32);
+    ioctl(0i32, 0x540ei32 as _, 1i32);
     tcsetpgrp(0i32, getpid());
     tcgetattr(0i32, &mut termchild);
     termchild.c_lflag |= 0o10i32 as libc::c_uint;
@@ -475,7 +481,7 @@ pub unsafe fn conspy_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_ch
       as *mut *mut globals);
   *fresh11 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   (*ptr_to_globals).height = (2147483647i32 as libc::c_uint)
     .wrapping_mul(2u32)
     .wrapping_add(1u32);
@@ -722,7 +728,7 @@ pub unsafe fn conspy_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_ch
     handle = crate::libbb::xfuncs_printf::xopen(tty_name.as_mut_ptr(), 0o1i32);
     result = ioctl(
       handle,
-      0x4b44i32 as libc::c_ulong,
+      0x4b44i32 as _,
       &mut kbd_mode as *mut libc::c_long,
     );
     if result >= 0 {
@@ -733,7 +739,7 @@ pub unsafe fn conspy_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_ch
         // scan code mode
       }
       while (*ptr_to_globals).key_count != 0 {
-        result = ioctl(handle, 0x5412i32 as libc::c_ulong, p);
+        result = ioctl(handle, 0x5412i32 as _, p);
         if result < 0 {
           memmove(
             bb_common_bufsiz1.as_mut_ptr() as *mut libc::c_void,

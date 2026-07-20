@@ -162,7 +162,7 @@ unsafe extern "C" fn i2c_smbus_access(
   args.data = data;
   return ioctl(
     fd,
-    0x720i32 as libc::c_ulong,
+    0x720i32 as _,
     &mut args as *mut i2c_smbus_ioctl_data,
   );
 }
@@ -1707,7 +1707,7 @@ pub unsafe fn i2cdetect_main(
       {
         printf(b"   \x00" as *const u8 as *const libc::c_char);
       } else {
-        status = ioctl(fd, 0x703i32 as libc::c_ulong, itoptr(i + j));
+        status = ioctl(fd, 0x703i32 as _, itoptr(i + j));
         if status < 0 {
           if *bb_errno == 16i32 {
             printf(b"UU \x00" as *const u8 as *const libc::c_char);

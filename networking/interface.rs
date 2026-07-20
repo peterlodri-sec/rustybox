@@ -455,14 +455,14 @@ unsafe extern "C" fn get_name(
   let mut namestart: *mut libc::c_char = std::ptr::null_mut::<libc::c_char>();
   namestart = skip_whitespace(p);
   nameend = namestart;
-  while !(nameend.wrapping_offset_from(namestart) as libc::c_long >= 16i32 as libc::c_long) {
+  while !(nameend.offset_from(namestart) as libc::c_long >= 16i32 as libc::c_long) {
     if *nameend as libc::c_int == ':' as i32 {
       memcpy(
         name as *mut libc::c_void,
         namestart as *const libc::c_void,
-        nameend.wrapping_offset_from(namestart) as libc::c_long as libc::c_ulong,
+        nameend.offset_from(namestart) as libc::c_long as libc::c_ulong,
       );
-      *name.offset(nameend.wrapping_offset_from(namestart) as libc::c_long as isize) =
+      *name.offset(nameend.offset_from(namestart) as libc::c_long as isize) =
         '\u{0}' as i32 as libc::c_char;
       return nameend.offset(1);
     }
@@ -665,7 +665,7 @@ unsafe extern "C" fn if_fetch(mut ife: *mut interface) -> libc::c_int {
   let mut skfd: libc::c_int = 0;
   skfd = crate::libbb::xfuncs_printf::xsocket(2i32, SOCK_DGRAM as libc::c_int, 0);
   crate::libbb::xfuncs::strncpy_IFNAMSIZ(ifr.ifr_ifrn.ifrn_name.as_mut_ptr(), ifname);
-  if ioctl(skfd, 0x8913i32 as libc::c_ulong, &mut ifr as *mut ifreq) < 0 {
+  if ioctl(skfd, 0x8913i32 as _, &mut ifr as *mut ifreq) < 0 {
     close(skfd);
     return -1i32;
   }
@@ -680,7 +680,7 @@ unsafe extern "C" fn if_fetch(mut ife: *mut interface) -> libc::c_int {
       .wrapping_add(::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong),
   );
   crate::libbb::xfuncs::strncpy_IFNAMSIZ(ifr.ifr_ifrn.ifrn_name.as_mut_ptr(), ifname);
-  if ioctl(skfd, 0x8927i32 as libc::c_ulong, &mut ifr as *mut ifreq) >= 0 {
+  if ioctl(skfd, 0x8927i32 as _, &mut ifr as *mut ifreq) >= 0 {
     memcpy(
       (*ife).hwaddr.as_mut_ptr() as *mut libc::c_void,
       ifr.ifr_ifru.ifru_hwaddr.sa_data.as_mut_ptr() as *const libc::c_void,
@@ -690,36 +690,36 @@ unsafe extern "C" fn if_fetch(mut ife: *mut interface) -> libc::c_int {
   //er.... why this _isnt_ inside if()?
   (*ife).type_0 = ifr.ifr_ifru.ifru_hwaddr.sa_family as libc::c_short;
   crate::libbb::xfuncs::strncpy_IFNAMSIZ(ifr.ifr_ifrn.ifrn_name.as_mut_ptr(), ifname);
-  if ioctl(skfd, 0x891di32 as libc::c_ulong, &mut ifr as *mut ifreq) >= 0 {
+  if ioctl(skfd, 0x891di32 as _, &mut ifr as *mut ifreq) >= 0 {
     (*ife).metric = ifr.ifr_ifru.ifru_ivalue
   }
   crate::libbb::xfuncs::strncpy_IFNAMSIZ(ifr.ifr_ifrn.ifrn_name.as_mut_ptr(), ifname);
-  if ioctl(skfd, 0x8921i32 as libc::c_ulong, &mut ifr as *mut ifreq) >= 0 {
+  if ioctl(skfd, 0x8921i32 as _, &mut ifr as *mut ifreq) >= 0 {
     (*ife).mtu = ifr.ifr_ifru.ifru_mtu
   }
   crate::libbb::xfuncs::strncpy_IFNAMSIZ(ifr.ifr_ifrn.ifrn_name.as_mut_ptr(), ifname);
-  if ioctl(skfd, 0x8970i32 as libc::c_ulong, &mut ifr as *mut ifreq) == 0 {
+  if ioctl(skfd, 0x8970i32 as _, &mut ifr as *mut ifreq) == 0 {
     (*ife).map = ifr.ifr_ifru.ifru_map
   }
   crate::libbb::xfuncs::strncpy_IFNAMSIZ(ifr.ifr_ifrn.ifrn_name.as_mut_ptr(), ifname);
-  if ioctl(skfd, 0x8942i32 as libc::c_ulong, &mut ifr as *mut ifreq) >= 0 {
+  if ioctl(skfd, 0x8942i32 as _, &mut ifr as *mut ifreq) >= 0 {
     (*ife).tx_queue_len = ifr.ifr_ifru.ifru_ivalue
   }
   crate::libbb::xfuncs::strncpy_IFNAMSIZ(ifr.ifr_ifrn.ifrn_name.as_mut_ptr(), ifname);
   ifr.ifr_ifru.ifru_addr.sa_family = 2i32 as sa_family_t;
-  if ioctl(skfd, 0x8915i32 as libc::c_ulong, &mut ifr as *mut ifreq) == 0 {
+  if ioctl(skfd, 0x8915i32 as _, &mut ifr as *mut ifreq) == 0 {
     (*ife).has_ip = 1i32 as smallint;
     (*ife).addr = ifr.ifr_ifru.ifru_addr;
     crate::libbb::xfuncs::strncpy_IFNAMSIZ(ifr.ifr_ifrn.ifrn_name.as_mut_ptr(), ifname);
-    if ioctl(skfd, 0x8917i32 as libc::c_ulong, &mut ifr as *mut ifreq) >= 0 {
+    if ioctl(skfd, 0x8917i32 as _, &mut ifr as *mut ifreq) >= 0 {
       (*ife).dstaddr = ifr.ifr_ifru.ifru_dstaddr
     }
     crate::libbb::xfuncs::strncpy_IFNAMSIZ(ifr.ifr_ifrn.ifrn_name.as_mut_ptr(), ifname);
-    if ioctl(skfd, 0x8919i32 as libc::c_ulong, &mut ifr as *mut ifreq) >= 0 {
+    if ioctl(skfd, 0x8919i32 as _, &mut ifr as *mut ifreq) >= 0 {
       (*ife).broadaddr = ifr.ifr_ifru.ifru_broadaddr
     }
     crate::libbb::xfuncs::strncpy_IFNAMSIZ(ifr.ifr_ifrn.ifrn_name.as_mut_ptr(), ifname);
-    if ioctl(skfd, 0x891bi32 as libc::c_ulong, &mut ifr as *mut ifreq) >= 0 {
+    if ioctl(skfd, 0x891bi32 as _, &mut ifr as *mut ifreq) >= 0 {
       (*ife).netmask = ifr.ifr_ifru.ifru_netmask
     }
   }

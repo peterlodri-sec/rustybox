@@ -182,7 +182,7 @@ unsafe fn cpio_o() -> libc::c_int {
         }
         /* Store hardlinks for later processing, dont output them */
         if !(st.st_mode & 0o170000i32 as libc::c_uint == 0o40000i32 as libc::c_uint)
-          && st.st_nlink > 1i32 as libc::c_ulong
+          && st.st_nlink as libc::c_ulong > 1i32 as libc::c_ulong
         {
           let mut n: *mut name_s = std::ptr::null_mut();
           let mut l: *mut inodes_s = std::ptr::null_mut();

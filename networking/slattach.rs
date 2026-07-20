@@ -79,8 +79,14 @@ unsafe fn restore_state_and_exit(mut exitcode: libc::c_int) -> ! {
     c_lflag: 0,
     c_line: 0,
     c_cc: [0; 32],
+    #[cfg(not(target_env = "musl"))]
     c_ispeed: 0,
+    #[cfg(not(target_env = "musl"))]
     c_ospeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ispeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ospeed: 0,
   };
   /* Restore line discipline */
   if crate::libbb::xfuncs_printf::bb_ioctl_or_warn(
@@ -135,8 +141,14 @@ pub unsafe fn slattach_main(
     c_lflag: 0,
     c_line: 0,
     c_cc: [0; 32],
+    #[cfg(not(target_env = "musl"))]
     c_ispeed: 0,
+    #[cfg(not(target_env = "musl"))]
     c_ospeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ispeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ospeed: 0,
   };
   let mut proto: *const libc::c_char = b"cslip\x00" as *const u8 as *const libc::c_char;
   /* 8 */
@@ -292,7 +304,7 @@ pub unsafe fn slattach_main(
           let mut modem_stat: libc::c_int = 0;
           if ioctl(
             3i32,
-            0x5415i32 as libc::c_ulong,
+            0x5415i32 as _,
             &mut modem_stat as *mut libc::c_int,
           ) != 0
           {

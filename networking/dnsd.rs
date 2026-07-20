@@ -249,12 +249,7 @@ unsafe extern "C" fn parse_conf_file(mut fileconf: *const libc::c_char) -> *mut 
             | (__x & 0xff00i32 as libc::c_uint) << 8i32
             | (__x & 0xffi32 as libc::c_uint) << 24i32
         } else {
-          let fresh0 = &mut __v;
-          let fresh1;
-          let fresh2 = __x;
-          llvm_asm!("bswap $0" : "=r" (fresh1) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh0, fresh2)) :);
-          c2rust_asm_casts::AsmCast::cast_out(fresh0, fresh2, fresh1);
+          __v = (__x).swap_bytes();
         }
         __v
       };
@@ -293,12 +288,7 @@ unsafe extern "C" fn table_lookup(
           __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
             as libc::c_ushort
         } else {
-          let fresh3 = &mut __v;
-          let fresh4;
-          let fresh5 = __x;
-          llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh4) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh3, fresh5)) : "cc");
-          c2rust_asm_casts::AsmCast::cast_out(fresh3, fresh5, fresh4);
+          __v = (__x).swap_bytes();
         }
         __v
       }) as libc::c_int
@@ -532,12 +522,7 @@ unsafe extern "C" fn process_packet(
         __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
           as libc::c_ushort
       } else {
-        let fresh6 = &mut __v;
-        let fresh7;
-        let fresh8 = __x;
-        llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh7) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh6, fresh8)) : "cc");
-        c2rust_asm_casts::AsmCast::cast_out(fresh6, fresh8, fresh7);
+        __v = (__x).swap_bytes();
       }
       __v
     }) as libc::c_int
@@ -558,12 +543,7 @@ unsafe extern "C" fn process_packet(
       __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
         as libc::c_ushort
     } else {
-      let fresh9 = &mut __v;
-      let fresh10;
-      let fresh11 = __x;
-      llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh10) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh9, fresh11)) : "cc");
-      c2rust_asm_casts::AsmCast::cast_out(fresh9, fresh11, fresh10);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -589,12 +569,7 @@ unsafe extern "C" fn process_packet(
         __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
           as libc::c_ushort
       } else {
-        let fresh12 = &mut __v;
-        let fresh13;
-        let fresh14 = __x;
-        llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh13) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh12, fresh14)) : "cc");
-        c2rust_asm_casts::AsmCast::cast_out(fresh12, fresh14, fresh13);
+        __v = (__x).swap_bytes();
       }
       __v
     }) as libc::c_int
@@ -602,7 +577,7 @@ unsafe extern "C" fn process_packet(
   {
     err_msg = b"opcode != 0\x00" as *const u8 as *const libc::c_char
   } else {
-    class = *(&mut (*unaligned_type_class).class as *mut u16 as *mut bb__aliased_u16);
+    class = *(&raw mut (*unaligned_type_class).class as *mut u16 as *mut bb__aliased_u16);
     if class as libc::c_int
       != ({
         let mut __v: libc::c_ushort = 0;
@@ -611,12 +586,7 @@ unsafe extern "C" fn process_packet(
           __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
             as libc::c_ushort
         } else {
-          let fresh15 = &mut __v;
-          let fresh16;
-          let fresh17 = __x;
-          llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh16) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh15, fresh17)) : "cc");
-          c2rust_asm_casts::AsmCast::cast_out(fresh15, fresh17, fresh16);
+          __v = (__x).swap_bytes();
         }
         __v
       }) as libc::c_int
@@ -624,7 +594,7 @@ unsafe extern "C" fn process_packet(
       /* not class INET? */
       err_msg = b"class != 1\x00" as *const u8 as *const libc::c_char
     } else {
-      type_0 = *(&mut (*unaligned_type_class).type_0 as *mut u16 as *mut bb__aliased_u16);
+      type_0 = *(&raw mut (*unaligned_type_class).type_0 as *mut u16 as *mut bb__aliased_u16);
       if type_0 as libc::c_int
         != ({
           let mut __v: libc::c_ushort = 0;
@@ -633,12 +603,7 @@ unsafe extern "C" fn process_packet(
             __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
               as libc::c_ushort
           } else {
-            let fresh18 = &mut __v;
-            let fresh19;
-            let fresh20 = __x;
-            llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh19) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh18, fresh20)) : "cc");
-            c2rust_asm_casts::AsmCast::cast_out(fresh18, fresh20, fresh19);
+            __v = (__x).swap_bytes();
           }
           __v
         }) as libc::c_int
@@ -650,12 +615,7 @@ unsafe extern "C" fn process_packet(
               __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
                 as libc::c_ushort
             } else {
-              let fresh21 = &mut __v;
-              let fresh22;
-              let fresh23 = __x;
-              llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh22) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh21, fresh23)) : "cc");
-              c2rust_asm_casts::AsmCast::cast_out(fresh21, fresh23, fresh22);
+              __v = (__x).swap_bytes();
             }
             __v
           }) as libc::c_int
@@ -676,12 +636,7 @@ unsafe extern "C" fn process_packet(
                 __v = (__x as libc::c_int >> 8i32 & 0xffi32
                   | (__x as libc::c_int & 0xffi32) << 8i32) as libc::c_ushort
               } else {
-                let fresh24 = &mut __v;
-                let fresh25;
-                let fresh26 = __x;
-                llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh25) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh24, fresh26)) : "cc");
-                c2rust_asm_casts::AsmCast::cast_out(fresh24, fresh26, fresh25);
+                __v = (__x).swap_bytes();
               }
               __v
             }) as libc::c_int
@@ -690,7 +645,7 @@ unsafe extern "C" fn process_packet(
           outr_rlen = strlen(answstr).wrapping_add(1i32 as libc::c_ulong) as u16
         }
         if answstr.is_null()
-          || (answb.wrapping_offset_from(buf) as libc::c_long as libc::c_uint)
+          || (answb.offset_from(buf) as libc::c_long as libc::c_uint)
             .wrapping_add(query_len as libc::c_uint)
             .wrapping_add(4i32 as libc::c_uint)
             .wrapping_add(2i32 as libc::c_uint)
@@ -708,12 +663,7 @@ unsafe extern "C" fn process_packet(
               __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
                 as libc::c_ushort
             } else {
-              let fresh27 = &mut __v;
-              let fresh28;
-              let fresh29 = __x;
-              llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh28) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh27, fresh29)) : "cc");
-              c2rust_asm_casts::AsmCast::cast_out(fresh27, fresh29, fresh28);
+              __v = (__x).swap_bytes();
             }
             __v
           }
@@ -734,12 +684,7 @@ unsafe extern "C" fn process_packet(
                 | (__x & 0xff00i32 as libc::c_uint) << 8i32
                 | (__x & 0xffi32 as libc::c_uint) << 24i32
             } else {
-              let fresh30 = &mut __v;
-              let fresh31;
-              let fresh32 = __x;
-              llvm_asm!("bswap $0" : "=r" (fresh31) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh30, fresh32)) :);
-              c2rust_asm_casts::AsmCast::cast_out(fresh30, fresh32, fresh31);
+              __v = (__x).swap_bytes();
             }
             __v
           };
@@ -751,12 +696,7 @@ unsafe extern "C" fn process_packet(
               __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
                 as libc::c_ushort
             } else {
-              let fresh33 = &mut __v;
-              let fresh34;
-              let fresh35 = __x;
-              llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh34) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh33, fresh35)) : "cc");
-              c2rust_asm_casts::AsmCast::cast_out(fresh33, fresh35, fresh34);
+              __v = (__x).swap_bytes();
             }
             __v
           };
@@ -786,12 +726,7 @@ unsafe extern "C" fn process_packet(
               __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
                 as libc::c_ushort
             } else {
-              let fresh36 = &mut __v;
-              let fresh37;
-              let fresh38 = __x;
-              llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh37) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh36, fresh38)) : "cc");
-              c2rust_asm_casts::AsmCast::cast_out(fresh36, fresh38, fresh37);
+              __v = (__x).swap_bytes();
             }
             __v
           };
@@ -803,12 +738,7 @@ unsafe extern "C" fn process_packet(
               __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
                 as libc::c_ushort
             } else {
-              let fresh39 = &mut __v;
-              let fresh40;
-              let fresh41 = __x;
-              llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh40) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh39, fresh41)) : "cc");
-              c2rust_asm_casts::AsmCast::cast_out(fresh39, fresh41, fresh40);
+              __v = (__x).swap_bytes();
             }
             __v
           }
@@ -824,12 +754,7 @@ unsafe extern "C" fn process_packet(
         __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
           as libc::c_ushort
       } else {
-        let fresh42 = &mut __v;
-        let fresh43;
-        let fresh44 = __x;
-        llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh43) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh42, fresh44)) : "cc");
-        c2rust_asm_casts::AsmCast::cast_out(fresh42, fresh44, fresh43);
+        __v = (__x).swap_bytes();
       }
       __v
     }) as libc::c_int
@@ -861,16 +786,11 @@ unsafe extern "C" fn process_packet(
       __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
         as libc::c_ushort
     } else {
-      let fresh45 = &mut __v;
-      let fresh46;
-      let fresh47 = __x;
-      llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh46) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh45, fresh47)) : "cc");
-      c2rust_asm_casts::AsmCast::cast_out(fresh45, fresh47, fresh46);
+      __v = (__x).swap_bytes();
     }
     __v
   };
-  return answb.wrapping_offset_from(buf) as libc::c_long as libc::c_int;
+  return answb.offset_from(buf) as libc::c_long as libc::c_int;
 }
 pub unsafe fn dnsd_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> libc::c_int {
   let mut listen_interface: *const libc::c_char =

@@ -92,7 +92,7 @@ pub unsafe fn write_new_utmp(
       ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong,
     );
   }
-  utent.ut_tv.tv_sec = time(0 as *mut time_t) as i32;
+  utent.ut_tv.tv_sec = time(0 as *mut time_t) as _;
   /* Invent our own ut_id. ut_id is only 4 chars wide.
    * Try to fit something remotely meaningful... */
   id = utent.ut_id.as_mut_ptr(); /* else: usually it's "ttyXXXX", map to "XXXX" */
@@ -197,7 +197,7 @@ pub unsafe fn update_utmp(
       ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong,
     );
   }
-  utent.ut_tv.tv_sec = time(0 as *mut time_t) as i32;
+  utent.ut_tv.tv_sec = time(0 as *mut time_t) as _;
   /* Update, or append new one */
   //setutxent();
   pututxline(&mut utent);

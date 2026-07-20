@@ -14,8 +14,16 @@ extern "C" {
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
   #[no_mangle]
   fn ctime(__timer: *const time_t) -> *mut libc::c_char;
-  #[no_mangle]
-  fn stime(__when: *const time_t) -> libc::c_int;
+}
+// glibc removed stime() in 2.31; emulate via clock_settime(CLOCK_REALTIME).
+unsafe fn stime(__when: *const time_t) -> libc::c_int {
+  let ts = libc::timespec {
+    tv_sec: *__when,
+    tv_nsec: 0,
+  };
+  libc::clock_settime(libc::CLOCK_REALTIME, &ts)
+}
+extern "C" {
 /* Create client TCP socket connected to peer:port. Peer cannot be NULL.
  * Peer can be numeric IP ("N.N.N.N"), numeric IPv6 address or hostname,
  * and can have ":PORT" suffix (for IPv6 use "[X:X:...:X]:PORT").
@@ -91,12 +99,7 @@ unsafe fn askremotedate(mut host: *const libc::c_char) -> time_t {
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh0 = &mut __v;
-      let fresh1;
-      let fresh2 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh1) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh0, fresh2)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh0, fresh2, fresh1);
+      __v = (__x).swap_bytes();
     }
     __v
   })

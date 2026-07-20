@@ -138,12 +138,7 @@ pub unsafe fn dumpleases_main(
         | (__x as libc::c_ulonglong & 0xff00u64) << 40i32
         | (__x as libc::c_ulonglong & 0xffu64) << 56i32) as u64
     } else {
-      let fresh0 = &mut __v;
-      let fresh1;
-      let fresh2 = __x;
-      llvm_asm!("bswap ${0:q}" : "=r" (fresh1) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh0, fresh2)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh0, fresh2, fresh1);
+      __v = (__x).swap_bytes();
     }
     __v
   }) as int64_t;
@@ -188,12 +183,7 @@ pub unsafe fn dumpleases_main(
           | (__x & 0xff00i32 as libc::c_uint) << 8i32
           | (__x & 0xffi32 as libc::c_uint) << 24i32
       } else {
-        let fresh3 = &mut __v;
-        let fresh4;
-        let fresh5 = __x;
-        llvm_asm!("bswap $0" : "=r" (fresh4) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh3, fresh5)) :);
-        c2rust_asm_casts::AsmCast::cast_out(fresh3, fresh5, fresh4);
+        __v = (__x).swap_bytes();
       }
       __v
     }) as libc::c_long

@@ -502,12 +502,7 @@ unsafe extern "C" fn mton(mut mask: u32) -> libc::c_int {
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh0 = &mut __v;
-      let fresh1;
-      let fresh2 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh1) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh0, fresh2)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh0, fresh2, fresh1);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -643,12 +638,7 @@ unsafe extern "C" fn xmalloc_optname_optval(
               __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
                 as libc::c_ushort
             } else {
-              let fresh3 = &mut __v;
-              let fresh4;
-              let fresh5 = __x;
-              llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh4) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh3, fresh5)) : "cc");
-              c2rust_asm_casts::AsmCast::cast_out(fresh3, fresh5, fresh4);
+              __v = (__x).swap_bytes();
             }
             __v
           }) as libc::c_int,
@@ -673,12 +663,7 @@ unsafe extern "C" fn xmalloc_optname_optval(
                 | (__x & 0xff00i32 as libc::c_uint) << 8i32
                 | (__x & 0xffi32 as libc::c_uint) << 24i32
             } else {
-              let fresh6 = &mut __v;
-              let fresh7;
-              let fresh8 = __x;
-              llvm_asm!("bswap $0" : "=r" (fresh7) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh6, fresh8)) :);
-              c2rust_asm_casts::AsmCast::cast_out(fresh6, fresh8, fresh7);
+              __v = (__x).swap_bytes();
             }
             __v
           }) as libc::c_ulong,
@@ -981,7 +966,7 @@ unsafe extern "C" fn fill_envp(mut packet: *mut dhcp_packet) -> *mut *mut libc::
   sprint_nip(
     *curr,
     b"ip=\x00" as *const u8 as *const libc::c_char,
-    &mut (*packet).yiaddr as *mut u32 as *mut u8,
+    &raw mut (*packet).yiaddr as *mut u32 as *mut u8,
   );
   let fresh16 = curr;
   curr = curr.offset(1);
@@ -993,7 +978,7 @@ unsafe extern "C" fn fill_envp(mut packet: *mut dhcp_packet) -> *mut *mut libc::
     sprint_nip(
       *curr,
       b"siaddr=\x00" as *const u8 as *const libc::c_char,
-      &mut (*packet).siaddr_nip as *mut u32 as *mut u8,
+      &raw mut (*packet).siaddr_nip as *mut u32 as *mut u8,
     );
     let fresh17 = curr;
     curr = curr.offset(1);
@@ -1006,7 +991,7 @@ unsafe extern "C" fn fill_envp(mut packet: *mut dhcp_packet) -> *mut *mut libc::
     sprint_nip(
       *curr,
       b"giaddr=\x00" as *const u8 as *const libc::c_char,
-      &mut (*packet).gateway_nip as *mut u32 as *mut u8,
+      &raw mut (*packet).gateway_nip as *mut u32 as *mut u8,
     );
     let fresh18 = curr;
     curr = curr.offset(1);
@@ -1210,12 +1195,7 @@ unsafe extern "C" fn init_packet(mut packet: *mut dhcp_packet, mut type_0: libc:
         __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
           as libc::c_ushort
       } else {
-        let fresh24 = &mut __v;
-        let fresh25;
-        let fresh26 = __x;
-        llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh25) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh24, fresh26)) : "cc");
-        c2rust_asm_casts::AsmCast::cast_out(fresh24, fresh26, fresh25);
+        __v = (__x).swap_bytes();
       }
       __v
     }) as libc::c_int
@@ -1263,12 +1243,7 @@ unsafe extern "C" fn add_client_options(mut packet: *mut dhcp_packet) {
         __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
           as libc::c_ushort
       } else {
-        let fresh27 = &mut __v;
-        let fresh28;
-        let fresh29 = __x;
-        llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh28) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh27, fresh29)) : "cc");
-        c2rust_asm_casts::AsmCast::cast_out(fresh27, fresh29, fresh28);
+        __v = (__x).swap_bytes();
       }
       __v
     }) as u32,
@@ -1358,12 +1333,7 @@ unsafe extern "C" fn add_client_options(mut packet: *mut dhcp_packet) {
           __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
             as libc::c_ushort
         } else {
-          let fresh30 = &mut __v;
-          let fresh31;
-          let fresh32 = __x;
-          llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh31) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh30, fresh32)) : "cc");
-          c2rust_asm_casts::AsmCast::cast_out(fresh30, fresh32, fresh31);
+          __v = (__x).swap_bytes();
         }
         __v
       }) as libc::c_int) as u16
@@ -1773,12 +1743,7 @@ unsafe extern "C" fn udhcp_recv_raw_packet(
         __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
           as libc::c_ushort
       } else {
-        let fresh33 = &mut __v;
-        let fresh34;
-        let fresh35 = __x;
-        llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh34) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh33, fresh35)) : "cc");
-        c2rust_asm_casts::AsmCast::cast_out(fresh33, fresh35, fresh34);
+        __v = (__x).swap_bytes();
       }
       __v
     }) as libc::c_int
@@ -1800,19 +1765,15 @@ unsafe extern "C" fn udhcp_recv_raw_packet(
       __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
         as libc::c_ushort
     } else {
-      let fresh36 = &mut __v;
-      let fresh37;
-      let fresh38 = __x;
-      llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh37) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh36, fresh38)) : "cc");
-      c2rust_asm_casts::AsmCast::cast_out(fresh36, fresh38, fresh37);
+      __v = (__x).swap_bytes();
     }
     __v
   }) as libc::c_int;
   /* make sure its the right packet for us, and that it passes sanity checks */
+  let ip = packet.ip;
   if packet.ip.protocol as libc::c_int != IPPROTO_UDP as libc::c_int
-    || packet.ip.version() as libc::c_int != 4i32
-    || packet.ip.ihl() as libc::c_ulong != ::std::mem::size_of::<iphdr>() as libc::c_ulong >> 2i32
+    || ip.version() as libc::c_int != 4i32
+    || ip.ihl() as libc::c_ulong != ::std::mem::size_of::<iphdr>() as libc::c_ulong >> 2i32
     || packet.udp.c2rust_unnamed.c2rust_unnamed_0.dest as libc::c_int
       != ({
         let mut __v: libc::c_ushort = 0;
@@ -1821,12 +1782,7 @@ unsafe extern "C" fn udhcp_recv_raw_packet(
           __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
             as libc::c_ushort
         } else {
-          let fresh39 = &mut __v;
-          let fresh40;
-          let fresh41 = __x;
-          llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh40) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh39, fresh41)) : "cc");
-          c2rust_asm_casts::AsmCast::cast_out(fresh39, fresh41, fresh40);
+          __v = (__x).swap_bytes();
         }
         __v
       }) as libc::c_int
@@ -1837,12 +1793,7 @@ unsafe extern "C" fn udhcp_recv_raw_packet(
         __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
           as libc::c_ushort
       } else {
-        let fresh42 = &mut __v;
-        let fresh43;
-        let fresh44 = __x;
-        llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh43) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh42, fresh44)) : "cc");
-        c2rust_asm_casts::AsmCast::cast_out(fresh42, fresh44, fresh43);
+        __v = (__x).swap_bytes();
       }
       __v
     }) as libc::c_int
@@ -1861,7 +1812,7 @@ unsafe extern "C" fn udhcp_recv_raw_packet(
   packet.ip.check = 0 as u16;
   if check as libc::c_int
     != crate::libbb::inet_cksum::inet_cksum(
-      &mut packet.ip as *mut iphdr as *mut u16,
+      &raw mut packet.ip as *mut iphdr as *mut u16,
       ::std::mem::size_of::<iphdr>() as libc::c_ulong as libc::c_int,
     ) as libc::c_int
   {
@@ -1899,7 +1850,7 @@ unsafe extern "C" fn udhcp_recv_raw_packet(
   match current_block {
     13763002826403452995 => {
       /* verify UDP checksum. IP header has to be modified for this */
-      memset(&mut packet.ip as *mut iphdr as *mut libc::c_void, 0, 9);
+      memset(&raw mut packet.ip as *mut iphdr as *mut libc::c_void, 0, 9);
       /* ip.xx fields which are not memset: protocol, check, saddr, daddr */
       packet.ip.tot_len = packet.udp.c2rust_unnamed.c2rust_unnamed_0.len; /* yes, this is needed */
       check = packet.udp.c2rust_unnamed.c2rust_unnamed_0.check;
@@ -1932,12 +1883,7 @@ unsafe extern "C" fn udhcp_recv_raw_packet(
           | (__x & 0xff00i32 as libc::c_uint) << 8i32
           | (__x & 0xffi32 as libc::c_uint) << 24i32
       } else {
-        let fresh45 = &mut __v;
-        let fresh46;
-        let fresh47 = __x;
-        llvm_asm!("bswap $0" : "=r" (fresh46) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh45, fresh47)) :);
-        c2rust_asm_casts::AsmCast::cast_out(fresh45, fresh47, fresh46);
+        __v = (__x).swap_bytes();
       }
       __v
     })
@@ -1992,12 +1938,7 @@ unsafe extern "C" fn udhcp_raw_socket(mut ifindex: libc::c_int) -> libc::c_int {
         __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
           as libc::c_ushort
       } else {
-        let fresh48 = &mut __v;
-        let fresh49;
-        let fresh50 = __x;
-        llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh49) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh48, fresh50)) : "cc");
-        c2rust_asm_casts::AsmCast::cast_out(fresh48, fresh50, fresh49);
+        __v = (__x).swap_bytes();
       }
       __v
     }) as libc::c_int,
@@ -2019,12 +1960,7 @@ unsafe extern "C" fn udhcp_raw_socket(mut ifindex: libc::c_int) -> libc::c_int {
       __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
         as libc::c_ushort
     } else {
-      let fresh51 = &mut __v;
-      let fresh52;
-      let fresh53 = __x;
-      llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh52) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh51, fresh53)) : "cc");
-      c2rust_asm_casts::AsmCast::cast_out(fresh51, fresh53, fresh52);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -3336,12 +3272,7 @@ pub unsafe fn udhcpc_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_ch
                             | (__x & 0xff00i32 as libc::c_uint) << 8i32
                             | (__x & 0xffi32 as libc::c_uint) << 24i32
                         } else {
-                          let fresh62 = &mut __v;
-                          let fresh63;
-                          let fresh64 = __x;
-                          llvm_asm!("bswap $0" : "=r" (fresh63) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh62, fresh64)) :);
-                          c2rust_asm_casts::AsmCast::cast_out(fresh62, fresh64, fresh63);
+                          __v = (__x).swap_bytes();
                         }
                         __v
                       };

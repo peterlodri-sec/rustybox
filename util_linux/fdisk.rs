@@ -438,10 +438,10 @@ unsafe fn bb_BLKGETSIZE_sectors(mut fd: libc::c_int) -> sector_t {
   let mut longsectors: libc::c_ulong = 0;
   if ioctl(
     fd,
-    (2u32 << 0 + 8i32 + 8i32 + 14i32
+    ((2u32 << 0 + 8i32 + 8i32 + 14i32
       | (0x12i32 << 0 + 8i32) as libc::c_uint
       | (114i32 << 0) as libc::c_uint) as libc::c_ulong
-      | (::std::mem::size_of::<size_t>() as libc::c_ulong) << 0 + 8i32 + 8i32,
+      | (::std::mem::size_of::<size_t>() as libc::c_ulong) << 0 + 8i32 + 8i32) as _,
     &mut v64 as *mut u64,
   ) == 0
   {
@@ -459,7 +459,7 @@ unsafe fn bb_BLKGETSIZE_sectors(mut fd: libc::c_int) -> sector_t {
       (0u32 << 0 + 8i32 + 8i32 + 14i32
         | (0x12i32 << 0 + 8i32) as libc::c_uint
         | (96i32 << 0) as libc::c_uint
-        | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as libc::c_ulong,
+        | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as _,
       &mut longsectors as *mut libc::c_ulong,
     ) != 0
     {
@@ -1134,7 +1134,7 @@ unsafe fn get_sectorsize() {
       (0u32 << 0 + 8i32 + 8i32 + 14i32
         | (0x12i32 << 0 + 8i32) as libc::c_uint
         | (104i32 << 0) as libc::c_uint
-        | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as libc::c_ulong,
+        | (0i32 << 0 + 8i32 + 8i32) as libc::c_uint) as _,
       &mut arg as *mut libc::c_int,
     ) == 0
     {
@@ -1157,7 +1157,7 @@ unsafe fn get_kernel_geometry() {
   };
   if ioctl(
     dev_fd as libc::c_int,
-    0x301i32 as libc::c_ulong,
+    0x301i32 as _,
     &mut geometry as *mut hd_geometry,
   ) == 0
   {
@@ -3256,7 +3256,7 @@ unsafe fn is_whole_disk(mut disk: *const libc::c_char) -> libc::c_int {
     };
     let mut err: libc::c_int = ioctl(
       fd,
-      0x301i32 as libc::c_ulong,
+      0x301i32 as _,
       &mut geometry as *mut hd_geometry,
     );
     close(fd);
@@ -3338,7 +3338,7 @@ pub unsafe fn fdisk_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_cha
     as *mut *mut globals); /* needed: fd 3 must not stay closed */
   *fresh2 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   (*ptr_to_globals).sector_size = 512i32 as libc::c_uint;
   (*ptr_to_globals).sector_offset = 1i32 as libc::c_uint;
   (*ptr_to_globals).g_partitions = 4i32;

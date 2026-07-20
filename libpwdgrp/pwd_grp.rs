@@ -264,7 +264,7 @@ unsafe fn parse_common(
   }
   /* record found */
   (*ptr_to_statics).string_size =
-    (*ptr_to_statics).tokenize_end.wrapping_offset_from(buf) as libc::c_long as libc::c_uint;
+    (*ptr_to_statics).tokenize_end.offset_from(buf) as libc::c_long as libc::c_uint;
   /*
    * Ugly hack: group db requires additional buffer space
    * for members[] array. If there is only one group, we need space

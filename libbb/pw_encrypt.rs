@@ -1033,12 +1033,7 @@ unsafe fn des_setkey(mut ctx: *mut des_ctx, mut key: *const libc::c_char) {
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh6 = &mut __v;
-      let fresh7;
-      let fresh8 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh7) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh6, fresh8)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh6, fresh8, fresh7);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -1051,12 +1046,7 @@ unsafe fn des_setkey(mut ctx: *mut des_ctx, mut key: *const libc::c_char) {
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh9 = &mut __v;
-      let fresh10;
-      let fresh11 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh10) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh9, fresh11)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh9, fresh11, fresh10);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -1235,7 +1225,7 @@ unsafe fn des_crypt(
    * and padding with zeros.
    */
   q = keybuf.as_mut_ptr() as *mut u8;
-  while q.wrapping_offset_from(keybuf.as_mut_ptr() as *mut u8) as libc::c_long
+  while q.offset_from(keybuf.as_mut_ptr() as *mut u8) as libc::c_long
     != 8i32 as libc::c_long
   {
     *q = ((*key as libc::c_int) << 1i32) as u8;
@@ -1503,7 +1493,7 @@ unsafe fn sha_crypt(
       resptr = resptr.offset(sprintf(resptr, str_rounds.as_ptr(), rounds) as isize)
     }
   }
-  salt_len = strchrnul(salt_data, '$' as i32).wrapping_offset_from(salt_data) as libc::c_long
+  salt_len = strchrnul(salt_data, '$' as i32).offset_from(salt_data) as libc::c_long
     as libc::c_uint;
   if salt_len > 16i32 as libc::c_uint {
     salt_len = 16i32 as libc::c_uint

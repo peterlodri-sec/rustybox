@@ -150,7 +150,7 @@ pub unsafe fn paste_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_cha
     /* note: handle NUL properly (do not stop at it!): try -d'\t\0\t' */
     del_cnt =
       crate::libbb::process_escape_sequence::strcpy_and_process_escape_sequences(delims, delims)
-        .wrapping_offset_from(delims) as libc::c_long as libc::c_int
+        .offset_from(delims) as libc::c_long as libc::c_int
   }
   if (*argv.offset(0)).is_null() {
     argv = argv.offset(-1);

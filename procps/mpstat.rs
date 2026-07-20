@@ -801,7 +801,7 @@ unsafe fn get_irqs_from_interrupts(
     }
     last_char = *cp_0.offset(-1i32 as isize);
     ic = &mut *(*per_cpu_stats.offset(current as isize)).offset(irq as isize) as *mut stats_irqcpu;
-    len = cp_0.wrapping_offset_from(buf) as libc::c_long as libc::c_int;
+    len = cp_0.offset_from(buf) as libc::c_long as libc::c_int;
     if len as libc::c_ulong >= ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong {
       len = (::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong)
         .wrapping_sub(1i32 as libc::c_ulong) as libc::c_int
@@ -1172,7 +1172,7 @@ pub unsafe fn mpstat_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_ch
     as *mut *mut globals);
   *fresh1 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   (*ptr_to_globals).interval = -1i32;
   /* Get number of processors */
   (*ptr_to_globals).cpu_nr = crate::libbb::get_cpu_count::get_cpu_count();

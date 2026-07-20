@@ -169,7 +169,7 @@ pub unsafe fn blockdev_main(
   flags = bdcmd_flags[bdcmd as usize] as libc::c_uint;
   if ioctl(
     fd,
-    bdcmd_ioctl[bdcmd as usize] as libc::c_ulong,
+    bdcmd_ioctl[bdcmd as usize] as _,
     &mut ioctl_val_on_stack.u64_0 as *mut u64,
   ) == -1i32
   {

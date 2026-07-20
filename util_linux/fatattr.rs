@@ -47,7 +47,7 @@ unsafe fn get_flag(mut c: libc::c_char) -> libc::c_ulong {
       c as libc::c_int,
     );
   }
-  return (1i32 << fp.wrapping_offset_from(bit_to_char.as_ptr()) as libc::c_long) as libc::c_ulong;
+  return (1i32 << fp.offset_from(bit_to_char.as_ptr()) as libc::c_long) as libc::c_ulong;
 }
 unsafe fn decode_arg(mut arg: *const libc::c_char) -> libc::c_uint {
   let mut fl: libc::c_uint = 0 as libc::c_uint;

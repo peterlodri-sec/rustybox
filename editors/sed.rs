@@ -285,7 +285,7 @@ unsafe fn parse_escapes(
           *string.offset((i + 1i32) as isize) as libc::c_int
         }) as libc::c_char;
         if *d as libc::c_int == '\u{0}' as i32 {
-          return d.wrapping_offset_from(dest) as libc::c_long as libc::c_uint;
+          return d.offset_from(dest) as libc::c_long as libc::c_uint;
         }
         i += 2i32;
         d = d.offset(1);
@@ -302,12 +302,12 @@ unsafe fn parse_escapes(
     i = i + 1;
     *d = *string.offset(fresh1 as isize);
     if *d as libc::c_int == '\u{0}' as i32 {
-      return d.wrapping_offset_from(dest) as libc::c_long as libc::c_uint;
+      return d.offset_from(dest) as libc::c_long as libc::c_uint;
     }
     d = d.offset(1)
   }
   *d = '\u{0}' as i32 as libc::c_char;
-  return d.wrapping_offset_from(dest) as libc::c_long as libc::c_uint;
+  return d.offset_from(dest) as libc::c_long as libc::c_uint;
 }
 unsafe fn copy_parsing_escapes(
   mut string: *const libc::c_char,
@@ -401,7 +401,7 @@ unsafe fn parse_regex_delim(
   cmdstr_ptr = cmdstr_ptr.offset((idx + 1i32) as isize);
   idx = index_of_next_unescaped_regexp_delim(-(delimiter as libc::c_int), cmdstr_ptr);
   *replace = copy_parsing_escapes(cmdstr_ptr, idx);
-  return (cmdstr_ptr.wrapping_offset_from(cmdstr) as libc::c_long + idx as libc::c_long)
+  return (cmdstr_ptr.offset_from(cmdstr) as libc::c_long + idx as libc::c_long)
     as libc::c_int;
 }
 /*
@@ -461,7 +461,7 @@ unsafe fn get_address(
     /* Move position to next character after last delimiter */
     pos = pos.offset((next + 1i32) as isize)
   }
-  return pos.wrapping_offset_from(my_str) as libc::c_long as libc::c_int;
+  return pos.offset_from(my_str) as libc::c_long as libc::c_int;
 }
 /* Grab a filename.  Whitespace at start is skipped, then goes to EOL. */
 unsafe fn parse_file_cmd(
@@ -482,15 +482,15 @@ unsafe fn parse_file_cmd(
     /* If lines glued together, put backslash back. */
     *retval = crate::libbb::xfuncs_printf::xstrndup(
       start,
-      (eol.wrapping_offset_from(start) as libc::c_long + 1) as libc::c_int,
+      (eol.offset_from(start) as libc::c_long + 1) as libc::c_int,
     );
-    *(*retval).offset(eol.wrapping_offset_from(start) as libc::c_long as isize) =
+    *(*retval).offset(eol.offset_from(start) as libc::c_long as isize) =
       '\\' as i32 as libc::c_char
   } else {
     /* eol is NUL */
     *retval = crate::libbb::xfuncs_printf::xstrdup(start)
   }
-  return eol.wrapping_offset_from(filecmdstr) as libc::c_long as libc::c_int;
+  return eol.offset_from(filecmdstr) as libc::c_long as libc::c_int;
 }
 unsafe fn parse_subst_cmd(
   mut sed_cmd: *mut sed_cmd_t,
@@ -530,7 +530,7 @@ unsafe fn parse_subst_cmd(
           &mut pos as *mut *const libc::c_char as *mut *mut libc::c_char,
           10i32,
         ) as libc::c_uint;
-        idx = (pos.wrapping_offset_from(substr) as libc::c_long - 1) as libc::c_int
+        idx = (pos.offset_from(substr) as libc::c_long - 1) as libc::c_int
       }
     } else {
       /* Skip spaces */
@@ -610,7 +610,7 @@ unsafe fn parse_cmd_args(
   ];
   let mut idx: libc::c_uint = 0;
   idx = strchrnul(cmd_letters.as_ptr(), (*sed_cmd).cmd as libc::c_int)
-    .wrapping_offset_from(cmd_letters.as_ptr()) as libc::c_long as libc::c_uint;
+    .offset_from(cmd_letters.as_ptr()) as libc::c_long as libc::c_uint;
   /* handle (s)ubstitution command */
   if idx == IDX_s as libc::c_int as libc::c_uint {
     cmdstr = cmdstr.offset(parse_subst_cmd(sed_cmd, cmdstr) as isize)

@@ -212,7 +212,7 @@ unsafe fn safe_write_to_pty_decode_iac(mut ts: *mut tsession) -> ssize_t {
        * Write only them, and return.
        */
       if !found.is_null() {
-        wr = found.wrapping_offset_from(buf) as libc::c_long as libc::c_uint
+        wr = found.offset_from(buf) as libc::c_long as libc::c_uint
       }
       /* We map \r\n ==> \r for pragmatic reasons:
        * many client implementations send \r\n when
@@ -223,7 +223,7 @@ unsafe fn safe_write_to_pty_decode_iac(mut ts: *mut tsession) -> ssize_t {
       found =
         memchr(buf as *const libc::c_void, '\r' as i32, wr as libc::c_ulong) as *mut libc::c_uchar;
       if !found.is_null() {
-        rc = found.wrapping_offset_from(buf) + 1
+        rc = found.offset_from(buf) + 1
       }
       rc =
         crate::libbb::safe_write::safe_write((*ts).ptyfd, buf as *const libc::c_void, rc as size_t);
@@ -345,7 +345,7 @@ unsafe fn safe_write_to_pty_decode_iac(mut ts: *mut tsession) -> ssize_t {
                 as libc::c_ushort;
               ioctl(
                 (*ts).ptyfd,
-                0x5414i32 as libc::c_ulong,
+                0x5414i32 as _,
                 &mut ws as *mut winsize as *mut libc::c_char,
               );
               rc = 7i32 as ssize_t
@@ -442,7 +442,7 @@ unsafe fn safe_write_double_iac(
       IACptr = memchr(buf as *const libc::c_void, 255i32, count) as *const libc::c_char;
       wr = count;
       if !IACptr.is_null() {
-        wr = IACptr.wrapping_offset_from(buf) as libc::c_long as size_t
+        wr = IACptr.offset_from(buf) as libc::c_long as size_t
       }
       rc = crate::libbb::safe_write::safe_write(fd, buf as *const libc::c_void, wr) as size_t;
       if rc != wr {
@@ -472,8 +472,14 @@ unsafe fn make_new_session(mut sock: libc::c_int) -> *mut tsession {
     c_lflag: 0,
     c_line: 0,
     c_cc: [0; 32],
+    #[cfg(not(target_env = "musl"))]
     c_ispeed: 0,
+    #[cfg(not(target_env = "musl"))]
     c_ospeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ispeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ospeed: 0,
   };
   let mut fd: libc::c_int = 0;
   let mut pid: libc::c_int = 0;
@@ -789,33 +795,19 @@ pub unsafe fn telnetd_main(
     let mut __d0: libc::c_int = 0;
     let mut __d1: libc::c_int = 0;
     let fresh4 = &mut __d0;
-    let fresh5;
     let fresh6 = &mut __d1;
-    let fresh7;
     let fresh8 = (::std::mem::size_of::<fd_set>() as libc::c_ulong)
       .wrapping_div(::std::mem::size_of::<__fd_mask>() as libc::c_ulong);
     let fresh9 = &mut *rdfdset.fds_bits.as_mut_ptr().offset(0) as *mut __fd_mask;
-    llvm_asm!("cld; rep; stosq" : "={cx}" (fresh5), "={di}" (fresh7) : "{ax}" (0i32),
-     "0" (c2rust_asm_casts::AsmCast::cast_in(fresh4, fresh8)), "1"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh6, fresh9)) : "memory" :
-     "volatile");
-    c2rust_asm_casts::AsmCast::cast_out(fresh4, fresh8, fresh5);
-    c2rust_asm_casts::AsmCast::cast_out(fresh6, fresh9, fresh7);
+    ::core::ptr::write_bytes(fresh9, 0u8, fresh8 as usize);
     let mut __d0_0: libc::c_int = 0;
     let mut __d1_0: libc::c_int = 0;
     let fresh10 = &mut __d0_0;
-    let fresh11;
     let fresh12 = &mut __d1_0;
-    let fresh13;
     let fresh14 = (::std::mem::size_of::<fd_set>() as libc::c_ulong)
       .wrapping_div(::std::mem::size_of::<__fd_mask>() as libc::c_ulong);
     let fresh15 = &mut *wrfdset.fds_bits.as_mut_ptr().offset(0) as *mut __fd_mask;
-    llvm_asm!("cld; rep; stosq" : "={cx}" (fresh11), "={di}" (fresh13) : "{ax}" (0i32),
-     "0" (c2rust_asm_casts::AsmCast::cast_in(fresh10, fresh14)), "1"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh12, fresh15)) : "memory" :
-     "volatile");
-    c2rust_asm_casts::AsmCast::cast_out(fresh10, fresh14, fresh11);
-    c2rust_asm_casts::AsmCast::cast_out(fresh12, fresh15, fresh13);
+    ::core::ptr::write_bytes(fresh15, 0u8, fresh14 as usize);
     /* Select on the master socket, all telnet sockets and their
      * ptys if there is room in their session buffers.
      * NB: scalability problem: we recalculate entire bitmap

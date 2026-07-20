@@ -1334,7 +1334,7 @@ pub unsafe fn diff_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char
       as *mut *mut globals);
   *fresh11 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   (*ptr_to_globals).opt_U_context = 3i32;
   /* exactly 2 params; collect multiple -L <label>; -U N */
   crate::libbb::getopt32::getopt32long(

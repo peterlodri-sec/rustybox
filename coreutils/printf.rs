@@ -442,7 +442,7 @@ unsafe fn print_formatted(
             return saved_argv.offset(-1);
           }
           direc_length = direc_length.wrapping_add(1);
-          if p.wrapping_offset_from(format_chars.as_ptr()) as libc::c_long <= 5i32 as libc::c_long {
+          if p.offset_from(format_chars.as_ptr()) as libc::c_long <= 5i32 as libc::c_long {
             /* it is one of "diouxX" */
             p = xmalloc(direc_length.wrapping_add(3) as size_t) as *mut libc::c_char;
             memcpy(

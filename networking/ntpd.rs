@@ -643,12 +643,7 @@ unsafe extern "C" fn lfp_to_d(mut lfp: l_fixedpt_t) -> libc::c_double {
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh0 = &mut __v;
-      let fresh1;
-      let fresh2 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh1) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh0, fresh2)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh0, fresh2, fresh1);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -661,12 +656,7 @@ unsafe extern "C" fn lfp_to_d(mut lfp: l_fixedpt_t) -> libc::c_double {
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh3 = &mut __v;
-      let fresh4;
-      let fresh5 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh4) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh3, fresh5)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh3, fresh5, fresh4);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -687,12 +677,7 @@ unsafe extern "C" fn sfp_to_d(mut sfp: s_fixedpt_t) -> libc::c_double {
       __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
         as libc::c_ushort
     } else {
-      let fresh6 = &mut __v;
-      let fresh7;
-      let fresh8 = __x;
-      llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh7) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh6, fresh8)) : "cc");
-      c2rust_asm_casts::AsmCast::cast_out(fresh6, fresh8, fresh7);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -703,12 +688,7 @@ unsafe extern "C" fn sfp_to_d(mut sfp: s_fixedpt_t) -> libc::c_double {
       __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
         as libc::c_ushort
     } else {
-      let fresh9 = &mut __v;
-      let fresh10;
-      let fresh11 = __x;
-      llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh10) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh9, fresh11)) : "cc");
-      c2rust_asm_casts::AsmCast::cast_out(fresh9, fresh11, fresh10);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -736,12 +716,7 @@ unsafe extern "C" fn d_to_lfp(mut d: libc::c_double) -> l_fixedpt_t {
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh12 = &mut __v;
-      let fresh13;
-      let fresh14 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh13) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh12, fresh14)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh12, fresh14, fresh13);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -754,12 +729,7 @@ unsafe extern "C" fn d_to_lfp(mut d: libc::c_double) -> l_fixedpt_t {
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh15 = &mut __v;
-      let fresh16;
-      let fresh17 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh16) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh15, fresh17)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh15, fresh17, fresh16);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -780,12 +750,7 @@ unsafe extern "C" fn d_to_sfp(mut d: libc::c_double) -> s_fixedpt_t {
       __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
         as libc::c_ushort
     } else {
-      let fresh18 = &mut __v;
-      let fresh19;
-      let fresh20 = __x;
-      llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh19) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh18, fresh20)) : "cc");
-      c2rust_asm_casts::AsmCast::cast_out(fresh18, fresh20, fresh19);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -796,12 +761,7 @@ unsafe extern "C" fn d_to_sfp(mut d: libc::c_double) -> s_fixedpt_t {
       __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
         as libc::c_ushort
     } else {
-      let fresh21 = &mut __v;
-      let fresh22;
-      let fresh23 = __x;
-      llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh22) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh21, fresh23)) : "cc");
-      c2rust_asm_casts::AsmCast::cast_out(fresh21, fresh23, fresh22);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -1089,12 +1049,7 @@ unsafe extern "C" fn hash_peer(mut p: *mut peer_t) {
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh24 = &mut __v;
-      let fresh25;
-      let fresh26 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh25) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh24, fresh26)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh24, fresh26, fresh25);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -3098,7 +3053,7 @@ pub unsafe fn ntpd_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char
     *(not_const_pp(&ptr_to_globals as *const *mut globals as *const libc::c_void)
       as *mut *mut globals);
   *fresh31 = &mut G as *mut globals as *mut libc::c_void as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   ntp_init(argv);
   /* If ENABLE_FEATURE_NTPD_SERVER, + 1 for listen_fd: */
   cnt = G.peer_cnt.wrapping_add(1i32 as libc::c_uint);

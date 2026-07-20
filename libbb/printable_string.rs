@@ -27,9 +27,9 @@ pub unsafe fn printable_string2(
     if c as libc::c_int == '\u{0}' as i32 {
       /* 99+% of inputs do not need conversion */
       if !stats.is_null() {
-        (*stats).byte_count = s.wrapping_offset_from(str) as libc::c_long as libc::c_uint;
-        (*stats).unicode_count = s.wrapping_offset_from(str) as libc::c_long as libc::c_uint;
-        (*stats).unicode_width = s.wrapping_offset_from(str) as libc::c_long as libc::c_uint
+        (*stats).byte_count = s.offset_from(str) as libc::c_long as libc::c_uint;
+        (*stats).unicode_count = s.offset_from(str) as libc::c_long as libc::c_uint;
+        (*stats).unicode_width = s.offset_from(str) as libc::c_long as libc::c_uint
       }
       return str;
     }

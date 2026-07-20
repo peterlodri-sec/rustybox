@@ -154,7 +154,7 @@ pub unsafe fn volume_id_probe_f2fs(mut id: *mut volume_id) -> libc::c_int
   }
   crate::util_linux::volume_id::util::volume_id_set_label_unicode16(
     id,
-    (*sb).volume_name.as_mut_ptr() as *mut u8,
+    (&raw mut (*sb).volume_name) as *mut u8,
     LE,
     if 1024i32 < 64i32 { 1024i32 } else { 64i32 } as size_t,
   );

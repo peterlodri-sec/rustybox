@@ -914,7 +914,7 @@ unsafe fn compile_fs_type(mut fs_type: *mut libc::c_char) {
       .offset(fresh11 as isize);
     *fresh12 = crate::libbb::xfuncs_printf::xstrndup(
       s,
-      comma.wrapping_offset_from(s) as libc::c_long as libc::c_int,
+      comma.offset_from(s) as libc::c_long as libc::c_int,
     );
     if *comma as libc::c_int == '\u{0}' as i32 {
       break;

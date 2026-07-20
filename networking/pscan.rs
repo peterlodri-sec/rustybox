@@ -131,12 +131,7 @@ unsafe extern "C" fn port_name(mut port: libc::c_uint) -> *const libc::c_char {
         __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
           as libc::c_ushort
       } else {
-        let fresh0 = &mut __v;
-        let fresh1;
-        let fresh2 = __x;
-        llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh1) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh0, fresh2)) : "cc");
-        c2rust_asm_casts::AsmCast::cast_out(fresh0, fresh2, fresh1);
+        __v = (__x).swap_bytes();
       }
       __v
     }) as libc::c_int,
@@ -225,12 +220,7 @@ pub unsafe fn pscan_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_cha
           __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
             as libc::c_ushort
         } else {
-          let fresh3 = &mut __v;
-          let fresh4;
-          let fresh5 = __x;
-          llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh4) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh3, fresh5)) : "cc");
-          c2rust_asm_casts::AsmCast::cast_out(fresh3, fresh5, fresh4);
+          __v = (__x).swap_bytes();
         }
         __v
       }) as libc::c_uint,

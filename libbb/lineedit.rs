@@ -859,7 +859,7 @@ unsafe extern "C" fn complete_cmd_dir_file(
     /* dirbuf = ".../.../.../" */
     dirbuf = crate::libbb::xfuncs_printf::xstrndup(
       command,
-      pfind.wrapping_offset_from(command) as libc::c_long as libc::c_int,
+      pfind.offset_from(command) as libc::c_long as libc::c_int,
     );
     if *dirbuf.offset(0) as libc::c_int == '~' as i32 {
       /* ~/... or ~user/... */
@@ -1377,7 +1377,7 @@ unsafe extern "C" fn input_tab(mut lastWasTab: *mut smallint) {
         n_0 = 1i32 as libc::c_uint;
         while n_0 < (*lineedit_ptr_to_statics).num_matches {
           if *(*(*lineedit_ptr_to_statics).matches.offset(n_0 as isize))
-            .offset(cp.wrapping_offset_from(chosen_match) as libc::c_long as isize)
+            .offset(cp.offset_from(chosen_match) as libc::c_long as isize)
             as libc::c_int
             != *cp as libc::c_int
           {
@@ -1972,7 +1972,7 @@ unsafe extern "C" fn parse_and_put_prompt(mut prmt_ptr: *const libc::c_char) {
                   buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
                   h = strtoul(buf2.as_mut_ptr(), &mut pbuf, 16i32) as libc::c_uint;
                   if h > (127i32 * 2i32 + 1i32) as libc::c_uint
-                    || (pbuf.wrapping_offset_from(buf2.as_mut_ptr()) as libc::c_long)
+                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long)
                       < l as libc::c_long
                   {
                     l -= 1;
@@ -2100,7 +2100,7 @@ unsafe extern "C" fn parse_and_put_prompt(mut prmt_ptr: *const libc::c_char) {
                   buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
                   h = strtoul(buf2.as_mut_ptr(), &mut pbuf, 16i32) as libc::c_uint;
                   if h > (127i32 * 2i32 + 1i32) as libc::c_uint
-                    || (pbuf.wrapping_offset_from(buf2.as_mut_ptr()) as libc::c_long)
+                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long)
                       < l as libc::c_long
                   {
                     l -= 1;
@@ -2220,7 +2220,7 @@ unsafe extern "C" fn parse_and_put_prompt(mut prmt_ptr: *const libc::c_char) {
                   buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
                   h = strtoul(buf2.as_mut_ptr(), &mut pbuf, 16i32) as libc::c_uint;
                   if h > (127i32 * 2i32 + 1i32) as libc::c_uint
-                    || (pbuf.wrapping_offset_from(buf2.as_mut_ptr()) as libc::c_long)
+                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long)
                       < l as libc::c_long
                   {
                     l -= 1;
@@ -2340,7 +2340,7 @@ unsafe extern "C" fn parse_and_put_prompt(mut prmt_ptr: *const libc::c_char) {
                   buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
                   h = strtoul(buf2.as_mut_ptr(), &mut pbuf, 16i32) as libc::c_uint;
                   if h > (127i32 * 2i32 + 1i32) as libc::c_uint
-                    || (pbuf.wrapping_offset_from(buf2.as_mut_ptr()) as libc::c_long)
+                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long)
                       < l as libc::c_long
                   {
                     l -= 1;
@@ -2460,7 +2460,7 @@ unsafe extern "C" fn parse_and_put_prompt(mut prmt_ptr: *const libc::c_char) {
                   buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
                   h = strtoul(buf2.as_mut_ptr(), &mut pbuf, 16i32) as libc::c_uint;
                   if h > (127i32 * 2i32 + 1i32) as libc::c_uint
-                    || (pbuf.wrapping_offset_from(buf2.as_mut_ptr()) as libc::c_long)
+                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long)
                       < l as libc::c_long
                   {
                     l -= 1;
@@ -2580,7 +2580,7 @@ unsafe extern "C" fn parse_and_put_prompt(mut prmt_ptr: *const libc::c_char) {
                   buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
                   h = strtoul(buf2.as_mut_ptr(), &mut pbuf, 16i32) as libc::c_uint;
                   if h > (127i32 * 2i32 + 1i32) as libc::c_uint
-                    || (pbuf.wrapping_offset_from(buf2.as_mut_ptr()) as libc::c_long)
+                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long)
                       < l as libc::c_long
                   {
                     l -= 1;
@@ -2700,7 +2700,7 @@ unsafe extern "C" fn parse_and_put_prompt(mut prmt_ptr: *const libc::c_char) {
                   buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
                   h = strtoul(buf2.as_mut_ptr(), &mut pbuf, 16i32) as libc::c_uint;
                   if h > (127i32 * 2i32 + 1i32) as libc::c_uint
-                    || (pbuf.wrapping_offset_from(buf2.as_mut_ptr()) as libc::c_long)
+                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long)
                       < l as libc::c_long
                   {
                     l -= 1;
@@ -2820,7 +2820,7 @@ unsafe extern "C" fn parse_and_put_prompt(mut prmt_ptr: *const libc::c_char) {
                   buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
                   h = strtoul(buf2.as_mut_ptr(), &mut pbuf, 16i32) as libc::c_uint;
                   if h > (127i32 * 2i32 + 1i32) as libc::c_uint
-                    || (pbuf.wrapping_offset_from(buf2.as_mut_ptr()) as libc::c_long)
+                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long)
                       < l as libc::c_long
                   {
                     l -= 1;
@@ -2940,7 +2940,7 @@ unsafe extern "C" fn parse_and_put_prompt(mut prmt_ptr: *const libc::c_char) {
                   buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
                   h = strtoul(buf2.as_mut_ptr(), &mut pbuf, 16i32) as libc::c_uint;
                   if h > (127i32 * 2i32 + 1i32) as libc::c_uint
-                    || (pbuf.wrapping_offset_from(buf2.as_mut_ptr()) as libc::c_long)
+                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long)
                       < l as libc::c_long
                   {
                     l -= 1;
@@ -3274,7 +3274,7 @@ unsafe extern "C" fn reverse_i_search(mut timeout: libc::c_int) -> i32 {
     matched_history_line = (*(*lineedit_ptr_to_statics).state).history[h as usize];
     (*lineedit_ptr_to_statics).command_len = load_string(matched_history_line) as libc::c_int;
     (*lineedit_ptr_to_statics).cursor =
-      match_0.wrapping_offset_from(matched_history_line) as libc::c_long as libc::c_uint;
+      match_0.offset_from(matched_history_line) as libc::c_long as libc::c_uint;
     //FIXME: cursor position for Unicode case
     free((*lineedit_ptr_to_statics).prompt_last_line as *mut libc::c_char as *mut libc::c_void);
   }
@@ -3842,8 +3842,14 @@ pub unsafe fn read_line_input(
     c_lflag: 0,
     c_line: 0,
     c_cc: [0; 32],
+    #[cfg(not(target_env = "musl"))]
     c_ispeed: 0,
+    #[cfg(not(target_env = "musl"))]
     c_ospeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ispeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ospeed: 0,
   };
   let mut new_settings: termios = termios {
     c_iflag: 0,
@@ -3852,8 +3858,14 @@ pub unsafe fn read_line_input(
     c_lflag: 0,
     c_line: 0,
     c_cc: [0; 32],
+    #[cfg(not(target_env = "musl"))]
     c_ispeed: 0,
+    #[cfg(not(target_env = "musl"))]
     c_ospeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ispeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ospeed: 0,
   };
   let mut read_key_buffer: [libc::c_char; 16] = [0; 16];
   let ref mut fresh23 =
@@ -3862,7 +3874,7 @@ pub unsafe fn read_line_input(
   *fresh23 = crate::libbb::xfuncs_printf::xzalloc(
     ::std::mem::size_of::<lineedit_statics>() as libc::c_ulong
   ) as *mut lineedit_statics;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   (*lineedit_ptr_to_statics).cmdedit_termw = 80i32 as libc::c_uint;
   (*lineedit_ptr_to_statics).home_pwd_buf = null_str.as_ptr() as *mut libc::c_char;
   n = crate::libbb::xfuncs::get_termios_and_make_raw(

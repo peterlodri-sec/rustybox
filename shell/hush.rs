@@ -1289,9 +1289,9 @@ unsafe extern "C" fn die_if_script() {
   };
 }
 unsafe extern "C" fn msg_and_die_if_script(mut fmt: *const libc::c_char, mut args: ...) {
-  let mut p: ::std::ffi::VaListImpl;
+  let mut p: ::std::ffi::VaList;
   p = args.clone();
-  crate::libbb::verror_msg::bb_verror_msg(fmt, p.as_va_list(), 0 as *const libc::c_char);
+  crate::libbb::verror_msg::bb_verror_msg(fmt, p, 0 as *const libc::c_char);
   die_if_script();
 }
 unsafe extern "C" fn syntax_error(mut msg: *const libc::c_char) {
@@ -1969,7 +1969,7 @@ unsafe extern "C" fn set_local_var(
       b"BUG in setvar\x00" as *const u8 as *const libc::c_char,
     );
   }
-  name_len = (eq_sign.wrapping_offset_from(str) as libc::c_long + 1) as libc::c_int;
+  name_len = (eq_sign.offset_from(str) as libc::c_long + 1) as libc::c_int;
   cur_pp = &mut (*ptr_to_globals).top_var;
   loop {
     cur = *cur_pp;
@@ -2201,7 +2201,7 @@ unsafe extern "C" fn set_vars_and_save_old(mut strings: *mut *mut libc::c_char) 
     }
     var_pp = get_ptr_to_local_var(
       *s,
-      eq.wrapping_offset_from(*s) as libc::c_long as libc::c_uint,
+      eq.offset_from(*s) as libc::c_long as libc::c_uint,
     );
     if !var_pp.is_null() {
       var_p = *var_pp;
@@ -2951,10 +2951,10 @@ unsafe extern "C" fn glob_brace(
                 mempcpy(
                   new_pattern_buf as *mut libc::c_void,
                   pattern as *const libc::c_void,
-                  begin.wrapping_offset_from(pattern) as libc::c_long as size_t,
+                  begin.offset_from(pattern) as libc::c_long as size_t,
                 ),
                 p as *const libc::c_void,
-                next.wrapping_offset_from(p) as libc::c_long as size_t,
+                next.offset_from(p) as libc::c_long as size_t,
               ),
               rest as *const libc::c_void,
               rest_len,
@@ -3041,12 +3041,12 @@ unsafe extern "C" fn perform_glob(mut o: *mut o_string, mut n: libc::c_int) -> l
   if glob_needed(pattern) == 0 {
     /* unbackslash last string in o in place, fix length */
     (*o).length =
-      unbackslash(pattern).wrapping_offset_from((*o).data) as libc::c_long as libc::c_int;
+      unbackslash(pattern).offset_from((*o).data) as libc::c_long as libc::c_int;
     return o_save_ptr_helper(o, n);
   }
   copy = crate::libbb::xfuncs_printf::xstrdup(pattern);
   /* "forget" pattern in o */
-  (*o).length = pattern.wrapping_offset_from((*o).data) as libc::c_long as libc::c_int;
+  (*o).length = pattern.offset_from((*o).data) as libc::c_long as libc::c_int;
   n = glob_brace(copy, o, n);
   free(copy as *mut libc::c_void);
   return n;
@@ -7403,7 +7403,7 @@ unsafe extern "C" fn strstr_pattern(
       (SCAN_MOVE_FROM_RIGHT as libc::c_int + SCAN_MATCH_LEFT_HALF as libc::c_int) as libc::c_uint,
     );
     if !end.is_null() {
-      *size = end.wrapping_offset_from(val) as libc::c_long as libc::c_int;
+      *size = end.offset_from(val) as libc::c_long as libc::c_int;
       return val;
     }
     if *val as libc::c_int == '\u{0}' as i32 {
@@ -7440,7 +7440,7 @@ unsafe extern "C" fn replace_pattern(
     result = crate::libbb::xfuncs_printf::xrealloc(
       result as *mut libc::c_void,
       (res_len as libc::c_long
-        + s.wrapping_offset_from(val) as libc::c_long
+        + s.offset_from(val) as libc::c_long
         + repl_len as libc::c_long
         + 1) as size_t,
     ) as *mut libc::c_char;
@@ -7448,12 +7448,12 @@ unsafe extern "C" fn replace_pattern(
       mempcpy(
         result.offset(res_len as isize) as *mut libc::c_void,
         val as *const libc::c_void,
-        s.wrapping_offset_from(val) as libc::c_long as size_t,
+        s.offset_from(val) as libc::c_long as size_t,
       ) as *mut libc::c_char,
       repl,
     );
     res_len = (res_len as libc::c_long
-      + (s.wrapping_offset_from(val) as libc::c_long + repl_len as libc::c_long))
+      + (s.offset_from(val) as libc::c_long + repl_len as libc::c_long))
       as libc::c_uint;
     val = s.offset(size as isize);
     if exp_op as libc::c_int == '/' as i32 {
@@ -7715,7 +7715,7 @@ unsafe extern "C" fn expand_one_var(
             /* %[%] */
             to_be_freed = crate::libbb::xfuncs_printf::xstrndup(
               val,
-              loc.wrapping_offset_from(val) as libc::c_long as libc::c_int,
+              loc.offset_from(val) as libc::c_long as libc::c_int,
             );
             val = to_be_freed
           }
@@ -8003,7 +8003,7 @@ unsafe extern "C" fn expand_vars_to_list(
     o_addblock(
       output,
       arg,
-      p.wrapping_offset_from(arg) as libc::c_long as libc::c_int,
+      p.offset_from(arg) as libc::c_long as libc::c_int,
     );
     p = p.offset(1);
     arg = p;
@@ -8970,7 +8970,7 @@ unsafe extern "C" fn find_in_path(mut arg: *const libc::c_char) -> *mut libc::c_
   }
   loop {
     let mut end: *const libc::c_char = strchrnul(PATH, ':' as i32);
-    let mut sz: libc::c_int = end.wrapping_offset_from(PATH) as libc::c_long as libc::c_int;
+    let mut sz: libc::c_int = end.offset_from(PATH) as libc::c_long as libc::c_int;
     free(ret as *mut libc::c_void);
     if sz != 0 {
       ret = crate::libbb::xfuncs_printf::xasprintf(
@@ -9261,7 +9261,7 @@ unsafe extern "C" fn x_mode_print_optionally_squoted(mut str: *const libc::c_cha
   cp = str;
   loop {
     /* print '....' up to EOL or first squote */
-    len = strchrnul(cp, '\'' as i32).wrapping_offset_from(cp) as libc::c_long as libc::c_int
+    len = strchrnul(cp, '\'' as i32).offset_from(cp) as libc::c_long as libc::c_int
       as libc::c_uint;
     if len != 0 as libc::c_uint {
       x_mode_addchr('\'' as i32);
@@ -9921,7 +9921,7 @@ unsafe extern "C" fn run_pipe(mut pi: *mut pipe) -> libc::c_int {
       /* Not all $IFS is whitespace */
       let mut d: *mut libc::c_char = std::ptr::null_mut::<libc::c_char>(); /* can overestimate */
       let mut len: libc::c_int =
-        p.wrapping_offset_from((*ptr_to_globals).ifs) as libc::c_long as libc::c_int;
+        p.offset_from((*ptr_to_globals).ifs) as libc::c_long as libc::c_int;
       p = crate::libbb::skip_whitespace::skip_non_whitespace(p);
       (*ptr_to_globals).ifs_whitespace = xmalloc(
         (len as libc::c_ulong)
@@ -10187,7 +10187,7 @@ unsafe extern "C" fn run_pipe(mut pi: *mut pipe) -> libc::c_int {
             }
             x_mode_addblock(
               p_0,
-              eq.wrapping_offset_from(p_0) as libc::c_long as libc::c_int,
+              eq.offset_from(p_0) as libc::c_long as libc::c_int,
             );
             x_mode_print_optionally_squoted(eq);
             x_mode_flush();
@@ -10910,7 +10910,7 @@ pub unsafe fn hush_main(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char)
       as *mut *mut globals);
   *fresh42 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   sigfillset(&mut (*ptr_to_globals).sa.sa_mask);
   (*ptr_to_globals).sa.sa_flags = 0x10000000i32;
   if 0 != 0 {
@@ -11681,7 +11681,7 @@ unsafe extern "C" fn print_escaped(mut s: *const libc::c_char) {
         /* print 'xxxx', possibly just '' */
         printf(
           b"\'%.*s\'\x00" as *const u8 as *const libc::c_char,
-          p.wrapping_offset_from(s) as libc::c_long as libc::c_int,
+          p.offset_from(s) as libc::c_long as libc::c_int,
           s,
         );
         if *p as libc::c_int == '\u{0}' as i32 {
@@ -11723,7 +11723,7 @@ unsafe extern "C" fn helper_export_local(
       let mut vpp: *mut *mut variable = std::ptr::null_mut();
       vpp = get_ptr_to_local_var(
         name,
-        name_end.wrapping_offset_from(name) as libc::c_long as libc::c_uint,
+        name_end.offset_from(name) as libc::c_long as libc::c_uint,
       );
       var = if !vpp.is_null() {
         *vpp
@@ -11865,7 +11865,7 @@ unsafe extern "C" fn builtin_export(mut argv: *mut *mut libc::c_char) -> libc::c
         /* export var= */
         printf(
           b"export %.*s\x00" as *const u8 as *const libc::c_char,
-          p.wrapping_offset_from(s) as libc::c_long as libc::c_int + 1i32,
+          p.offset_from(s) as libc::c_long as libc::c_int + 1i32,
           s,
         );
         print_escaped(p.offset(1));

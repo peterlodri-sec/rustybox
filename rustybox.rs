@@ -4,11 +4,8 @@
 #![allow(non_upper_case_globals)]
 #![allow(unused_assignments)]
 #![allow(unused_mut)]
-#![feature(llvm_asm)]
 #![feature(c_variadic)]
 #![feature(extern_types)]
-#![feature(label_break_value)]
-#![feature(ptr_wrapping_offset_from)]
 
 #[macro_use]
 extern crate lazy_static;
@@ -538,6 +535,49 @@ pub mod sysklogd {
 } // mod sysklogd
 pub mod librb;
 pub mod util_linux;
+
+// musl implements major()/minor()/makedev() as inline macros and does not
+// export the glibc `gnu_dev_*` symbols that the transpiled code links against.
+// Provide them (glibc dev_t encoding) for musl targets only.
+#[cfg(target_env = "musl")]
+#[no_mangle]
+pub extern "C" fn gnu_dev_major(dev: libc::dev_t) -> libc::c_uint {
+  (((dev >> 8) & 0xfff) | ((dev >> 32) & !0xfff)) as libc::c_uint
+}
+#[cfg(target_env = "musl")]
+#[no_mangle]
+pub extern "C" fn gnu_dev_minor(dev: libc::dev_t) -> libc::c_uint {
+  ((dev & 0xff) | ((dev >> 12) & !0xff)) as libc::c_uint
+}
+#[cfg(target_env = "musl")]
+#[no_mangle]
+pub extern "C" fn gnu_dev_makedev(major: libc::c_uint, minor: libc::c_uint) -> libc::dev_t {
+  let (major, minor) = (major as libc::dev_t, minor as libc::dev_t);
+  (minor & 0xff) | ((major & 0xfff) << 8) | ((minor & !0xff) << 12) | ((major & !0xfff) << 32)
+}
+
+// glibc exposes CMSG_NXTHDR via the out-of-line `__cmsg_nxthdr`; musl inlines
+// it. Provide the glibc-equivalent for musl.
+#[cfg(target_env = "musl")]
+#[no_mangle]
+pub unsafe extern "C" fn __cmsg_nxthdr(
+  mhdr: *mut libc::msghdr,
+  cmsg: *mut libc::cmsghdr,
+) -> *mut libc::cmsghdr {
+  let align =
+    |len: usize| (len + core::mem::size_of::<usize>() - 1) & !(core::mem::size_of::<usize>() - 1);
+  if ((*cmsg).cmsg_len as usize) < core::mem::size_of::<libc::cmsghdr>() {
+    return core::ptr::null_mut();
+  }
+  let next = (cmsg as *mut u8).add(align((*cmsg).cmsg_len as usize)) as *mut libc::cmsghdr;
+  let ctl_end = ((*mhdr).msg_control as *mut u8).add((*mhdr).msg_controllen as usize);
+  if (next.add(1) as *mut u8) > ctl_end
+    || (next as *mut u8).add(align((*next).cmsg_len as usize)) > ctl_end
+  {
+    return core::ptr::null_mut();
+  }
+  next
+}
 
 fn main() {
   unsafe { libbb::appletlib::main() }

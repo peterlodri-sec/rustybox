@@ -370,7 +370,7 @@ unsafe extern "C" fn findline(mut buf: *mut libc::c_char, mut siz: libc::c_uint)
   p = buf;
   while x > 0 {
     if *p as libc::c_int == '\n' as i32 {
-      x = p.wrapping_offset_from(buf) as libc::c_long as libc::c_int;
+      x = p.offset_from(buf) as libc::c_long as libc::c_int;
       x += 1;
       return x as libc::c_uint;
     }
@@ -745,12 +745,7 @@ unsafe extern "C" fn udptest() -> libc::c_int {
           __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
             as libc::c_ushort
         } else {
-          let fresh1 = &mut __v;
-          let fresh2;
-          let fresh3 = __x;
-          llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh2) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh1, fresh3)) : "cc");
-          c2rust_asm_casts::AsmCast::cast_out(fresh1, fresh3, fresh2);
+          __v = (__x).swap_bytes();
         }
         __v
       }) as libc::c_uint,
@@ -857,7 +852,7 @@ unsafe extern "C" fn oprint(
     crate::libbb::xfuncs_printf::xwrite(
       ofd as libc::c_int,
       stage.as_mut_ptr() as *const libc::c_void,
-      ap.wrapping_offset_from(stage.as_mut_ptr()) as libc::c_long as size_t,
+      ap.offset_from(stage.as_mut_ptr()) as libc::c_long as size_t,
     );
     if !(bc != 0) {
       break;
@@ -1083,7 +1078,7 @@ pub unsafe fn nc_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char) 
     as *mut *mut globals);
   *fresh8 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   /* catch a signal or two for cleanup */
   crate::libbb::signals::bb_signals(
     0 + (1i32 << 2i32) + (1i32 << 3i32) + (1i32 << 15i32),
@@ -1237,12 +1232,7 @@ pub unsafe fn nc_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char) 
             __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
               as libc::c_ushort
           } else {
-            let fresh9 = &mut __v;
-            let fresh10;
-            let fresh11 = __x;
-            llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh10) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh9, fresh11)) : "cc");
-            c2rust_asm_casts::AsmCast::cast_out(fresh9, fresh11, fresh10);
+            __v = (__x).swap_bytes();
           }
           __v
         }) as libc::c_uint,

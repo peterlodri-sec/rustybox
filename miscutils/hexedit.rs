@@ -241,7 +241,7 @@ unsafe fn redraw_cur_line() {
   column = (0xfi32 as libc::c_ulong & (*ptr_to_globals).current_byte as uintptr_t) as libc::c_int;
   data = (*ptr_to_globals).current_byte.offset(-(column as isize));
   offset = (*ptr_to_globals).offset
-    + data.wrapping_offset_from((*ptr_to_globals).baseaddr) as libc::c_long;
+    + data.offset_from((*ptr_to_globals).baseaddr) as libc::c_long;
   column = column * 3i32 + (*ptr_to_globals).half as libc::c_int;
   column += format_line(buf.as_mut_ptr(), data, offset);
   printf(
@@ -295,7 +295,7 @@ unsafe fn move_mapping_further() -> libc::c_int {
   pagesize = 4096i32 as libc::c_uint;
   pos = (*ptr_to_globals)
     .current_byte
-    .wrapping_offset_from((*ptr_to_globals).baseaddr) as libc::c_long as libc::c_uint;
+    .offset_from((*ptr_to_globals).baseaddr) as libc::c_long as libc::c_uint;
   if pos >= pagesize {
     loop
     /* move offset up until current position is in 1st page */
@@ -325,7 +325,7 @@ unsafe fn move_mapping_lower() -> libc::c_int {
   pagesize = 4096i32 as libc::c_uint;
   pos = (*ptr_to_globals)
     .current_byte
-    .wrapping_offset_from((*ptr_to_globals).baseaddr) as libc::c_long as libc::c_uint;
+    .offset_from((*ptr_to_globals).baseaddr) as libc::c_long as libc::c_uint;
   /* move offset down until current position is in last page */
   pos = pos.wrapping_add(pagesize);
   while pos < (64i32 * 1024i32) as libc::c_uint {
@@ -350,7 +350,7 @@ pub unsafe fn hexedit_main(
     as *mut *mut globals);
   *fresh9 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   crate::libbb::xfuncs::get_terminal_width_height(
     -1i32,
     0 as *mut libc::c_uint,
@@ -617,7 +617,7 @@ pub unsafe fn hexedit_main(
           1407665506148312647 => {
             if ((*ptr_to_globals)
               .current_byte
-              .wrapping_offset_from((*ptr_to_globals).baseaddr) as libc::c_long)
+              .offset_from((*ptr_to_globals).baseaddr) as libc::c_long)
               < 16i32 as libc::c_long
             {
               if move_mapping_lower() == 0 {

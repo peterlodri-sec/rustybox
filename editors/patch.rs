@@ -406,15 +406,15 @@ pub unsafe fn patch_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_cha
     116, 114, 105, 112, 0, 1, 112, 105, 110, 112, 117, 116, 0, 1, 105, 102, 111, 114, 119, 97, 114,
     100, 0, 0, 78, 114, 101, 109, 111, 118, 101, 45, 101, 109, 112, 116, 121, 45, 102, 105, 108,
     101, 115, 0, 0, 69, 102, 111, 114, 99, 101, 0, 0, 102, 103, 101, 116, 0, 1, 103, 100, 114, 121,
-    45, 114, 117, 110, 0, 0, -3, 98, 97, 99, 107, 117, 112, 45, 105, 102, 45, 109, 105, 115, 109,
-    97, 116, 99, 104, 0, 0, -2, 110, 111, 45, 98, 97, 99, 107, 117, 112, 45, 105, 102, 45, 109,
-    105, 115, 109, 97, 116, 99, 104, 0, 0, -1, 0,
+    45, 114, 117, 110, 0, 0, 253u8 as libc::c_char, 98, 97, 99, 107, 117, 112, 45, 105, 102, 45, 109, 105, 115, 109,
+    97, 116, 99, 104, 0, 0, 254u8 as libc::c_char, 110, 111, 45, 98, 97, 99, 107, 117, 112, 45, 105, 102, 45, 109,
+    105, 115, 109, 97, 116, 99, 104, 0, 0, 255u8 as libc::c_char, 0,
   ];
   let ref mut fresh0 = *(not_const_pp(&ptr_to_globals as *const *mut globals as *const libc::c_void)
     as *mut *mut globals);
   *fresh0 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   opts = crate::libbb::getopt32::getopt32long(
     argv,
     b"Rup:i:NEfg\x00" as *const u8 as *const libc::c_char,

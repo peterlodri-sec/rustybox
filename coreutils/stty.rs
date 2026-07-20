@@ -1184,14 +1184,14 @@ Wrap to next line first if it won't fit.
 Print a space first unless MESSAGE will start a new line */
 unsafe extern "C" fn wrapf(mut message: *const libc::c_char, mut args: ...) {
   let mut buf: [libc::c_char; 128] = [0; 128];
-  let mut args_0: ::std::ffi::VaListImpl;
+  let mut args_0: ::std::ffi::VaList;
   let mut buflen: libc::c_uint = 0;
   args_0 = args.clone();
   buflen = vsnprintf(
     buf.as_mut_ptr(),
     ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong,
     message,
-    args_0.as_va_list(),
+    args_0,
   ) as libc::c_uint;
   /* We seem to be called only with suitable lengths, but check if
   somebody failed to adhere to this assumption just to be sure.  */
@@ -1239,7 +1239,7 @@ unsafe fn set_window_size(mut rows: libc::c_int, mut cols: libc::c_int) {
     };
     init
   };
-  if ioctl(0i32, 0x5413i32 as libc::c_ulong, &mut win as *mut winsize) != 0 {
+  if ioctl(0i32, 0x5413i32 as _, &mut win as *mut winsize) != 0 {
     if *bb_errno != 22i32 {
       current_block = 17025510460101745201;
     } else {
@@ -1263,7 +1263,7 @@ unsafe fn set_window_size(mut rows: libc::c_int, mut cols: libc::c_int) {
       }
       if ioctl(
         0,
-        0x5414i32 as libc::c_ulong,
+        0x5414i32 as _,
         &mut win as *mut winsize as *mut libc::c_char,
       ) != 0
       {
@@ -1778,8 +1778,14 @@ pub unsafe fn stty_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char
     c_lflag: 0,
     c_line: 0,
     c_cc: [0; 32],
+    #[cfg(not(target_env = "musl"))]
     c_ispeed: 0,
+    #[cfg(not(target_env = "musl"))]
     c_ospeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ispeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ospeed: 0,
   };
   let mut output_func: Option<unsafe fn(_: *const termios, _: libc::c_int) -> ()> = None;
   let mut file_name: *const libc::c_char = std::ptr::null();
@@ -2070,8 +2076,14 @@ pub unsafe fn stty_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char
       c_lflag: 0,
       c_line: 0,
       c_cc: [0; 32],
+      #[cfg(not(target_env = "musl"))]
       c_ispeed: 0,
+      #[cfg(not(target_env = "musl"))]
       c_ospeed: 0,
+      #[cfg(target_env = "musl")]
+      __c_ispeed: 0,
+      #[cfg(target_env = "musl")]
+      __c_ospeed: 0,
     };
     if tcsetattr(0i32, 1i32, &mut mode) != 0 {
       perror_on_device_and_die(b"%s\x00" as *const u8 as *const libc::c_char);

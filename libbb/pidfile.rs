@@ -57,7 +57,7 @@ pub unsafe fn write_pidfile(mut path: *const libc::c_char) {
     crate::libbb::full_write::full_write(
       pid_fd,
       buf.as_mut_ptr() as *const libc::c_void,
-      (end.wrapping_offset_from(buf.as_mut_ptr()) as libc::c_long + 1) as size_t,
+      (end.offset_from(buf.as_mut_ptr()) as libc::c_long + 1) as size_t,
     );
   }
   close(pid_fd);

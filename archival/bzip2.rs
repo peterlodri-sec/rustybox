@@ -1883,7 +1883,7 @@ unsafe fn inner_loop(mut yy: *mut u8, mut ll_i: u8) -> libc::c_int {
     *ryy_j = rtmp2
   }
   *yy.offset(0) = rtmp;
-  return ryy_j.wrapping_offset_from(&mut *yy.offset(0) as *mut u8) as libc::c_long as libc::c_int;
+  return ryy_j.offset_from(&mut *yy.offset(0) as *mut u8) as libc::c_long as libc::c_int;
 }
 #[inline(never)]
 unsafe fn generateMTFValues(mut s: *mut EState) {

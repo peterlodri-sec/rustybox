@@ -416,7 +416,7 @@ unsafe fn parse_envmatch_pfx(mut val: *mut libc::c_char) -> *mut libc::c_char {
     nextp = &mut (*e).next;
     (*e).envname = crate::libbb::xfuncs_printf::xstrndup(
       val,
-      eq.wrapping_offset_from(val) as libc::c_long as libc::c_int,
+      eq.offset_from(val) as libc::c_long as libc::c_int,
     );
     *semicolon = '\u{0}' as i32 as libc::c_char;
     crate::libbb::xregcomp::xregcomp(&mut (*e).match_0, eq.offset(1), 1i32);
@@ -512,7 +512,7 @@ unsafe fn parse_next_rule() {
             .envvar;
           *fresh0 = crate::libbb::xfuncs_printf::xstrndup(
             val,
-            eq.wrapping_offset_from(val) as libc::c_long as libc::c_int,
+            eq.offset_from(val) as libc::c_long as libc::c_int,
           );
           val = eq.offset(1);
           current_block = 224731115979188411;
@@ -579,7 +579,7 @@ unsafe fn parse_next_rule() {
               .ren_mov;
             *fresh1 = crate::libbb::xfuncs_printf::xstrndup(
               val,
-              s.wrapping_offset_from(val) as libc::c_long as libc::c_int,
+              s.offset_from(val) as libc::c_long as libc::c_int,
             );
             val = skip_whitespace(s)
           }

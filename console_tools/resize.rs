@@ -49,8 +49,14 @@ pub unsafe fn resize_main(
     c_lflag: 0,
     c_line: 0,
     c_cc: [0; 32],
+    #[cfg(not(target_env = "musl"))]
     c_ispeed: 0,
+    #[cfg(not(target_env = "musl"))]
     c_ospeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ispeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ospeed: 0,
   };
   let mut w: winsize = {
     let mut init = winsize {
@@ -102,7 +108,7 @@ pub unsafe fn resize_main(
   /* BTW, other versions of resize recalculate w.ws_xpixel, ws.ws_ypixel
    * by calculating character cell HxW from old values
    * (gotten via TIOCGWINSZ) and recomputing *pixel values */
-  ret = ioctl(2i32, 0x5414i32 as libc::c_ulong, &mut w as *mut winsize);
+  ret = ioctl(2i32, 0x5414i32 as _, &mut w as *mut winsize);
   tcsetattr(2i32, 0, bb_common_bufsiz1.as_mut_ptr() as *mut termios);
   printf(
     b"COLUMNS=%d;LINES=%d;export COLUMNS LINES;\n\x00" as *const u8 as *const libc::c_char,

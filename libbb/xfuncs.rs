@@ -419,7 +419,7 @@ pub unsafe fn get_terminal_width_height(
   win.ws_col = 0 as libc::c_ushort;
   /* I've seen ioctl returning 0, but row/col is (still?) 0.
    * We treat that as an error too.  */
-  err = (ioctl(fd, 0x5413i32 as libc::c_ulong, &mut win as *mut winsize) != 0
+  err = (ioctl(fd, 0x5413i32 as _, &mut win as *mut winsize) != 0
     || win.ws_row as libc::c_int == 0) as libc::c_int;
   if !height.is_null() {
     *height = wh_helper(
@@ -677,8 +677,14 @@ pub unsafe fn set_termios_to_raw(
     c_lflag: 0,
     c_line: 0,
     c_cc: [0; 32],
+    #[cfg(not(target_env = "musl"))]
     c_ispeed: 0,
+    #[cfg(not(target_env = "musl"))]
     c_ospeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ispeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ospeed: 0,
   };
   get_termios_and_make_raw(fd, &mut newterm, oldterm, flags);
   return tcsetattr(fd, 0, &mut newterm);

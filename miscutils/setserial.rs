@@ -211,7 +211,7 @@ unsafe fn serial_ctl(
   let mut ret: libc::c_int = 0;
   let mut err: *const libc::c_char = std::ptr::null();
   if ops & 1i32 << 0 != 0 {
-    ret = ioctl(fd, 0x541fi32 as libc::c_ulong, serinfo);
+    ret = ioctl(fd, 0x541fi32 as _, serinfo);
     if ret < 0 {
       err = b"can\'t set serial info\x00" as *const u8 as *const libc::c_char;
       current_block = 183908852989203104;
@@ -224,7 +224,7 @@ unsafe fn serial_ctl(
   match current_block {
     11875828834189669668 => {
       if ops & 1i32 << 1i32 != 0 {
-        ret = ioctl(fd, 0x5453i32 as libc::c_ulong);
+        ret = ioctl(fd, 0x5453i32 as _);
         if ret < 0 {
           err = b"can\'t autoconfigure port\x00" as *const u8 as *const libc::c_char;
           current_block = 183908852989203104;
@@ -238,7 +238,7 @@ unsafe fn serial_ctl(
         183908852989203104 => {}
         _ => {
           if ops & 1i32 << 2i32 != 0 {
-            ret = ioctl(fd, 0x541ei32 as libc::c_ulong, serinfo);
+            ret = ioctl(fd, 0x541ei32 as _, serinfo);
             if ret < 0 {
               err = b"can\'t get serial info\x00" as *const u8 as *const libc::c_char;
               current_block = 183908852989203104;

@@ -1565,7 +1565,7 @@ unsafe fn split_escape_and_log(mut tmpbuf: *mut libc::c_char, mut len: libc::c_i
     timestamp_and_log(
       pri,
       (*ptr_to_globals).parsebuf.as_mut_ptr(),
-      q.wrapping_offset_from((*ptr_to_globals).parsebuf.as_mut_ptr()) as libc::c_long
+      q.offset_from((*ptr_to_globals).parsebuf.as_mut_ptr()) as libc::c_long
         as libc::c_int,
     );
   }
@@ -1820,7 +1820,7 @@ pub unsafe fn syslogd_main(
     &init_data as *const init_globals as *const libc::c_void,
     ::std::mem::size_of::<init_globals>() as libc::c_ulong,
   ) as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   /* No non-option params */
   opts = crate::libbb::getopt32::getopt32(
     argv,

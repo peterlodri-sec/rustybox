@@ -878,7 +878,7 @@ unsafe fn print_addrinfo(
     (*fn_0).nlmsg_seq = *fresh0;
     (*(bb_common_bufsiz1.as_mut_ptr() as *mut filter_t)).flushp = (fn_0 as *mut libc::c_char)
       .offset((*n).nlmsg_len as isize)
-      .wrapping_offset_from((*(bb_common_bufsiz1.as_mut_ptr() as *mut filter_t)).flushb)
+      .offset_from((*(bb_common_bufsiz1.as_mut_ptr() as *mut filter_t)).flushb)
       as libc::c_long
       as libc::c_int;
     (*(bb_common_bufsiz1.as_mut_ptr() as *mut filter_t)).flushed = 1i32 as smallint;
@@ -1764,12 +1764,7 @@ unsafe extern "C" fn ipaddr_modify(
                 | (__x & 0xff00i32 as libc::c_uint) << 8i32
                 | (__x & 0xffi32 as libc::c_uint) << 24i32
             } else {
-              let fresh4 = &mut __v;
-              let fresh5;
-              let fresh6 = __x;
-              llvm_asm!("bswap $0" : "=r" (fresh5) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh4, fresh6)) :);
-              c2rust_asm_casts::AsmCast::cast_out(fresh4, fresh6, fresh5);
+              __v = (__x).swap_bytes();
             }
             __v
           }
@@ -1783,12 +1778,7 @@ unsafe extern "C" fn ipaddr_modify(
                 | (__x & 0xff00i32 as libc::c_uint) << 8i32
                 | (__x & 0xffi32 as libc::c_uint) << 24i32
             } else {
-              let fresh7 = &mut __v;
-              let fresh8;
-              let fresh9 = __x;
-              llvm_asm!("bswap $0" : "=r" (fresh8) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh7, fresh9)) :);
-              c2rust_asm_casts::AsmCast::cast_out(fresh7, fresh9, fresh8);
+              __v = (__x).swap_bytes();
             }
             __v
           })

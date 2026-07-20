@@ -775,7 +775,7 @@ unsafe fn bc_verror_msg(mut fmt: *const libc::c_char, mut p: ::std::ffi::VaList)
       (*ptr_to_globals).err_line,
     )
   }
-  crate::libbb::verror_msg::bb_verror_msg(fmt, p.as_va_list(), 0 as *const libc::c_char);
+  crate::libbb::verror_msg::bb_verror_msg(fmt, p, 0 as *const libc::c_char);
   if !(*ptr_to_globals).prs.lex_filename.is_null() {
     free(applet_name as *mut libc::c_char as *mut libc::c_void);
     applet_name = sv
@@ -783,9 +783,9 @@ unsafe fn bc_verror_msg(mut fmt: *const libc::c_char, mut p: ::std::ffi::VaList)
 }
 #[inline(never)]
 unsafe extern "C" fn bc_error_fmt(mut fmt: *const libc::c_char, mut args: ...) -> libc::c_int {
-  let mut p: ::std::ffi::VaListImpl;
+  let mut p: ::std::ffi::VaList;
   p = args.clone();
-  bc_verror_msg(fmt, p.as_va_list());
+  bc_verror_msg(fmt, p);
   if false || (*ptr_to_globals).ttyin as libc::c_int != 0 {
     return BC_STATUS_FAILURE as libc::c_int;
   }
@@ -793,13 +793,13 @@ unsafe extern "C" fn bc_error_fmt(mut fmt: *const libc::c_char, mut args: ...) -
 }
 #[inline(never)]
 unsafe extern "C" fn zbc_posix_error_fmt(mut fmt: *const libc::c_char, mut args: ...) -> BcStatus {
-  let mut p: ::std::ffi::VaListImpl;
+  let mut p: ::std::ffi::VaList;
   // Are non-POSIX constructs totally ok?
   if option_mask32 & (1i32 << 2i32 | 1i32 << 0) as libc::c_uint == 0 {
     return BC_STATUS_SUCCESS;
   } // yes
   p = args.clone();
-  bc_verror_msg(fmt, p.as_va_list());
+  bc_verror_msg(fmt, p);
   // Do we treat non-POSIX constructs as errors?
   if option_mask32 & (1i32 << 2i32) as libc::c_uint == 0 {
     return BC_STATUS_SUCCESS;
@@ -823,7 +823,7 @@ unsafe fn bc_error_at(mut msg: *const libc::c_char) -> libc::c_int {
     return bc_error_fmt(
       b"%s at \'%.*s\'\x00" as *const u8 as *const libc::c_char,
       msg,
-      strchrnul(err_at, '\n' as i32).wrapping_offset_from(err_at) as libc::c_long as libc::c_int,
+      strchrnul(err_at, '\n' as i32).offset_from(err_at) as libc::c_long as libc::c_int,
       err_at,
     );
   }
@@ -2893,7 +2893,7 @@ unsafe fn bc_num_parseDecimal(mut n: *mut BcNum, mut val: *const libc::c_char) {
   (*n).rdx = 0 as size_t;
   if !ptr.is_null() {
     (*n).rdx =
-      val.offset(len as isize).wrapping_offset_from(ptr.offset(1)) as libc::c_long as size_t
+      val.offset(len as isize).offset_from(ptr.offset(1)) as libc::c_long as size_t
   }
   i = 0 as size_t;
   while *val.offset(i as isize) != 0 {
@@ -3410,7 +3410,7 @@ unsafe fn zbc_lex_identifier() -> BcStatus {
     // bc: POSIX only allows one character names; this is bad: 'qwe=1
     // '
     let mut len: libc::c_uint =
-      strchrnul(buf, '\n' as i32).wrapping_offset_from(buf) as libc::c_long as libc::c_uint; // strings can cross lines
+      strchrnul(buf, '\n' as i32).offset_from(buf) as libc::c_long as libc::c_uint; // strings can cross lines
     s = zbc_posix_error_fmt(
       b"POSIX only allows one character names; this is bad: \'%.*s\'\x00" as *const u8
         as *const libc::c_char,
@@ -5897,13 +5897,13 @@ unsafe fn xc_program_printString(mut str: *const libc::c_char) {
           break;
         }
       } else {
-        if n.wrapping_offset_from(esc.as_ptr()) as libc::c_long == 0 {
+        if n.offset_from(esc.as_ptr()) as libc::c_long == 0 {
           // "\n" ?
           (*ptr_to_globals).prog.nchars = 18446744073709551615u64
         }
         c = (*::std::mem::transmute::<&[u8; 10], &[libc::c_char; 10]>(
           b"\n\x07\x08\x0c\r\t\\\\\\\x00",
-        ))[n.wrapping_offset_from(esc.as_ptr()) as libc::c_long as usize]
+        ))[n.offset_from(esc.as_ptr()) as libc::c_long as usize]
         //   n a b f r t   e \   \<end of line>
       }
     }
@@ -8085,7 +8085,7 @@ pub unsafe fn bc_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char) 
       as *mut *mut globals);
   *fresh21 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   is_tty = xc_vm_init(b"BC_LINE_LENGTH\x00" as *const u8 as *const libc::c_char);
   bc_args(argv);
   if is_tty != 0 && option_mask32 & (1i32 << 3i32) as libc::c_uint == 0 {
@@ -8100,7 +8100,7 @@ pub unsafe fn dc_main(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -
       as *mut *mut globals);
   *fresh22 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   // TODO: dc (GNU bc 1.07.1) 1.4.1 seems to use width
   // 1 char wider than bc from the same package.
   // Both default width, and xC_LINE_LENGTH=N are wider:

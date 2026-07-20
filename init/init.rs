@@ -309,7 +309,7 @@ unsafe extern "C" fn message(
   mut fmt: *const libc::c_char,
   mut args: ...
 ) {
-  let mut arguments: ::std::ffi::VaListImpl;
+  let mut arguments: ::std::ffi::VaList;
   let mut l: libc::c_uint = 0;
   let mut msg: [libc::c_char; 128] = [0; 128];
   msg[0] = '\r' as i32 as libc::c_char;
@@ -320,7 +320,7 @@ unsafe extern "C" fn message(
       (::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong)
         .wrapping_sub(2i32 as libc::c_ulong),
       fmt,
-      arguments.as_va_list(),
+      arguments,
     )) as libc::c_uint;
   if l as libc::c_ulong
     > (::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong)
@@ -377,7 +377,7 @@ unsafe fn console_init() {
     //		fcntl(STDERR_FILENO, F_SETFL, fcntl(STDERR_FILENO, F_GETFL) | O_NONBLOCK);
   }
   s = getenv(b"TERM\x00" as *const u8 as *const libc::c_char);
-  if ioctl(0, 0x5600i32 as libc::c_ulong, &mut vtno as *mut libc::c_int) != 0 {
+  if ioctl(0, 0x5600i32 as _, &mut vtno as *mut libc::c_int) != 0 {
     /* Not a linux terminal, probably serial console.
      * Force the TERM setting to vt102
      * if TERM is set to linux (the default) */
@@ -398,8 +398,14 @@ unsafe fn set_sane_term() {
     c_lflag: 0,
     c_line: 0,
     c_cc: [0; 32],
+    #[cfg(not(target_env = "musl"))]
     c_ispeed: 0,
+    #[cfg(not(target_env = "musl"))]
     c_ospeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ispeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ospeed: 0,
   };
   tcgetattr(0i32, &mut tty);
   /* set control chars */
@@ -538,7 +544,7 @@ unsafe fn init_exec(mut command: *const libc::c_char) {
    */
   if 1i32 != 0 && dash != 0 {
     /* _Attempt_ to make stdin a controlling tty. */
-    ioctl(0i32, 0x540ei32 as libc::c_ulong, 0);
+    ioctl(0i32, 0x540ei32 as _, 0);
   }
   /* Here command never contains the dash, cmd[0] might */
   execvp(command, cmd.as_mut_ptr() as *const *mut libc::c_char);

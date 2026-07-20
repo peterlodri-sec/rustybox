@@ -879,9 +879,9 @@ unsafe extern "C" fn func_links(
   mut ap: *mut action_links,
 ) -> libc::c_int {
   match (*ap).links_char as libc::c_int {
-    45 => return ((*statbuf).st_nlink < (*ap).links_count as libc::c_ulong) as libc::c_int,
-    43 => return ((*statbuf).st_nlink > (*ap).links_count as libc::c_ulong) as libc::c_int,
-    _ => return ((*statbuf).st_nlink == (*ap).links_count as libc::c_ulong) as libc::c_int,
+    45 => return (((*statbuf).st_nlink as libc::c_ulong) < (*ap).links_count as libc::c_ulong) as libc::c_int,
+    43 => return (((*statbuf).st_nlink as libc::c_ulong) > (*ap).links_count as libc::c_ulong) as libc::c_int,
+    _ => return ((*statbuf).st_nlink as libc::c_ulong == (*ap).links_count as libc::c_ulong) as libc::c_int,
   };
 }
 unsafe fn fileAction(

@@ -285,7 +285,7 @@ pub unsafe fn xmalloc_substitute_string(
     dst = mempcpy(
       dst as *mut libc::c_void,
       src as *const libc::c_void,
-      end.wrapping_offset_from(src) as libc::c_long as size_t,
+      end.offset_from(src) as libc::c_long as size_t,
     ) as *mut libc::c_char;
     dst = mempcpy(
       dst as *mut libc::c_void,

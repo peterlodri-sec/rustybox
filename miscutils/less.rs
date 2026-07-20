@@ -308,7 +308,7 @@ unsafe fn re_wrap() {
     }
     /* this is not a continuation line!
      * create next _new_ line too */
-    sz = (d.wrapping_offset_from(linebuf.as_mut_ptr()) as libc::c_long + 1) as libc::c_int;
+    sz = (d.offset_from(linebuf.as_mut_ptr()) as libc::c_long + 1) as libc::c_int;
     d = (xmalloc((sz + 4i32) as size_t) as *mut libc::c_char).offset(4);
     *(d.offset(-4) as *mut u32) = lineno;
     memcpy(
@@ -768,7 +768,7 @@ unsafe fn status_print() {
 }
 static mut controls: [libc::c_char; 33] = [
   1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27,
-  28, 29, 30, 31, 127, -101, 0,
+  28, 29, 30, 31, 127, 155u8 as libc::c_char, 0,
 ];
 /* DEL and infamous Meta-ESC :( */
 static mut ctrlconv: [libc::c_char; 33] = [
@@ -1971,7 +1971,7 @@ pub unsafe fn less_main(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char)
       as *mut *mut globals);
   *fresh13 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   (*ptr_to_globals).less_gets_pos = -1i32;
   (*ptr_to_globals).empty_line_marker = b"~\x00" as *const u8 as *const libc::c_char;
   (*ptr_to_globals).current_file = 1i32 as libc::c_uint;

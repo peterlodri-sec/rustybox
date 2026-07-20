@@ -415,7 +415,7 @@ unsafe fn do_load(mut fd: libc::c_int, mut buffer: *mut libc::c_uchar, mut len: 
     do_loadtable(
       fd,
       table,
-      buffer.wrapping_offset_from(table) as libc::c_long as libc::c_int,
+      buffer.offset_from(table) as libc::c_long as libc::c_int,
       fontsize,
       has_table - 1i32,
     );

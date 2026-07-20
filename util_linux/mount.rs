@@ -259,7 +259,7 @@ unsafe fn append_mount_options(
       let mut len: libc::c_int = strlen(newopts) as libc::c_int;
       p = strchr(newopts, ',' as i32);
       if !p.is_null() {
-        len = p.wrapping_offset_from(newopts) as libc::c_long as libc::c_int
+        len = p.offset_from(newopts) as libc::c_long as libc::c_int
       }
       p = *oldopts;
       loop {
@@ -947,7 +947,7 @@ unsafe fn match_opt(
       O_opt = O_opt.offset(2)
     }
     // Isolate the current O option
-    O_len = strchrnul(O_opt, ',' as i32).wrapping_offset_from(O_opt) as libc::c_long as libc::c_int;
+    O_len = strchrnul(O_opt, ',' as i32).offset_from(O_opt) as libc::c_long as libc::c_int;
     loop
     // Check for a match against existing options
     {

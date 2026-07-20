@@ -623,12 +623,7 @@ pub unsafe fn bb_lookup_port(
             __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
               as libc::c_ushort
           } else {
-            let fresh0 = &mut __v;
-            let fresh1;
-            let fresh2 = __x;
-            llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh1) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh0, fresh2)) : "cc");
-            c2rust_asm_casts::AsmCast::cast_out(fresh0, fresh2, fresh1);
+            __v = (__x).swap_bytes();
           }
           __v
         }) as libc::c_uint
@@ -732,7 +727,7 @@ unsafe fn str2sockaddr(
   if !cp.is_null() {
     let mut current_block_34: u64;
     /* points to ":" or "]:" */
-    let mut sz: libc::c_int = (cp.wrapping_offset_from(host) as libc::c_long + 1) as libc::c_int; /* skip ']' */
+    let mut sz: libc::c_int = (cp.offset_from(host) as libc::c_long + 1) as libc::c_int; /* skip ']' */
     let mut fresh3 = ::std::vec::from_elem(0, sz as libc::c_ulong as usize); /* skip ':' */
     host = crate::libbb::safe_strncpy::safe_strncpy(
       fresh3.as_mut_ptr() as *mut libc::c_char,
@@ -876,12 +871,7 @@ unsafe fn str2sockaddr(
             __v =
               (__x as libc::c_int >> 8 & 0xff | (__x as libc::c_int & 0xff) << 8) as libc::c_ushort
           } else {
-            let fresh4 = &mut __v;
-            let fresh5;
-            let fresh6 = __x;
-            llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh5) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh4, fresh6)) : "cc");
-            c2rust_asm_casts::AsmCast::cast_out(fresh4, fresh6, fresh5);
+            __v = (__x).swap_bytes();
           }
           __v
         }) as libc::c_uint,
@@ -1000,12 +990,7 @@ unsafe fn create_and_bind_or_die(
           __v =
             (__x as libc::c_int >> 8 & 0xff | (__x as libc::c_int & 0xff) << 8) as libc::c_ushort
         } else {
-          let fresh7 = &mut __v;
-          let fresh8;
-          let fresh9 = __x;
-          llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh8) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh7, fresh9)) : "cc");
-          c2rust_asm_casts::AsmCast::cast_out(fresh7, fresh9, fresh8);
+          __v = (__x).swap_bytes();
         }
         __v
       }) as libc::c_uint,

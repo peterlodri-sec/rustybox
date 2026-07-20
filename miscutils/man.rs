@@ -491,7 +491,7 @@ pub unsafe fn man_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char)
         {
           let mut next_sect: *mut libc::c_char = strchrnul(cur_sect, ':' as i32);
           let mut sect_len: libc::c_int =
-            next_sect.wrapping_offset_from(cur_sect) as libc::c_long as libc::c_int;
+            next_sect.offset_from(cur_sect) as libc::c_long as libc::c_int;
           let mut man_filename: *mut libc::c_char = std::ptr::null_mut::<libc::c_char>();
           let mut cat0man1: libc::c_int = 0;
           /* Search for cat, then man page */

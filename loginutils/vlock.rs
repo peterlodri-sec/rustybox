@@ -62,13 +62,13 @@ unsafe extern "C" fn release_vt(mut _signo: libc::c_int) {
    * "no, kernel, we don't allow console switch away from us!" */
   ioctl(
     0,
-    0x5605i32 as libc::c_ulong,
+    0x5605i32 as _,
     (option_mask32 == 0) as libc::c_int as libc::c_ulong,
   );
 }
 unsafe extern "C" fn acquire_vt(mut _signo: libc::c_int) {
   /* ACK to kernel that switch to console is successful */
-  ioctl(0i32, 0x5605i32 as libc::c_ulong, 0x2i32);
+  ioctl(0i32, 0x5605i32 as _, 0x2i32);
 }
 pub unsafe fn vlock_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> libc::c_int {
   let mut vtm: vt_mode = vt_mode {
@@ -92,8 +92,14 @@ pub unsafe fn vlock_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_cha
     c_lflag: 0,
     c_line: 0,
     c_cc: [0; 32],
+    #[cfg(not(target_env = "musl"))]
     c_ispeed: 0,
+    #[cfg(not(target_env = "musl"))]
     c_ospeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ispeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ospeed: 0,
   };
   let mut oterm: termios = termios {
     c_iflag: 0,
@@ -102,8 +108,14 @@ pub unsafe fn vlock_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_cha
     c_lflag: 0,
     c_line: 0,
     c_cc: [0; 32],
+    #[cfg(not(target_env = "musl"))]
     c_ispeed: 0,
+    #[cfg(not(target_env = "musl"))]
     c_ospeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ispeed: 0,
+    #[cfg(target_env = "musl")]
+    __c_ospeed: 0,
   };
   let mut pw: *mut passwd = std::ptr::null_mut();
   pw = crate::libbb::bb_pwd::xgetpwuid(getuid());
@@ -144,7 +156,7 @@ pub unsafe fn vlock_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_cha
   vtm.mode = 0x1i32 as libc::c_char;
   vtm.relsig = 10i32 as libc::c_short;
   vtm.acqsig = 12i32 as libc::c_short;
-  ioctl(0i32, 0x5602i32 as libc::c_ulong, &mut vtm as *mut vt_mode);
+  ioctl(0i32, 0x5602i32 as _, &mut vtm as *mut vt_mode);
   //TODO: use set_termios_to_raw()
   tcgetattr(0i32, &mut oterm); /* ignore serial break (why? VTs don't have breaks, right?) */
   term = oterm; /* redundant? "dont translate break to SIGINT" */
@@ -165,7 +177,7 @@ pub unsafe fn vlock_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_cha
     crate::libbb::bb_do_delay::bb_do_delay(3i32);
     puts(b"Incorrect password\x00" as *const u8 as *const libc::c_char);
   }
-  ioctl(0i32, 0x5602i32 as libc::c_ulong, &mut ovtm as *mut vt_mode);
+  ioctl(0i32, 0x5602i32 as _, &mut ovtm as *mut vt_mode);
   crate::libbb::xfuncs::tcsetattr_stdin_TCSANOW(&mut oterm);
   crate::libbb::fflush_stdout_and_exit::fflush_stdout_and_exit(0i32);
 }

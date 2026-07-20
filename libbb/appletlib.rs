@@ -14,7 +14,7 @@ pub unsafe fn string_array_len(argv: *mut *mut libc::c_char) -> libc::c_uint {
   while !(*current).is_null() {
     current = current.offset(1)
   }
-  return current.wrapping_offset_from(start) as libc::c_long as libc::c_uint;
+  return current.offset_from(start) as libc::c_long as libc::c_uint;
 }
 
 pub unsafe fn bb_show_usage() -> ! {

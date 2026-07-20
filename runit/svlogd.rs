@@ -371,12 +371,7 @@ unsafe fn fmt_time_bernstein_25(mut s: *mut libc::c_char) {
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh2 = &mut __v;
-      let fresh3;
-      let fresh4 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh3) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh2, fresh4)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh2, fresh4, fresh3);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -389,12 +384,7 @@ unsafe fn fmt_time_bernstein_25(mut s: *mut libc::c_char) {
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh5 = &mut __v;
-      let fresh6;
-      let fresh7 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh6) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh5, fresh7)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh5, fresh7, fresh6);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -407,12 +397,7 @@ unsafe fn fmt_time_bernstein_25(mut s: *mut libc::c_char) {
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh8 = &mut __v;
-      let fresh9;
-      let fresh10 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh9) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh8, fresh10)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh8, fresh10, fresh9);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -1486,7 +1471,7 @@ pub unsafe fn svlogd_main(mut argc: libc::c_int, mut argv: *mut *mut libc::c_cha
       as *mut *mut globals);
   *fresh14 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   (*ptr_to_globals).linemax = 1000i32;
   (*ptr_to_globals).linecomplete = 1i32 as smallint;
   (*ptr_to_globals).replace = b"\x00" as *const u8 as *const libc::c_char;
@@ -1661,7 +1646,7 @@ pub unsafe fn svlogd_main(mut argc: libc::c_int, mut argv: *mut *mut libc::c_cha
           /* NB: starting from here lineptr may point
            * farther out into line[] */
           (*ptr_to_globals).linelen =
-            (np.wrapping_offset_from(lineptr) as libc::c_long + 1) as libc::c_int;
+            (np.offset_from(lineptr) as libc::c_long + 1) as libc::c_int;
           current_block_116 = 12961834331865314435;
         }
         _ => {
@@ -1748,7 +1733,7 @@ pub unsafe fn svlogd_main(mut argc: libc::c_int, mut argv: *mut *mut libc::c_cha
               ) as *mut libc::c_char;
               if !np.is_null() {
                 (*ptr_to_globals).linelen =
-                  (np.wrapping_offset_from(lineptr) as libc::c_long + 1) as libc::c_int
+                  (np.offset_from(lineptr) as libc::c_long + 1) as libc::c_int
               }
               ch = *lineptr.offset(((*ptr_to_globals).linelen - 1i32) as isize)
             }

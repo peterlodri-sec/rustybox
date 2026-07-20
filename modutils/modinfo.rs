@@ -189,7 +189,7 @@ unsafe extern "C" fn modinfo(
                 ptr as *const libc::c_void,
                 *pattern as libc::c_int,
                 len.wrapping_sub(
-                  ptr.wrapping_offset_from(the_module) as libc::c_long as libc::c_ulong
+                  ptr.offset_from(the_module) as libc::c_long as libc::c_ulong
                 ),
               ) as *mut libc::c_char;
               if ptr.is_null() {

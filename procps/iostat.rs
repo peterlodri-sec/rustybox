@@ -513,7 +513,7 @@ pub unsafe fn iostat_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_ch
     as *mut *mut globals);
   *fresh0 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   (*ptr_to_globals).unit.str_0 = b"Blk\x00" as *const u8 as *const libc::c_char;
   (*ptr_to_globals).unit.div = 1i32 as libc::c_uint;
   memset(

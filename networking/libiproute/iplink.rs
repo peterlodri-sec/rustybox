@@ -493,12 +493,7 @@ unsafe extern "C" fn get_address(
       __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
         as libc::c_ushort
     } else {
-      let fresh0 = &mut __v;
-      let fresh1;
-      let fresh2 = __x;
-      llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh1) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh0, fresh2)) : "cc");
-      c2rust_asm_casts::AsmCast::cast_out(fresh0, fresh2, fresh1);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -798,12 +793,7 @@ unsafe extern "C" fn vlan_parse_opt(
             __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
               as libc::c_ushort
           } else {
-            let fresh3 = &mut __v;
-            let fresh4;
-            let fresh5 = __x;
-            llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh4) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh3, fresh5)) : "cc");
-            c2rust_asm_casts::AsmCast::cast_out(fresh3, fresh5, fresh4);
+            __v = (__x).swap_bytes();
           }
           __v
         }
@@ -815,12 +805,7 @@ unsafe extern "C" fn vlan_parse_opt(
             __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
               as libc::c_ushort
           } else {
-            let fresh6 = &mut __v;
-            let fresh7;
-            let fresh8 = __x;
-            llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh7) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh6, fresh8)) : "cc");
-            c2rust_asm_casts::AsmCast::cast_out(fresh6, fresh8, fresh7);
+            __v = (__x).swap_bytes();
           }
           __v
         }
@@ -1046,7 +1031,7 @@ unsafe extern "C" fn do_add_or_delete(
           .wrapping_sub(1i32 as libc::c_uint)
           & !4u32.wrapping_sub(1i32 as libc::c_uint)) as isize,
       ) as *mut rtattr as *mut libc::c_void)
-        .wrapping_offset_from(data as *mut libc::c_void) as libc::c_long
+        .offset_from(data as *mut libc::c_void) as libc::c_long
         as libc::c_ushort
     }
     (*linkinfo).rta_len = ((&mut req.n as *mut nlmsghdr as *mut libc::c_void).offset(
@@ -1057,7 +1042,7 @@ unsafe extern "C" fn do_add_or_delete(
         .wrapping_sub(1i32 as libc::c_uint)
         & !4u32.wrapping_sub(1i32 as libc::c_uint)) as isize,
     ) as *mut rtattr as *mut libc::c_void)
-      .wrapping_offset_from(linkinfo as *mut libc::c_void) as libc::c_long
+      .offset_from(linkinfo as *mut libc::c_void) as libc::c_long
       as libc::c_ushort
   }
   /* Allow "ip link add dev" and "ip link add name" */

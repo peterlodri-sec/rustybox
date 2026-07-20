@@ -46,7 +46,7 @@ pub unsafe fn get_uidgid(mut u: *mut bb_uidgid_t, mut ug: *const libc::c_char) -
   group = strchr(ug, ':' as i32);
   if !group.is_null() {
     group = group.offset(1);
-    let mut sz: libc::c_int = group.wrapping_offset_from(ug) as libc::c_long as libc::c_int;
+    let mut sz: libc::c_int = group.offset_from(ug) as libc::c_long as libc::c_int;
     let mut fresh0 = ::std::vec::from_elem(0, sz as libc::c_ulong as usize);
     user = fresh0.as_mut_ptr() as *mut libc::c_char;
     /* copies sz-1 bytes, stores terminating '\0' */

@@ -150,7 +150,7 @@ unsafe extern "C" fn convert_dname(mut src: *const libc::c_char) -> *mut u8 {
     c = *fresh0 as u8;
     if c as libc::c_int == '.' as i32 || c as libc::c_int == '\u{0}' as i32 {
       /* end of label */
-      len = (dst.wrapping_offset_from(lenptr) as libc::c_long - 1) as libc::c_int;
+      len = (dst.offset_from(lenptr) as libc::c_long - 1) as libc::c_int;
       /* label too long, too short, or two '.'s in a row? abort */
       if len > 63i32
         || len == 0
@@ -176,7 +176,7 @@ unsafe extern "C" fn convert_dname(mut src: *const libc::c_char) -> *mut u8 {
       *fresh2 = c
     }
   }
-  if dst.wrapping_offset_from(res) as libc::c_long >= 255i32 as libc::c_long {
+  if dst.offset_from(res) as libc::c_long >= 255i32 as libc::c_long {
     /* dname too long? abort */
     free(res as *mut libc::c_void);
     return std::ptr::null_mut();
@@ -375,6 +375,6 @@ pub unsafe extern "C" fn dname_enc(
     }
     d = d.offset((*d as libc::c_int + 1i32) as isize)
   }
-  *retlen = (d.wrapping_offset_from(dname) as libc::c_long + 1) as libc::c_int;
+  *retlen = (d.offset_from(dname) as libc::c_long + 1) as libc::c_int;
   return dname;
 }

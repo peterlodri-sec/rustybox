@@ -1000,7 +1000,7 @@ pub unsafe fn mkfs_minix_main(
     as *mut *mut globals);
   *fresh2 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   /* default (changed to 30, per Linus's suggestion, Sun Nov 21 08:05:07 1993) */
   (*ptr_to_globals).namelen = 30i32;
   (*ptr_to_globals).dirsize = 32i32;

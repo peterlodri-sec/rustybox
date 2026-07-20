@@ -205,8 +205,8 @@ pub const OPT_c: C2RustUnnamed_0 = 4;
 // pub const OPT_A: C2RustUnnamed_0 = 1;
 
 static mut boot_code: [libc::c_char; 59] = [
-  14, 31, -66, 119, 124, -84, 34, -64, 116, 11, 86, -76, 14, -69, 7, 0, -51, 16, 94, -21, -16, 50,
-  -28, -51, 22, -51, 25, -21, -2, 84, 104, 105, 115, 32, 105, 115, 32, 110, 111, 116, 32, 97, 32,
+  14, 31, 190u8 as libc::c_char, 119, 124, 172u8 as libc::c_char, 34, 192u8 as libc::c_char, 116, 11, 86, 180u8 as libc::c_char, 14, 187u8 as libc::c_char, 7, 0, 205u8 as libc::c_char, 16, 94, 235u8 as libc::c_char, 240u8 as libc::c_char, 50,
+  228u8 as libc::c_char, 205u8 as libc::c_char, 22, 205u8 as libc::c_char, 25, 235u8 as libc::c_char, 254u8 as libc::c_char, 84, 104, 105, 115, 32, 105, 115, 32, 110, 111, 116, 32, 97, 32,
   98, 111, 111, 116, 97, 98, 108, 101, 32, 100, 105, 115, 107, 13, 10, 0,
 ];
 /* compat:
@@ -335,7 +335,7 @@ pub unsafe fn mkfs_vfat_main(
   // N.B. whether to use HDIO_GETGEO or HDIO_REQ?
   if ioctl(
     dev,
-    0x301i32 as libc::c_ulong,
+    0x301i32 as _,
     &mut geometry as *mut hd_geometry,
   ) == 0
     && geometry.sectors as libc::c_int != 0
@@ -349,10 +349,10 @@ pub unsafe fn mkfs_vfat_main(
     // floppy, loop, or regular file
     let mut not_floppy: libc::c_int = ioctl(
       dev,
-      (2u32 << 0 + 8i32 + 8i32 + 14i32
+      ((2u32 << 0 + 8i32 + 8i32 + 14i32
         | (2i32 << 0 + 8i32) as libc::c_uint
         | (0x4i32 << 0) as libc::c_uint) as libc::c_ulong
-        | (::std::mem::size_of::<floppy_struct>() as libc::c_ulong) << 0 + 8i32 + 8i32,
+        | (::std::mem::size_of::<floppy_struct>() as libc::c_ulong) << 0 + 8i32 + 8i32) as _,
       &mut param as *mut floppy_struct,
     );
     if not_floppy == 0 {

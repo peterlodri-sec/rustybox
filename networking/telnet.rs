@@ -205,11 +205,11 @@ unsafe fn handle_net_output(mut len: libc::c_int) {
     }
     dst = dst.offset(1)
   }
-  if dst.wrapping_offset_from(outbuf.as_mut_ptr()) as libc::c_long != 0 {
+  if dst.offset_from(outbuf.as_mut_ptr()) as libc::c_long != 0 {
     crate::libbb::full_write::full_write(
       netfd as libc::c_int,
       outbuf.as_mut_ptr() as *const libc::c_void,
-      dst.wrapping_offset_from(outbuf.as_mut_ptr()) as libc::c_long as size_t,
+      dst.offset_from(outbuf.as_mut_ptr()) as libc::c_long as size_t,
     );
   };
 }

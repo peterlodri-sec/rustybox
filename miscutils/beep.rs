@@ -66,7 +66,7 @@ pub unsafe fn beep_main(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char)
             b"KIOCSOUND\x00" as *const u8 as *const libc::c_char,
           );
           usleep((1000i32 as libc::c_uint).wrapping_mul(length));
-          ioctl(speaker, 0x4b2fi32 as libc::c_ulong, 0 as *mut libc::c_void);
+          ioctl(speaker, 0x4b2fi32 as _, 0 as *mut libc::c_void);
           rep = rep.wrapping_sub(1);
           if rep != 0 {
             usleep((1000i32 as libc::c_uint).wrapping_mul(delay));

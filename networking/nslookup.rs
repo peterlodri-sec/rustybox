@@ -49,7 +49,7 @@ extern "C" {
     _: size_t,
   ) -> libc::c_int;
   #[no_mangle]
-  fn __res_mkquery(
+  fn res_mkquery(
     _: libc::c_int,
     _: *const libc::c_char,
     _: libc::c_int,
@@ -1175,7 +1175,7 @@ unsafe extern "C" fn add_query(mut type_0: libc::c_int, mut dname: *const libc::
     .query
     .offset(count as isize) as *mut query;
   (*new_q).name = dname;
-  qlen = __res_mkquery(
+  qlen = res_mkquery(
     ns_o_query as libc::c_int,
     dname,
     ns_c_in as libc::c_int,
@@ -1210,7 +1210,7 @@ unsafe extern "C" fn add_query_with_search(
     fullname = crate::libbb::xfuncs_printf::xasprintf(
       b"%s.%.*s\x00" as *const u8 as *const libc::c_char,
       dname,
-      e.wrapping_offset_from(s) as libc::c_long as libc::c_int,
+      e.offset_from(s) as libc::c_long as libc::c_int,
       s,
     );
     add_query(type_0, fullname);

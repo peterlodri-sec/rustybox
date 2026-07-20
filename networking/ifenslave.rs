@@ -238,7 +238,7 @@ unsafe extern "C" fn not_const_pp(mut p: *const libc::c_void) -> *mut libc::c_vo
 }
 /* NOINLINEs are placed where it results in smaller code (gcc 4.3.1) */
 unsafe extern "C" fn ioctl_on_skfd(mut request: libc::c_uint, mut ifr: *mut ifreq) -> libc::c_int {
-  return ioctl(skfd as libc::c_int, request as libc::c_ulong, ifr);
+  return ioctl(skfd as libc::c_int, request as _, ifr);
 }
 unsafe extern "C" fn set_ifrname_and_do_ioctl(
   mut request: libc::c_uint,
@@ -780,7 +780,7 @@ pub unsafe fn ifenslave_main(
     as *mut *mut globals);
   *fresh0 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   opt = crate::libbb::getopt32::getopt32long(
     argv,
     b"cdfa\x00" as *const u8 as *const libc::c_char,

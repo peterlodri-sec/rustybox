@@ -469,7 +469,7 @@ pub unsafe fn ifconfig_main(
           }
           a1op = Arg1Opt
             .as_ptr()
-            .offset(op.wrapping_offset_from(OptArray.as_ptr()) as libc::c_long as isize);
+            .offset(op.offset_from(OptArray.as_ptr()) as libc::c_long as isize);
           argv = argv.offset(1);
           if (*argv).is_null() {
             if mask & 0x10 as libc::c_uint != 0 {

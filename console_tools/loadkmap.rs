@@ -75,7 +75,7 @@ pub unsafe fn loadkmap_main(
          * K_BARENUMLOCK == K(KT_SPEC,19).
          * So far we just ignore these errors:
          */
-        ioctl(fd, 0x4b47i32 as libc::c_ulong, &mut ke as *mut kbentry);
+        ioctl(fd, 0x4b47i32 as _, &mut ke as *mut kbentry);
         j += 1
       }
     }

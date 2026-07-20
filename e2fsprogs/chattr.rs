@@ -48,7 +48,7 @@ unsafe fn get_flag(mut c: libc::c_char) -> libc::c_ulong {
     strchr(&*e2attr_flags_sname.as_ptr().offset(1), c as libc::c_int);
   if !fp.is_null() {
     return *(&*e2attr_flags_value.as_ptr().offset(1) as *const u32).offset(
-      fp.wrapping_offset_from(&*e2attr_flags_sname.as_ptr().offset(1) as *const libc::c_char)
+      fp.offset_from(&*e2attr_flags_sname.as_ptr().offset(1) as *const libc::c_char)
         as libc::c_long as isize,
     ) as libc::c_ulong;
   }

@@ -464,12 +464,7 @@ unsafe extern "C" fn send_probe(mut seq: libc::c_int, mut ttl: libc::c_int) {
           | (__x & 0xff00i32 as libc::c_uint) << 8i32
           | (__x & 0xffi32 as libc::c_uint) << 24i32
       } else {
-        let fresh0 = &mut __v;
-        let fresh1;
-        let fresh2 = __x;
-        llvm_asm!("bswap $0" : "=r" (fresh1) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh0, fresh2)) :);
-        c2rust_asm_casts::AsmCast::cast_out(fresh0, fresh2, fresh1);
+        __v = (__x).swap_bytes();
       }
       __v
     };
@@ -482,12 +477,7 @@ unsafe extern "C" fn send_probe(mut seq: libc::c_int, mut ttl: libc::c_int) {
           | (__x & 0xff00i32 as libc::c_uint) << 8i32
           | (__x & 0xffi32 as libc::c_uint) << 24i32
       } else {
-        let fresh3 = &mut __v;
-        let fresh4;
-        let fresh5 = __x;
-        llvm_asm!("bswap $0" : "=r" (fresh4) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh3, fresh5)) :);
-        c2rust_asm_casts::AsmCast::cast_out(fresh3, fresh5, fresh4);
+        __v = (__x).swap_bytes();
       }
       __v
     }
@@ -508,12 +498,7 @@ unsafe extern "C" fn send_probe(mut seq: libc::c_int, mut ttl: libc::c_int) {
           __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
             as libc::c_ushort
         } else {
-          let fresh6 = &mut __v;
-          let fresh7;
-          let fresh8 = __x;
-          llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh7) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh6, fresh8)) : "cc");
-          c2rust_asm_casts::AsmCast::cast_out(fresh6, fresh8, fresh7);
+          __v = (__x).swap_bytes();
         }
         __v
       };
@@ -524,7 +509,7 @@ unsafe extern "C" fn send_probe(mut seq: libc::c_int, mut ttl: libc::c_int) {
           (*ptr_to_globals).outip.offset(1) as *mut icmp as *mut u16,
           ((*ptr_to_globals).outip as *mut libc::c_char)
             .offset((*ptr_to_globals).packlen as isize)
-            .wrapping_offset_from(
+            .offset_from(
               (*ptr_to_globals).outip.offset(1) as *mut icmp as *mut libc::c_char
             ) as libc::c_long as libc::c_int,
         );
@@ -574,12 +559,7 @@ unsafe extern "C" fn send_probe(mut seq: libc::c_int, mut ttl: libc::c_int) {
           __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
             as libc::c_ushort
         } else {
-          let fresh9 = &mut __v;
-          let fresh10;
-          let fresh11 = __x;
-          llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh10) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh9, fresh11)) : "cc");
-          c2rust_asm_casts::AsmCast::cast_out(fresh9, fresh11, fresh10);
+          __v = (__x).swap_bytes();
         }
         __v
       }) as libc::c_uint,
@@ -587,7 +567,7 @@ unsafe extern "C" fn send_probe(mut seq: libc::c_int, mut ttl: libc::c_int) {
   }
   len = ((*ptr_to_globals).outip as *mut libc::c_char)
     .offset((*ptr_to_globals).packlen as isize)
-    .wrapping_offset_from(out as *mut libc::c_char) as libc::c_long as libc::c_int;
+    .offset_from(out as *mut libc::c_char) as libc::c_long as libc::c_int;
   res = crate::libbb::xfuncs_printf::xsendto(
     sndsock as libc::c_int,
     out,
@@ -705,12 +685,7 @@ unsafe extern "C" fn packet4_ok(
         __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
           as libc::c_ushort
       } else {
-        let fresh12 = &mut __v;
-        let fresh13;
-        let fresh14 = __x;
-        llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh13) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh12, fresh14)) : "cc");
-        c2rust_asm_casts::AsmCast::cast_out(fresh12, fresh14, fresh13);
+        __v = (__x).swap_bytes();
       }
       __v
     }) as libc::c_int
@@ -735,12 +710,7 @@ unsafe extern "C" fn packet4_ok(
               __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
                 as libc::c_ushort
             } else {
-              let fresh15 = &mut __v;
-              let fresh16;
-              let fresh17 = __x;
-              llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh16) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh15, fresh17)) : "cc");
-              c2rust_asm_casts::AsmCast::cast_out(fresh15, fresh17, fresh16);
+              __v = (__x).swap_bytes();
             }
             __v
           }) as libc::c_int
@@ -752,12 +722,7 @@ unsafe extern "C" fn packet4_ok(
               __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
                 as libc::c_ushort
             } else {
-              let fresh18 = &mut __v;
-              let fresh19;
-              let fresh20 = __x;
-              llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh19) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh18, fresh20)) : "cc");
-              c2rust_asm_casts::AsmCast::cast_out(fresh18, fresh20, fresh19);
+              __v = (__x).swap_bytes();
             }
             __v
           }) as libc::c_int
@@ -775,12 +740,7 @@ unsafe extern "C" fn packet4_ok(
               __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
                 as libc::c_ushort
             } else {
-              let fresh21 = &mut __v;
-              let fresh22;
-              let fresh23 = __x;
-              llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh22) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh21, fresh23)) : "cc");
-              c2rust_asm_casts::AsmCast::cast_out(fresh21, fresh23, fresh22);
+              __v = (__x).swap_bytes();
             }
             __v
           }) as libc::c_int
@@ -792,12 +752,7 @@ unsafe extern "C" fn packet4_ok(
               __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
                 as libc::c_ushort
             } else {
-              let fresh24 = &mut __v;
-              let fresh25;
-              let fresh26 = __x;
-              llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh25) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh24, fresh26)) : "cc");
-              c2rust_asm_casts::AsmCast::cast_out(fresh24, fresh26, fresh25);
+              __v = (__x).swap_bytes();
             }
             __v
           }) as libc::c_int
@@ -821,12 +776,7 @@ unsafe extern "C" fn packet4_ok(
               __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
                 as libc::c_ushort
             } else {
-              let fresh27 = &mut __v;
-              let fresh28;
-              let fresh29 = __x;
-              llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh28) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh27, fresh29)) : "cc");
-              c2rust_asm_casts::AsmCast::cast_out(fresh27, fresh29, fresh28);
+              __v = (__x).swap_bytes();
             }
             __v
           }) as libc::c_int
@@ -905,12 +855,7 @@ unsafe extern "C" fn packet_ok(
             | (__x & 0xff00i32 as libc::c_uint) << 8i32
             | (__x & 0xffi32 as libc::c_uint) << 24i32
         } else {
-          let fresh31 = &mut __v;
-          let fresh32;
-          let fresh33 = __x;
-          llvm_asm!("bswap $0" : "=r" (fresh32) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh31, fresh33)) :);
-          c2rust_asm_casts::AsmCast::cast_out(fresh31, fresh33, fresh32);
+          __v = (__x).swap_bytes();
         }
         __v
       }) == (*ptr_to_globals).ident
@@ -923,12 +868,7 @@ unsafe extern "C" fn packet_ok(
               | (__x & 0xff00i32 as libc::c_uint) << 8i32
               | (__x & 0xffi32 as libc::c_uint) << 24i32
           } else {
-            let fresh34 = &mut __v;
-            let fresh35;
-            let fresh36 = __x;
-            llvm_asm!("bswap $0" : "=r" (fresh35) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh34, fresh36)) :);
-            c2rust_asm_casts::AsmCast::cast_out(fresh34, fresh36, fresh35);
+            __v = (__x).swap_bytes();
           }
           __v
         }) == seq as libc::c_uint
@@ -1086,7 +1026,7 @@ unsafe extern "C" fn common_traceroute_main(
       as *mut *mut globals);
   *fresh37 = crate::libbb::xfuncs_printf::xzalloc(::std::mem::size_of::<globals>() as libc::c_ulong)
     as *mut globals;
-  llvm_asm!("" : : : "memory" : "volatile");
+  ::core::sync::atomic::compiler_fence(::core::sync::atomic::Ordering::SeqCst);
   (*ptr_to_globals).port = 33434i32 as u16;
   (*ptr_to_globals).waittime = 5i32;
   op = (op as libc::c_uint
@@ -1287,12 +1227,7 @@ unsafe extern "C" fn common_traceroute_main(
           __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
             as libc::c_ushort
         } else {
-          let fresh38 = &mut __v;
-          let fresh39;
-          let fresh40 = __x;
-          llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh39) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh38, fresh40)) : "cc");
-          c2rust_asm_casts::AsmCast::cast_out(fresh38, fresh40, fresh39);
+          __v = (__x).swap_bytes();
         }
         __v
       };
@@ -1358,12 +1293,7 @@ unsafe extern "C" fn common_traceroute_main(
           __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
             as libc::c_ushort
         } else {
-          let fresh41 = &mut __v;
-          let fresh42;
-          let fresh43 = __x;
-          llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh42) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh41, fresh43)) : "cc");
-          c2rust_asm_casts::AsmCast::cast_out(fresh41, fresh43, fresh42);
+          __v = (__x).swap_bytes();
         }
         __v
       }) as libc::c_uint,
@@ -1383,12 +1313,7 @@ unsafe extern "C" fn common_traceroute_main(
           __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
             as libc::c_ushort
         } else {
-          let fresh44 = &mut __v;
-          let fresh45;
-          let fresh46 = __x;
-          llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh45) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh44, fresh46)) : "cc");
-          c2rust_asm_casts::AsmCast::cast_out(fresh44, fresh46, fresh45);
+          __v = (__x).swap_bytes();
         }
         __v
       }) as libc::c_uint,

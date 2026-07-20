@@ -412,7 +412,7 @@ unsafe fn print_neigh(
     (*fn_0).nlmsg_seq = *fresh0;
     (*(bb_common_bufsiz1.as_mut_ptr() as *mut filter_t)).flushp = (fn_0 as *mut libc::c_char)
       .offset((*n).nlmsg_len as isize)
-      .wrapping_offset_from((*(bb_common_bufsiz1.as_mut_ptr() as *mut filter_t)).flushb)
+      .offset_from((*(bb_common_bufsiz1.as_mut_ptr() as *mut filter_t)).flushb)
       as libc::c_long
       as libc::c_int;
     let ref mut fresh1 = (*(bb_common_bufsiz1.as_mut_ptr() as *mut filter_t)).flushed;

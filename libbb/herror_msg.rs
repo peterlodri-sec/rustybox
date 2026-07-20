@@ -26,14 +26,14 @@ pub type va_list = __builtin_va_list;
  * Licensed under GPLv2 or later, see file LICENSE in this source tree.
  */
 pub unsafe extern "C" fn bb_herror_msg(mut s: *const libc::c_char, mut args: ...) {
-  let mut p: ::std::ffi::VaListImpl;
+  let mut p: ::std::ffi::VaList;
   p = args.clone();
-  crate::libbb::verror_msg::bb_verror_msg(s, p.as_va_list(), hstrerror(*__h_errno_location()));
+  crate::libbb::verror_msg::bb_verror_msg(s, p, hstrerror(*__h_errno_location()));
 }
 pub unsafe extern "C" fn bb_herror_msg_and_die(mut s: *const libc::c_char, mut args: ...) -> ! {
-  let mut p: ::std::ffi::VaListImpl;
+  let mut p: ::std::ffi::VaList;
   p = args.clone();
-  crate::libbb::verror_msg::bb_verror_msg(s, p.as_va_list(), hstrerror(*__h_errno_location()));
+  crate::libbb::verror_msg::bb_verror_msg(s, p, hstrerror(*__h_errno_location()));
   crate::libbb::xfunc_die::xfunc_die();
 }
 pub unsafe fn bb_simple_herror_msg(mut s: *const libc::c_char) {

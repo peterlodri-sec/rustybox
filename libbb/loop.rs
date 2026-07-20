@@ -72,7 +72,7 @@ pub unsafe fn query_loop(mut device: *const libc::c_char) -> *mut libc::c_char {
   if fd >= 0 {
     if ioctl(
       fd,
-      0x4c05i32 as libc::c_ulong,
+      0x4c05i32 as _,
       &mut loopinfo as *mut bb_loop_info,
     ) == 0
     {
@@ -93,7 +93,7 @@ pub unsafe fn del_loop(mut device: *const libc::c_char) -> libc::c_int {
   if fd < 0 {
     return 1i32;
   }
-  rc = ioctl(fd, 0x4c01i32 as libc::c_ulong, 0);
+  rc = ioctl(fd, 0x4c01i32 as _, 0);
   close(fd);
   return rc;
 }
@@ -108,7 +108,7 @@ pub unsafe fn get_free_loop() -> libc::c_int {
   if fd == -1i32 {
     return fd - 1i32;
   }
-  loopdevno = ioctl(fd, 0x4c82i32 as libc::c_ulong);
+  loopdevno = ioctl(fd, 0x4c82i32 as _);
   close(fd);
   return loopdevno;
   /* can be -1 if error */
@@ -660,13 +660,13 @@ pub unsafe fn set_loop(
         } else {
           rc = ioctl(
             dfd,
-            0x4c05i32 as libc::c_ulong,
+            0x4c05i32 as _,
             &mut loopinfo as *mut bb_loop_info,
           );
           /* If device is free, claim it.  */
           if rc != 0 && *bb_errno == 6i32 {
             /* Associate free loop device with file.  */
-            if ioctl(dfd, 0x4c00i32 as libc::c_ulong, ffd) == 0 {
+            if ioctl(dfd, 0x4c00i32 as _, ffd) == 0 {
               memset(
                 &mut loopinfo as *mut bb_loop_info as *mut libc::c_void,
                 0,
@@ -687,7 +687,7 @@ pub unsafe fn set_loop(
               loopinfo.lo_flags = flags & !1i32 as libc::c_uint;
               rc = ioctl(
                 dfd,
-                0x4c04i32 as libc::c_ulong,
+                0x4c04i32 as _,
                 &mut loopinfo as *mut bb_loop_info,
               );
               if rc != 0 && loopinfo.lo_flags & 4i32 as libc::c_uint != 0 {
@@ -698,12 +698,12 @@ pub unsafe fn set_loop(
                   as u32;
                 rc = ioctl(
                   dfd,
-                  0x4c04i32 as libc::c_ulong,
+                  0x4c04i32 as _,
                   &mut loopinfo as *mut bb_loop_info,
                 )
               }
               if rc != 0 {
-                ioctl(dfd, 0x4c01i32 as libc::c_ulong, 0);
+                ioctl(dfd, 0x4c01i32 as _, 0);
                 // actually, 0 param is unnecessary
               }
             }

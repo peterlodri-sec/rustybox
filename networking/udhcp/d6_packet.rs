@@ -331,12 +331,7 @@ pub unsafe fn d6_send_raw_packet(
         __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
           as libc::c_ushort
       } else {
-        let fresh0 = &mut __v;
-        let fresh1;
-        let fresh2 = __x;
-        llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh1) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh0, fresh2)) : "cc");
-        c2rust_asm_casts::AsmCast::cast_out(fresh0, fresh2, fresh1);
+        __v = (__x).swap_bytes();
       }
       __v
     }) as libc::c_int,
@@ -364,12 +359,7 @@ pub unsafe fn d6_send_raw_packet(
         __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
           as libc::c_ushort
       } else {
-        let fresh3 = &mut __v;
-        let fresh4;
-        let fresh5 = __x;
-        llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh4) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh3, fresh5)) : "cc");
-        c2rust_asm_casts::AsmCast::cast_out(fresh3, fresh5, fresh4);
+        __v = (__x).swap_bytes();
       }
       __v
     };
@@ -404,12 +394,7 @@ pub unsafe fn d6_send_raw_packet(
           __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
             as libc::c_ushort
         } else {
-          let fresh6 = &mut __v;
-          let fresh7;
-          let fresh8 = __x;
-          llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh7) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh6, fresh8)) : "cc");
-          c2rust_asm_casts::AsmCast::cast_out(fresh6, fresh8, fresh7);
+          __v = (__x).swap_bytes();
         }
         __v
       };
@@ -420,12 +405,7 @@ pub unsafe fn d6_send_raw_packet(
           __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
             as libc::c_ushort
         } else {
-          let fresh9 = &mut __v;
-          let fresh10;
-          let fresh11 = __x;
-          llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh10) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh9, fresh11)) : "cc");
-          c2rust_asm_casts::AsmCast::cast_out(fresh9, fresh11, fresh10);
+          __v = (__x).swap_bytes();
         }
         __v
       };
@@ -439,12 +419,7 @@ pub unsafe fn d6_send_raw_packet(
           __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
             as libc::c_ushort
         } else {
-          let fresh12 = &mut __v;
-          let fresh13;
-          let fresh14 = __x;
-          llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh13) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh12, fresh14)) : "cc");
-          c2rust_asm_casts::AsmCast::cast_out(fresh12, fresh14, fresh13);
+          __v = (__x).swap_bytes();
         }
         __v
       };
@@ -531,12 +506,7 @@ pub unsafe fn d6_send_kernel_packet(
         __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
           as libc::c_ushort
       } else {
-        let fresh15 = &mut __v;
-        let fresh16;
-        let fresh17 = __x;
-        llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh16) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh15, fresh17)) : "cc");
-        c2rust_asm_casts::AsmCast::cast_out(fresh15, fresh17, fresh16);
+        __v = (__x).swap_bytes();
       }
       __v
     };
@@ -566,12 +536,7 @@ pub unsafe fn d6_send_kernel_packet(
           __v = (__x as libc::c_int >> 8i32 & 0xffi32 | (__x as libc::c_int & 0xffi32) << 8i32)
             as libc::c_ushort
         } else {
-          let fresh18 = &mut __v;
-          let fresh19;
-          let fresh20 = __x;
-          llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh19) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh18, fresh20)) : "cc");
-          c2rust_asm_casts::AsmCast::cast_out(fresh18, fresh20, fresh19);
+          __v = (__x).swap_bytes();
         }
         __v
       };

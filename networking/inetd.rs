@@ -1337,12 +1337,7 @@ unsafe extern "C" fn reread_config_file(mut _sig: libc::c_int) {
                 __v = (__x as libc::c_int >> 8i32 & 0xffi32
                   | (__x as libc::c_int & 0xffi32) << 8i32) as libc::c_ushort
               } else {
-                let fresh12 = &mut __v;
-                let fresh13;
-                let fresh14 = __x;
-                llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh13) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh12, fresh14)) : "cc");
-                c2rust_asm_casts::AsmCast::cast_out(fresh12, fresh14, fresh13);
+                __v = (__x).swap_bytes();
               }
               __v
             };
@@ -1391,12 +1386,7 @@ unsafe extern "C" fn reread_config_file(mut _sig: libc::c_int) {
                           | (__x as libc::c_int & 0xffi32) << 8i32)
                           as libc::c_ushort
                       } else {
-                        let fresh15 = &mut __v;
-                        let fresh16;
-                        let fresh17 = __x;
-                        llvm_asm!("rorw $$8, ${0:w}" : "=r" (fresh16) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh15, fresh17)) : "cc");
-                        c2rust_asm_casts::AsmCast::cast_out(fresh15, fresh17, fresh16);
+                        __v = (__x).swap_bytes();
                       }
                       __v
                     }) as libc::c_int,
@@ -2201,7 +2191,7 @@ unsafe extern "C" fn chargen_stream(mut s: libc::c_int, mut _sep: *mut servtab_t
   loop {
     len = (*(bb_common_bufsiz1.as_mut_ptr() as *mut globals))
       .end_ring
-      .wrapping_offset_from(rs) as libc::c_long as libc::c_int;
+      .offset_from(rs) as libc::c_long as libc::c_int;
     if len >= 72i32 {
       memmove(
         text.as_mut_ptr() as *mut libc::c_void,
@@ -2273,7 +2263,7 @@ unsafe extern "C" fn chargen_dg(mut s: libc::c_int, mut sep: *mut servtab_t) {
   }
   len = (*(bb_common_bufsiz1.as_mut_ptr() as *mut globals))
     .end_ring
-    .wrapping_offset_from((*(bb_common_bufsiz1.as_mut_ptr() as *mut globals)).ring_pos)
+    .offset_from((*(bb_common_bufsiz1.as_mut_ptr() as *mut globals)).ring_pos)
     as libc::c_long as libc::c_int;
   if len >= 72i32 {
     memmove(
@@ -2339,12 +2329,7 @@ unsafe extern "C" fn machtime() -> u32 {
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh29 = &mut __v;
-      let fresh30;
-      let fresh31 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh30) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh29, fresh31)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh29, fresh31, fresh30);
+      __v = (__x).swap_bytes();
     }
     __v
   };

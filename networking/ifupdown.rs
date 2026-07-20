@@ -262,12 +262,7 @@ unsafe fn count_netmask_bits(mut dotted_quad: *const libc::c_char) -> libc::c_in
         | (__x & 0xff00i32 as libc::c_uint) << 8i32
         | (__x & 0xffi32 as libc::c_uint) << 24i32
     } else {
-      let fresh0 = &mut __v;
-      let fresh1;
-      let fresh2 = __x;
-      llvm_asm!("bswap $0" : "=r" (fresh1) : "0"
-     (c2rust_asm_casts::AsmCast::cast_in(fresh0, fresh2)) :);
-      c2rust_asm_casts::AsmCast::cast_out(fresh0, fresh2, fresh1);
+      __v = (__x).swap_bytes();
     }
     __v
   };
@@ -340,7 +335,7 @@ unsafe fn parse(
         }
         varvalue = get_var(
           command,
-          nextpercent.wrapping_offset_from(command) as libc::c_long as size_t,
+          nextpercent.offset_from(command) as libc::c_long as size_t,
           ifd,
         );
         if !varvalue.is_null() {
