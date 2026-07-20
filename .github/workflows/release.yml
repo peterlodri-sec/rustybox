@@ -30,7 +30,7 @@ jobs:
       - name: Install musl toolchain
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends musl-tools musl-dev clang
+          sudo apt-get install -y --no-install-recommends musl-tools musl-dev clang upx-ucl
 
       - name: Toolchain
         run: |
@@ -44,21 +44,35 @@ jobs:
 
       # Native musl C compiler so cc-based build scripts (blake3, ...) resolve.
       # rustybox (full, GPL-2.0) — all applets; rustybox-core (MIT) — permissive.
+      # Native musl cc for build scripts (blake3). relocation-model=static gives
+      # a non-PIE static binary so UPX can compress it. Provenance is baked into
+      # rustybox-core via RUSTYBOX_* (see build.rs).
       - name: Build (static)
         env:
           CC_x86_64_unknown_linux_musl: musl-gcc
           CC_aarch64_unknown_linux_musl: musl-gcc
+          CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_RUSTFLAGS: "-C target-feature=+crt-static -C relocation-model=static -C linker-flavor=ld.lld"
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUSTFLAGS: "-C target-feature=+crt-static -C relocation-model=static -C linker-flavor=ld.lld"
+          RUSTYBOX_GIT_SHA: ${{ github.sha }}
+          RUSTYBOX_BUILD_ARGS: "cargo build --release --target ${{ matrix.target }} (--all-features | -p rustybox-core)"
         run: |
+          export RUSTYBOX_BUILD_DATE="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          echo "RUSTYBOX_BUILD_DATE=$RUSTYBOX_BUILD_DATE" >> "$GITHUB_ENV"
           cargo build --release --target ${{ matrix.target }} --all-features
           cargo build --release --target ${{ matrix.target }} -p rustybox-core
 
-      - name: Package
+      # SOTA size WITHOUT stripping symbols: UPX --best --lzma. Symbols stay in
+      # the (compressed) image; the artifact on disk is a fraction of the size.
+      - name: Package (UPX-compress, keep symbols)
         run: |
           for name in rustybox rustybox-core; do
             BIN="target/${{ matrix.target }}/release/$name"
-            strip -s "$BIN"
             OUT="$name-${{ matrix.target }}"
             cp "$BIN" "$OUT"
+            before=$(stat -c%s "$OUT")
+            upx --best --lzma "$OUT" || echo "upx skipped for $OUT"
+            after=$(stat -c%s "$OUT")
+            echo "$OUT: $before -> $after bytes"
             sha256sum "$OUT" > "$OUT.sha256"
           done
           ls -la rustybox*-${{ matrix.target }}*
@@ -67,6 +81,34 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
+          generate_release_notes: true
+          body: |
+            ### rustybox ${{ github.ref_name }}
+
+            One fully-static binary, dual-arch, memory-safe where it counts.
+
+            | | |
+            |---|---|
+            | **commit** | `${{ github.sha }}` |
+            | **built (UTC)** | `${{ env.RUSTYBOX_BUILD_DATE }}` |
+            | **build** | `cargo build --release --target <arch>-unknown-linux-musl` |
+            | **repo** | https://github.com/peterlodri-sec/rustybox |
+            | **site** | https://rustybox.io |
+
+            **Editions**
+            - `rustybox-<arch>` — full BusyBox parity (**GPL-2.0-only**)
+            - `rustybox-core-<arch>` — permissive-only, **MIT**; `rustybox-core --version` prints this provenance
+
+            **Binaries** are `UPX --best --lzma` compressed with symbols preserved (no strip); static, no runtime deps.
+
+            ```sh
+            curl -LO https://github.com/peterlodri-sec/rustybox/releases/download/${{ github.ref_name }}/rustybox-core-x86_64-unknown-linux-musl
+            curl -LO https://github.com/peterlodri-sec/rustybox/releases/download/${{ github.ref_name }}/rustybox-core-x86_64-unknown-linux-musl.sha256
+            sha256sum -c rustybox-core-x86_64-unknown-linux-musl.sha256
+            chmod +x rustybox-core-* && ./rustybox-core-* --version
+            ```
+
+            ♥ [Sponsor the work](https://github.com/sponsors/peterlodri-sec)
           files: |
             rustybox-${{ matrix.target }}
             rustybox-${{ matrix.target }}.sha256

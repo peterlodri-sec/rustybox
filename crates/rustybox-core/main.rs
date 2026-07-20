@@ -34,6 +34,11 @@ fn main() {
       (prog.to_string(), raw.iter().map(String::as_str).collect())
     };
 
+  if matches!(name.as_str(), "--version" | "-V" | "version") {
+    print_version();
+    std::process::exit(0);
+  }
+
   match dispatch(&name, &argv) {
     Some(code) => std::process::exit(code),
     None => {
@@ -113,6 +118,17 @@ fn dispatch(name: &str, argv: &[&str]) -> Option<i32> {
     "base64" => Some(uu_base64::uumain(argv.iter().map(std::ffi::OsString::from))),
     _ => None,
   }
+}
+
+fn print_version() {
+  println!("rustybox-core {} (MIT edition)", env!("CARGO_PKG_VERSION"));
+  println!("commit:   {}", env!("RB_GIT_SHA"));
+  println!("built:    {}", env!("RB_BUILD_DATE"));
+  println!("target:   {}", env!("RB_TARGET"));
+  println!("args:     {}", env!("RB_BUILD_ARGS"));
+  println!("repo:     https://github.com/peterlodri-sec/rustybox");
+  println!("site:     https://rustybox.io");
+  println!("backends: uutils + ripgrep libs · memory-safe, permissive-licensed");
 }
 
 fn list_applets() {

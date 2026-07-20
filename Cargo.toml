@@ -106,9 +106,13 @@ tempfile = "3.1.0"
 
 # See https://github.com/johnthagen/min-sized-rust
 [profile.release]
-opt-level = 'z'  # Optimize for size.
-lto = true
-codegen-units = 1
+opt-level = 'z'      # optimize for size
+lto = true           # cross-crate inlining + dead-code elimination
+codegen-units = 1    # better optimization, smaller output
+panic = "abort"      # drop unwinding tables (real size win, not symbol stripping)
+strip = false        # keep symbols — size comes from build flags + UPX, not stripping
+# Release artifacts are UPX --best --lzma compressed in CI (docker/release), so
+# the shipped binary is small on disk while symbols stay in the image.
 
 [features]
 # Modern memory-safe backends (MIGRATION.md). `modern` = all wired so far.
