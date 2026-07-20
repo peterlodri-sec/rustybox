@@ -75,9 +75,22 @@ is nearly free.
     infiniband`, and legacy SLIP/ISA options (`mem_start`, `io_addr`, `irq`,
     `keepalive`, `outfill`) — dead hardware classes BusyBox itself already
     called out as unmaintained ("Still missing: media, tunnel").
-  - `mount`/`umount`/`ip`/`init`/`ash` — not yet started. `ash` in particular
-    (15k transpiled lines, full POSIX shell semantics) is a multi-session
-    project on its own, not a quick swap.
+  - `mount`/`umount`/`mountpoint` ✅ — `modern/mount.rs`, `modern/umount.rs`,
+    `modern/mountpoint.rs`, features `modern-mount`/`modern-umount`/
+    `modern-mountpoint`. `mount`/`umount` via `nix::mount::{mount,umount2}`
+    (safe wrappers around mount(2)/umount2(2)); `mountpoint` is fully
+    `unsafe`-free (`std::fs` stat calls + the glibc major/minor bit-decode
+    formula, no ioctls at all). Covers two-arg mount with `-o` flags and
+    fstype autodetection via `/proc/filesystems`, bind/rbind/move/remount/
+    make-{shared,private,slave,unbindable} (+ recursive), `-a` against
+    `/etc/fstab` or `-T FILE` with `-t`/`-O` filtering, and the bare listing.
+    Out of scope: automatic loop-device attach for `mount image.img dir`
+    (losetup(8) it yourself first), CIFS/NFS fstab shorthand auto-detection,
+    and the `mount.<fstype>` helper-program fallback (already dead code
+    upstream).
+  - `ip`/`init`/`ash` — not yet started. `ash` in particular (15k transpiled
+    lines, full POSIX shell semantics) is a multi-session project on its
+    own, not a quick swap.
 - **Phase 4 — retire transpiled code.** Once an applet's modern backend is the
   default and parity-tested, delete the transpiled `*_main` and its `unsafe`.
 

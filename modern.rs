@@ -19,6 +19,12 @@ mod compress;
 mod tar;
 #[cfg(feature = "modern-ifconfig")]
 mod ifconfig;
+#[cfg(feature = "modern-mount")]
+mod mount;
+#[cfg(feature = "modern-umount")]
+mod umount;
+#[cfg(feature = "modern-mountpoint")]
+mod mountpoint;
 
 #[allow(unused_variables)]
 pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
@@ -37,6 +43,12 @@ pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
     "tar" => Some(tar::run(argv)),
     #[cfg(feature = "modern-ifconfig")]
     "ifconfig" => Some(ifconfig::run(argv)),
+    #[cfg(feature = "modern-mount")]
+    "mount" => Some(mount::run(argv)),
+    #[cfg(feature = "modern-umount")]
+    "umount" => Some(umount::run(argv)),
+    #[cfg(feature = "modern-mountpoint")]
+    "mountpoint" => Some(mountpoint::run(argv)),
     #[cfg(feature = "modern-cat")]
     "cat" => Some(uu_cat::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-echo")]

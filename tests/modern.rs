@@ -220,6 +220,35 @@ fn ifconfig_unknown_iface_errors() {
 }
 
 #[test]
+fn mountpoint_root_is_mountpoint() {
+  let status = cmd!(exe(), "mountpoint", "-q", "/").unchecked().run().unwrap();
+  assert_eq!(status.status.code(), Some(0));
+}
+
+#[test]
+fn mountpoint_regular_dir_is_not() {
+  let dir = tempfile::tempdir().unwrap();
+  let status = cmd!(exe(), "mountpoint", "-q", dir.path().to_str().unwrap()).unchecked().run().unwrap();
+  assert_eq!(status.status.code(), Some(1));
+}
+
+#[test]
+fn mount_umount_tmpfs_roundtrip() {
+  let dir = tempfile::tempdir().unwrap();
+  let path = dir.path().to_str().unwrap();
+  let status = cmd!(exe(), "mount", "-t", "tmpfs", "tmpfs", path).unchecked().stderr_capture().run().unwrap();
+  if status.status.code() != Some(0) {
+    eprintln!("SKIPPED: mount tmpfs needs CAP_SYS_ADMIN, not available in this environment");
+    return;
+  }
+  let mp_status = cmd!(exe(), "mountpoint", "-q", path).unchecked().run().unwrap();
+  assert_eq!(mp_status.status.code(), Some(0), "tmpfs mount should register as a mountpoint");
+  cmd!(exe(), "umount", path).run().unwrap();
+  let mp_after = cmd!(exe(), "mountpoint", "-q", path).unchecked().run().unwrap();
+  assert_eq!(mp_after.status.code(), Some(1), "should no longer be a mountpoint after umount");
+}
+
+#[test]
 fn true_false_exit_codes() {
   let t = cmd!(exe(), "true").unchecked().run().unwrap();
   assert_eq!(t.status.code(), Some(0));
