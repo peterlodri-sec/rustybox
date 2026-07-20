@@ -195,6 +195,31 @@ fn tar_create_list_extract() {
 }
 
 #[test]
+fn ifconfig_lo_display() {
+  let out = cmd!(exe(), "ifconfig", "lo").read().unwrap();
+  assert!(out.contains("lo"), "got: {out}");
+  assert!(out.contains("127.0.0.1"), "got: {out}");
+  assert!(out.contains("LOOPBACK"), "got: {out}");
+}
+
+#[test]
+fn ifconfig_all_includes_lo() {
+  let out = cmd!(exe(), "ifconfig", "-a").read().unwrap();
+  assert!(out.lines().any(|l| l.starts_with("lo ")), "got: {out}");
+}
+
+#[test]
+fn ifconfig_unknown_iface_errors() {
+  let status = cmd!(exe(), "ifconfig", "there-is-no-such-iface")
+    .unchecked()
+    .stdout_null()
+    .stderr_null()
+    .run()
+    .unwrap();
+  assert_ne!(status.status.code(), Some(0));
+}
+
+#[test]
 fn true_false_exit_codes() {
   let t = cmd!(exe(), "true").unchecked().run().unwrap();
   assert_eq!(t.status.code(), Some(0));

@@ -17,6 +17,8 @@ mod find;
 mod compress;
 #[cfg(feature = "modern-tar")]
 mod tar;
+#[cfg(feature = "modern-ifconfig")]
+mod ifconfig;
 
 #[allow(unused_variables)]
 pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
@@ -33,6 +35,8 @@ pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
     "xz" | "unxz" | "xzcat" => Some(compress::run(name, argv, &compress::XZ)),
     #[cfg(feature = "modern-tar")]
     "tar" => Some(tar::run(argv)),
+    #[cfg(feature = "modern-ifconfig")]
+    "ifconfig" => Some(ifconfig::run(argv)),
     #[cfg(feature = "modern-cat")]
     "cat" => Some(uu_cat::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-echo")]

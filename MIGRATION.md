@@ -66,6 +66,18 @@ is nearly free.
 - **Phase 3 — no-crate applets.** Hand-written safe rewrites for the things with
   no good library (`mount`, `ifconfig`, `ip`, `init`, the `ash` shell), using
   `rustix`/`nix` for syscalls instead of the transpiled `unsafe` FFI.
+  - `ifconfig` ✅ — `modern/ifconfig.rs`, feature `modern-ifconfig`. Display via
+    `nix::ifaddrs::getifaddrs` (fully safe read path); set operations (address,
+    netmask, broadcast, pointopoint, dstaddr, hw ether, mtu, metric,
+    txqueuelen, up/down/arp/promisc/allmulti/multicast/dynamic/trailers) via a
+    handful of confined `ioctl(2)` helpers instead of pointer arithmetic
+    threaded through the whole applet. Out of scope: IPv6 add/del, `hw
+    infiniband`, and legacy SLIP/ISA options (`mem_start`, `io_addr`, `irq`,
+    `keepalive`, `outfill`) — dead hardware classes BusyBox itself already
+    called out as unmaintained ("Still missing: media, tunnel").
+  - `mount`/`umount`/`ip`/`init`/`ash` — not yet started. `ash` in particular
+    (15k transpiled lines, full POSIX shell semantics) is a multi-session
+    project on its own, not a quick swap.
 - **Phase 4 — retire transpiled code.** Once an applet's modern backend is the
   default and parity-tested, delete the transpiled `*_main` and its `unsafe`.
 

@@ -513,7 +513,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e0b1fab2ae45819af2d0731d60f2afe17227ebb1a1538a236da84c93e9a60162"
 dependencies = [
  "dispatch2",
- "nix",
+ "nix 0.31.3",
  "windows-sys 0.61.2",
 ]
 
@@ -1541,6 +1541,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "memoffset"
+version = "0.9.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "488016bfae457b036d996092f6cb448677611ce4449e970ceaf42695203f218a"
+dependencies = [
+ "autocfg",
+]
+
+[[package]]
 name = "miniz_oxide"
 version = "0.8.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1560,6 +1569,19 @@ dependencies = [
  "log",
  "wasi",
  "windows-sys 0.61.2",
+]
+
+[[package]]
+name = "nix"
+version = "0.29.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "71e2746dc3a24dd78b3cfcb7be93368c6de9963d30f43a6a73998a9cf4b17b46"
+dependencies = [
+ "bitflags 2.13.1",
+ "cfg-if",
+ "cfg_aliases",
+ "libc",
+ "memoffset",
 ]
 
 [[package]]
@@ -2033,6 +2055,7 @@ dependencies = [
  "ignore",
  "lazy_static",
  "libc",
+ "nix 0.29.0",
  "tar",
  "tempfile",
  "uu_base64",
@@ -2657,7 +2680,7 @@ dependencies = [
  "fluent",
  "indicatif",
  "libc",
- "nix",
+ "nix 0.31.3",
  "rustix",
  "thiserror",
  "uucore",
@@ -2706,7 +2729,7 @@ dependencies = [
  "fluent",
  "gcd",
  "libc",
- "nix",
+ "nix 0.31.3",
  "thiserror",
  "uucore",
 ]
@@ -2770,7 +2793,7 @@ checksum = "7f5f7e0e55ae69e5cf4d749f4b11e38bd0eafdc877c582b6ef10638ca38f34cf"
 dependencies = [
  "clap",
  "fluent",
- "nix",
+ "nix 0.31.3",
  "rust-ini",
  "thiserror",
  "uucore",
@@ -2943,7 +2966,7 @@ dependencies = [
  "fs_extra",
  "indicatif",
  "libc",
- "nix",
+ "nix 0.31.3",
  "rustc-hash",
  "rustix",
  "thiserror",
@@ -3206,7 +3229,7 @@ checksum = "51832792ea087287e18133523b805afb1572a6dfea19e822eeab3938427d2fb1"
 dependencies = [
  "clap",
  "fluent",
- "nix",
+ "nix 0.31.3",
  "uucore",
  "windows-sys 0.61.2",
 ]
@@ -3443,7 +3466,7 @@ dependencies = [
  "libc",
  "md-5",
  "memchr",
- "nix",
+ "nix 0.31.3",
  "num-traits",
  "os_display",
  "procfs",
