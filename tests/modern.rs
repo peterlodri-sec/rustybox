@@ -134,6 +134,14 @@ fn timeout_passes_quick() {
 }
 
 #[test]
+fn base64_roundtrip() {
+  let enc = cmd!(exe(), "base64").stdin_bytes("hi").read().unwrap();
+  assert_eq!(enc, "aGk=");
+  let dec = cmd!(exe(), "base64", "-d").stdin_bytes("aGk=").read().unwrap();
+  assert_eq!(dec, "hi");
+}
+
+#[test]
 fn true_false_exit_codes() {
   let t = cmd!(exe(), "true").unchecked().run().unwrap();
   assert_eq!(t.status.code(), Some(0));

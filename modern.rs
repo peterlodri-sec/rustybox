@@ -145,6 +145,10 @@ pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
     "sync" => Some(uu_sync::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-uname")]
     "uname" => Some(uu_uname::uumain(argv.iter().map(std::ffi::OsString::from))),
+    #[cfg(feature = "modern-sum")]
+    "sum" => Some(uu_sum::uumain(argv.iter().map(std::ffi::OsString::from))),
+    #[cfg(feature = "modern-base64")]
+    "base64" => Some(uu_base64::uumain(argv.iter().map(std::ffi::OsString::from))),
     _ => None,
   }
 }

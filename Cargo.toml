@@ -85,6 +85,8 @@ uu_cksum = { version = "0.9", optional = true }
 uu_paste = { version = "0.9", optional = true }
 uu_sync = { version = "0.9", optional = true }
 uu_uname = { version = "0.9", optional = true }
+uu_sum = { version = "0.9", optional = true }
+uu_base64 = { version = "0.9", optional = true }
 
 walkdir = { version = "2", optional = true }
 globset = { version = "0.4", optional = true }
@@ -104,7 +106,7 @@ codegen-units = 1
 
 [features]
 # Modern memory-safe backends (MIGRATION.md). `modern` = all wired so far.
-modern = ["modern-cat", "modern-echo", "modern-ls", "modern-cp", "modern-mv", "modern-rm", "modern-mkdir", "modern-rmdir", "modern-ln", "modern-pwd", "modern-touch", "modern-true", "modern-false", "modern-head", "modern-tail", "modern-wc", "modern-sort", "modern-uniq", "modern-cut", "modern-tr", "modern-chmod", "modern-chown", "modern-df", "modern-du", "modern-env", "modern-printenv", "modern-date", "modern-basename", "modern-dirname", "modern-readlink", "modern-stat", "modern-seq", "modern-sleep", "modern-id", "modern-whoami", "modern-yes", "modern-tac", "modern-nl", "modern-tee", "modern-mktemp", "modern-realpath", "modern-nproc", "modern-printf", "modern-link", "modern-unlink", "modern-logname", "modern-factor", "modern-grep", "modern-find", "modern-timeout", "modern-nohup", "modern-shuf", "modern-nice", "modern-dd", "modern-truncate", "modern-fold", "modern-expand", "modern-unexpand", "modern-comm", "modern-split", "modern-cksum", "modern-paste", "modern-sync", "modern-uname"]
+modern = ["modern-cat", "modern-echo", "modern-ls", "modern-cp", "modern-mv", "modern-rm", "modern-mkdir", "modern-rmdir", "modern-ln", "modern-pwd", "modern-touch", "modern-true", "modern-false", "modern-head", "modern-tail", "modern-wc", "modern-sort", "modern-uniq", "modern-cut", "modern-tr", "modern-chmod", "modern-chown", "modern-df", "modern-du", "modern-env", "modern-printenv", "modern-date", "modern-basename", "modern-dirname", "modern-readlink", "modern-stat", "modern-seq", "modern-sleep", "modern-id", "modern-whoami", "modern-yes", "modern-tac", "modern-nl", "modern-tee", "modern-mktemp", "modern-realpath", "modern-nproc", "modern-printf", "modern-link", "modern-unlink", "modern-logname", "modern-factor", "modern-grep", "modern-find", "modern-timeout", "modern-nohup", "modern-shuf", "modern-nice", "modern-dd", "modern-truncate", "modern-fold", "modern-expand", "modern-unexpand", "modern-comm", "modern-split", "modern-cksum", "modern-paste", "modern-sync", "modern-uname", "modern-sum", "modern-base64"]
 modern-cat = ["dep:uu_cat", "cat"]
 modern-echo = ["dep:uu_echo", "echo"]
 modern-ls = ["dep:uu_ls", "ls"]
@@ -169,6 +171,8 @@ modern-cksum = ["dep:uu_cksum", "cksum"]
 modern-paste = ["dep:uu_paste", "paste"]
 modern-sync = ["dep:uu_sync", "sync"]
 modern-uname = ["dep:uu_uname", "uname"]
+modern-sum = ["dep:uu_sum", "sum"]
+modern-base64 = ["dep:uu_base64", "base64"]
 
 test-bracket1 = []
 test-bracket2 = []
