@@ -54,6 +54,9 @@ jobs:
         with:
           key: ${{ matrix.target }}
 
+      - name: Install wild-linker
+        run: cargo install --locked wild-linker
+
       # Native musl C compiler so cc-based build scripts (blake3, ...) resolve.
       # rustybox (full, GPL-2.0) — all applets; rustybox-core (MIT) — permissive.
       # Native musl cc for build scripts (blake3). relocation-model=static gives
@@ -63,8 +66,8 @@ jobs:
         env:
           CC_x86_64_unknown_linux_musl: musl-gcc
           CC_aarch64_unknown_linux_musl: musl-gcc
-          CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_RUSTFLAGS: "-C target-feature=+crt-static -C relocation-model=static -C linker-flavor=ld.lld"
-          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUSTFLAGS: "-C target-feature=+crt-static -C relocation-model=static -C linker-flavor=ld.lld"
+          CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_RUSTFLAGS: "-C target-feature=+crt-static -C relocation-model=static -C linker=clang -C link-arg=--ld-path=wild"
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUSTFLAGS: "-C target-feature=+crt-static -C relocation-model=static -C linker=clang -C link-arg=--ld-path=wild"
           RUSTYBOX_GIT_SHA: ${{ github.sha }}
           RUSTYBOX_BUILD_ARGS: "cargo build --release --target ${{ matrix.target }} (--all-features | -p rustybox-core)"
         run: |
