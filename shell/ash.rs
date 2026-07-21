@@ -3145,7 +3145,10 @@ unsafe extern "C" fn setjobctl(mut on: libc::c_int) {
             crate::libbb::xfuncs::close_on_exec_on(fd);
           }
           loop {
-            pgrp = tcgetpgrp(fd);
+            pgrp = match tcgetpgrp(BorrowedFd::borrow_raw(fd)) {
+              Ok(p) => p.as_raw(),
+              Err(_) => -1,
+            };
             if pgrp < 0 {
               current_block = 14414541239968212827;
               break;
