@@ -1,6 +1,11 @@
 # ash job-control/signal hardening — design
 
-Status: approved, not yet implemented.
+Status: approved. **Amended after the detailed implementation-planning pass**
+(see the "Tier 1 / Tier 2 split" note below) — the original scope table
+below undercounted the real per-call-site complexity of the signal-handling
+functions. The plan at
+`docs/superpowers/plans/2026-07-21-ash-job-control-hardening.md` implements
+**Tier 1 only**.
 
 ## Context
 
@@ -35,23 +40,66 @@ actually reduces unsafety.
 
 ## Scope
 
-**In scope** — 9 functions, ~30 call sites total, all process-group/
-terminal-control/signal-handling primitives:
+Initial scoping (grepping the extern declarations' call counts) counted
+comment mentions and the declarations themselves as "call sites," inflating
+the estimate to ~30. Reading every actual call site during implementation
+planning found the real number is smaller (18 real call sites across all 9
+functions) — but more importantly, it surfaced that the signal-handling
+functions are genuinely entangled with each other and with a function that
+was never in scope at all (`sigprocmask`), while the process-group/terminal
+functions are cleanly independent. That's the actual reason for the split
+below, not just "fewer than expected."
+
+### Tier 1 — in scope, this plan
+
+6 functions, 10 real call sites, all process-group/terminal-control
+primitives, fully independent of each other and of anything signal-related:
 
 | function | call sites | why it's in scope |
 |---|---|---|
-| `fork` | 4 | established pattern already (mount.rs/init.rs this session); one small, well-understood conversion (`ForkResult` → 0/pid/-1) |
-| `setpgid` | 5 | `nix::unistd::Pid` is a trivial newtype over `pid_t`, no encoding conversion |
-| `tcsetpgrp` | 3 | same |
-| `tcgetpgrp` | 2 | same |
-| `getpgrp` | 2 | same (used alongside the above) |
-| `getppid` | 2 | same |
-| `sigaction` | 4 | signal handling is exactly the class of code that's easy to get subtly wrong in raw FFI; `nix::sys::signal::{SigAction, SigHandler, SigSet, Signal}` map cleanly onto the same kernel disposition |
-| `signal` | 6 | same, via `nix::sys::signal::signal` |
-| `sigfillset` / `sigsuspend` | 3 / 2 | same, `SigSet` |
+| `fork` | 1 (`forkshell`) | established pattern already (mount.rs/init.rs this session); one small, well-understood conversion (`ForkResult` → 0/pid/-1) |
+| `setpgid` | 4 | `nix::unistd::Pid` is a trivial newtype over `pid_t`, no encoding conversion |
+| `tcsetpgrp` | 2 | same, via `BorrowedFd::borrow_raw` for the raw fd → `AsFd` bound |
+| `tcgetpgrp` | 1 | same |
+| `getpgrp` | 1 | same (used alongside the above, inside `setjobctl`) |
+| `getppid` | 1 | same (unrelated call site, inside `init()`, sets `$PPID`) |
 
-**Out of scope for this increment** (already discovered during scoping,
-deliberately not touched):
+### Tier 2 — deferred, needs its own separate design pass
+
+Discovered during implementation planning, not during brainstorming — these
+looked like the same class of "clean nix swap" as Tier 1 from the outside,
+but reading the actual call sites found real entanglement:
+
+- **`sigaction`** (1 real call site, inside `setsignal()`) — it's a
+  *query-only* call (`sigaction(signo, NULL, &mut act)`) specifically to
+  detect whether the shell inherited `SIG_IGN` for this signal from its
+  parent (POSIX-mandated: an interactive/job-control shell must not
+  override a signal disposition it inherited as ignored). `nix`'s
+  `sigaction()` always performs set-and-return-old in one call; there's no
+  clean way to express "query without setting" through its safe API.
+- **`signal`** (4 real call sites) — 2 are simple `SIG_DFL` resets
+  (`signal(SIGINT, None)` before self-`raise`, and `signal(SIGHUP, None)` at
+  shell init) that would convert cleanly, but the other 2 (inside
+  `ignoresig()`) share the exact same magic-number `transmute(1) == SIG_IGN`
+  pattern `setsignal()` uses. Converting only the easy 2 and leaving the
+  other 2 as the same raw hack isn't a real improvement; converting all 4
+  needs the `sigaction()` query problem above solved first.
+- **`sigfillset` / `sigsuspend`** (2 / 1 real call sites, inside
+  `wait_block_or_sig()`) — this function's core logic is an atomic-wait
+  idiom (block all signals, then `sigsuspend` in a loop to atomically wait
+  for one while briefly unblocking) built from `sigfillset`+`sigsuspend`
+  *plus* `sigprocmask`/`crate::libbb::signals::sigprocmask2` — the latter
+  two were never in this spec's scope at all. Converting just the two
+  scoped functions here would leave a half-converted mix, needing
+  back-and-forth conversion between `nix::sys::signal::SigSet` and the raw
+  `sigset_t` the neighboring `sigprocmask` calls use, for uncertain benefit.
+
+Tier 2 needs its own scoping pass that includes `sigprocmask` from the
+start and works out the inherited-disposition query problem — not
+something to guess at inside an implementation plan.
+
+**Out of scope entirely for either tier** (already discovered during
+brainstorming, deliberately not touched):
 
 - `pipe` (4 call sites) — `nix::unistd::pipe()` returns owned, auto-closing
   file descriptors, but ash's own fd bookkeeping needs raw fds, so the
@@ -72,23 +120,25 @@ deliberately not touched):
 
 ## Approach
 
-For each of the 9 functions: read every call site in `ash.rs` to understand
-exactly how the return value/output is used, remove the `extern "C"`
-declaration, and rewrite each call site directly against nix's safe API.
-No new files or shim module — this lives entirely within `ash.rs`, since job
-control is shell-specific and doesn't belong in the general-purpose
-`compat.rs` (which exists for functions with a trivial, universal, same-
-signature fix; these aren't that).
+For each of the 6 Tier 1 functions: read every call site in `ash.rs` to
+understand exactly how the return value/output is used, remove the
+`extern "C"` declaration, and rewrite each call site directly against nix's
+safe API (`Pid`, `ForkResult`, `BorrowedFd::borrow_raw` for the raw-fd →
+`AsFd` bound `tcsetpgrp`/`tcgetpgrp` need). No new files or shim module —
+this lives entirely within `ash.rs`, since job control is shell-specific and
+doesn't belong in the general-purpose `compat.rs` (which exists for
+functions with a trivial, universal, same-signature fix; these aren't
+that — nix's `Result`-returning API has a different shape than the raw
+C return-value convention, so each call site's surrounding code needs a
+small, real adaptation, not a drop-in replacement).
 
-This is **not** the `compat.rs` "same signature, safe internals" pattern.
-For `sigaction` specifically, preserving the exact raw `*const
-libc::sigaction`/`*mut libc::sigaction` call-site signature would mean
-writing a shim that manually parses/constructs the C struct fields — real
-adaptation code that wouldn't actually be more idiomatic, just relocated
-unsafety. Rewriting the ~30 call sites directly to use nix's types natively
-(`Signal`, `SigAction`, `SigHandler`, `SigSet`, `Pid`) is more real editing
-work per call site, but genuinely idiomatic rather than another FFI-shaped
-shim.
+The Tier 2 functions (deferred) would need the same direct-rewrite
+treatment eventually, but for `sigaction` specifically, preserving the exact
+raw `*const libc::sigaction`/`*mut libc::sigaction` call-site signature via
+a `compat.rs`-style shim would mean writing code that manually parses/
+constructs the C struct fields — real adaptation code that wouldn't
+actually be more idiomatic, just relocated unsafety. That's part of why
+Tier 2 needs its own design pass rather than a quick follow-on.
 
 ## Error handling
 
@@ -105,8 +155,10 @@ syscall itself is invoked.
 Same real-verification approach as the rest of Phase 3: build in the Linux
 build container (`rustybox-build:latest`), then exercise actual job control
 interactively — background a job, `fg`/`bg` it, verify terminal control
-transfers correctly via `tcgetpgrp`, send `SIGTSTP`/`SIGCONT`, verify a
-signal handler installed via the new `sigaction` path actually fires.
+transfers correctly via `tcgetpgrp`/`tcsetpgrp`, verify `$PPID` is still
+correct. (Tier 1 doesn't touch signal handling, so there's no `SIGTSTP`/
+`SIGCONT`/handler-installation verification needed here — that belongs to
+whichever pass eventually tackles Tier 2.)
 
 Given `testsuite/ash.tests` has zero real shell-semantics coverage, this
 will be manual/scripted verification against real `ash` invocations in the
@@ -119,21 +171,23 @@ terminal/session, not just a subprocess).
 
 ## What "done" looks like
 
-- The 9 targeted `extern "C"` declarations are gone from `ash.rs`.
-- Every call site compiles and behaves identically (same error messages,
+- The 6 Tier 1 `extern "C"` declarations (`fork`, `setpgid`, `tcsetpgrp`,
+  `tcgetpgrp`, `getpgrp`, `getppid`) are gone from `ash.rs`.
+- All 10 call sites compile and behave identically (same error messages,
   same exit codes, same job-control behavior) — verified by hand in the
   build container, not just "it compiles."
 - `cargo build --all-features` / the `ash`-inclusive core-features build
   both still succeed at the current 48-warning baseline (this change should
-  not introduce new warnings; it may or may not reduce the existing "X
-  redeclared with a different signature" warnings for `sigaction`/`signal`/
-  etc. if any exist for those symbols — check after, don't assume).
+  not introduce new warnings — check the actual "generated N warnings" line
+  after, don't assume).
 - MIGRATION.md's Phase 3 `ash` bullet is updated to describe this first
-  increment and what remains (the lexer/parser/executor/builtins, and the
-  five explicitly-deferred syscalls above).
+  increment and what remains (Tier 2's 4 signal-handling functions plus
+  `sigprocmask`, `pipe`/`waitpid`/`killpg`/`raise`/`execve`, and the
+  lexer/parser/executor/builtins).
 
 ## Explicitly not attempted here
 
-A full ash rewrite, a new test suite, `setjmp`/`longjmp` replacement, or any
-change to parsing/expansion/execution/builtins. This is one bounded,
-verifiable increment; the rest of ash stays exactly as it is today.
+A full ash rewrite, a new test suite, `setjmp`/`longjmp` replacement, the
+Tier 2 signal-handling functions, or any change to
+parsing/expansion/execution/builtins. This is one bounded, verifiable
+increment; the rest of ash stays exactly as it is today.
