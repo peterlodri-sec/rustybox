@@ -3,7 +3,7 @@ pub mod blkdiscard;
 pub mod blkid;
 pub mod blockdev;
 pub mod cal;
-pub mod chrt;
+
 pub mod dmesg;
 pub mod eject;
 pub mod fallocate;
@@ -12,7 +12,7 @@ pub mod fbset;
 pub mod fdformat;
 pub mod fdisk;
 pub mod findfs;
-pub mod flock;
+
 pub mod freeramdisk;
 pub mod fsck_minix;
 pub mod fsfreeze;
@@ -35,8 +35,7 @@ pub mod mkfs_minix;
 pub mod mkfs_vfat;
 pub mod mkswap;
 pub mod more;
-pub mod mount;
-pub mod mountpoint;
+
 pub mod nsenter;
 pub mod pivot_root;
 pub mod rdate;
@@ -49,12 +48,12 @@ pub mod script;
 pub mod scriptreplay;
 pub mod setarch;
 pub mod setpriv;
-pub mod setsid;
+
 pub mod swaponoff;
 pub mod switch_root;
 pub mod taskset;
 pub mod uevent;
-pub mod umount;
+
 pub mod unshare;
 pub mod volume_id {
   pub mod bcache;

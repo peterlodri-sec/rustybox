@@ -199,3 +199,9 @@ pub fn run(args: &[&str]) -> i32 {
 
     0
 }
+
+pub fn run_and_exit(args: &[&str]) -> ! {
+    let code = run(args);
+    std::process::exit(code);
+}
+

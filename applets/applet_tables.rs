@@ -323,7 +323,7 @@ lazy_static! {
     appy_mcappface.push(applet {
       name: "chrt",
       main: "chrt",
-      entrypoint: Entrypoint::CStyle(crate::util_linux::chrt::chrt_main),
+      entrypoint: Entrypoint::SafeStyle(crate::modern::chrt::run_and_exit),
       install_loc: InstallLoc::DIR_USR_BIN,
       usage: std::include_str!("../usage/chrt"),
     });
@@ -1083,7 +1083,7 @@ lazy_static! {
     appy_mcappface.push(applet {
       name: "ifconfig",
       main: "ifconfig",
-      entrypoint: Entrypoint::CStyle(crate::networking::ifconfig::ifconfig_main),
+      entrypoint: Entrypoint::SafeStyle(crate::modern::ifconfig::run_and_exit),
       install_loc: InstallLoc::DIR_SBIN,
       usage: std::include_str!("../usage/ifconfig"),
     });
@@ -1131,7 +1131,7 @@ lazy_static! {
     appy_mcappface.push(applet {
       name: "init",
       main: "init",
-      entrypoint: Entrypoint::CStyle(crate::init::init::init_main),
+      entrypoint: Entrypoint::SafeStyle(crate::modern::init::run_and_exit),
       install_loc: InstallLoc::DIR_SBIN,
       usage: std::include_str!("../usage/init"),
     });
@@ -1331,7 +1331,7 @@ lazy_static! {
     appy_mcappface.push(applet {
       name: "linuxrc",
       main: "init",
-      entrypoint: Entrypoint::CStyle(crate::init::init::init_main),
+      entrypoint: Entrypoint::SafeStyle(crate::modern::init::run_and_exit),
       install_loc: InstallLoc::DIR_ROOT,
       usage: std::include_str!("../usage/linuxrc"),
     });
@@ -1675,7 +1675,7 @@ lazy_static! {
     appy_mcappface.push(applet {
       name: "mount",
       main: "mount",
-      entrypoint: Entrypoint::CStyle(crate::util_linux::mount::mount_main),
+      entrypoint: Entrypoint::SafeStyle(crate::modern::mount::run_and_exit),
       install_loc: InstallLoc::DIR_BIN,
       usage: std::include_str!("../usage/mount"),
     });
@@ -1683,7 +1683,7 @@ lazy_static! {
     appy_mcappface.push(applet {
       name: "mountpoint",
       main: "mountpoint",
-      entrypoint: Entrypoint::CStyle(crate::util_linux::mountpoint::mountpoint_main),
+      entrypoint: Entrypoint::SafeStyle(crate::modern::mountpoint::run_and_exit),
       install_loc: InstallLoc::DIR_BIN,
       usage: std::include_str!("../usage/mountpoint"),
     });
@@ -2355,7 +2355,7 @@ lazy_static! {
     appy_mcappface.push(applet {
       name: "setsid",
       main: "setsid",
-      entrypoint: Entrypoint::CStyle(crate::util_linux::setsid::setsid_main),
+      entrypoint: Entrypoint::SafeStyle(crate::modern::setsid::run_and_exit),
       install_loc: InstallLoc::DIR_USR_BIN,
       usage: std::include_str!("../usage/setsid"),
     });
@@ -2923,7 +2923,7 @@ lazy_static! {
     appy_mcappface.push(applet {
       name: "umount",
       main: "umount",
-      entrypoint: Entrypoint::CStyle(crate::util_linux::umount::umount_main),
+      entrypoint: Entrypoint::SafeStyle(crate::modern::umount::run_and_exit),
       install_loc: InstallLoc::DIR_BIN,
       usage: std::include_str!("../usage/umount"),
     });

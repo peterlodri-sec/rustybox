@@ -204,7 +204,6 @@ pub mod findutils {
 pub mod init {
   pub mod bootchartd;
   pub mod halt;
-  pub mod init;
 } // mod init
 pub mod klibc_utils {
   pub mod nuke;
@@ -419,7 +418,7 @@ pub mod networking {
   pub mod ftpgetput;
   pub mod hostname;
   pub mod httpd;
-  pub mod ifconfig;
+
   pub mod ifenslave;
   pub mod ifplugd;
   pub mod ifupdown;

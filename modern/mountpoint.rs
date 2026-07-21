@@ -118,3 +118,9 @@ pub fn run(argv: &[&str]) -> i32 {
   }
   i32::from(!is_mountpoint)
 }
+
+pub fn run_and_exit(args: &[&str]) -> ! {
+  let code = run(args);
+  std::process::exit(code);
+}
+

@@ -131,3 +131,9 @@ fn unmount_one(target: &str, flags: MntFlags, remount_ro_on_busy: bool, device: 
     Err(e) => Err(io::Error::from(e)),
   }
 }
+
+pub fn run_and_exit(args: &[&str]) -> ! {
+  let code = run(args);
+  std::process::exit(code);
+}
+

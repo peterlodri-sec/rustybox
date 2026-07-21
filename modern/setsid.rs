@@ -50,3 +50,9 @@ pub fn run(argv: &[&str]) -> i32 {
   eprintln!("setsid: can't execute '{}': {}", prog, std::io::Error::last_os_error());
   127
 }
+
+pub fn run_and_exit(args: &[&str]) -> ! {
+  let code = run(args);
+  std::process::exit(code);
+}
+
