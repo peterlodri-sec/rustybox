@@ -158,8 +158,24 @@ is nearly free.
     to an unrelated PID 1 is inherently environment-dependent, matching
     upstream, not something to automate) and verified once manually inside
     a disposable namespace instead.
-  - `ash` — not yet started; 15k transpiled lines, full POSIX shell
-    semantics, a multi-session project on its own, not a quick swap.
+  - `ash` — full grammar/parser/executor rewrite ruled out for now (uses
+    `setjmp`/`longjmp` throughout for error propagation, which doesn't map
+    onto Rust's Drop model; `testsuite/ash.tests` has zero real shell-
+    semantics coverage — by its own comment it only tests line-editing/
+    unicode display). Doing incremental hardening in place instead: keep
+    the transpiled control flow, replace individual unsafe syscalls with
+    `nix` where it's a genuine improvement. First increment ✅ (see
+    `docs/superpowers/specs/2026-07-21-ash-job-control-hardening-design.md`):
+    `fork`/`setpgid`/`tcsetpgrp`/`tcgetpgrp`/`getpgrp`/`getppid` (10 call
+    sites) now go through `nix::unistd`. Deferred to a separate pass:
+    `sigaction`/`signal`/`sigfillset`/`sigsuspend` — entangled with
+    `sigprocmask`/`sigprocmask2` (not originally scoped) and an inherited-
+    `SIG_IGN` detection query nix's `sigaction()` doesn't cleanly support
+    without its own design pass. `pipe`/`waitpid`/`killpg`/`raise`/`execve`
+    also left as direct libc calls (real risk of shuffling unsafety around
+    rather than reducing it — see the design spec for the per-function
+    reasoning). The lexer/parser/expansion/executor/~40 builtins are
+    entirely untouched.
 - **Phase 4 — retire transpiled code.** Once an applet's modern backend is the
   default and parity-tested, delete the transpiled `*_main` and its `unsafe`.
 
