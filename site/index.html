@@ -95,9 +95,11 @@
   footer{padding:36px 0;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line)}
   footer a{color:var(--muted)}
   .lic{font-family:var(--mono)}
+  canvas#digitRain{position:fixed;inset:0;width:100%;height:100%;z-index:-1;display:block;pointer-events:none}
 </style>
 </head>
 <body>
+<canvas id="digitRain" aria-hidden="true"></canvas>
 <header><div class="wrap nav">
   <span class="logo">rusty<b>box</b></span>
   <a href="#why">why</a><a href="#tools">tools</a><a href="#install">install</a><a href="#sponsor">sponsor</a>
@@ -146,6 +148,17 @@ rustybox: ELF, statically linked, <span class="g">not a dynamic executable</span
     </div>
   </section>
 
+  <section id="pipeline">
+    <h2>Build Pipeline</h2>
+    <p style="color:var(--muted);margin-top:-.3em">Official releases are supply-chain secured and heavily optimized.</p>
+    <div class="grid">
+      <div class="card"><h3>1. Provenance</h3><p>Source trees are archived and keylessly signed via Sigstore's <span class="k">cosign</span>.</p></div>
+      <div class="card"><h3>2. Compilation</h3><p>Built with the blazing fast <span class="k">wild</span> linker for x86_64 &amp; aarch64 musl.</p></div>
+      <div class="card"><h3>3. Compression</h3><p>Payloads are packed with <span class="k">UPX</span> down to ~4MB, keeping debug symbols.</p></div>
+      <div class="card"><h3>4. *-slim Builds</h3><p>We also distribute stripped, ultra-compressed <span class="k">-slim</span> binaries (~3.2MB) for peak minimalism.</p></div>
+    </div>
+  </section>
+
   <section id="tools">
     <h2>The toolbox</h2>
     <p style="color:var(--muted);margin-top:-.3em">Pick exactly the applets you want; features gate the dispatch table, not compile time.</p>
@@ -190,5 +203,127 @@ cargo build --release --features <span class="g">"cat ls grep find timeout"</spa
   <!-- LICENSE: rustybox is a fork of BusyBox (GPL-2.0-only); the derived tree stays GPLv2. -->
   <div class="lic" style="margin-top:6px">License: <b>GPL-2.0-only</b> (BusyBox lineage) · original modern-backend layer under MIT where separable</div>
 </div></footer>
+<script>
+// Ambient digit-rain background, adapted from tailscope.io's packet-rain
+// effect (src/pages/packetRain.ts) — same falling-'0'/'1' mechanic and
+// perf/accessibility guarantees (fixed particle cap, capped DPR, paused on
+// hidden tab, no motion at all under prefers-reduced-motion), recolored to
+// rustybox's own mint/blue palette. No firewall-boundary motif here — that
+// was specifically a Tailscale/networking nod, doesn't fit a Unix toolbox.
+(function () {
+  var canvas = document.getElementById('digitRain');
+  if (!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  var COLOR_A = [46, 230, 166];  // --acc  #2ee6a6
+  var COLOR_B = [102, 204, 255]; // --acc2 #6cf
+  function rgba(rgb, a) { return 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',' + a + ')'; }
+
+  var MAX_PARTICLES = 60;
+  var MAX_DPR = 2;
+  function rand(min, max) { return min + Math.random() * (max - min); }
+
+  var cssWidth = window.innerWidth || 1;
+  var cssHeight = window.innerHeight || 1;
+
+  function resizeCanvas() {
+    cssWidth = window.innerWidth || 1;
+    cssHeight = window.innerHeight || 1;
+    var dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
+    canvas.width = Math.max(1, Math.floor(cssWidth * dpr));
+    canvas.height = Math.max(1, Math.floor(cssHeight * dpr));
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    for (var i = 0; i < particles.length; i++) {
+      if (particles[i].x > cssWidth) particles[i].x = Math.random() * cssWidth;
+    }
+  }
+
+  function makeParticle() {
+    var kind = Math.random() < 0.55 ? 'a' : 'b';
+    var p = { kind: kind, x: 0, y: 0, len: 0, speed: 0, opacity: 0, flickerSeed: Math.random() * 1000, digit: Math.random() < 0.5 ? '0' : '1' };
+    respawn(p, true);
+    return p;
+  }
+
+  function respawn(p, initial) {
+    p.x = Math.random() * cssWidth;
+    p.digit = Math.random() < 0.5 ? '0' : '1';
+    if (p.kind === 'a') {
+      p.len = rand(16, 28); p.speed = rand(80, 130); p.opacity = rand(0.16, 0.26);
+      p.y = initial ? rand(-cssHeight, cssHeight) : rand(-160, -20);
+    } else {
+      p.len = rand(6, 14); p.speed = rand(50, 240); p.opacity = rand(0.1, 0.2);
+      p.y = initial ? rand(-cssHeight, cssHeight) : rand(-420, -10);
+    }
+  }
+
+  var particles = [];
+  for (var i = 0; i < MAX_PARTICLES; i++) particles.push(makeParticle());
+  resizeCanvas();
+
+  var FONT_A = '11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+  var FONT_B = '9px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+
+  function drawParticle(p, now) {
+    var rgb = p.kind === 'a' ? COLOR_A : COLOR_B;
+    var x = p.x, yTail = p.y - p.len;
+    var grad = ctx.createLinearGradient(x, yTail, x, p.y);
+    grad.addColorStop(0, rgba(rgb, 0));
+    grad.addColorStop(1, rgba(rgb, p.opacity * 0.5));
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = p.kind === 'a' ? 1.2 : 0.8;
+    ctx.beginPath(); ctx.moveTo(x, yTail); ctx.lineTo(x, p.y); ctx.stroke();
+
+    var alpha = p.opacity * 2.2;
+    var digit = p.digit;
+    if (p.kind === 'b') {
+      var flicker = 0.5 + 0.5 * Math.sin(now / 140 + p.flickerSeed);
+      alpha *= flicker;
+      digit = Math.floor(now / 220 + p.flickerSeed) % 2 === 0 ? '0' : '1';
+    }
+    ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
+    ctx.font = p.kind === 'a' ? FONT_A : FONT_B;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = rgba(rgb, 1);
+    ctx.fillText(digit, x, p.y);
+    ctx.globalAlpha = 1;
+  }
+
+  var rafId = null, running = false, lastTime = 0;
+
+  function frame(now) {
+    if (!running) return;
+    var dt = Math.min(0.05, (now - lastTime) / 1000 || 0);
+    lastTime = now;
+    ctx.clearRect(0, 0, cssWidth, cssHeight);
+    for (var i = 0; i < particles.length; i++) {
+      var p = particles[i];
+      p.y += p.speed * dt;
+      if (p.y - p.len > cssHeight) { respawn(p, false); continue; }
+      drawParticle(p, now);
+    }
+    rafId = requestAnimationFrame(frame);
+  }
+
+  function startLoop() { if (running) return; running = true; lastTime = performance.now(); rafId = requestAnimationFrame(frame); }
+  function stopLoop() { running = false; if (rafId !== null) cancelAnimationFrame(rafId); rafId = null; }
+  function clearCanvas() { ctx.clearRect(0, 0, cssWidth, cssHeight); }
+
+  var reducedMotionQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false, addEventListener: function () {}, addListener: function () {} };
+  function applyMotionPreference() {
+    if (reducedMotionQuery.matches) { stopLoop(); clearCanvas(); }
+    else if (!document.hidden) { startLoop(); }
+  }
+  if (reducedMotionQuery.addEventListener) reducedMotionQuery.addEventListener('change', applyMotionPreference);
+  else if (reducedMotionQuery.addListener) reducedMotionQuery.addListener(applyMotionPreference);
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) stopLoop(); else applyMotionPreference();
+  });
+  window.addEventListener('resize', resizeCanvas);
+  applyMotionPreference();
+})();
+</script>
 </body>
 </html>
