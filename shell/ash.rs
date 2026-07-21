@@ -3097,7 +3097,7 @@ unsafe extern "C" fn freejob(mut jp: *mut job) {
   int_on();
 }
 unsafe extern "C" fn xtcsetpgrp(mut fd: libc::c_int, mut pgrp: pid_t) {
-  if tcsetpgrp(fd, pgrp) != 0 {
+  if tcsetpgrp(BorrowedFd::borrow_raw(fd), Pid::from_raw(pgrp)).is_err() {
     ash_msg_and_raise_error(
       b"can\'t set tty process group: %m\x00" as *const u8 as *const libc::c_char,
     );
@@ -3182,7 +3182,7 @@ unsafe extern "C" fn setjobctl(mut on: libc::c_int) {
   } else {
     fd = ttyfd;
     pgrp = initialpgrp;
-    tcsetpgrp(fd, pgrp);
+    let _ = tcsetpgrp(BorrowedFd::borrow_raw(fd), Pid::from_raw(pgrp));
     let _ = setpgid(Pid::from_raw(0), Pid::from_raw(pgrp));
     setsignal(20i32);
     setsignal(22i32);
