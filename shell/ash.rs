@@ -3153,7 +3153,7 @@ unsafe extern "C" fn setjobctl(mut on: libc::c_int) {
               current_block = 14414541239968212827;
               break;
             }
-            if pgrp == getpgrp() {
+            if pgrp == getpgrp().as_raw() {
               initialpgrp = pgrp;
               setsignal(20i32);
               setsignal(22i32);
