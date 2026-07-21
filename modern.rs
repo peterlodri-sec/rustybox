@@ -31,6 +31,8 @@ mod ip;
 mod init;
 #[cfg(feature = "modern-hashsum")]
 mod hashsum;
+#[cfg(feature = "modern-setsid")]
+mod setsid;
 
 #[allow(unused_variables)]
 pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
@@ -61,6 +63,8 @@ pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
     "init" | "linuxrc" => Some(init::run(argv)),
     #[cfg(feature = "modern-hashsum")]
     "md5sum" | "sha1sum" | "sha256sum" | "sha512sum" | "sha3sum" => Some(hashsum::run(name, argv)),
+    #[cfg(feature = "modern-setsid")]
+    "setsid" => Some(setsid::run(argv)),
     #[cfg(feature = "modern-cat")]
     "cat" => Some(uu_cat::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-echo")]
