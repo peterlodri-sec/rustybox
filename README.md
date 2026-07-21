@@ -7,7 +7,7 @@
 
 > **Built in the open — [♥ sponsor the resurrection](https://github.com/sponsors/peterlodri-sec).**
 
-RustyBox is a free-range, non-GMO fork of [BusyBox](https://busybox.net/) written entirely in [Rust](https://www.rust-lang.org/). It includes all your favorite commands like `ls`, `mount`, and `top`, but without a single line of C code. Like BusyBox, it fits in about a megabyte and covers the basic utilities you need to stand up a small Linux userland.
+RustyBox is a free-range, non-GMO fork of [BusyBox](https://busybox.net/) written entirely in [Rust](https://www.rust-lang.org/). It includes all your favorite commands like `ls`, `mount`, and `top`, but without a single line of C code. Like BusyBox, it covers the basic utilities you need to stand up a small Linux userland, and fits into a single, fully-static ~4MB binary (UPX compressed).
 
 ## Status
 
@@ -16,6 +16,7 @@ RustyBox is a free-range, non-GMO fork of [BusyBox](https://busybox.net/) writte
 - Compiles with a **current nightly** (pinned in `rust-toolchain.toml`), edition 2021.
 - **All applets compile** (`cargo build --all-features`).
 - **Fully-static musl binaries** for both **x86_64** and **aarch64** — the same source is portable across `glibc`/`musl` and both architectures.
+- **Supply-chain secured** — Release binaries are statically compiled with the fast `wild` linker, heavily compressed with UPX (to ~4.0 MB), and accompanied by cryptographically signed source code provenance archives via `cosign`.
 - `libc` bumped from the 2019-era `0.2.65` to current.
 
 It is still "bug-for-bug compatible" with BusyBox in the sense that the internals are the transpiled C: raw pointers and `unsafe` abound. Making it idiomatic and memory-safe — applet by applet — is the ongoing work (see [MIGRATION.md](MIGRATION.md)).
