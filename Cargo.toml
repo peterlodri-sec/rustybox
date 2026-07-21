@@ -106,7 +106,7 @@ ignore = { version = "0.4", optional = true }
 # Phase 3 (MIGRATION.md): no drop-in crate exists for ifconfig/mount/ip/init,
 # so these get idiomatic in-house rewrites with syscalls via nix instead of
 # the transpiled unsafe FFI.
-nix = { version = "0.29", optional = true, features = ["net", "ioctl", "mount", "user", "fs", "process", "signal", "term"] }
+nix = { version = "0.29", features = ["net", "ioctl", "mount", "user", "fs", "process", "signal", "term"] }
 
 # md5sum/sha*sum (MIGRATION.md): uu_hashsum has been stuck at 0.5 for 7+
 # months while the rest of the uutils family we depend on is at 0.9 --
@@ -204,12 +204,12 @@ modern-sync = ["dep:uu_sync", "sync"]
 modern-uname = ["dep:uu_uname", "uname"]
 modern-sum = ["dep:uu_sum", "sum"]
 modern-base64 = ["dep:uu_base64", "base64"]
-modern-ifconfig = ["dep:nix", "ifconfig"]
-modern-mount = ["dep:nix", "mount"]
-modern-umount = ["dep:nix", "umount"]
-modern-mountpoint = ["dep:nix", "mountpoint"]
-modern-ip = ["dep:nix", "ip"]
-modern-init = ["dep:nix", "init", "linuxrc"]
+modern-ifconfig = ["ifconfig"]
+modern-mount = ["mount"]
+modern-umount = ["umount"]
+modern-mountpoint = ["mountpoint"]
+modern-ip = ["ip"]
+modern-init = ["init", "linuxrc"]
 modern-hashsum = ["dep:md-5", "dep:sha1", "dep:sha2", "dep:sha3", "md5sum", "sha1sum", "sha256sum", "sha512sum", "sha3sum"]
 
 test-bracket1 = []
@@ -222,7 +222,7 @@ adjtimex = []
 arch = []
 arp = []
 arping = []
-ash = ["dep:nix"]
+ash = []
 awk = []
 base64 = []
 basename = []
