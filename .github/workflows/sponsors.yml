@@ -2,11 +2,21 @@ name: Sponsors
 
 # Keeps SPONSORS.md and this README's sponsor list in sync with the account's
 # GitHub Sponsors listing (shared with crabcc/Vaked — see
-# docs/sponsors-profile.md). GitHub Actions can listen to the `sponsorship`
-# webhook event natively, so no external receiver/infra is needed.
+# docs/sponsors-profile.md).
+#
+# NOTE: `sponsorship` is an account-level webhook event, not a repo-level
+# one — GitHub Actions' `on:` block has no way to listen for it directly
+# (confirmed via actionlint: "unknown Webhook event `sponsorship`"), unlike
+# repo events (push, pull_request, etc.). That's why every push to this repo
+# was failing workflow-file validation. A daily schedule is the plain-Actions
+# way to keep this in sync without standing up an external webhook receiver;
+# tailscope-cloud's src/routes/sponsors.ts is the actual real-time webhook
+# handler for GitHub Sponsors events (a normal Worker endpoint, not an
+# Actions trigger) — this workflow is a slower, infra-free complement to
+# that, not a replacement.
 on:
-  sponsorship:
-    types: [created, cancelled, edited, tier_changed, pending_cancellation, pending_tier_change]
+  schedule:
+    - cron: "17 6 * * *" # daily, off the hour to avoid GitHub's cron-minute pileup
   workflow_dispatch:
 
 permissions:
