@@ -1,0 +1,30 @@
+# rustybox
+
+> A free-range, non-GMO fork of BusyBox written entirely in Rust. One
+> fully-static binary, dual-arch (x86_64 + aarch64), memory-safe applets on
+> uutils/ripgrep/walkdir, and `timeout` built in for agentic harnesses.
+> GPL-2.0 (BusyBox lineage), MIT where separable.
+
+## What it is
+
+- One fully-static musl binary — drop into a container `FROM scratch`, a
+  rescue image, or a sandbox. No libc, no dependencies.
+- Common tools route to battle-tested Rust: uutils coreutils, ripgrep's
+  engine for grep, walkdir for find — same CLI, memory-safe internals.
+- Built for coding agents: `timeout`, `nohup`, `dd`, `shuf` and friends
+  baked in, the userland an autonomous harness needs to bound and script work.
+- Resurrected from a six-year-dead c2rust transpile.
+
+## Install
+
+```
+curl -LO https://github.com/peterlodri-sec/rustybox/releases/latest/download/rustybox-x86_64-unknown-linux-musl
+chmod +x rustybox-* && ./rustybox-* echo hello
+```
+
+## Links
+
+- [Source](https://github.com/peterlodri-sec/rustybox)
+- [Releases](https://github.com/peterlodri-sec/rustybox/releases)
+- [Story: resurrecting rustybox](https://pocoo.vaked.dev/posts/2026-07-20-resurrecting-rustybox.html)
+- [Sponsor](https://github.com/sponsors/peterlodri-sec)
