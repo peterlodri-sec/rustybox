@@ -78,10 +78,13 @@ jobs:
 
       # SOTA size WITHOUT stripping symbols: UPX --best --lzma. Symbols stay in
       # the (compressed) image; the artifact on disk is a fraction of the size.
-      - name: Package (UPX-compress, keep symbols)
+      # We also generate a `-slim` variant where debug symbols are stripped entirely before UPX.
+      - name: Package (UPX-compress)
         run: |
           for name in rustybox rustybox-core; do
             BIN="target/${{ matrix.target }}/release/$name"
+            
+            # 1. Standard (keep symbols)
             OUT="$name-${{ matrix.target }}"
             cp "$BIN" "$OUT"
             before=$(stat -c%s "$OUT")
@@ -89,6 +92,16 @@ jobs:
             after=$(stat -c%s "$OUT")
             echo "$OUT: $before -> $after bytes"
             sha256sum "$OUT" > "$OUT.sha256"
+
+            # 2. Slim (stripped symbols)
+            OUT_SLIM="$name-slim-${{ matrix.target }}"
+            cp "$BIN" "$OUT_SLIM"
+            strip "$OUT_SLIM" || llvm-strip "$OUT_SLIM" || echo "strip failed"
+            before_slim=$(stat -c%s "$OUT_SLIM")
+            upx --best --lzma "$OUT_SLIM" || echo "upx skipped for $OUT_SLIM"
+            after_slim=$(stat -c%s "$OUT_SLIM")
+            echo "$OUT_SLIM: $before_slim -> $after_slim bytes"
+            sha256sum "$OUT_SLIM" > "$OUT_SLIM.sha256"
           done
           ls -la rustybox*-${{ matrix.target }}*
 
@@ -113,8 +126,10 @@ jobs:
             **Editions**
             - `rustybox-<arch>` — full BusyBox parity (**GPL-2.0-only**)
             - `rustybox-core-<arch>` — permissive-only, **MIT**; `rustybox-core --version` prints this provenance
+            
+            Each edition is available as standard (preserves debug symbols) or `-slim` (stripped entirely for maximum compression).
 
-            **Binaries** are `UPX --best --lzma` compressed with symbols preserved (no strip); static, no runtime deps.
+            **Binaries** are `UPX --best --lzma` compressed; static, no runtime deps.
 
             ```sh
             curl -LO https://github.com/peterlodri-sec/rustybox/releases/download/${{ github.ref_name }}/rustybox-core-x86_64-unknown-linux-musl
@@ -127,7 +142,11 @@ jobs:
           files: |
             rustybox-${{ matrix.target }}
             rustybox-${{ matrix.target }}.sha256
+            rustybox-slim-${{ matrix.target }}
+            rustybox-slim-${{ matrix.target }}.sha256
             rustybox-core-${{ matrix.target }}
             rustybox-core-${{ matrix.target }}.sha256
+            rustybox-core-slim-${{ matrix.target }}
+            rustybox-core-slim-${{ matrix.target }}.sha256
             rustybox-source-*.tar.gz
             rustybox-source-*.tar.gz.sig
