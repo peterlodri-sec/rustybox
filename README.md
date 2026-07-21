@@ -53,7 +53,7 @@ cargo build --release --target aarch64-unknown-linux-musl --all-features
 
 ## Roadmap
 
-- **Idiomatic core** — replace the transpiled `unsafe` internals of the common applets with safe Rust, and trim the inherited warning pile.
+- **Idiomatic core** — replace the transpiled `unsafe` internals of the common applets with safe Rust (including `init`, `ifconfig`, and `ash` job-control), and trim the inherited warning pile.
 - **Modern equivalents** — where a best-in-class Rust CLI already exists (`ripgrep`, `bat`, `fd`, `eza`, `uutils`…), offer it as a drop-in behind the familiar applet name. See [MIGRATION.md](MIGRATION.md).
 
 ## Sponsor
