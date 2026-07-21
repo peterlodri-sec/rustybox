@@ -18,21 +18,21 @@ mod compress;
 #[cfg(feature = "modern-tar")]
 mod tar;
 #[cfg(feature = "modern-ifconfig")]
-mod ifconfig;
+pub mod ifconfig;
 #[cfg(feature = "modern-mount")]
-mod mount;
+pub mod mount;
 #[cfg(feature = "modern-umount")]
-mod umount;
+pub mod umount;
 #[cfg(feature = "modern-mountpoint")]
-mod mountpoint;
+pub mod mountpoint;
 #[cfg(feature = "modern-ip")]
 mod ip;
 #[cfg(feature = "modern-init")]
-mod init;
+pub mod init;
 #[cfg(feature = "modern-hashsum")]
 mod hashsum;
 #[cfg(feature = "modern-setsid")]
-mod setsid;
+pub mod setsid;
 #[cfg(feature = "modern-chrt")]
 pub mod chrt;
 #[cfg(feature = "modern-ionice")]
