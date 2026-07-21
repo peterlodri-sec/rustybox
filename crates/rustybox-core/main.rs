@@ -63,8 +63,8 @@ fn dispatch(name: &str, argv: &[&str]) -> Option<i32> {
     "ln" => Some(uu_ln::uumain(argv.iter().map(std::ffi::OsString::from))),
     "pwd" => Some(uu_pwd::uumain(argv.iter().map(std::ffi::OsString::from))),
     "touch" => Some(uu_touch::uumain(argv.iter().map(std::ffi::OsString::from))),
-    "true" => Some(uu_true::uumain(argv.iter().map(std::ffi::OsString::from))),
-    "false" => Some(uu_false::uumain(argv.iter().map(std::ffi::OsString::from))),
+    "true" => Some(0),
+    "false" => Some(1),
     "head" => Some(uu_head::uumain(argv.iter().map(std::ffi::OsString::from))),
     "tail" => Some(uu_tail::uumain(argv.iter().map(std::ffi::OsString::from))),
     "wc" => Some(uu_wc::uumain(argv.iter().map(std::ffi::OsString::from))),
@@ -77,7 +77,11 @@ fn dispatch(name: &str, argv: &[&str]) -> Option<i32> {
     "df" => Some(uu_df::uumain(argv.iter().map(std::ffi::OsString::from))),
     "du" => Some(uu_du::uumain(argv.iter().map(std::ffi::OsString::from))),
     "env" => Some(uu_env::uumain(argv.iter().map(std::ffi::OsString::from))),
-    "printenv" => Some(uu_printenv::uumain(argv.iter().map(std::ffi::OsString::from))),
+    "printenv" => {
+        let mut new_argv = vec![std::ffi::OsString::from("env")];
+        new_argv.extend(argv.iter().skip(1).map(std::ffi::OsString::from));
+        Some(uu_env::uumain(new_argv.into_iter()))
+    },
     "date" => Some(uu_date::uumain(argv.iter().map(std::ffi::OsString::from))),
     "basename" => Some(uu_basename::uumain(argv.iter().map(std::ffi::OsString::from))),
     "dirname" => Some(uu_dirname::uumain(argv.iter().map(std::ffi::OsString::from))),
@@ -86,7 +90,13 @@ fn dispatch(name: &str, argv: &[&str]) -> Option<i32> {
     "seq" => Some(uu_seq::uumain(argv.iter().map(std::ffi::OsString::from))),
     "sleep" => Some(uu_sleep::uumain(argv.iter().map(std::ffi::OsString::from))),
     "id" => Some(uu_id::uumain(argv.iter().map(std::ffi::OsString::from))),
-    "whoami" => Some(uu_whoami::uumain(argv.iter().map(std::ffi::OsString::from))),
+    "whoami" | "logname" => {
+        let new_argv = vec![
+            std::ffi::OsString::from("id"),
+            std::ffi::OsString::from("-un"),
+        ];
+        Some(uu_id::uumain(new_argv.into_iter()))
+    },
     "yes" => Some(uu_yes::uumain(argv.iter().map(std::ffi::OsString::from))),
     "tac" => Some(uu_tac::uumain(argv.iter().map(std::ffi::OsString::from))),
     "nl" => Some(uu_nl::uumain(argv.iter().map(std::ffi::OsString::from))),
@@ -95,9 +105,16 @@ fn dispatch(name: &str, argv: &[&str]) -> Option<i32> {
     "realpath" => Some(uu_realpath::uumain(argv.iter().map(std::ffi::OsString::from))),
     "nproc" => Some(uu_nproc::uumain(argv.iter().map(std::ffi::OsString::from))),
     "printf" => Some(uu_printf::uumain(argv.iter().map(std::ffi::OsString::from))),
-    "link" => Some(uu_link::uumain(argv.iter().map(std::ffi::OsString::from))),
-    "unlink" => Some(uu_unlink::uumain(argv.iter().map(std::ffi::OsString::from))),
-    "logname" => Some(uu_logname::uumain(argv.iter().map(std::ffi::OsString::from))),
+    "link" => {
+        let mut new_argv = vec![std::ffi::OsString::from("ln")];
+        new_argv.extend(argv.iter().skip(1).map(std::ffi::OsString::from));
+        Some(uu_ln::uumain(new_argv.into_iter()))
+    },
+    "unlink" => {
+        let mut new_argv = vec![std::ffi::OsString::from("rm")];
+        new_argv.extend(argv.iter().skip(1).map(std::ffi::OsString::from));
+        Some(uu_rm::uumain(new_argv.into_iter()))
+    },
     "factor" => Some(uu_factor::uumain(argv.iter().map(std::ffi::OsString::from))),
     "timeout" => Some(uu_timeout::uumain(argv.iter().map(std::ffi::OsString::from))),
     "nohup" => Some(uu_nohup::uumain(argv.iter().map(std::ffi::OsString::from))),
@@ -112,7 +129,13 @@ fn dispatch(name: &str, argv: &[&str]) -> Option<i32> {
     "split" => Some(uu_split::uumain(argv.iter().map(std::ffi::OsString::from))),
     "cksum" => Some(uu_cksum::uumain(argv.iter().map(std::ffi::OsString::from))),
     "paste" => Some(uu_paste::uumain(argv.iter().map(std::ffi::OsString::from))),
-    "sync" => Some(uu_sync::uumain(argv.iter().map(std::ffi::OsString::from))),
+    "sync" => {
+        // rustybox-core doesn't link nix right now, actually we can just call libc directly
+        unsafe { let _ = std::ffi::CStr::from_ptr("sync".as_ptr() as *const _); } // hack to not pull nix here since rustybox-core is mostly pure
+        // wait, nix is used in modern.rs, but rustybox-core doesn't have it. Let's just use libc.
+        unsafe { libc::sync(); }
+        Some(0)
+    },
     "uname" => Some(uu_uname::uumain(argv.iter().map(std::ffi::OsString::from))),
     "sum" => Some(uu_sum::uumain(argv.iter().map(std::ffi::OsString::from))),
     "base64" => Some(uu_base64::uumain(argv.iter().map(std::ffi::OsString::from))),
