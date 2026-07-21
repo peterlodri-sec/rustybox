@@ -3156,7 +3156,7 @@ unsafe extern "C" fn setjobctl(mut on: libc::c_int) {
               setsignal(22i32);
               setsignal(21i32);
               pgrp = (*ash_ptr_to_globals_misc).rootpid;
-              setpgid(0i32, pgrp);
+              let _ = setpgid(Pid::from_raw(0), Pid::from_raw(pgrp));
               xtcsetpgrp(fd, pgrp);
               current_block = 13131896068329595644;
               break;
@@ -3183,7 +3183,7 @@ unsafe extern "C" fn setjobctl(mut on: libc::c_int) {
     fd = ttyfd;
     pgrp = initialpgrp;
     tcsetpgrp(fd, pgrp);
-    setpgid(0i32, pgrp);
+    let _ = setpgid(Pid::from_raw(0), Pid::from_raw(pgrp));
     setsignal(20i32);
     setsignal(22i32);
     setsignal(21i32);
@@ -4340,7 +4340,7 @@ unsafe extern "C" fn forkchild(mut jp: *mut job, mut n: *mut node, mut mode: lib
     } else {
       pgrp = (*(*jp).ps.offset(0)).ps_pid
     }
-    setpgid(0i32, pgrp);
+    let _ = setpgid(Pid::from_raw(0), Pid::from_raw(pgrp));
     if mode == 0 {
       xtcsetpgrp(ttyfd, pgrp);
     }
@@ -4402,7 +4402,7 @@ unsafe extern "C" fn forkparent(
     } else {
       pgrp = (*(*jp).ps.offset(0)).ps_pid
     }
-    setpgid(pid, pgrp);
+    let _ = setpgid(Pid::from_raw(pid), Pid::from_raw(pgrp));
   }
   if mode == 1i32 {
     (*ash_ptr_to_globals_misc).backgndpid = pid;
