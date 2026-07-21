@@ -158,6 +158,7 @@ is nearly free.
     to an unrelated PID 1 is inherently environment-dependent, matching
     a disposable namespace instead.
   - `setsid` ✅ — `modern/setsid.rs`, feature `modern-setsid`. Full memory-safe rewrite using `nix::unistd::setsid` and `fork`/`execvp`. Covers `-c` (controlling terminal) via a safe `ioctl` helper.
+  - `flock` ✅ — `modern/flock.rs`, feature `modern-flock`. Full memory-safe rewrite using `nix::libc::flock`. Covers shared, exclusive, non-blocking, and unlock semantics, as well as executing a command with or without `-c`.
   - `ash` — full grammar/parser/executor rewrite ruled out for now (uses
     `setjmp`/`longjmp` throughout for error propagation, which doesn't map
     onto Rust's Drop model; `testsuite/ash.tests` has zero real shell-
@@ -208,7 +209,7 @@ standouts are wired now:
 | env, seq, sleep, tee, mktemp, realpath, nproc, printf | scripting glue | uutils ✅ (Phase 1) |
 
 **Stay transpiled for now** (util-linux/procps, no coreutils crate): `xargs`
-(fan-out), `watch`, `flock`, `chrt`, `ionice`. Candidates for
+(fan-out), `watch`, `chrt`, `ionice`. Candidates for
 in-house safe rewrites (Phase 3) or a dedicated crate.
 
 **Net-new applets** — not in BusyBox, so they need an `applet_tables.rs` entry
