@@ -92,9 +92,9 @@ pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
     #[cfg(feature = "modern-touch")]
     "touch" => Some(uu_touch::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-true")]
-    "true" => Some(uu_true::uumain(argv.iter().map(std::ffi::OsString::from))),
+    "true" => Some(0),
     #[cfg(feature = "modern-false")]
-    "false" => Some(uu_false::uumain(argv.iter().map(std::ffi::OsString::from))),
+    "false" => Some(1),
     #[cfg(feature = "modern-head")]
     "head" => Some(uu_head::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-tail")]
@@ -120,7 +120,11 @@ pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
     #[cfg(feature = "modern-env")]
     "env" => Some(uu_env::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-printenv")]
-    "printenv" => Some(uu_printenv::uumain(argv.iter().map(std::ffi::OsString::from))),
+    "printenv" => {
+        let mut new_argv = vec![std::ffi::OsString::from("env")];
+        new_argv.extend(argv.iter().skip(1).map(std::ffi::OsString::from));
+        Some(uu_env::uumain(new_argv.into_iter()))
+    },
     #[cfg(feature = "modern-date")]
     "date" => Some(uu_date::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-basename")]
@@ -138,7 +142,13 @@ pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
     #[cfg(feature = "modern-id")]
     "id" => Some(uu_id::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-whoami")]
-    "whoami" => Some(uu_whoami::uumain(argv.iter().map(std::ffi::OsString::from))),
+    "whoami" | "logname" => {
+        let new_argv = vec![
+            std::ffi::OsString::from("id"),
+            std::ffi::OsString::from("-un"),
+        ];
+        Some(uu_id::uumain(new_argv.into_iter()))
+    },
     #[cfg(feature = "modern-yes")]
     "yes" => Some(uu_yes::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-tac")]
@@ -156,11 +166,17 @@ pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
     #[cfg(feature = "modern-printf")]
     "printf" => Some(uu_printf::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-link")]
-    "link" => Some(uu_link::uumain(argv.iter().map(std::ffi::OsString::from))),
+    "link" => {
+        let mut new_argv = vec![std::ffi::OsString::from("ln")];
+        new_argv.extend(argv.iter().skip(1).map(std::ffi::OsString::from));
+        Some(uu_ln::uumain(new_argv.into_iter()))
+    },
     #[cfg(feature = "modern-unlink")]
-    "unlink" => Some(uu_unlink::uumain(argv.iter().map(std::ffi::OsString::from))),
-    #[cfg(feature = "modern-logname")]
-    "logname" => Some(uu_logname::uumain(argv.iter().map(std::ffi::OsString::from))),
+    "unlink" => {
+        let mut new_argv = vec![std::ffi::OsString::from("rm")];
+        new_argv.extend(argv.iter().skip(1).map(std::ffi::OsString::from));
+        Some(uu_rm::uumain(new_argv.into_iter()))
+    },
     #[cfg(feature = "modern-factor")]
     "factor" => Some(uu_factor::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-timeout")]
@@ -190,7 +206,10 @@ pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
     #[cfg(feature = "modern-paste")]
     "paste" => Some(uu_paste::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-sync")]
-    "sync" => Some(uu_sync::uumain(argv.iter().map(std::ffi::OsString::from))),
+    "sync" => {
+        nix::unistd::sync();
+        Some(0)
+    },
     #[cfg(feature = "modern-uname")]
     "uname" => Some(uu_uname::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-sum")]

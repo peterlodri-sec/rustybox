@@ -40,8 +40,6 @@ uu_rmdir = { version = "0.9", optional = true }
 uu_ln = { version = "0.9", optional = true }
 uu_pwd = { version = "0.9", optional = true }
 uu_touch = { version = "0.9", optional = true }
-uu_true = { version = "0.9", optional = true }
-uu_false = { version = "0.9", optional = true }
 uu_head = { version = "0.9", optional = true }
 uu_tail = { version = "0.9", optional = true }
 uu_wc = { version = "0.9", optional = true }
@@ -54,7 +52,6 @@ uu_chown = { version = "0.9", optional = true }
 uu_df = { version = "0.9", optional = true }
 uu_du = { version = "0.9", optional = true }
 uu_env = { version = "0.9", optional = true }
-uu_printenv = { version = "0.9", optional = true }
 uu_date = { version = "0.9", optional = true }
 uu_basename = { version = "0.9", optional = true }
 uu_dirname = { version = "0.9", optional = true }
@@ -63,7 +60,6 @@ uu_stat = { version = "0.9", optional = true }
 uu_seq = { version = "0.9", optional = true }
 uu_sleep = { version = "0.9", optional = true }
 uu_id = { version = "0.9", optional = true }
-uu_whoami = { version = "0.9", optional = true }
 uu_yes = { version = "0.9", optional = true }
 uu_tac = { version = "0.9", optional = true }
 uu_nl = { version = "0.9", optional = true }
@@ -72,9 +68,6 @@ uu_mktemp = { version = "0.9", optional = true }
 uu_realpath = { version = "0.9", optional = true }
 uu_nproc = { version = "0.9", optional = true }
 uu_printf = { version = "0.9", optional = true }
-uu_link = { version = "0.9", optional = true }
-uu_unlink = { version = "0.9", optional = true }
-uu_logname = { version = "0.9", optional = true }
 uu_factor = { version = "0.9", optional = true }
 uu_timeout = { version = "0.9", optional = true }
 uu_nohup = { version = "0.9", optional = true }
@@ -89,7 +82,6 @@ uu_comm = { version = "0.9", optional = true }
 uu_split = { version = "0.9", optional = true }
 uu_cksum = { version = "0.9", optional = true }
 uu_paste = { version = "0.9", optional = true }
-uu_sync = { version = "0.9", optional = true }
 uu_uname = { version = "0.9", optional = true }
 uu_sum = { version = "0.9", optional = true }
 uu_base64 = { version = "0.9", optional = true }
@@ -145,8 +137,8 @@ modern-rmdir = ["dep:uu_rmdir", "rmdir"]
 modern-ln = ["dep:uu_ln", "ln"]
 modern-pwd = ["dep:uu_pwd", "pwd"]
 modern-touch = ["dep:uu_touch", "touch"]
-modern-true = ["dep:uu_true", "true"]
-modern-false = ["dep:uu_false", "false"]
+modern-true = ["true"]
+modern-false = ["false"]
 modern-head = ["dep:uu_head", "head"]
 modern-tail = ["dep:uu_tail", "tail"]
 modern-wc = ["dep:uu_wc", "wc"]
@@ -159,7 +151,7 @@ modern-chown = ["dep:uu_chown", "chown"]
 modern-df = ["dep:uu_df", "df"]
 modern-du = ["dep:uu_du", "du"]
 modern-env = ["dep:uu_env", "env"]
-modern-printenv = ["dep:uu_printenv", "printenv"]
+modern-printenv = ["env"]
 modern-date = ["dep:uu_date", "date"]
 modern-basename = ["dep:uu_basename", "basename"]
 modern-dirname = ["dep:uu_dirname", "dirname"]
@@ -168,7 +160,7 @@ modern-stat = ["dep:uu_stat", "stat"]
 modern-seq = ["dep:uu_seq", "seq"]
 modern-sleep = ["dep:uu_sleep", "sleep"]
 modern-id = ["dep:uu_id", "id"]
-modern-whoami = ["dep:uu_whoami", "whoami"]
+modern-whoami = ["id"]
 modern-yes = ["dep:uu_yes", "yes"]
 modern-tac = ["dep:uu_tac", "tac"]
 modern-nl = ["dep:uu_nl", "nl"]
@@ -177,9 +169,9 @@ modern-mktemp = ["dep:uu_mktemp", "mktemp"]
 modern-realpath = ["dep:uu_realpath", "realpath"]
 modern-nproc = ["dep:uu_nproc", "nproc"]
 modern-printf = ["dep:uu_printf", "printf"]
-modern-link = ["dep:uu_link", "link"]
-modern-unlink = ["dep:uu_unlink", "unlink"]
-modern-logname = ["dep:uu_logname", "logname"]
+modern-link = ["ln"]
+modern-unlink = ["rm"]
+modern-logname = ["id"]
 modern-factor = ["dep:uu_factor", "factor"]
 modern-grep = ["dep:grep-regex", "dep:grep-searcher", "dep:ignore", "grep", "egrep", "fgrep"]
 modern-find = ["dep:walkdir", "dep:globset", "find"]
@@ -200,7 +192,7 @@ modern-comm = ["dep:uu_comm", "comm"]
 modern-split = ["dep:uu_split", "split"]
 modern-cksum = ["dep:uu_cksum", "cksum"]
 modern-paste = ["dep:uu_paste", "paste"]
-modern-sync = ["dep:uu_sync", "sync"]
+modern-sync = ["sync"]
 modern-uname = ["dep:uu_uname", "uname"]
 modern-sum = ["dep:uu_sum", "sum"]
 modern-base64 = ["dep:uu_base64", "base64"]
