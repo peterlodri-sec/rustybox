@@ -1,3 +1,6 @@
+use nix::unistd::{fork, getpgrp, getppid, setpgid, tcgetpgrp, tcsetpgrp, ForkResult, Pid};
+use std::os::fd::BorrowedFd;
+
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::libpwdgrp::pwd_grp::bb_internal_getpwnam;
@@ -72,14 +75,6 @@ extern "C" {
     __envp: *const *mut libc::c_char,
   ) -> libc::c_int;
   fn _exit(_: libc::c_int) -> !;
-
-  fn getppid() -> pid_t;
-  fn getpgrp() -> pid_t;
-  fn setpgid(__pid: pid_t, __pgid: pid_t) -> libc::c_int;
-  fn fork() -> pid_t;
-
-  fn tcgetpgrp(__fd: libc::c_int) -> pid_t;
-  fn tcsetpgrp(__fd: libc::c_int, __pgrp_id: pid_t) -> libc::c_int;
 
   fn _setjmp(_: *mut __jmp_buf_tag) -> libc::c_int;
   fn longjmp(_: *mut __jmp_buf_tag, _: libc::c_int) -> !;
