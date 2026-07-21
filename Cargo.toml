@@ -106,7 +106,7 @@ ignore = { version = "0.4", optional = true }
 # Phase 3 (MIGRATION.md): no drop-in crate exists for ifconfig/mount/ip/init,
 # so these get idiomatic in-house rewrites with syscalls via nix instead of
 # the transpiled unsafe FFI.
-nix = { version = "0.29", optional = true, features = ["net", "ioctl", "mount", "user", "fs", "process", "signal"] }
+nix = { version = "0.29", optional = true, features = ["net", "ioctl", "mount", "user", "fs", "process", "signal", "term"] }
 
 # md5sum/sha*sum (MIGRATION.md): uu_hashsum has been stuck at 0.5 for 7+
 # months while the rest of the uutils family we depend on is at 0.9 --
