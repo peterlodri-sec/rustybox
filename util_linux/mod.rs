@@ -21,7 +21,7 @@ pub mod getopt;
 pub mod hexdump;
 pub mod hexdump_xxd;
 pub mod hwclock;
-pub mod ionice;
+
 pub mod ipcrm;
 pub mod ipcs;
 pub mod last_fancy;

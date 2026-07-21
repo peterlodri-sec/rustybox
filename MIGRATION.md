@@ -160,6 +160,7 @@ is nearly free.
   - `setsid` ✅ — `modern/setsid.rs`, feature `modern-setsid`. Full memory-safe rewrite using `nix::unistd::setsid` and `fork`/`execvp`. Covers `-c` (controlling terminal) via a safe `ioctl` helper.
   - `flock` ✅ — `modern/flock.rs`, feature `modern-flock`. Full memory-safe rewrite using `nix::libc::flock`. Covers shared, exclusive, non-blocking, and unlock semantics, as well as executing a command with or without `-c`.
   - `chrt` ✅ — `modern/chrt.rs`, feature `modern-chrt`. Full memory-safe rewrite using `nix::libc::sched_*`. Covers scheduling policy getting/setting and execution.
+  - `ionice` ✅ — `modern/ionice.rs`, feature `modern-ionice`. Full memory-safe rewrite using `libc::SYS_ioprio_get` and `libc::SYS_ioprio_set`. Covers scheduling class getting/setting and execution.
   - `ash` — full grammar/parser/executor rewrite ruled out for now (uses
     `setjmp`/`longjmp` throughout for error propagation, which doesn't map
     onto Rust's Drop model; `testsuite/ash.tests` has zero real shell-
@@ -209,8 +210,10 @@ standouts are wired now:
 | **shuf, nice, truncate, fold, expand, unexpand, comm, split, cksum, paste, sync, uname** | data munging + housekeeping | uutils ✅ |
 | env, seq, sleep, tee, mktemp, realpath, nproc, printf | scripting glue | uutils ✅ (Phase 1) |
 
-**Stay transpiled for now** (util-linux/procps, no coreutils crate): `xargs`
-(fan-out), `watch`, `ionice`. Candidates for
+| **watch** | loop and periodic execution | in-house safe rewrite ✅ |
+| **xargs** | build and execute command lines | in-house safe rewrite ✅ |
+
+**Stay transpiled for now**: Candidates for
 in-house safe rewrites (Phase 3) or a dedicated crate.
 
 **Net-new applets** — not in BusyBox, so they need an `applet_tables.rs` entry

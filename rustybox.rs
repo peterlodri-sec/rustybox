@@ -200,7 +200,6 @@ pub mod editors {
 pub mod findutils {
   pub mod find;
   pub mod grep;
-  pub mod xargs;
 } // mod findutils
 pub mod init {
   pub mod bootchartd;
@@ -519,7 +518,6 @@ pub mod procps {
   pub mod sysctl;
   pub mod top;
   pub mod uptime;
-  pub mod watch;
 } // mod procps
 pub mod runit {
   pub mod chpst;

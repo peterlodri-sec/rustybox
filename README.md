@@ -58,6 +58,7 @@ Official release binaries go through a rigorous, supply-chain secured pipeline b
 1. **Provenance**: The exact source code tree is archived (`git archive`) and keylessly signed using Sigstore's `cosign` (OIDC). Both the source `.tar.gz` and `.sig` are attached to the release.
 2. **Compilation**: Built natively using the blazingly fast `wild` linker for `x86_64` and `aarch64`.
 3. **Compression**: The resulting static binaries (~16 MB) are packed using `upx --best --lzma` down to ~4.0 MB, retaining all debug symbols within the compressed payload.
+4. **Slim Build (`*-slim`)**: We also produce a stripped, ultra-compressed `-slim` release variant for each architecture where debug symbols are discarded entirely before UPX compression, resulting in an even smaller ~3.2 MB binary.
 
 ## Roadmap
 

@@ -34,7 +34,13 @@ mod hashsum;
 #[cfg(feature = "modern-setsid")]
 mod setsid;
 #[cfg(feature = "modern-chrt")]
-mod chrt;
+pub mod chrt;
+#[cfg(feature = "modern-ionice")]
+pub mod ionice;
+#[cfg(feature = "modern-watch")]
+pub mod watch;
+#[cfg(feature = "modern-xargs")]
+pub mod xargs;
 
 #[allow(unused_variables)]
 pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
@@ -181,6 +187,12 @@ pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
     "factor" => Some(uu_factor::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-timeout")]
     "timeout" => Some(uu_timeout::uumain(argv.iter().map(std::ffi::OsString::from))),
+    #[cfg(feature = "modern-ionice")]
+    "ionice" => Some(ionice::run(argv)),
+    #[cfg(feature = "modern-watch")]
+    "watch" => Some(watch::run(argv)),
+    #[cfg(feature = "modern-xargs")]
+    "xargs" => Some(xargs::run(argv)),
     #[cfg(feature = "modern-nohup")]
     "nohup" => Some(uu_nohup::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-shuf")]

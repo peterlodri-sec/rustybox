@@ -1155,7 +1155,7 @@ lazy_static! {
     appy_mcappface.push(applet {
       name: "ionice",
       main: "ionice",
-      entrypoint: Entrypoint::CStyle(crate::util_linux::ionice::ionice_main),
+      entrypoint: Entrypoint::SafeStyle(crate::modern::ionice::run_and_exit),
       install_loc: InstallLoc::DIR_BIN,
       usage: std::include_str!("../usage/ionice"),
     });
@@ -3091,7 +3091,7 @@ lazy_static! {
     appy_mcappface.push(applet {
       name: "watch",
       main: "watch",
-      entrypoint: Entrypoint::CStyle(crate::procps::watch::watch_main),
+      entrypoint: Entrypoint::SafeStyle(crate::modern::watch::run_and_exit),
       install_loc: InstallLoc::DIR_BIN,
       usage: std::include_str!("../usage/watch"),
     });
@@ -3155,7 +3155,7 @@ lazy_static! {
     appy_mcappface.push(applet {
       name: "xargs",
       main: "xargs",
-      entrypoint: Entrypoint::CStyle(crate::findutils::xargs::xargs_main),
+      entrypoint: Entrypoint::SafeStyle(crate::modern::xargs::run_and_exit),
       install_loc: InstallLoc::DIR_USR_BIN,
       usage: std::include_str!("../usage/xargs"),
     });
