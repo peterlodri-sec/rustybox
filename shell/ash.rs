@@ -14431,7 +14431,7 @@ unsafe extern "C" fn init() {
   setvareq(defoptindvar.as_ptr() as *mut libc::c_char, 0x8i32);
   setvar0(
     b"PPID\x00" as *const u8 as *const libc::c_char,
-    crate::libbb::xfuncs::utoa(getppid() as libc::c_uint),
+    crate::libbb::xfuncs::utoa(getppid().as_raw() as libc::c_uint),
   );
   p = lookupvar(b"SHLVL\x00" as *const u8 as *const libc::c_char);
   setvar(
