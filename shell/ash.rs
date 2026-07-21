@@ -4426,7 +4426,11 @@ unsafe extern "C" fn forkshell(
   mut mode: libc::c_int,
 ) -> libc::c_int {
   let mut pid: libc::c_int = 0;
-  pid = fork();
+  pid = match fork() {
+    Ok(ForkResult::Child) => 0,
+    Ok(ForkResult::Parent { child }) => child.as_raw(),
+    Err(_) => -1,
+  };
   if pid < 0 {
     if !jp.is_null() {
       freejob(jp);
