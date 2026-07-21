@@ -52,6 +52,13 @@ cargo build --release --target aarch64-unknown-linux-musl --all-features
 
 `strip` the result if you are size-conscious; a curated core lands well under a megabyte.
 
+### Release Build Pipeline
+
+Official release binaries go through a rigorous, supply-chain secured pipeline before being uploaded to GitHub:
+1. **Provenance**: The exact source code tree is archived (`git archive`) and keylessly signed using Sigstore's `cosign` (OIDC). Both the source `.tar.gz` and `.sig` are attached to the release.
+2. **Compilation**: Built natively using the blazingly fast `wild` linker for `x86_64` and `aarch64`.
+3. **Compression**: The resulting static binaries (~16 MB) are packed using `upx --best --lzma` down to ~4.0 MB, retaining all debug symbols within the compressed payload.
+
 ## Roadmap
 
 - **Idiomatic core** — replace the transpiled `unsafe` internals of the common applets with safe Rust (including `init`, `ifconfig`, and `ash` job-control), and trim the inherited warning pile.

@@ -141,6 +141,8 @@ rustybox: ELF, statically linked, <span class="g">not a dynamic executable</span
       <div class="card"><h3>Memory-safe where it counts</h3><p>The common tools route to battle-tested Rust: the <span class="k">uutils</span> coreutils, <span class="k">ripgrep</span>'s engine for <span class="k">grep</span>, <span class="k">walkdir</span> for <span class="k">find</span> — same CLI, safe internals.</p></div>
       <div class="card"><h3>Built for agents</h3><p><span class="k">timeout</span>, <span class="k">nohup</span>, <span class="k">dd</span>, <span class="k">shuf</span> and friends baked in — the exact userland an autonomous coding harness needs to bound and script work.</p></div>
       <div class="card"><h3>Resurrected in the open</h3><p>A six-year-dead c2rust transpile, brought back to a current toolchain and hardened arch-by-arch. <a href="https://pocoo.vaked.dev/posts/2026-07-20-resurrecting-rustybox.html">Read the story →</a></p></div>
+      <div class="card"><h3>Secure supply chain</h3><p>Every release includes a keyless <span class="k">cosign</span> cryptographic signature of the exact source code tree used to build it.</p></div>
+      <div class="card"><h3>Heavily optimized</h3><p>Linked blazingly fast with the <span class="k">wild</span> linker and compressed down to ~4.0 MB with <span class="k">UPX</span>, retaining debug symbols in the payload.</p></div>
     </div>
   </section>
 
