@@ -21,6 +21,17 @@ jobs:
       - name: Cache
         uses: Swatinem/rust-cache@v2
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Code Review Graph Build
+        run: |
+          pip install code-review-graph
+          code-review-graph build
+
+
       # Whole tree must compile (features only gate the applet dispatch table,
       # not module compilation). NOTE: 2000+ warnings are inherited from the
       # c2rust transpile and are cleaned up incrementally, so no -D warnings yet.
