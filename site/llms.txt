@@ -2,24 +2,27 @@
 
 > A free-range, non-GMO fork of BusyBox written entirely in Rust. One
 > fully-static binary, dual-arch (x86_64 + aarch64), memory-safe applets on
-> uutils/ripgrep/walkdir, and `timeout` built in for agentic harnesses.
-> GPL-2.0 (BusyBox lineage), MIT where separable.
+> uutils/ripgrep/walkdir/RustCrypto/tar/flate2/xz2, and `timeout`/`xargs`/`watch`/`flock` built in for agentic harnesses.
+> Dual editions: GPL-2.0 (rustybox full) & 100% MIT (rustybox-core).
 
 ## What it is
 
 - One fully-static musl binary — drop into a container `FROM scratch`, a
   rescue image, or a sandbox. No libc, no dependencies.
-- Common tools route to battle-tested Rust: uutils coreutils, ripgrep's
-  engine for grep, walkdir for find — same CLI, memory-safe internals.
-- Built for coding agents: `timeout`, `nohup`, `dd`, `shuf` and friends
+- 100% parity across all permissive applets: coreutils, ripgrep engine for
+  grep, walkdir for find, RustCrypto hashes, tar/gzip/bzip2/xz archives.
+- **rustybox-core (MIT edition)**: Compiles zero GPL code; 85+ memory-safe
+  applets distributed under the MIT license.
+- Built for coding agents: `timeout`, `xargs`, `watch`, `flock`, `dd`, `shuf`
   baked in, the userland an autonomous harness needs to bound and script work.
 - Resurrected from a six-year-dead c2rust transpile.
 
 ## Install
 
 ```
-curl -LO https://github.com/peterlodri-sec/rustybox/releases/latest/download/rustybox-x86_64-unknown-linux-musl
-chmod +x rustybox-* && ./rustybox-* echo hello
+# Grab rustybox-core (MIT edition) or rustybox (Full GPL edition)
+curl -LO https://github.com/peterlodri-sec/rustybox/releases/latest/download/rustybox-core-x86_64-unknown-linux-musl
+chmod +x rustybox-core-* && ./rustybox-core-* --version
 ```
 
 ## Links
