@@ -1,4 +1,6 @@
 use crate::archival::libarchive::bb_archive::TransformerMagic;
+use crate::compat::memcpy;
+use crate::compat::memset;
 use crate::librb::fd_pair;
 use crate::librb::size_t;
 use crate::librb::smallint;
@@ -9,15 +11,12 @@ use libc::off_t;
 use libc::open;
 use libc::pid_t;
 use libc::ssize_t;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
 
   fn vfork() -> libc::c_int;
 
   fn _exit(_: libc::c_int) -> !;
 
-  
   fn wait(__stat_loc: *mut libc::c_int) -> pid_t;
 
   static mut bb_got_signal: smallint;

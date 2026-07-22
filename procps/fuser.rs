@@ -1,3 +1,4 @@
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::size_t;
 use crate::librb::smallint;
@@ -21,7 +22,6 @@ use libc::stat;
 use libc::strcpy;
 use libc::DIR;
 use libc::FILE;
-use crate::compat::strlen;
 extern "C" {
 
   static mut optind: libc::c_int;

@@ -1,7 +1,7 @@
+use crate::compat::memset;
 use crate::networking::tls_pstm::pstm_int;
 use libc;
 use libc::free;
-use crate::compat::memset;
 
 /* Failure to allocate requested memory */
 /* Failure on sanity/limit tests */

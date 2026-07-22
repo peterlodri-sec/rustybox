@@ -1,4 +1,5 @@
 use crate::archival::libarchive::bb_archive::transformer_state_t;
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::librb::size_t;
 use crate::librb::smallint;
@@ -14,7 +15,6 @@ use libc::suseconds_t;
 use libc::timeval;
 use libc::unlink;
 use libc::FILE;
-use crate::compat::strlen;
 extern "C" {
 
   static mut optind: libc::c_int;

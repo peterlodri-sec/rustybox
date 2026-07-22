@@ -1,3 +1,4 @@
+use crate::compat::memset;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::size_t;
 use libc;
@@ -7,7 +8,6 @@ use libc::stat;
 use libc::strcpy;
 use libc::time;
 use libc::time_t;
-use crate::compat::memset;
 extern "C" {
 
   static mut optind: libc::c_int;

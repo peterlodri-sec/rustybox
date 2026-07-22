@@ -1,9 +1,9 @@
+use crate::compat::memcpy;
+use crate::compat::memmove;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::size_t;
 use libc;
 use libc::pollfd;
-use crate::compat::memcpy;
-use crate::compat::memmove;
 extern "C" {
   fn strtoul(
     __nptr: *const libc::c_char,

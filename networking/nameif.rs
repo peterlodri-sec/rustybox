@@ -1,3 +1,6 @@
+use crate::compat::memcmp;
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::parse_config::parser_t;
 use crate::libbb::skip_whitespace::skip_whitespace;
@@ -11,13 +14,8 @@ use libc::sockaddr;
 use libc::strcmp;
 use libc::strcpy;
 use libc::FILE;
-use crate::compat::memcmp;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
   static mut optind: libc::c_int;
-
-  
 
   static mut logmode: smallint;
 

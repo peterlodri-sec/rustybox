@@ -1,3 +1,5 @@
+use crate::compat::memcpy;
+use crate::compat::strlen;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::libpwdgrp::pwd_grp::bb_internal_getgrgid;
 use crate::librb::size_t;
@@ -15,8 +17,6 @@ use libc::strchr;
 use libc::time_t;
 use libc::tm;
 use libc::FILE;
-use crate::compat::memcpy;
-use crate::compat::strlen;
 extern "C" {
 
   static mut optind: libc::c_int;
@@ -28,7 +28,7 @@ extern "C" {
 
   fn strcat(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
   fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  
+
   fn stpcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
 
   fn strftime(

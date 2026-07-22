@@ -1,3 +1,4 @@
+use crate::compat::strlen;
 use crate::librb::size_t;
 use libc;
 use libc::fclose;
@@ -9,7 +10,6 @@ use libc::puts;
 use libc::time;
 use libc::time_t;
 use libc::FILE;
-use crate::compat::strlen;
 extern "C" {
 
   fn unsetenv(__name: *const libc::c_char) -> libc::c_int;

@@ -177,12 +177,7 @@ pub unsafe fn cttyhack_main(
         (b"S%u\x00" as *const u8 as *const libc::c_char).offset(1),
         u.vt.v_active as libc::c_int,
       );
-    } else if ioctl(
-      0,
-      0x541ei32 as _,
-      &mut u.sr as *mut serial_struct,
-    ) == 0
-    {
+    } else if ioctl(0, 0x541ei32 as _, &mut u.sr as *mut serial_struct) == 0 {
       /* this is a serial console; assuming it is named /dev/ttySn */
       sprintf(
         console.as_mut_ptr().offset(8),

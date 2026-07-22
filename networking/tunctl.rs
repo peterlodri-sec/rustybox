@@ -1,8 +1,8 @@
+use crate::compat::memset;
 use libc;
 use libc::geteuid;
 use libc::printf;
 use libc::puts;
-use crate::compat::memset;
 
 pub type __caddr_t = *mut libc::c_char;
 

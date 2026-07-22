@@ -1,3 +1,6 @@
+use crate::compat::memset;
+use crate::compat::read;
+use crate::compat::strlen;
 use crate::libbb::default_error_retval::xfunc_error_retval;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::size_t;
@@ -16,9 +19,6 @@ use libc::strcmp;
 use libc::time;
 use libc::time_t;
 use libc::useconds_t;
-use crate::compat::memset;
-use crate::compat::read;
-use crate::compat::strlen;
 extern "C" {
 
   static mut optind: libc::c_int;
@@ -27,8 +27,6 @@ extern "C" {
   fn fchdir(__fd: libc::c_int) -> libc::c_int;
 
   fn usleep(__useconds: useconds_t) -> libc::c_int;
-
-  
 
   /* Some useful definitions */
   /* Macros for min/max.  */

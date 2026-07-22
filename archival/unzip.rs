@@ -1,4 +1,6 @@
 use crate::archival::libarchive::bb_archive::transformer_state_t;
+use crate::compat::memcpy;
+use crate::compat::strlen;
 use crate::libbb::llist::llist_t;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::xfuncs_printf::xmalloc;
@@ -19,8 +21,6 @@ use libc::sprintf;
 use libc::stat;
 use libc::strcpy;
 use libc::FILE;
-use crate::compat::memcpy;
-use crate::compat::strlen;
 extern "C" {
 
   static mut optarg: *mut libc::c_char;
@@ -35,24 +35,23 @@ extern "C" {
 
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
 
-  
   fn dirname(__path: *mut libc::c_char) -> *mut libc::c_char;
 
-/* Some useful definitions */
-/* Macros for min/max.  */
-/* buffer allocation schemes */
-/* glibc uses __errno_location() to get a ptr to errno */
-/* We can just memorize it once - no multithreading in busybox :) */
+  /* Some useful definitions */
+  /* Macros for min/max.  */
+  /* buffer allocation schemes */
+  /* glibc uses __errno_location() to get a ptr to errno */
+  /* We can just memorize it once - no multithreading in busybox :) */
 
-/* Simpler version: does not special case "/" string */
+  /* Simpler version: does not special case "/" string */
 
-/* NB: can violate const-ness (similarly to strchr) */
+  /* NB: can violate const-ness (similarly to strchr) */
 
-/* Returns a string with unprintable chars replaced by '?' or
- * SUBST_WCHAR. This function is unicode-aware. */
+  /* Returns a string with unprintable chars replaced by '?' or
+   * SUBST_WCHAR. This function is unicode-aware. */
 
-// NB: will return short read on error, not -1,
-// if some data was read before error occurred
+  // NB: will return short read on error, not -1,
+  // if some data was read before error occurred
 
 }
 

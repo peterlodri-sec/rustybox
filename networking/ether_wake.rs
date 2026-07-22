@@ -1,9 +1,9 @@
+use crate::compat::memcpy;
+use crate::compat::memset;
 use crate::librb::size_t;
 use libc;
 use libc::sockaddr;
 use libc::sscanf;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
 
   static mut optind: libc::c_int;

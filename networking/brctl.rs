@@ -1,3 +1,4 @@
+use crate::compat::memcmp;
 use crate::libbb::appletlib::applet_name;
 use crate::librb::__compar_fn_t;
 use crate::librb::size_t;
@@ -15,7 +16,6 @@ use libc::ssize_t;
 use libc::strcpy;
 use libc::DIR;
 use libc::FILE;
-use crate::compat::memcmp;
 extern "C" {
 
   fn strtod(__nptr: *const libc::c_char, __endptr: *mut *mut libc::c_char) -> libc::c_double;

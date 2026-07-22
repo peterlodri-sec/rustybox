@@ -1,3 +1,5 @@
+use crate::compat::memcpy;
+use crate::compat::memset;
 use crate::librb::in6_addr;
 use crate::librb::size_t;
 use crate::librb::socklen_t;
@@ -10,8 +12,6 @@ use libc::sockaddr;
 use libc::sockaddr_in;
 use libc::sockaddr_in6;
 use libc::ssize_t;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;

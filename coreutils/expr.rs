@@ -1,3 +1,5 @@
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::default_error_retval::xfunc_error_retval;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::re_pattern_buffer;
@@ -8,8 +10,6 @@ use libc::free;
 use libc::printf;
 use libc::puts;
 use libc::strcmp;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
   fn strtoll(
     __nptr: *const libc::c_char,

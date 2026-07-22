@@ -73,7 +73,12 @@ pub fn run(name: &str, argv: &[&str], c: &Codec) -> i32 {
 
   let mut rc = 0;
   for f in &files {
-    if report(c.comp, f, process(f, decompress, to_stdout, keep, force, level, c)) != 0 {
+    if report(
+      c.comp,
+      f,
+      process(f, decompress, to_stdout, keep, force, level, c),
+    ) != 0
+    {
       rc = 1;
     }
   }

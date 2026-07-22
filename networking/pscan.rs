@@ -27,11 +27,11 @@ extern "C" {
   fn connect(__fd: libc::c_int, __addr: __CONST_SOCKADDR_ARG, __len: socklen_t) -> libc::c_int;
   fn getservbyport(__port: libc::c_int, __proto: *const libc::c_char) -> *mut servent;
 
-/* Version which dies on error */
+  /* Version which dies on error */
 
-/* Assign sin[6]_port member if the socket is an AF_INET[6] one,
- * otherwise no-op. Useful for ftp.
- * NB: does NOT do htons() internally, just direct assignment. */
+  /* Assign sin[6]_port member if the socket is an AF_INET[6] one,
+   * otherwise no-op. Useful for ftp.
+   * NB: does NOT do htons() internally, just direct assignment. */
 
 }
 

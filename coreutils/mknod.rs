@@ -7,7 +7,7 @@ extern "C" {
   fn gnu_dev_minor(__dev: libc::dev_t) -> libc::c_uint;
   static mut optind: libc::c_int;
 
-/* At least glibc has horrendously large inline for this, so wrap it */
+  /* At least glibc has horrendously large inline for this, so wrap it */
 
 }
 

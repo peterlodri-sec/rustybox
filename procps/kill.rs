@@ -1,3 +1,4 @@
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::procps_status_t;
 use crate::librb::size_t;
@@ -8,7 +9,6 @@ use libc::kill;
 use libc::pid_t;
 use libc::printf;
 use libc::puts;
-use crate::compat::strlen;
 extern "C" {
 
   fn getsid(__pid: pid_t) -> pid_t;

@@ -1,3 +1,4 @@
+use crate::compat::strlen;
 use crate::librb::size_t;
 use libc;
 use libc::closedir;
@@ -8,7 +9,6 @@ use libc::readdir;
 use libc::stat;
 use libc::strcpy;
 use libc::DIR;
-use crate::compat::strlen;
 
 #[repr(C)]
 #[derive(Copy, Clone)]

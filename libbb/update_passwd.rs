@@ -1,3 +1,4 @@
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::size_t;
@@ -23,7 +24,6 @@ use libc::uid_t;
 use libc::unlink;
 use libc::useconds_t;
 use libc::FILE;
-use crate::compat::strlen;
 extern "C" {
   fn link(__from: *const libc::c_char, __to: *const libc::c_char) -> libc::c_int;
   fn fsync(__fd: libc::c_int) -> libc::c_int;
@@ -34,7 +34,7 @@ extern "C" {
   fn fchown(__fd: libc::c_int, __owner: uid_t, __group: gid_t) -> libc::c_int;
   fn usleep(__useconds: useconds_t) -> libc::c_int;
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  
+
   fn strsep(__stringp: *mut *mut libc::c_char, __delim: *const libc::c_char) -> *mut libc::c_char;
 }
 

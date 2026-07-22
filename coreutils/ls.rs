@@ -1,3 +1,4 @@
+use crate::compat::memset;
 use crate::libbb::appletlib::applet_name;
 use crate::librb::__compar_fn_t;
 use crate::librb::size_t;
@@ -27,7 +28,6 @@ use libc::tm;
 use libc::uid_t;
 use libc::DIR;
 use libc::FILE;
-use crate::compat::memset;
 extern "C" {
 
   fn qsort(__base: *mut libc::c_void, __nmemb: size_t, __size: size_t, __compar: __compar_fn_t);
@@ -1346,9 +1346,53 @@ pub unsafe fn ls_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char) 
   /* need to initialize since --color has _an optional_ argument */
   let mut color_opt: *const libc::c_char = color_str.as_ptr(); /* "always" */
   static mut ls_longopts: [libc::c_char; 47] = [
-    102, 117, 108, 108, 45, 116, 105, 109, 101, 0, 0, 255u8 as libc::c_char, 103, 114, 111, 117, 112, 45, 100, 105,
-    114, 101, 99, 116, 111, 114, 105, 101, 115, 45, 102, 105, 114, 115, 116, 0, 0, 254u8 as libc::c_char, 99, 111,
-    108, 111, 114, 0, 2, 253u8 as libc::c_char, 0,
+    102,
+    117,
+    108,
+    108,
+    45,
+    116,
+    105,
+    109,
+    101,
+    0,
+    0,
+    255u8 as libc::c_char,
+    103,
+    114,
+    111,
+    117,
+    112,
+    45,
+    100,
+    105,
+    114,
+    101,
+    99,
+    116,
+    111,
+    114,
+    105,
+    101,
+    115,
+    45,
+    102,
+    105,
+    114,
+    115,
+    116,
+    0,
+    0,
+    254u8 as libc::c_char,
+    99,
+    111,
+    108,
+    111,
+    114,
+    0,
+    2,
+    253u8 as libc::c_char,
+    0,
   ];
   memset(
     bb_common_bufsiz1.as_mut_ptr() as *mut globals as *mut libc::c_void,

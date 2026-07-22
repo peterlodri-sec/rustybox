@@ -1,3 +1,6 @@
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::parse_config::parser_t;
 use crate::libbb::ptr_to_globals::bb_errno;
@@ -21,9 +24,6 @@ use libc::strcasecmp;
 use libc::time;
 use libc::time_t;
 use libc::unlink;
-use crate::compat::memcmp;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
   //extern const int const_int_1;
   /* This struct is deliberately not defined. */
@@ -33,8 +33,6 @@ extern "C" {
 
   static mut optind: libc::c_int;
 
-  
-  
   fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> *mut libc::c_char;
   fn strtok_r(
     __s: *mut libc::c_char,
@@ -151,12 +149,12 @@ extern "C" {
   // All others                 MAY           MAY         MAY                     MUST NOT     MUST NOT
   /* ** Logging ***/
   static mut dhcp_verbose: libc::c_uint;
-/* ** Other shared functions ***/
-/* 2nd param is "u32*" */
+  /* ** Other shared functions ***/
+  /* 2nd param is "u32*" */
 
-/* 2nd param is "struct option_set**" */
+  /* 2nd param is "struct option_set**" */
 
-/* Returns 1 if no reply received */
+  /* Returns 1 if no reply received */
 
 }
 

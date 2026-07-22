@@ -1,3 +1,5 @@
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::default_error_retval::xfunc_error_retval;
 use crate::librb::rtattr;
@@ -11,8 +13,6 @@ use libc::nlmsghdr;
 use libc::sa_family_t;
 use libc::sockaddr;
 use libc::strcmp;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
   fn socket(__domain: libc::c_int, __type: libc::c_int, __protocol: libc::c_int) -> libc::c_int;
 
@@ -24,8 +24,8 @@ extern "C" {
 
   static mut preferred_family: family_t;
 
-/* We need linux/types.h because older kernels use u32 etc
- * in linux/[rt]netlink.h. 2.6.19 seems to be ok, though */
+  /* We need linux/types.h because older kernels use u32 etc
+   * in linux/[rt]netlink.h. 2.6.19 seems to be ok, though */
 
 }
 

@@ -1,3 +1,5 @@
+use crate::compat::memcpy;
+use crate::compat::memset;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::size_t;
 use crate::librb::smallint;
@@ -13,8 +15,6 @@ use libc::ssize_t;
 use libc::stat;
 use libc::strchr;
 use libc::FILE;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
 
   fn fsync(__fd: libc::c_int) -> libc::c_int;

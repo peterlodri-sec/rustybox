@@ -4,6 +4,9 @@ use crate::librb::smallint;
 use c2rust_asm_casts;
 use c2rust_asm_casts::AsmCastTrait;
 
+use crate::compat::memcpy;
+use crate::compat::memmove;
+use crate::compat::strlen;
 use libc;
 use libc::chmod;
 use libc::close;
@@ -31,9 +34,6 @@ use libc::time_t;
 use libc::timeval;
 use libc::unlink;
 use libc::FILE;
-use crate::compat::memcpy;
-use crate::compat::memmove;
-use crate::compat::strlen;
 extern "C" {
 
   fn flock(__fd: libc::c_int, __operation: libc::c_int) -> libc::c_int;
@@ -58,7 +58,6 @@ extern "C" {
   fn execl(__path: *const libc::c_char, __arg: *const libc::c_char, _: ...) -> libc::c_int;
   fn fchdir(__fd: libc::c_int) -> libc::c_int;
 
-  
   fn memchr(_: *const libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
   fn memrchr(__s: *const libc::c_void, __c: libc::c_int, __n: size_t) -> *mut libc::c_void;
 
@@ -1623,8 +1622,7 @@ pub unsafe fn svlogd_main(mut argc: libc::c_int, mut argv: *mut *mut libc::c_cha
         368077705793071303 => {
           /* NB: starting from here lineptr may point
            * farther out into line[] */
-          (*ptr_to_globals).linelen =
-            (np.offset_from(lineptr) as libc::c_long + 1) as libc::c_int;
+          (*ptr_to_globals).linelen = (np.offset_from(lineptr) as libc::c_long + 1) as libc::c_int;
           current_block_116 = 12961834331865314435;
         }
         _ => {

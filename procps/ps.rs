@@ -1,3 +1,4 @@
+use crate::compat::strlen;
 use crate::libbb::llist::llist_t;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::procps_status_t;
@@ -8,7 +9,6 @@ use libc::printf;
 use libc::sprintf;
 use libc::strchr;
 use libc::strcpy;
-use crate::compat::strlen;
 extern "C" {
 
   fn snprintf(

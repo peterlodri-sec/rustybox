@@ -1,3 +1,5 @@
+use crate::compat::memset;
+use crate::compat::read;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::default_error_retval::xfunc_error_retval;
 use crate::libbb::xfuncs_printf::xmalloc;
@@ -13,16 +15,12 @@ use libc::ssize_t;
 use libc::strcmp;
 use libc::sync;
 use libc::termios;
-use crate::compat::memset;
-use crate::compat::read;
 extern "C" {
   fn exit(_: libc::c_int) -> !;
 
   static mut optind: libc::c_int;
 
   fn getchar_unlocked() -> libc::c_int;
-
-  
 
   static mut option_mask32: u32;
 

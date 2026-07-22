@@ -1,3 +1,5 @@
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::xfuncs_printf::xmalloc;
 use libc;
@@ -10,8 +12,6 @@ use libc::printf;
 use libc::puts;
 use libc::sleep;
 use libc::sync;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
 
   static mut optarg: *mut libc::c_char;
@@ -21,9 +21,9 @@ extern "C" {
 
   fn exit(_: libc::c_int) -> !;
   fn abs(_: libc::c_int) -> libc::c_int;
-  
+
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
-  
+
   fn mlock(__addr: *const libc::c_void, __len: size_t) -> libc::c_int;
   fn munlock(__addr: *const libc::c_void, __len: size_t) -> libc::c_int;
 
@@ -1676,13 +1676,7 @@ unsafe extern "C" fn flush_buffer_cache()
     b"BLKFLSBUF\x00" as *const u8 as *const libc::c_char,
   ); /* do it again, big time */
   sleep(1i32 as libc::c_uint);
-  if ioctl(
-    fd as libc::c_int,
-    0x31fi32 as _,
-    0 as *mut libc::c_void,
-  ) != 0
-    && *bb_errno != 22i32
-  {
+  if ioctl(fd as libc::c_int, 0x31fi32 as _, 0 as *mut libc::c_void) != 0 && *bb_errno != 22i32 {
     /* await completion */
     /* To be coherent with ioctl_or_warn */
     crate::libbb::perror_msg::bb_simple_perror_msg(
@@ -2805,12 +2799,7 @@ unsafe extern "C" fn process_dev(mut devname: *mut libc::c_char) {
       words206_254: [0; 49],
       integrity_word: 0,
     };
-    if ioctl(
-      fd as libc::c_int,
-      0x30di32 as _,
-      &mut id as *mut hd_driveid,
-    ) == 0
-    {
+    if ioctl(fd as libc::c_int, 0x30di32 as _, &mut id as *mut hd_driveid) == 0 {
       if multcount != -1i32 as libc::c_long {
         id.multsect = multcount as libc::c_uchar;
         id.multsect_valid = (id.multsect_valid as libc::c_int | 1i32) as libc::c_uchar

@@ -1,3 +1,8 @@
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memmove;
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::size_t;
 use crate::networking::tls_pstm::pstm_int;
@@ -9,15 +14,8 @@ use libc::fprintf;
 use libc::free;
 use libc::pollfd;
 use libc::FILE;
-use crate::compat::memcmp;
-use crate::compat::memcpy;
-use crate::compat::memmove;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
 
-  
-  
   static mut stderr: *mut FILE;
 
   fn putc_unlocked(__c: libc::c_int, __stream: *mut FILE) -> libc::c_int;
@@ -27,22 +25,22 @@ extern "C" {
     __src: *const libc::c_void,
     __n: size_t,
   ) -> *mut libc::c_void;
-  
+
   fn strnlen(__string: *const libc::c_char, __maxlen: size_t) -> size_t;
 
-/*
- * Copyright (C) 2017 Denys Vlasenko
- *
- * Licensed under GPLv2, see file LICENSE in this source tree.
- *
- * Selected few declarations for AES.
- */
+  /*
+   * Copyright (C) 2017 Denys Vlasenko
+   *
+   * Licensed under GPLv2, see file LICENSE in this source tree.
+   *
+   * Selected few declarations for AES.
+   */
 
-/*
- * Copyright (C) 2018 Denys Vlasenko
- *
- * Licensed under GPLv2, see file LICENSE in this source tree.
- */
+  /*
+   * Copyright (C) 2018 Denys Vlasenko
+   *
+   * Licensed under GPLv2, see file LICENSE in this source tree.
+   */
 
 }
 pub type __builtin_va_list = [__va_list_tag; 1];

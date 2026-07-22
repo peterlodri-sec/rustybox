@@ -1,9 +1,9 @@
+use crate::compat::memcpy;
 use crate::librb::socklen_t;
 use crate::networking::libiproute::utils::inet_prefix;
 use libc;
 use libc::sscanf;
 use libc::strchr;
-use crate::compat::memcpy;
 extern "C" {
   fn snprintf(
     _: *mut libc::c_char,

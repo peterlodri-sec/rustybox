@@ -1,6 +1,6 @@
-use libc;
 use crate::compat::memcpy;
 use crate::compat::memset;
+use libc;
 
 /*
  * Copyright (C) 2018 Denys Vlasenko

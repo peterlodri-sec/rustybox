@@ -1,11 +1,11 @@
 use crate::archival::libarchive::bb_archive::transformer_state_t;
+use crate::compat::memset;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::size_t;
 use libc;
 use libc::free;
 use libc::ssize_t;
-use crate::compat::memset;
 extern "C" {
 
   static mut optind: libc::c_int;

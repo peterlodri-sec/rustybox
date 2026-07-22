@@ -1,8 +1,8 @@
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::size_t;
 use libc;
 use libc::free;
-use crate::compat::strlen;
 extern "C" {
 
   fn getcwd(__buf: *mut libc::c_char, __size: size_t) -> *mut libc::c_char;

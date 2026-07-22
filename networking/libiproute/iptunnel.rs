@@ -3,6 +3,8 @@ use c2rust_asm_casts::AsmCastTrait;
 use c2rust_bitfields;
 use c2rust_bitfields::BitfieldStruct;
 
+use crate::compat::memcmp;
+use crate::compat::memset;
 use crate::libbb::appletlib::applet_name;
 use libc;
 use libc::close;
@@ -11,8 +13,6 @@ use libc::printf;
 use libc::sscanf;
 use libc::strchr;
 use libc::strcmp;
-use crate::compat::memcmp;
-use crate::compat::memset;
 extern "C" {
 
   fn fgets_unlocked(

@@ -1,3 +1,5 @@
+use crate::compat::memcpy;
+use crate::compat::memset;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::smallint;
 use libc;
@@ -5,8 +7,6 @@ use libc::ioctl;
 use libc::sa_family_t;
 use libc::sockaddr;
 use libc::strcpy;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
 
   static mut optind: libc::c_int;

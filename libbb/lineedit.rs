@@ -1,3 +1,6 @@
+use crate::compat::memmove;
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::unicode::bb_mbstate_t;
 use crate::libbb::xfuncs_printf::xmalloc;
@@ -41,9 +44,6 @@ use libc::time_t;
 use libc::uid_t;
 use libc::DIR;
 use libc::FILE;
-use crate::compat::memmove;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
   fn sigaction(__sig: libc::c_int, __act: *const sigaction, __oact: *mut sigaction) -> libc::c_int;
 
@@ -1957,8 +1957,7 @@ unsafe extern "C" fn parse_and_put_prompt(mut prmt_ptr: *const libc::c_char) {
                   buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
                   h = strtoul(buf2.as_mut_ptr(), &mut pbuf, 16i32) as libc::c_uint;
                   if h > (127i32 * 2i32 + 1i32) as libc::c_uint
-                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long)
-                      < l as libc::c_long
+                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long) < l as libc::c_long
                   {
                     l -= 1;
                     buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
@@ -2085,8 +2084,7 @@ unsafe extern "C" fn parse_and_put_prompt(mut prmt_ptr: *const libc::c_char) {
                   buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
                   h = strtoul(buf2.as_mut_ptr(), &mut pbuf, 16i32) as libc::c_uint;
                   if h > (127i32 * 2i32 + 1i32) as libc::c_uint
-                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long)
-                      < l as libc::c_long
+                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long) < l as libc::c_long
                   {
                     l -= 1;
                     buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
@@ -2205,8 +2203,7 @@ unsafe extern "C" fn parse_and_put_prompt(mut prmt_ptr: *const libc::c_char) {
                   buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
                   h = strtoul(buf2.as_mut_ptr(), &mut pbuf, 16i32) as libc::c_uint;
                   if h > (127i32 * 2i32 + 1i32) as libc::c_uint
-                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long)
-                      < l as libc::c_long
+                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long) < l as libc::c_long
                   {
                     l -= 1;
                     buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
@@ -2325,8 +2322,7 @@ unsafe extern "C" fn parse_and_put_prompt(mut prmt_ptr: *const libc::c_char) {
                   buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
                   h = strtoul(buf2.as_mut_ptr(), &mut pbuf, 16i32) as libc::c_uint;
                   if h > (127i32 * 2i32 + 1i32) as libc::c_uint
-                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long)
-                      < l as libc::c_long
+                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long) < l as libc::c_long
                   {
                     l -= 1;
                     buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
@@ -2445,8 +2441,7 @@ unsafe extern "C" fn parse_and_put_prompt(mut prmt_ptr: *const libc::c_char) {
                   buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
                   h = strtoul(buf2.as_mut_ptr(), &mut pbuf, 16i32) as libc::c_uint;
                   if h > (127i32 * 2i32 + 1i32) as libc::c_uint
-                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long)
-                      < l as libc::c_long
+                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long) < l as libc::c_long
                   {
                     l -= 1;
                     buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
@@ -2565,8 +2560,7 @@ unsafe extern "C" fn parse_and_put_prompt(mut prmt_ptr: *const libc::c_char) {
                   buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
                   h = strtoul(buf2.as_mut_ptr(), &mut pbuf, 16i32) as libc::c_uint;
                   if h > (127i32 * 2i32 + 1i32) as libc::c_uint
-                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long)
-                      < l as libc::c_long
+                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long) < l as libc::c_long
                   {
                     l -= 1;
                     buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
@@ -2685,8 +2679,7 @@ unsafe extern "C" fn parse_and_put_prompt(mut prmt_ptr: *const libc::c_char) {
                   buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
                   h = strtoul(buf2.as_mut_ptr(), &mut pbuf, 16i32) as libc::c_uint;
                   if h > (127i32 * 2i32 + 1i32) as libc::c_uint
-                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long)
-                      < l as libc::c_long
+                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long) < l as libc::c_long
                   {
                     l -= 1;
                     buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
@@ -2805,8 +2798,7 @@ unsafe extern "C" fn parse_and_put_prompt(mut prmt_ptr: *const libc::c_char) {
                   buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
                   h = strtoul(buf2.as_mut_ptr(), &mut pbuf, 16i32) as libc::c_uint;
                   if h > (127i32 * 2i32 + 1i32) as libc::c_uint
-                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long)
-                      < l as libc::c_long
+                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long) < l as libc::c_long
                   {
                     l -= 1;
                     buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
@@ -2925,8 +2917,7 @@ unsafe extern "C" fn parse_and_put_prompt(mut prmt_ptr: *const libc::c_char) {
                   buf2[l as usize] = '\u{0}' as i32 as libc::c_char;
                   h = strtoul(buf2.as_mut_ptr(), &mut pbuf, 16i32) as libc::c_uint;
                   if h > (127i32 * 2i32 + 1i32) as libc::c_uint
-                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long)
-                      < l as libc::c_long
+                    || (pbuf.offset_from(buf2.as_mut_ptr()) as libc::c_long) < l as libc::c_long
                   {
                     l -= 1;
                     buf2[l as usize] = '\u{0}' as i32 as libc::c_char;

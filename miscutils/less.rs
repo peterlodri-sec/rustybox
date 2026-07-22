@@ -1,3 +1,6 @@
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::re_pattern_buffer;
@@ -25,9 +28,6 @@ use libc::termios;
 use libc::time;
 use libc::time_t;
 use libc::FILE;
-use crate::compat::memcpy;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
   fn sched_yield() -> libc::c_int;
 
@@ -39,11 +39,9 @@ extern "C" {
   static mut optind: libc::c_int;
   static bb_msg_standard_input: [libc::c_char; 0];
 
-  
-
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
   fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  
+
   fn stpcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
 
@@ -751,8 +749,39 @@ unsafe fn status_print() {
   print_hilite(p);
 }
 static mut controls: [libc::c_char; 33] = [
-  1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27,
-  28, 29, 30, 31, 127, 155u8 as libc::c_char, 0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+  19,
+  20,
+  21,
+  22,
+  23,
+  24,
+  25,
+  26,
+  27,
+  28,
+  29,
+  30,
+  31,
+  127,
+  155u8 as libc::c_char,
+  0,
 ];
 /* DEL and infamous Meta-ESC :( */
 static mut ctrlconv: [libc::c_char; 33] = [

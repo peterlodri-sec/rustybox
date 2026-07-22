@@ -1,3 +1,4 @@
+use crate::compat::memset;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::size_t;
 use libc;
@@ -11,7 +12,6 @@ use libc::printf;
 use libc::puts;
 use libc::strchr;
 use libc::unlink;
-use crate::compat::memset;
 
 pub type C2RustUnnamed = libc::c_uint;
 pub const DAEMON_ONLY_SANITIZE: C2RustUnnamed = 8;

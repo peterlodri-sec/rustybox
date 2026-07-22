@@ -1,3 +1,6 @@
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::xfuncs_printf::xmalloc;
@@ -15,9 +18,6 @@ use libc::sockaddr;
 use libc::ssize_t;
 use libc::strchr;
 use libc::unlink;
-use crate::compat::memcpy;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
 
   fn recv(

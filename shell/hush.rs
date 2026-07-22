@@ -1,3 +1,7 @@
+use crate::compat::memcpy;
+use crate::compat::memmove;
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::default_error_retval::xfunc_error_retval;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::skip_whitespace::skip_whitespace;
@@ -39,10 +43,6 @@ use libc::strcpy;
 use libc::timeval;
 use libc::umask;
 use libc::FILE;
-use crate::compat::memcpy;
-use crate::compat::memmove;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
   fn sigaction(__sig: libc::c_int, __act: *const sigaction, __oact: *mut sigaction) -> libc::c_int;
   fn getc_unlocked(__stream: *mut FILE) -> libc::c_int;
@@ -92,8 +92,6 @@ extern "C" {
 
   fn unsetenv(__name: *const libc::c_char) -> libc::c_int;
 
-  
-
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
@@ -103,7 +101,7 @@ extern "C" {
     __src: *const libc::c_void,
     __n: size_t,
   ) -> *mut libc::c_void;
-  
+
   fn strnlen(__string: *const libc::c_char, __maxlen: size_t) -> size_t;
   fn stpcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
 
@@ -155,11 +153,11 @@ extern "C" {
    * Licensed under GPLv2 or later, see file LICENSE in this source tree.
    */
   static defifsvar: [libc::c_char; 0];
-//TODO? do not provide bashisms if not asked for:
-//#if !ENABLE_HUSH_BASH_COMPAT && !ENABLE_ASH_BASH_COMPAT
-//#define shell_builtin_read(setvar,argv,ifs,read_flags,n,p,t,u,d)
-//	shell_builtin_read(setvar,argv,ifs,read_flags)
-//#endif
+  //TODO? do not provide bashisms if not asked for:
+  //#if !ENABLE_HUSH_BASH_COMPAT && !ENABLE_ASH_BASH_COMPAT
+  //#define shell_builtin_read(setvar,argv,ifs,read_flags,n,p,t,u,d)
+  //	shell_builtin_read(setvar,argv,ifs,read_flags)
+  //#endif
 
 }
 
@@ -2151,10 +2149,7 @@ unsafe extern "C" fn set_vars_and_save_old(mut strings: *mut *mut libc::c_char) 
         b"BUG in varexp4\x00" as *const u8 as *const libc::c_char,
       );
     }
-    var_pp = get_ptr_to_local_var(
-      *s,
-      eq.offset_from(*s) as libc::c_long as libc::c_uint,
-    );
+    var_pp = get_ptr_to_local_var(*s, eq.offset_from(*s) as libc::c_long as libc::c_uint);
     if !var_pp.is_null() {
       var_p = *var_pp;
       if (*var_p).flg_read_only != 0 {
@@ -2992,8 +2987,7 @@ unsafe extern "C" fn perform_glob(mut o: *mut o_string, mut n: libc::c_int) -> l
   pattern = (*o).data.offset(o_get_last_ptr(o, n) as isize);
   if glob_needed(pattern) == 0 {
     /* unbackslash last string in o in place, fix length */
-    (*o).length =
-      unbackslash(pattern).offset_from((*o).data) as libc::c_long as libc::c_int;
+    (*o).length = unbackslash(pattern).offset_from((*o).data) as libc::c_long as libc::c_int;
     return o_save_ptr_helper(o, n);
   }
   copy = crate::libbb::xfuncs_printf::xstrdup(pattern);
@@ -4120,23 +4114,28 @@ unsafe extern "C" fn add_till_backquote(
   mut input: *mut in_str,
   mut in_dquote: libc::c_int,
 ) -> libc::c_int {
-  loop  {
-        let mut ch: libc::c_int = i_getch(input);
-        if ch == '`' as i32 { return 1i32 }
-        if ch == '\\' as i32 {
-            /* \x. Copy both unless it is \`, \$, \\ and maybe \" */
-            ch = i_getch(input); /* PS2 */
-            if ch != '`' as i32 && ch != '$' as i32 && ch != '\\' as i32 &&
-                   (in_dquote == 0 || ch != '\"' as i32) {
-                o_addchr(dest, '\\' as i32);
-            }
-        }
-        if ch == -1i32 {
-            syntax_error_unterm_ch('`' as i32 as libc::c_char);
-            return 0
-        }
-        o_addchr(dest, ch);
+  loop {
+    let mut ch: libc::c_int = i_getch(input);
+    if ch == '`' as i32 {
+      return 1i32;
     }
+    if ch == '\\' as i32 {
+      /* \x. Copy both unless it is \`, \$, \\ and maybe \" */
+      ch = i_getch(input); /* PS2 */
+      if ch != '`' as i32
+        && ch != '$' as i32
+        && ch != '\\' as i32
+        && (in_dquote == 0 || ch != '\"' as i32)
+      {
+        o_addchr(dest, '\\' as i32);
+      }
+    }
+    if ch == -1i32 {
+      syntax_error_unterm_ch('`' as i32 as libc::c_char);
+      return 0;
+    }
+    o_addchr(dest, ch);
+  }
 }
 unsafe extern "C" fn add_till_closing_bracket(
   mut dest: *mut o_string,
@@ -5973,69 +5972,70 @@ unsafe extern "C" fn encode_string(
 ) -> libc::c_int {
   let mut ch: libc::c_int = 0;
   let mut next: libc::c_int = 0;
-  loop
-  {
+  loop {
     //debug_printf_subst("SUBST RES3 '%s'\n", dest->data + pos);
-        ch = i_getch(input);
-        // TODO: why was this translated this way?
-        // (ch) != -1i32;
-        if ch == dquote_end {
-            /* may be only '"' or EOF */
-            return 1i32
-        }
-        /* note: can't move it above ch == dquote_end check! */
-        if ch == -1i32 {
-            syntax_error_unterm_ch('\"' as i32 as libc::c_char);
-            return 0
-            /* error */
-        }
-        next = '\u{0}' as i32;
-        if ch != '\n' as i32 { next = i_peek(input) }
-        if ch == '\\' as i32 {
-            if next == -1i32 {
-                /* Testcase: in interactive shell a file with
-			 *  echo "unterminated string\<eof>
-			 * is sourced.
-			 */
-                syntax_error_unterm_ch('\"' as i32 as libc::c_char);
-                return 0
-                /* error */
-            }
-            /* bash:
-		 * "The backslash retains its special meaning [in "..."]
-		 * only when followed by one of the following characters:
-		 * $, `, ", \, or <newline>.  A double quote may be quoted
-		 * within double quotes by preceding it with a backslash."
-		 * NB: in (unquoted) heredoc, above does not apply to ",
-		 * therefore we check for it by "next == dquote_end" cond.
-		 */
-            if next == dquote_end ||
-                   !strchr(b"$`\\\n\x00" as *const u8 as *const libc::c_char,
-                           next).is_null()
-               { /* else: ch remains == '\\', and we double it below: */
-                ch = i_getch(input);
-                if ch == '\n' as i32 {
-                    continue ; /* eat next */
-                }
-                /* skip \<newline> */
-            } /* \c if c is a glob char, else just c */
-            o_addqchr(dest, ch);
-        } else if ch == '$' as i32 {
-            if parse_dollar(dest, input, 0x80i32 as libc::c_uchar) == 0 {
-                return 0
-            }
-        } else if ch == '`' as i32 {
-            //unsigned pos = dest->length;
-            o_addchr(dest, 3i32); /* error */
-            o_addchr(dest, 0x80i32 | '`' as i32);
-            if add_till_backquote(dest, input,
-                                  (dquote_end == '\"' as i32) as libc::c_int)
-                   == 0 {
-                return 0
-            }
-            o_addchr(dest, 3i32);
-        } else { o_addQchr(dest, ch); }
+    ch = i_getch(input);
+    // TODO: why was this translated this way?
+    // (ch) != -1i32;
+    if ch == dquote_end {
+      /* may be only '"' or EOF */
+      return 1i32;
     }
+    /* note: can't move it above ch == dquote_end check! */
+    if ch == -1i32 {
+      syntax_error_unterm_ch('\"' as i32 as libc::c_char);
+      return 0;
+      /* error */
+    }
+    next = '\u{0}' as i32;
+    if ch != '\n' as i32 {
+      next = i_peek(input)
+    }
+    if ch == '\\' as i32 {
+      if next == -1i32 {
+        /* Testcase: in interactive shell a file with
+         *  echo "unterminated string\<eof>
+         * is sourced.
+         */
+        syntax_error_unterm_ch('\"' as i32 as libc::c_char);
+        return 0;
+        /* error */
+      }
+      /* bash:
+       * "The backslash retains its special meaning [in "..."]
+       * only when followed by one of the following characters:
+       * $, `, ", \, or <newline>.  A double quote may be quoted
+       * within double quotes by preceding it with a backslash."
+       * NB: in (unquoted) heredoc, above does not apply to ",
+       * therefore we check for it by "next == dquote_end" cond.
+       */
+      if next == dquote_end
+        || !strchr(b"$`\\\n\x00" as *const u8 as *const libc::c_char, next).is_null()
+      {
+        /* else: ch remains == '\\', and we double it below: */
+        ch = i_getch(input);
+        if ch == '\n' as i32 {
+          continue; /* eat next */
+        }
+        /* skip \<newline> */
+      } /* \c if c is a glob char, else just c */
+      o_addqchr(dest, ch);
+    } else if ch == '$' as i32 {
+      if parse_dollar(dest, input, 0x80i32 as libc::c_uchar) == 0 {
+        return 0;
+      }
+    } else if ch == '`' as i32 {
+      //unsigned pos = dest->length;
+      o_addchr(dest, 3i32); /* error */
+      o_addchr(dest, 0x80i32 | '`' as i32);
+      if add_till_backquote(dest, input, (dquote_end == '\"' as i32) as libc::c_int) == 0 {
+        return 0;
+      }
+      o_addchr(dest, 3i32);
+    } else {
+      o_addQchr(dest, ch);
+    }
+  }
 }
 /*
  * Scan input until EOF or end_trigger char.
@@ -6566,150 +6566,119 @@ unsafe extern "C" fn parse_stream(
               }
               /* Note: nommu_addchr(&ctx.as_string, ch) is already done */
               match ch {
-                                    3 => {
-                                        /* Convert raw ^C to corresponding special variable reference */
-                                        o_addchr(&mut ctx.word,
-                                                 3i32); /* get next char */
-                                        o_addchr(&mut ctx.word,
-                                                 1i32); /* eat second " */
-                                        current_block = 11704709843737693330;
-                                    }
-                                    35 => {
-                                        current_block = 11704709843737693330;
-                                    }
-                                    36 => {
-                                        if parse_dollar(&mut ctx.word, input,
-                                                        0 as libc::c_uchar)
-                                               == 0 {
-                                            current_block =
-                                                1907364584679199995;
-                                            break ;
-                                        }
-                                        continue ;
-                                    }
-                                    34 => {
-                                        ctx.word.has_quoted_part =
-                                            1i32 as smallint;
-                                        if next == '\"' as i32 &&
-                                               ctx.pending_redirect.is_null()
-                                           {
-                                            i_getch(input);
-                                            /* get next char */
-                                        } else {
-                                            if ctx.is_assignment as
-                                                   libc::c_int ==
-                                                   NOT_ASSIGNMENT as
-                                                       libc::c_int {
-                                                ctx.word.o_expflags |=
-                                                    EXP_FLAG_ESC_GLOB_CHARS as
-                                                        libc::c_int
-                                            } /* get next char */
-                                            if encode_string(&mut ctx.word,
-                                                             input,
-                                                             '\"' as i32) == 0
-                                               {
-                                                current_block =
-                                                    1907364584679199995;
-                                                break ;
-                                            }
-                                            ctx.word.o_expflags &=
-                                                !(EXP_FLAG_ESC_GLOB_CHARS as
-                                                      libc::c_int);
-                                            continue ;
-                                        }
-                                        current_block = 2277602629737488951;
-                                    }
-                                    96 => {
-                                        o_addchr(&mut ctx.word, 3i32);
-                                        o_addchr(&mut ctx.word, '`' as i32);
-                                        if add_till_backquote(&mut ctx.word,
-                                                              input, 0) ==
-                                               0 {
-                                            current_block =
-                                                1907364584679199995;
-                                            break ;
-                                        }
-                                        o_addchr(&mut ctx.word, 3i32);
-                                        /* get next char */
-                                        continue ;
-                                    }
-                                    59 => {
-                                        current_block = 4562139175239303272;
-                                    }
-                                    38 => {
-                                        if done_word(&mut ctx) != 0 {
-                                            current_block =
-                                                1907364584679199995;
-                                            break ;
-                                        }
-                                        if next == '&' as i32 {
-                                            ch = i_getch(input);
-                                            done_pipe(&mut ctx, PIPE_AND);
-                                        } else {
-                                            done_pipe(&mut ctx, PIPE_BG);
-                                        }
-                                        current_block = 14669516692233869547;
-                                    }
-                                    124 => {
-                                        if done_word(&mut ctx) != 0 {
-                                            current_block =
-                                                1907364584679199995;
-                                            break ;
-                                        }
-                                        //debug_printf_subst("SUBST RES3 '%s'\n", ctx.word.data + pos);
-                                        if ctx.ctx_res_w as libc::c_int ==
-                                               RES_MATCH as libc::c_int {
-                                            continue
-                                                ; /* we are in case's "word | word)" */
-                                        }
-                                        if next == '|' as i32 {
-                                            /* || */
-                                            ch = i_getch(input);
-                                            done_pipe(&mut ctx, PIPE_OR);
-                                        } else {
-                                            /* we could pick up a file descriptor choice here
-				 * with redirect_opt_num(), but bash doesn't do it.
-				 * "echo foo 2| cat" yields "foo 2". */
-                                            done_command(&mut ctx);
-                                        }
-                                        current_block = 14669516692233869547;
-                                    }
-                                    40 => {
-                                        /* "case... in [(]word)..." - skip '(' */
-                                        if ctx.ctx_res_w as libc::c_int ==
-                                               RES_MATCH as libc::c_int &&
-                                               (*ctx.command).argv.is_null()
-                                               && ctx.word.length == 0 &&
-                                               ctx.word.has_quoted_part as
-                                                   libc::c_int == 0 {
-                                            continue ;
-                                        }
-                                        current_block = 613454377845503748;
-                                    }
-                                    123 => {
-                                        current_block = 613454377845503748;
-                                    }
-                                    41 => {
-                                        if ctx.ctx_res_w as libc::c_int ==
-                                               RES_MATCH as libc::c_int {
-                                            current_block =
-                                                4562139175239303272;
-                                        } else {
-                                            current_block =
-                                                7912797836817091754;
-                                        }
-                                    }
-                                    125 => {
-                                        current_block = 7912797836817091754;
-                                    }
-                                    _ => {
-                                        crate::libbb::verror_msg::bb_error_msg_and_die(b"BUG: unexpected %c\x00"
-                                                                 as *const u8
-                                                                 as
-                                                                 *const libc::c_char,
-                                                             ch);
-                                    }
-                                }
+                3 => {
+                  /* Convert raw ^C to corresponding special variable reference */
+                  o_addchr(&mut ctx.word, 3i32); /* get next char */
+                  o_addchr(&mut ctx.word, 1i32); /* eat second " */
+                  current_block = 11704709843737693330;
+                }
+                35 => {
+                  current_block = 11704709843737693330;
+                }
+                36 => {
+                  if parse_dollar(&mut ctx.word, input, 0 as libc::c_uchar) == 0 {
+                    current_block = 1907364584679199995;
+                    break;
+                  }
+                  continue;
+                }
+                34 => {
+                  ctx.word.has_quoted_part = 1i32 as smallint;
+                  if next == '\"' as i32 && ctx.pending_redirect.is_null() {
+                    i_getch(input);
+                    /* get next char */
+                  } else {
+                    if ctx.is_assignment as libc::c_int == NOT_ASSIGNMENT as libc::c_int {
+                      ctx.word.o_expflags |= EXP_FLAG_ESC_GLOB_CHARS as libc::c_int
+                    } /* get next char */
+                    if encode_string(&mut ctx.word, input, '\"' as i32) == 0 {
+                      current_block = 1907364584679199995;
+                      break;
+                    }
+                    ctx.word.o_expflags &= !(EXP_FLAG_ESC_GLOB_CHARS as libc::c_int);
+                    continue;
+                  }
+                  current_block = 2277602629737488951;
+                }
+                96 => {
+                  o_addchr(&mut ctx.word, 3i32);
+                  o_addchr(&mut ctx.word, '`' as i32);
+                  if add_till_backquote(&mut ctx.word, input, 0) == 0 {
+                    current_block = 1907364584679199995;
+                    break;
+                  }
+                  o_addchr(&mut ctx.word, 3i32);
+                  /* get next char */
+                  continue;
+                }
+                59 => {
+                  current_block = 4562139175239303272;
+                }
+                38 => {
+                  if done_word(&mut ctx) != 0 {
+                    current_block = 1907364584679199995;
+                    break;
+                  }
+                  if next == '&' as i32 {
+                    ch = i_getch(input);
+                    done_pipe(&mut ctx, PIPE_AND);
+                  } else {
+                    done_pipe(&mut ctx, PIPE_BG);
+                  }
+                  current_block = 14669516692233869547;
+                }
+                124 => {
+                  if done_word(&mut ctx) != 0 {
+                    current_block = 1907364584679199995;
+                    break;
+                  }
+                  //debug_printf_subst("SUBST RES3 '%s'\n", ctx.word.data + pos);
+                  if ctx.ctx_res_w as libc::c_int == RES_MATCH as libc::c_int {
+                    continue; /* we are in case's "word | word)" */
+                  }
+                  if next == '|' as i32 {
+                    /* || */
+                    ch = i_getch(input);
+                    done_pipe(&mut ctx, PIPE_OR);
+                  } else {
+                    /* we could pick up a file descriptor choice here
+                     * with redirect_opt_num(), but bash doesn't do it.
+                     * "echo foo 2| cat" yields "foo 2". */
+                    done_command(&mut ctx);
+                  }
+                  current_block = 14669516692233869547;
+                }
+                40 => {
+                  /* "case... in [(]word)..." - skip '(' */
+                  if ctx.ctx_res_w as libc::c_int == RES_MATCH as libc::c_int
+                    && (*ctx.command).argv.is_null()
+                    && ctx.word.length == 0
+                    && ctx.word.has_quoted_part as libc::c_int == 0
+                  {
+                    continue;
+                  }
+                  current_block = 613454377845503748;
+                }
+                123 => {
+                  current_block = 613454377845503748;
+                }
+                41 => {
+                  if ctx.ctx_res_w as libc::c_int == RES_MATCH as libc::c_int {
+                    current_block = 4562139175239303272;
+                  } else {
+                    current_block = 7912797836817091754;
+                  }
+                }
+                125 => {
+                  current_block = 7912797836817091754;
+                }
+                _ => {
+                  crate::libbb::verror_msg::bb_error_msg_and_die(
+                    b"BUG: unexpected %c\x00" as *const u8 as *const libc::c_char,
+                    ch,
+                  );
+                }
+              }
               match current_block {
                 2277602629737488951 => {}
                 _ => {
@@ -7391,10 +7360,8 @@ unsafe extern "C" fn replace_pattern(
     }
     result = crate::libbb::xfuncs_printf::xrealloc(
       result as *mut libc::c_void,
-      (res_len as libc::c_long
-        + s.offset_from(val) as libc::c_long
-        + repl_len as libc::c_long
-        + 1) as size_t,
+      (res_len as libc::c_long + s.offset_from(val) as libc::c_long + repl_len as libc::c_long + 1)
+        as size_t,
     ) as *mut libc::c_char;
     strcpy(
       mempcpy(
@@ -9213,8 +9180,7 @@ unsafe extern "C" fn x_mode_print_optionally_squoted(mut str: *const libc::c_cha
   cp = str;
   loop {
     /* print '....' up to EOL or first squote */
-    len = strchrnul(cp, '\'' as i32).offset_from(cp) as libc::c_long as libc::c_int
-      as libc::c_uint;
+    len = strchrnul(cp, '\'' as i32).offset_from(cp) as libc::c_long as libc::c_int as libc::c_uint;
     if len != 0 as libc::c_uint {
       x_mode_addchr('\'' as i32);
       x_mode_addblock(cp, len as libc::c_int);
@@ -10137,10 +10103,7 @@ unsafe extern "C" fn run_pipe(mut pi: *mut pipe) -> libc::c_int {
             if *eq != 0 {
               eq = eq.offset(1)
             }
-            x_mode_addblock(
-              p_0,
-              eq.offset_from(p_0) as libc::c_long as libc::c_int,
-            );
+            x_mode_addblock(p_0, eq.offset_from(p_0) as libc::c_long as libc::c_int);
             x_mode_print_optionally_squoted(eq);
             x_mode_flush();
           }
@@ -10325,14 +10288,12 @@ unsafe extern "C" fn run_list(mut pi: *mut pipe) -> libc::c_int {
       if !((*(*cpipe).next).res_word as libc::c_int == RES_DO as libc::c_int) {
         /* next word is not "do". It must be "in" then ("FOR v in ...") */
         if (*cpipe).res_word as libc::c_int == RES_IN as libc::c_int
-                       ||
-                       (*(*cpipe).next).res_word as libc::c_int !=
-                           RES_IN as libc::c_int {
-                    /* FOR v not_do_and_not_in..."? */
-                    syntax_error(b"malformed for\x00" as *const u8 as
-                                     *const libc::c_char);
-                    return 1i32
-                }
+          || (*(*cpipe).next).res_word as libc::c_int != RES_IN as libc::c_int
+        {
+          /* FOR v not_do_and_not_in..."? */
+          syntax_error(b"malformed for\x00" as *const u8 as *const libc::c_char);
+          return 1i32;
+        }
       }
     }
     cpipe = (*cpipe).next

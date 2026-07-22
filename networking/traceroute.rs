@@ -1,3 +1,5 @@
+use crate::compat::memcmp;
+use crate::compat::memcpy;
 use crate::librb::len_and_sockaddr;
 use crate::librb::size_t;
 use crate::librb::socklen_t;
@@ -20,8 +22,6 @@ use libc::sockaddr_in;
 use libc::sockaddr_in6;
 use libc::timeval;
 use libc::useconds_t;
-use crate::compat::memcmp;
-use crate::compat::memcpy;
 extern "C" {
   fn setsockopt(
     __fd: libc::c_int,
@@ -500,9 +500,8 @@ unsafe extern "C" fn send_probe(mut seq: libc::c_int, mut ttl: libc::c_int) {
           (*ptr_to_globals).outip.offset(1) as *mut icmp as *mut u16,
           ((*ptr_to_globals).outip as *mut libc::c_char)
             .offset((*ptr_to_globals).packlen as isize)
-            .offset_from(
-              (*ptr_to_globals).outip.offset(1) as *mut icmp as *mut libc::c_char
-            ) as libc::c_long as libc::c_int,
+            .offset_from((*ptr_to_globals).outip.offset(1) as *mut icmp as *mut libc::c_char)
+            as libc::c_long as libc::c_int,
         );
       if (*((*ptr_to_globals).outip.offset(1) as *mut icmp)).icmp_cksum as libc::c_int == 0 {
         (*((*ptr_to_globals).outip.offset(1) as *mut icmp)).icmp_cksum = 0xffffi32 as u16

@@ -1,9 +1,9 @@
+use crate::compat::memset;
 use crate::librb::smaprec;
 use libc;
 use libc::pid_t;
 use libc::printf;
 use libc::puts;
-use crate::compat::memset;
 extern "C" {
   static mut optind: libc::c_int;
 

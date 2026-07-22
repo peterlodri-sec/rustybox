@@ -1,4 +1,5 @@
 use crate::archival::libarchive::bb_archive::archive_handle_t;
+use crate::compat::strlen;
 use crate::libpwdgrp::pwd_grp::bb_internal_getpwnam;
 use crate::librb::__compar_fn_t;
 use crate::librb::size_t;
@@ -24,7 +25,6 @@ use libc::strcmp;
 use libc::time_t;
 use libc::tm;
 use libc::uid_t;
-use crate::compat::strlen;
 extern "C" {
   static mut optind: libc::c_int;
 

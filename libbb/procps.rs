@@ -1,3 +1,7 @@
+use crate::compat::memmove;
+use crate::compat::memset;
+use crate::compat::read;
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::skip_whitespace::skip_whitespace;
 use crate::librb::size_t;
@@ -22,10 +26,6 @@ use libc::strcpy;
 use libc::strrchr;
 use libc::uid_t;
 use libc::FILE;
-use crate::compat::memmove;
-use crate::compat::memset;
-use crate::compat::read;
-use crate::compat::strlen;
 extern "C" {
 
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
@@ -47,7 +47,6 @@ extern "C" {
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
 
-  
   fn getpagesize() -> libc::c_int;
 }
 

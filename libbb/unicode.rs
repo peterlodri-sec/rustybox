@@ -1,8 +1,8 @@
+use crate::compat::memcpy;
+use crate::compat::strlen;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::size_t;
 use libc;
-use crate::compat::memcpy;
-use crate::compat::strlen;
 extern "C" {
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
 

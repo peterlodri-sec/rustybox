@@ -1,3 +1,6 @@
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::xfuncs_printf::xmalloc;
 use c2rust_asm_casts;
 use c2rust_asm_casts::AsmCastTrait;
@@ -7,12 +10,8 @@ use libc::getpid;
 use libc::sprintf;
 use libc::strcasecmp;
 use libc::strcpy;
-use crate::compat::memcpy;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
 
-  
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
@@ -1221,9 +1220,7 @@ unsafe fn des_crypt(
    * and padding with zeros.
    */
   q = keybuf.as_mut_ptr() as *mut u8;
-  while q.offset_from(keybuf.as_mut_ptr() as *mut u8) as libc::c_long
-    != 8i32 as libc::c_long
-  {
+  while q.offset_from(keybuf.as_mut_ptr() as *mut u8) as libc::c_long != 8i32 as libc::c_long {
     *q = ((*key as libc::c_int) << 1i32) as u8;
     if *q != 0 {
       key = key.offset(1)
@@ -1489,8 +1486,8 @@ unsafe fn sha_crypt(
       resptr = resptr.offset(sprintf(resptr, str_rounds.as_ptr(), rounds) as isize)
     }
   }
-  salt_len = strchrnul(salt_data, '$' as i32).offset_from(salt_data) as libc::c_long
-    as libc::c_uint;
+  salt_len =
+    strchrnul(salt_data, '$' as i32).offset_from(salt_data) as libc::c_long as libc::c_uint;
   if salt_len > 16i32 as libc::c_uint {
     salt_len = 16i32 as libc::c_uint
   }

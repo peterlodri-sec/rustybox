@@ -1,3 +1,4 @@
+use crate::compat::memset;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::size_t;
 use libc;
@@ -9,7 +10,6 @@ use libc::off_t;
 use libc::open;
 use libc::sprintf;
 use libc::stat;
-use crate::compat::memset;
 
 pub type __u8 = libc::c_uchar;
 
@@ -65,12 +65,7 @@ pub unsafe fn query_loop(mut device: *const libc::c_char) -> *mut libc::c_char {
   let mut dev: *mut libc::c_char = std::ptr::null_mut::<libc::c_char>();
   fd = open(device, 0);
   if fd >= 0 {
-    if ioctl(
-      fd,
-      0x4c05i32 as _,
-      &mut loopinfo as *mut bb_loop_info,
-    ) == 0
-    {
+    if ioctl(fd, 0x4c05i32 as _, &mut loopinfo as *mut bb_loop_info) == 0 {
       dev = crate::libbb::xfuncs_printf::xasprintf(
         b"%lu %s\x00" as *const u8 as *const libc::c_char,
         loopinfo.lo_offset as off_t,
@@ -653,11 +648,7 @@ pub unsafe fn set_loop(
             break;
           }
         } else {
-          rc = ioctl(
-            dfd,
-            0x4c05i32 as _,
-            &mut loopinfo as *mut bb_loop_info,
-          );
+          rc = ioctl(dfd, 0x4c05i32 as _, &mut loopinfo as *mut bb_loop_info);
           /* If device is free, claim it.  */
           if rc != 0 && *bb_errno == 6i32 {
             /* Associate free loop device with file.  */
@@ -680,22 +671,14 @@ pub unsafe fn set_loop(
                * is wrong (would free the loop device!)
                */
               loopinfo.lo_flags = flags & !1i32 as libc::c_uint;
-              rc = ioctl(
-                dfd,
-                0x4c04i32 as _,
-                &mut loopinfo as *mut bb_loop_info,
-              );
+              rc = ioctl(dfd, 0x4c04i32 as _, &mut loopinfo as *mut bb_loop_info);
               if rc != 0 && loopinfo.lo_flags & 4i32 as libc::c_uint != 0 {
                 /* Old kernel, does not support LO_FLAGS_AUTOCLEAR? */
                 /* (this code path is not tested) */
                 loopinfo.lo_flags = (loopinfo.lo_flags as libc::c_uint)
                   .wrapping_sub(4i32 as libc::c_uint) as u32
                   as u32;
-                rc = ioctl(
-                  dfd,
-                  0x4c04i32 as _,
-                  &mut loopinfo as *mut bb_loop_info,
-                )
+                rc = ioctl(dfd, 0x4c04i32 as _, &mut loopinfo as *mut bb_loop_info)
               }
               if rc != 0 {
                 ioctl(dfd, 0x4c01i32 as _, 0);

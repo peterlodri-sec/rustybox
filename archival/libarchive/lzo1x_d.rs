@@ -142,9 +142,7 @@ pub unsafe fn lzo1x_decompress_safe(
           if m_pos < out || m_pos >= op {
             break;
           }
-          if (op_end.offset_from(op) as libc::c_long as libc::c_uint)
-            < 3i32 as libc::c_uint
-          {
+          if (op_end.offset_from(op) as libc::c_long as libc::c_uint) < 3i32 as libc::c_uint {
             current_block = 13165906339582574725;
             continue;
           }
@@ -179,18 +177,14 @@ pub unsafe fn lzo1x_decompress_safe(
           if !(t >= 16i32 as libc::c_uint) {
             /* a literal run */
             if t == 0 as libc::c_uint {
-              if (ip_end.offset_from(ip) as libc::c_long as libc::c_uint)
-                < 1i32 as libc::c_uint
-              {
+              if (ip_end.offset_from(ip) as libc::c_long as libc::c_uint) < 1i32 as libc::c_uint {
                 current_block = 2691384274927532760;
                 continue;
               }
               while *ip as libc::c_int == 0 {
                 t = t.wrapping_add(255i32 as libc::c_uint);
                 ip = ip.offset(1);
-                if (ip_end.offset_from(ip) as libc::c_long as libc::c_uint)
-                  < 1i32 as libc::c_uint
-                {
+                if (ip_end.offset_from(ip) as libc::c_long as libc::c_uint) < 1i32 as libc::c_uint {
                   current_block = 2691384274927532760;
                   continue 's_77;
                 }
@@ -285,18 +279,14 @@ pub unsafe fn lzo1x_decompress_safe(
             /* a M3 match */
             t &= 31i32 as libc::c_uint;
             if t == 0 as libc::c_uint {
-              if (ip_end.offset_from(ip) as libc::c_long as libc::c_uint)
-                < 1i32 as libc::c_uint
-              {
+              if (ip_end.offset_from(ip) as libc::c_long as libc::c_uint) < 1i32 as libc::c_uint {
                 current_block = 2691384274927532760;
                 continue;
               }
               while *ip as libc::c_int == 0 {
                 t = t.wrapping_add(255i32 as libc::c_uint);
                 ip = ip.offset(1);
-                if (ip_end.offset_from(ip) as libc::c_long as libc::c_uint)
-                  < 1i32 as libc::c_uint
-                {
+                if (ip_end.offset_from(ip) as libc::c_long as libc::c_uint) < 1i32 as libc::c_uint {
                   current_block = 2691384274927532760;
                   continue 's_77;
                 }
@@ -327,18 +317,14 @@ pub unsafe fn lzo1x_decompress_safe(
             /* COPY_DICT */
             t &= 7i32 as libc::c_uint;
             if t == 0 as libc::c_uint {
-              if (ip_end.offset_from(ip) as libc::c_long as libc::c_uint)
-                < 1i32 as libc::c_uint
-              {
+              if (ip_end.offset_from(ip) as libc::c_long as libc::c_uint) < 1i32 as libc::c_uint {
                 current_block = 2691384274927532760;
                 continue;
               }
               while *ip as libc::c_int == 0 {
                 t = t.wrapping_add(255i32 as libc::c_uint);
                 ip = ip.offset(1);
-                if (ip_end.offset_from(ip) as libc::c_long as libc::c_uint)
-                  < 1i32 as libc::c_uint
-                {
+                if (ip_end.offset_from(ip) as libc::c_long as libc::c_uint) < 1i32 as libc::c_uint {
                   current_block = 2691384274927532760;
                   continue 's_77;
                 }
@@ -382,9 +368,7 @@ pub unsafe fn lzo1x_decompress_safe(
             if m_pos < out || m_pos >= op {
               break;
             }
-            if (op_end.offset_from(op) as libc::c_long as libc::c_uint)
-              < 2i32 as libc::c_uint
-            {
+            if (op_end.offset_from(op) as libc::c_long as libc::c_uint) < 2i32 as libc::c_uint {
               current_block = 13165906339582574725;
               continue;
             }

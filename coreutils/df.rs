@@ -16,8 +16,8 @@ extern "C" {
 
   static kmg_i_suffixes: [suffix_mult; 0];
 
-//UNUSED: unsigned FAST_FUNC unicode_padding_to_width(unsigned width, const char *src);
-//UNUSED: char* FAST_FUNC unicode_conv_to_printable2(uni_stat_t *stats, const char *src, unsigned width, int flags);
+  //UNUSED: unsigned FAST_FUNC unicode_padding_to_width(unsigned width, const char *src);
+  //UNUSED: char* FAST_FUNC unicode_conv_to_printable2(uni_stat_t *stats, const char *src, unsigned width, int flags);
 
 }
 

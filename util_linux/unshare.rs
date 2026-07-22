@@ -1,6 +1,8 @@
 use crate::librb::fd_pair;
 use crate::librb::size_t;
 
+use crate::compat::memset;
+use crate::compat::read;
 use libc;
 use libc::close;
 use libc::getegid;
@@ -14,16 +16,12 @@ use libc::ssize_t;
 use libc::strcmp;
 use libc::uid_t;
 use libc::unshare;
-use crate::compat::memset;
-use crate::compat::read;
 extern "C" {
 
   static mut optind: libc::c_int;
 
-  
-
-/* xvfork() can't be a _function_, return after vfork in child mangles stack
- * in the parent. It must be a macro. */
+  /* xvfork() can't be a _function_, return after vfork in child mangles stack
+   * in the parent. It must be a macro. */
 
 }
 
@@ -201,11 +199,108 @@ static mut ns_list: [namespace_descr; 6] = [
  * '+': stop at first non-option.
  */
 static mut unshare_longopts: [libc::c_char; 102] = [
-  109, 111, 117, 110, 116, 0, 2, 240u8 as libc::c_char, 117, 116, 115, 0, 2, 241u8 as libc::c_char, 105, 112, 99, 0, 2, 242u8 as libc::c_char, 110, 101,
-  116, 0, 2, 243u8 as libc::c_char, 112, 105, 100, 0, 2, 244u8 as libc::c_char, 117, 115, 101, 114, 0, 2, 245u8 as libc::c_char, 102, 111, 114, 107, 0,
-  0, 102, 109, 97, 112, 45, 114, 111, 111, 116, 45, 117, 115, 101, 114, 0, 0, 114, 109, 111, 117,
-  110, 116, 45, 112, 114, 111, 99, 0, 2, 253u8 as libc::c_char, 112, 114, 111, 112, 97, 103, 97, 116, 105, 111, 110,
-  0, 1, 254u8 as libc::c_char, 115, 101, 116, 103, 114, 111, 117, 112, 115, 0, 1, 255u8 as libc::c_char, 0,
+  109,
+  111,
+  117,
+  110,
+  116,
+  0,
+  2,
+  240u8 as libc::c_char,
+  117,
+  116,
+  115,
+  0,
+  2,
+  241u8 as libc::c_char,
+  105,
+  112,
+  99,
+  0,
+  2,
+  242u8 as libc::c_char,
+  110,
+  101,
+  116,
+  0,
+  2,
+  243u8 as libc::c_char,
+  112,
+  105,
+  100,
+  0,
+  2,
+  244u8 as libc::c_char,
+  117,
+  115,
+  101,
+  114,
+  0,
+  2,
+  245u8 as libc::c_char,
+  102,
+  111,
+  114,
+  107,
+  0,
+  0,
+  102,
+  109,
+  97,
+  112,
+  45,
+  114,
+  111,
+  111,
+  116,
+  45,
+  117,
+  115,
+  101,
+  114,
+  0,
+  0,
+  114,
+  109,
+  111,
+  117,
+  110,
+  116,
+  45,
+  112,
+  114,
+  111,
+  99,
+  0,
+  2,
+  253u8 as libc::c_char,
+  112,
+  114,
+  111,
+  112,
+  97,
+  103,
+  97,
+  116,
+  105,
+  111,
+  110,
+  0,
+  1,
+  254u8 as libc::c_char,
+  115,
+  101,
+  116,
+  103,
+  114,
+  111,
+  117,
+  112,
+  115,
+  0,
+  1,
+  255u8 as libc::c_char,
+  0,
 ];
 unsafe extern "C" fn parse_propagation(mut prop_str: *const libc::c_char) -> libc::c_ulong {
   let mut i: libc::c_int = crate::libbb::compare_string_array::index_in_strings(

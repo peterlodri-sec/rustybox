@@ -1,3 +1,6 @@
+use crate::compat::memmove;
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::size_t;
 use crate::librb::smallint;
@@ -19,12 +22,7 @@ use libc::stat;
 use libc::strcmp;
 use libc::sync;
 use libc::FILE;
-use crate::compat::memmove;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
-
-  
 
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
 
@@ -3210,11 +3208,7 @@ unsafe fn is_whole_disk(mut disk: *const libc::c_char) -> libc::c_int {
       cylinders: 0,
       start: 0,
     };
-    let mut err: libc::c_int = ioctl(
-      fd,
-      0x301i32 as _,
-      &mut geometry as *mut hd_geometry,
-    );
+    let mut err: libc::c_int = ioctl(fd, 0x301i32 as _, &mut geometry as *mut hd_geometry);
     close(fd);
     if err == 0 {
       return (geometry.start == 0 as libc::c_ulong) as libc::c_int;

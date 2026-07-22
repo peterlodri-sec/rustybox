@@ -1,3 +1,5 @@
+use crate::compat::memcpy;
+use crate::compat::memset;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::rtattr;
@@ -11,8 +13,6 @@ use libc::sockaddr_nl;
 use libc::ssize_t;
 use libc::time;
 use libc::time_t;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
   fn recvmsg(__fd: libc::c_int, __message: *mut msghdr, __flags: libc::c_int) -> ssize_t;
   fn sendmsg(__fd: libc::c_int, __message: *const msghdr, __flags: libc::c_int) -> ssize_t;

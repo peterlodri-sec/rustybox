@@ -62,7 +62,11 @@ pub fn run(argv: &[&str]) -> i32 {
   macro_rules! push_pred {
     ($p:expr) => {{
       let p = $p;
-      preds.push(if negate_next { Pred::Not(Box::new(p)) } else { p });
+      preds.push(if negate_next {
+        Pred::Not(Box::new(p))
+      } else {
+        p
+      });
       negate_next = false;
     }};
   }

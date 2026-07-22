@@ -1,6 +1,6 @@
+use crate::compat::memset;
 use crate::librb::size_t;
 use libc;
-use crate::compat::memset;
 
 /* After v = xrealloc_vector(v, SHIFT, idx) it's ok to use
  * at least v[idx] and v[idx+1], for all idx values.

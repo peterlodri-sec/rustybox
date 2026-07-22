@@ -1,3 +1,5 @@
+use crate::compat::memcpy;
+use crate::compat::memset;
 use crate::librb::in6_addr;
 use c2rust_asm_casts;
 use c2rust_asm_casts::AsmCastTrait;
@@ -13,8 +15,6 @@ use libc::sockaddr_in;
 use libc::sockaddr_in6;
 use libc::strchr;
 use libc::strcmp;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
 
   fn snprintf(
@@ -27,8 +27,6 @@ extern "C" {
   fn feof_unlocked(__stream: *mut FILE) -> libc::c_int;
   static mut optind: libc::c_int;
 
-  
-
   fn inet_ntoa(__in: in_addr) -> *mut libc::c_char;
   fn inet_pton(
     __af: libc::c_int,
@@ -36,23 +34,23 @@ extern "C" {
     __buf: *mut libc::c_void,
   ) -> libc::c_int;
 
-/*
- * stolen from net-tools-1.59 and stripped down for busybox by
- *                      Erik Andersen <andersen@codepoet.org>
- *
- * Heavily modified by Manuel Novoa III       Mar 12, 2001
- *
- */
-/* hostfirst!=0 If we expect this to be a hostname,
-  try hostname database first
-*/
+  /*
+   * stolen from net-tools-1.59 and stripped down for busybox by
+   *                      Erik Andersen <andersen@codepoet.org>
+   *
+   * Heavily modified by Manuel Novoa III       Mar 12, 2001
+   *
+   */
+  /* hostfirst!=0 If we expect this to be a hostname,
+    try hostname database first
+  */
 
-/* numeric: & 0x8000: "default" instead of "*",
- *          & 0x4000: host instead of net,
- *          & 0x0fff: don't resolve
- */
+  /* numeric: & 0x8000: "default" instead of "*",
+   *          & 0x4000: host instead of net,
+   *          & 0x0fff: don't resolve
+   */
 
-/* These return malloced string */
+  /* These return malloced string */
 
 }
 

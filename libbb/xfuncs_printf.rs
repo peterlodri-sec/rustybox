@@ -1,3 +1,9 @@
+use crate::compat::malloc;
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::read;
+use crate::compat::realloc;
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::size_t;
 use crate::librb::socklen_t;
@@ -29,12 +35,6 @@ use libc::strchr;
 use libc::uid_t;
 use libc::unlink;
 use libc::DIR;
-use crate::compat::malloc;
-use crate::compat::memcpy;
-use crate::compat::memset;
-use crate::compat::read;
-use crate::compat::realloc;
-use crate::compat::strlen;
 extern "C" {
 
   pub type sockaddr_x25;

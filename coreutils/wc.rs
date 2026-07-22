@@ -1,8 +1,8 @@
+use crate::compat::memset;
 use crate::librb::smallint;
 use libc;
 use libc::printf;
 use libc::FILE;
-use crate::compat::memset;
 extern "C" {
   static mut optind: libc::c_int;
 

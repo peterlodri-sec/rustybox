@@ -2,6 +2,8 @@ use super::mkfs_ext2::BUG_wrong_field_size;
 use crate::librb::size_t;
 use crate::librb::uoff_t;
 
+use crate::compat::memcpy;
+use crate::compat::memset;
 use libc;
 use libc::fprintf;
 use libc::ioctl;
@@ -11,8 +13,6 @@ use libc::strcpy;
 use libc::time;
 use libc::time_t;
 use libc::FILE;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
 
   static mut optind: libc::c_int;
@@ -199,9 +199,65 @@ pub const OPT_c: C2RustUnnamed_0 = 4;
 // pub const OPT_A: C2RustUnnamed_0 = 1;
 
 static mut boot_code: [libc::c_char; 59] = [
-  14, 31, 190u8 as libc::c_char, 119, 124, 172u8 as libc::c_char, 34, 192u8 as libc::c_char, 116, 11, 86, 180u8 as libc::c_char, 14, 187u8 as libc::c_char, 7, 0, 205u8 as libc::c_char, 16, 94, 235u8 as libc::c_char, 240u8 as libc::c_char, 50,
-  228u8 as libc::c_char, 205u8 as libc::c_char, 22, 205u8 as libc::c_char, 25, 235u8 as libc::c_char, 254u8 as libc::c_char, 84, 104, 105, 115, 32, 105, 115, 32, 110, 111, 116, 32, 97, 32,
-  98, 111, 111, 116, 97, 98, 108, 101, 32, 100, 105, 115, 107, 13, 10, 0,
+  14,
+  31,
+  190u8 as libc::c_char,
+  119,
+  124,
+  172u8 as libc::c_char,
+  34,
+  192u8 as libc::c_char,
+  116,
+  11,
+  86,
+  180u8 as libc::c_char,
+  14,
+  187u8 as libc::c_char,
+  7,
+  0,
+  205u8 as libc::c_char,
+  16,
+  94,
+  235u8 as libc::c_char,
+  240u8 as libc::c_char,
+  50,
+  228u8 as libc::c_char,
+  205u8 as libc::c_char,
+  22,
+  205u8 as libc::c_char,
+  25,
+  235u8 as libc::c_char,
+  254u8 as libc::c_char,
+  84,
+  104,
+  105,
+  115,
+  32,
+  105,
+  115,
+  32,
+  110,
+  111,
+  116,
+  32,
+  97,
+  32,
+  98,
+  111,
+  111,
+  116,
+  97,
+  98,
+  108,
+  101,
+  32,
+  100,
+  105,
+  115,
+  107,
+  13,
+  10,
+  0,
 ];
 /* compat:
  * mkdosfs 2.11 (12 Mar 2005)
@@ -327,11 +383,7 @@ pub unsafe fn mkfs_vfat_main(
   };
   let mut current_block_50: u64;
   // N.B. whether to use HDIO_GETGEO or HDIO_REQ?
-  if ioctl(
-    dev,
-    0x301i32 as _,
-    &mut geometry as *mut hd_geometry,
-  ) == 0
+  if ioctl(dev, 0x301i32 as _, &mut geometry as *mut hd_geometry) == 0
     && geometry.sectors as libc::c_int != 0
     && geometry.heads as libc::c_int != 0
   {

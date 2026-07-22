@@ -1,7 +1,7 @@
-use crate::networking::tls_pstm::pstm_int;
-use libc;
 use crate::compat::memcpy;
 use crate::compat::memset;
+use crate::networking::tls_pstm::pstm_int;
+use libc;
 
 pub type uint32 = u32;
 pub type int32 = i32;

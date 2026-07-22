@@ -21,33 +21,33 @@ extern "C" {
 
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
-/* callbacks */
+  /* callbacks */
 
-/* Driver:
- *
- * Select on listen_fd for <linger_timeout> (or forever if 0).
- *
- * If we time out and we have no peers, exit.
- * If we have peers, call do_timeout(peer_param),
- * if it returns !0, peer is removed.
- *
- * If listen_fd is active, accept new connection ("peer"),
- * call new_peer() on it, and if it returns 0,
- * add it to fds to select on.
- * Now, select will wait for <timeout>, not <linger_timeout>
- * (as long as we have more than zero peers).
- *
- * If a peer's fd is active, we call do_rd() on it if read
- * bit was set, and then do_wr() if write bit was also set.
- * If either returns !0, peer is removed.
- * Reaching this place also resets timeout counter for this peer.
- *
- * Note that peer must indicate that he wants to be selected
- * for read and/or write using isrv_want_rd()/isrv_want_wr()
- * [can be called in new_peer() or in do_rd()/do_wr()].
- * If it never wants to be selected for write, do_wr()
- * will never be called (can be NULL).
- */
+  /* Driver:
+   *
+   * Select on listen_fd for <linger_timeout> (or forever if 0).
+   *
+   * If we time out and we have no peers, exit.
+   * If we have peers, call do_timeout(peer_param),
+   * if it returns !0, peer is removed.
+   *
+   * If listen_fd is active, accept new connection ("peer"),
+   * call new_peer() on it, and if it returns 0,
+   * add it to fds to select on.
+   * Now, select will wait for <timeout>, not <linger_timeout>
+   * (as long as we have more than zero peers).
+   *
+   * If a peer's fd is active, we call do_rd() on it if read
+   * bit was set, and then do_wr() if write bit was also set.
+   * If either returns !0, peer is removed.
+   * Reaching this place also resets timeout counter for this peer.
+   *
+   * Note that peer must indicate that he wants to be selected
+   * for read and/or write using isrv_want_rd()/isrv_want_wr()
+   * [can be called in new_peer() or in do_rd()/do_wr()].
+   * If it never wants to be selected for write, do_wr()
+   * will never be called (can be NULL).
+   */
 
 }
 

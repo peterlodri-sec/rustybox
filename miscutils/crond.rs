@@ -1,3 +1,4 @@
+use crate::compat::memset;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::parse_config::parser_t;
 use crate::libbb::skip_whitespace::skip_whitespace;
@@ -30,7 +31,6 @@ use libc::time;
 use libc::time_t;
 use libc::unlink;
 use libc::FILE;
-use crate::compat::memset;
 extern "C" {
 
   fn strtol(

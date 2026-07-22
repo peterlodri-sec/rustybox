@@ -1,3 +1,8 @@
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::read;
+use crate::compat::strlen;
 use crate::libbb::llist::llist_t;
 use crate::libbb::parse_config::parser_t;
 use crate::libbb::ptr_to_globals::bb_errno;
@@ -36,11 +41,6 @@ use libc::time_t;
 use libc::uid_t;
 use libc::unlink;
 use libc::FILE;
-use crate::compat::memcmp;
-use crate::compat::memcpy;
-use crate::compat::memset;
-use crate::compat::read;
-use crate::compat::strlen;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_ns;
@@ -51,10 +51,6 @@ extern "C" {
   pub type sockaddr_dl;
   pub type sockaddr_ax25;
   pub type sockaddr_at;
-
-  
-
-  
 
   static mut optind: libc::c_int;
 
@@ -1540,8 +1536,7 @@ unsafe fn split_escape_and_log(mut tmpbuf: *mut libc::c_char, mut len: libc::c_i
     timestamp_and_log(
       pri,
       (*ptr_to_globals).parsebuf.as_mut_ptr(),
-      q.offset_from((*ptr_to_globals).parsebuf.as_mut_ptr()) as libc::c_long
-        as libc::c_int,
+      q.offset_from((*ptr_to_globals).parsebuf.as_mut_ptr()) as libc::c_long as libc::c_int,
     );
   }
 }

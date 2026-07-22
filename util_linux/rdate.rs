@@ -21,10 +21,10 @@ unsafe fn stime(__when: *const time_t) -> libc::c_int {
   libc::clock_settime(libc::CLOCK_REALTIME, &ts)
 }
 extern "C" {
-/* Create client TCP socket connected to peer:port. Peer cannot be NULL.
- * Peer can be numeric IP ("N.N.N.N"), numeric IPv6 address or hostname,
- * and can have ":PORT" suffix (for IPv6 use "[X:X:...:X]:PORT").
- * If there is no suffix, port argument is used */
+  /* Create client TCP socket connected to peer:port. Peer cannot be NULL.
+   * Peer can be numeric IP ("N.N.N.N"), numeric IPv6 address or hostname,
+   * and can have ":PORT" suffix (for IPv6 use "[X:X:...:X]:PORT").
+   * If there is no suffix, port argument is used */
 
 }
 

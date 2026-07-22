@@ -1,9 +1,9 @@
+use crate::compat::strlen;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::size_t;
 use libc;
 use libc::strcpy;
 use libc::strstr;
-use crate::compat::strlen;
 extern "C" {
 
   fn mempcpy(

@@ -7,10 +7,10 @@ use libc::tm;
 extern "C" {
 
   fn localtime_r(__timer: *const time_t, __tp: *mut tm) -> *mut tm;
-//TODO: supply a pointer to char[11] buffer (avoid statics)?
+  //TODO: supply a pointer to char[11] buffer (avoid statics)?
 
-/* Guaranteed to NOT be a macro (smallest code). Saves nearly 2k on uclibc.
- * But potentially slow, don't use in one-billion-times loops */
+  /* Guaranteed to NOT be a macro (smallest code). Saves nearly 2k on uclibc.
+   * But potentially slow, don't use in one-billion-times loops */
 
 }
 

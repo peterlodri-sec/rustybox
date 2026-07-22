@@ -1,3 +1,5 @@
+use crate::compat::memcpy;
+use crate::compat::memset;
 use crate::libbb::skip_whitespace::skip_whitespace;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::signal::__sighandler_t;
@@ -17,8 +19,6 @@ use libc::time;
 use libc::time_t;
 use libc::tm;
 use libc::FILE;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
   fn strtoul(
     __nptr: *const libc::c_char,
@@ -39,8 +39,6 @@ extern "C" {
     __stream: *mut FILE,
   ) -> *mut libc::c_char;
   fn pause() -> libc::c_int;
-
-  
 
   fn strftime(
     __s: *mut libc::c_char,

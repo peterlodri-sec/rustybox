@@ -1,6 +1,7 @@
 use crate::librb::signal::__sighandler_t;
 use crate::librb::size_t;
 
+use crate::compat::strlen;
 use libc;
 use libc::close;
 use libc::fclose;
@@ -12,7 +13,6 @@ use libc::strcasecmp;
 use libc::strchr;
 use libc::strtok;
 use libc::FILE;
-use crate::compat::strlen;
 extern "C" {
 
   static ptr_to_globals: *mut globals;

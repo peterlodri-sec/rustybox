@@ -1,10 +1,10 @@
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::skip_whitespace::skip_whitespace;
 use crate::librb::size_t;
 use libc;
 use libc::sprintf;
 use libc::strcmp;
-use crate::compat::strlen;
 extern "C" {
   fn strtoull(
     __nptr: *const libc::c_char,

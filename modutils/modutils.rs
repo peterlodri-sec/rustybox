@@ -1,5 +1,6 @@
 use crate::libbb::ptr_to_globals::bb_errno;
 
+use crate::compat::strlen;
 use libc;
 use libc::close;
 use libc::free;
@@ -8,11 +9,10 @@ use libc::sprintf;
 use libc::strchr;
 use libc::strcmp;
 use libc::syscall;
-use crate::compat::strlen;
 extern "C" {
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  
+
   fn strerror(_: libc::c_int) -> *mut libc::c_char;
   fn strsep(__stringp: *mut *mut libc::c_char, __delim: *const libc::c_char) -> *mut libc::c_char;
   fn munmap(__addr: *mut libc::c_void, __len: size_t) -> libc::c_int;

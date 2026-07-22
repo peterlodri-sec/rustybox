@@ -26,7 +26,11 @@ fn main() {
   println!("cargo:rustc-env=RB_BUILD_DATE={date}");
   println!("cargo:rustc-env=RB_BUILD_ARGS={args}");
   println!("cargo:rustc-env=RB_TARGET={target}");
-  for k in ["RUSTYBOX_GIT_SHA", "RUSTYBOX_BUILD_DATE", "RUSTYBOX_BUILD_ARGS"] {
+  for k in [
+    "RUSTYBOX_GIT_SHA",
+    "RUSTYBOX_BUILD_DATE",
+    "RUSTYBOX_BUILD_ARGS",
+  ] {
     println!("cargo:rerun-if-env-changed={k}");
   }
 }

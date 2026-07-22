@@ -77,7 +77,12 @@ fn action_keyword(s: &str) -> Option<u8> {
 }
 
 fn default_inittab() -> Vec<Action> {
-  let mk = |terminal: &str, action: u8, process: &str| Action { terminal: terminal.to_string(), action, process: process.to_string(), pid: None };
+  let mk = |terminal: &str, action: u8, process: &str| Action {
+    terminal: terminal.to_string(),
+    action,
+    process: process.to_string(),
+    pid: None,
+  };
   vec![
     mk("", ACT_SYSINIT, "/etc/init.d/rcS"),
     mk("", ACT_ASKFIRST, "/bin/sh"),
@@ -96,7 +101,9 @@ fn default_inittab() -> Vec<Action> {
 // matching upstream. No trim/collapse: an empty `id` field is meaningful
 // (means "console", not "field absent").
 fn parse_inittab() -> Vec<Action> {
-  let Ok(content) = fs::read_to_string(INITTAB) else { return default_inittab() };
+  let Ok(content) = fs::read_to_string(INITTAB) else {
+    return default_inittab();
+  };
   let mut out = Vec::new();
   for (lineno, raw) in content.lines().enumerate() {
     let line = raw.split('#').next().unwrap_or("");
@@ -104,7 +111,9 @@ fn parse_inittab() -> Vec<Action> {
       continue;
     }
     let fields: Vec<&str> = line.splitn(4, ':').collect();
-    let (Some(id), Some(_runlevels), Some(action_str), Some(process)) = (fields.first(), fields.get(1), fields.get(2), fields.get(3)) else {
+    let (Some(id), Some(_runlevels), Some(action_str), Some(process)) =
+      (fields.first(), fields.get(1), fields.get(2), fields.get(3))
+    else {
       eprintln!("init: bad inittab entry at line {}", lineno + 1);
       continue;
     };
@@ -112,8 +121,17 @@ fn parse_inittab() -> Vec<Action> {
       eprintln!("init: bad inittab entry at line {}", lineno + 1);
       continue;
     };
-    let terminal = if id.is_empty() { String::new() } else { format!("/dev/{id}") };
-    out.push(Action { terminal, action, process: process.to_string(), pid: None });
+    let terminal = if id.is_empty() {
+      String::new()
+    } else {
+      format!("/dev/{id}")
+    };
+    out.push(Action {
+      terminal,
+      action,
+      process: process.to_string(),
+      pid: None,
+    });
   }
   if out.is_empty() {
     default_inittab()
@@ -167,7 +185,14 @@ fn install_signal_handlers() {
   // bookkeeping can't race itself; SA_RESTART matches upstream's intent
   // (don't make blocking init syscalls fail with EINTR gratuitously).
   let action = SigAction::new(handler, SaFlags::SA_RESTART, SigSet::all());
-  for sig in [Signal::SIGHUP, Signal::SIGINT, Signal::SIGQUIT, Signal::SIGTERM, Signal::SIGUSR1, Signal::SIGUSR2] {
+  for sig in [
+    Signal::SIGHUP,
+    Signal::SIGINT,
+    Signal::SIGQUIT,
+    Signal::SIGTERM,
+    Signal::SIGUSR1,
+    Signal::SIGUSR2,
+  ] {
     // SAFETY: `record_signal` only performs an atomic store — it is
     // async-signal-safe, satisfying sigaction(2)'s handler requirements.
     unsafe { sigaction(sig, &action) }.ok();
@@ -188,7 +213,11 @@ fn check_delayed_sigs(actions: &mut Vec<Action>) -> bool {
     any = true;
     exec_restart_action(actions);
   }
-  for (i, sig) in [(3, Signal::SIGTERM), (4, Signal::SIGUSR1), (5, Signal::SIGUSR2)] {
+  for (i, sig) in [
+    (3, Signal::SIGTERM),
+    (4, Signal::SIGUSR1),
+    (5, Signal::SIGUSR2),
+  ] {
     if PENDING[i].swap(false, Ordering::SeqCst) {
       any = true;
       halt_reboot_pwoff(actions, sig);
@@ -227,7 +256,14 @@ fn build_argv(process: &str) -> (CString, Vec<CString>) {
   let is_shell_cmd = process.contains(|c| "~`!$^&*()=|\\{}[];\"'<>?".contains(c));
   if is_shell_cmd {
     let sh = CString::new("/bin/sh").unwrap();
-    (sh.clone(), vec![sh, CString::new("-c").unwrap(), CString::new(process).unwrap()])
+    (
+      sh.clone(),
+      vec![
+        sh,
+        CString::new("-c").unwrap(),
+        CString::new(process).unwrap(),
+      ],
+    )
   } else {
     let mut words = process.split_whitespace();
     let mut prog = words.next().unwrap_or("").to_string();
@@ -253,7 +289,15 @@ fn spawn(a: &Action) -> Option<Pid> {
       // Reset the delayed-signal handlers to default and unblock
       // everything, so the spawned process starts with a clean slate —
       // matches reset_sighandlers_and_unblock_sigs.
-      for sig in [Signal::SIGHUP, Signal::SIGINT, Signal::SIGQUIT, Signal::SIGTERM, Signal::SIGUSR1, Signal::SIGUSR2, Signal::SIGTSTP] {
+      for sig in [
+        Signal::SIGHUP,
+        Signal::SIGINT,
+        Signal::SIGQUIT,
+        Signal::SIGTERM,
+        Signal::SIGUSR1,
+        Signal::SIGUSR2,
+        Signal::SIGTSTP,
+      ] {
         let default = SigAction::new(SigHandler::SigDfl, SaFlags::empty(), SigSet::empty());
         unsafe { sigaction(sig, &default) }.ok();
       }
@@ -270,7 +314,11 @@ fn spawn(a: &Action) -> Option<Pid> {
       }
       let (path, argv) = build_argv(&a.process);
       let _ = execvp(&path, &argv);
-      eprintln!("init: can't run '{}': {}", a.process, std::io::Error::last_os_error());
+      eprintln!(
+        "init: can't run '{}': {}",
+        a.process,
+        std::io::Error::last_os_error()
+      );
       std::process::exit(-1);
     }
     Err(e) => {
@@ -317,7 +365,10 @@ fn run_actions(actions: &mut [Action], mask: u8) {
 fn mark_terminated(actions: &mut [Action], pid: Pid) {
   for a in actions.iter_mut() {
     if a.pid == Some(pid) {
-      eprintln!("init: process '{}' ({pid}) exited. Scheduling for restart.", a.process);
+      eprintln!(
+        "init: process '{}' ({pid}) exited. Scheduling for restart.",
+        a.process
+      );
       a.pid = None;
     }
   }
@@ -335,7 +386,14 @@ fn shutdown_and_kill(actions: &mut [Action]) {
 }
 
 fn reset_to_default_and_unblock() {
-  for sig in [Signal::SIGHUP, Signal::SIGINT, Signal::SIGQUIT, Signal::SIGTERM, Signal::SIGUSR1, Signal::SIGUSR2] {
+  for sig in [
+    Signal::SIGHUP,
+    Signal::SIGINT,
+    Signal::SIGQUIT,
+    Signal::SIGTERM,
+    Signal::SIGUSR1,
+    Signal::SIGUSR2,
+  ] {
     let default = SigAction::new(SigHandler::SigDfl, SaFlags::empty(), SigSet::empty());
     unsafe { sigaction(sig, &default) }.ok();
   }
@@ -417,7 +475,12 @@ pub fn run(argv: &[&str]) -> i32 {
   std::env::set_var("RUNLEVEL", runlevel);
 
   let mut actions = if is_single_user(runlevel) {
-    vec![Action { terminal: String::new(), action: ACT_ONCE, process: "/bin/sh".to_string(), pid: None }]
+    vec![Action {
+      terminal: String::new(),
+      action: ACT_ONCE,
+      process: "/bin/sh".to_string(),
+      pid: None,
+    }]
   } else {
     parse_inittab()
   };
@@ -437,10 +500,16 @@ pub fn run(argv: &[&str]) -> i32 {
     }
     let signaled = signaled || check_delayed_sigs(&mut actions);
 
-    let flags = if signaled { WaitPidFlag::WNOHANG } else { WaitPidFlag::empty() };
+    let flags = if signaled {
+      WaitPidFlag::WNOHANG
+    } else {
+      WaitPidFlag::empty()
+    };
     loop {
       match waitpid(Pid::from_raw(-1), Some(flags)) {
-        Ok(WaitStatus::Exited(p, _)) | Ok(WaitStatus::Signaled(p, _, _)) => mark_terminated(&mut actions, p),
+        Ok(WaitStatus::Exited(p, _)) | Ok(WaitStatus::Signaled(p, _, _)) => {
+          mark_terminated(&mut actions, p)
+        }
         _ => break,
       }
     }
@@ -451,4 +520,3 @@ pub fn run_and_exit(args: &[&str]) -> ! {
   let code = run(args);
   std::process::exit(code);
 }
-

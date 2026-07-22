@@ -1,3 +1,5 @@
+use crate::compat::read;
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::size_t;
 use crate::librb::smallint;
@@ -14,8 +16,6 @@ use libc::strchr;
 use libc::strcmp;
 use libc::termios;
 use libc::FILE;
-use crate::compat::read;
-use crate::compat::strlen;
 extern "C" {
 
   static mut optarg: *mut libc::c_char;
@@ -27,7 +27,7 @@ extern "C" {
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-  
+
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
   fn getrlimit(__resource: __rlimit_resource_t, __rlimits: *mut rlimit) -> libc::c_int;
   fn setrlimit(__resource: __rlimit_resource_t, __rlimits: *const rlimit) -> libc::c_int;
@@ -37,25 +37,25 @@ extern "C" {
     __optional_actions: libc::c_int,
     __termios_p: *const termios,
   ) -> libc::c_int;
-/* Some useful definitions */
-/* Macros for min/max.  */
-/* buffer allocation schemes */
-/* glibc uses __errno_location() to get a ptr to errno */
-/* We can just memorize it once - no multithreading in busybox :) */
+  /* Some useful definitions */
+  /* Macros for min/max.  */
+  /* buffer allocation schemes */
+  /* glibc uses __errno_location() to get a ptr to errno */
+  /* We can just memorize it once - no multithreading in busybox :) */
 
-/* 0 if argv[0] is NULL: */
+  /* 0 if argv[0] is NULL: */
 
-/* Non-aborting kind of convertors: bb_strto[u][l]l */
-/* On exit: errno = 0 only if there was non-empty, '\0' terminated value
- * errno = EINVAL if value was not '\0' terminated, but otherwise ok
- *    Return value is still valid, caller should just check whether end[0]
- *    is a valid terminating char for particular case. OTOH, if caller
- *    requires '\0' terminated input, [s]he can just check errno == 0.
- * errno = ERANGE if value had alphanumeric terminating char ("1234abcg").
- * errno = ERANGE if value is out of range, missing, etc.
- * errno = ERANGE if value had minus sign for strtouXX (even "-0" is not ok )
- *    return value is all-ones in this case.
- */
+  /* Non-aborting kind of convertors: bb_strto[u][l]l */
+  /* On exit: errno = 0 only if there was non-empty, '\0' terminated value
+   * errno = EINVAL if value was not '\0' terminated, but otherwise ok
+   *    Return value is still valid, caller should just check whether end[0]
+   *    is a valid terminating char for particular case. OTOH, if caller
+   *    requires '\0' terminated input, [s]he can just check errno == 0.
+   * errno = ERANGE if value had alphanumeric terminating char ("1234abcg").
+   * errno = ERANGE if value is out of range, missing, etc.
+   * errno = ERANGE if value had minus sign for strtouXX (even "-0" is not ok )
+   *    return value is all-ones in this case.
+   */
 
 }
 
@@ -899,51 +899,56 @@ pub unsafe extern "C" fn shell_builtin_ulimit(mut argv: *mut *mut libc::c_char) 
       }
       printlim(opts, &mut limit, &*limits_tbl.as_ptr().offset(i as isize));
     } else {
-            let mut val: rlim_t = 0xffffffffffffffffu64 as rlim_t;
-            if strcmp(val_str,
-                      b"unlimited\x00" as *const u8 as *const libc::c_char) !=
-                   0 {
-                if ::std::mem::size_of::<rlim_t>() as libc::c_ulong ==
-                       ::std::mem::size_of::<libc::c_int>() as libc::c_ulong {
-                    val =
-                        crate::libbb::bb_strtonum::bb_strtou(val_str, 0 as *mut *mut libc::c_char, 10i32)
-                            as rlim_t
-                } else if ::std::mem::size_of::<rlim_t>() as libc::c_ulong ==
-                              ::std::mem::size_of::<libc::c_long>() as
-                                  libc::c_ulong {
-                    val =
-                        bb_strtoul(val_str, 0 as *mut *mut libc::c_char,
-                                   10i32)
-                } else {
-                    val =
-                        crate::libbb::bb_strtonum::bb_strtoull(val_str, 0 as *mut *mut libc::c_char,
-                                    10i32) as rlim_t
-                }
-                if *bb_errno != 0 {
-                    crate::libbb::verror_msg::bb_error_msg(b"invalid number \'%s\'\x00" as *const u8 as
-                                     *const libc::c_char, val_str);
-                    return 1i32
-                }
-                val <<= limits_tbl[i as usize].factor_shift as libc::c_int
-            }
-            //bb_error_msg("opt %c val_str:'%s' val:%lld", opt_char, val_str, (long long)val);
-			/* from man bash: "If neither -H nor -S
-			 * is specified, both the soft and hard
-			 * limits are set. */
-            if opts & OPT_hard as libc::c_int as libc::c_uint != 0 {
-                limit.rlim_max = val
-            }
-            if opts & OPT_soft as libc::c_int as libc::c_uint != 0 {
-                limit.rlim_cur = val
-            }
-            //bb_error_msg("setrlimit(%d, %lld, %lld)", limits_tbl[i].cmd, (long long)limit.rlim_cur, (long long)limit.rlim_max);
-            if setrlimit(limits_tbl[i as usize].cmd as __rlimit_resource_t,
-                         &mut limit) < 0 {
-                crate::libbb::perror_msg::bb_simple_perror_msg(b"error setting limit\x00" as *const u8
-                                         as *const libc::c_char);
-                return 1i32
-            }
+      let mut val: rlim_t = 0xffffffffffffffffu64 as rlim_t;
+      if strcmp(
+        val_str,
+        b"unlimited\x00" as *const u8 as *const libc::c_char,
+      ) != 0
+      {
+        if ::std::mem::size_of::<rlim_t>() as libc::c_ulong
+          == ::std::mem::size_of::<libc::c_int>() as libc::c_ulong
+        {
+          val = crate::libbb::bb_strtonum::bb_strtou(val_str, 0 as *mut *mut libc::c_char, 10i32)
+            as rlim_t
+        } else if ::std::mem::size_of::<rlim_t>() as libc::c_ulong
+          == ::std::mem::size_of::<libc::c_long>() as libc::c_ulong
+        {
+          val = bb_strtoul(val_str, 0 as *mut *mut libc::c_char, 10i32)
+        } else {
+          val = crate::libbb::bb_strtonum::bb_strtoull(val_str, 0 as *mut *mut libc::c_char, 10i32)
+            as rlim_t
         }
+        if *bb_errno != 0 {
+          crate::libbb::verror_msg::bb_error_msg(
+            b"invalid number \'%s\'\x00" as *const u8 as *const libc::c_char,
+            val_str,
+          );
+          return 1i32;
+        }
+        val <<= limits_tbl[i as usize].factor_shift as libc::c_int
+      }
+      //bb_error_msg("opt %c val_str:'%s' val:%lld", opt_char, val_str, (long long)val);
+      /* from man bash: "If neither -H nor -S
+       * is specified, both the soft and hard
+       * limits are set. */
+      if opts & OPT_hard as libc::c_int as libc::c_uint != 0 {
+        limit.rlim_max = val
+      }
+      if opts & OPT_soft as libc::c_int as libc::c_uint != 0 {
+        limit.rlim_cur = val
+      }
+      //bb_error_msg("setrlimit(%d, %lld, %lld)", limits_tbl[i].cmd, (long long)limit.rlim_cur, (long long)limit.rlim_max);
+      if setrlimit(
+        limits_tbl[i as usize].cmd as __rlimit_resource_t,
+        &mut limit,
+      ) < 0
+      {
+        crate::libbb::perror_msg::bb_simple_perror_msg(
+          b"error setting limit\x00" as *const u8 as *const libc::c_char,
+        );
+        return 1i32;
+      }
+    }
   }
   if opt_cnt == 0 as libc::c_uint {
     /* "bare ulimit": treat it as if it was -f */

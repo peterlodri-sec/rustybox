@@ -1,3 +1,4 @@
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::parse_config::parser_t;
 use crate::librb::signal::__sighandler_t;
@@ -13,7 +14,6 @@ use libc::stat;
 use libc::strstr;
 use libc::timeval;
 use libc::unlink;
-use crate::compat::strlen;
 extern "C" {
 
   /* After v = xrealloc_vector(v, SHIFT, idx) it's ok to use

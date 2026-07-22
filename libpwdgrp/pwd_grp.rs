@@ -1,3 +1,7 @@
+use crate::compat::memcpy;
+use crate::compat::memmove;
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::skip_whitespace::skip_whitespace;
 use crate::librb::size_t;
@@ -10,16 +14,10 @@ use libc::passwd;
 use libc::strcmp;
 use libc::uid_t;
 use libc::FILE;
-use crate::compat::memcpy;
-use crate::compat::memmove;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
 
   fn rewind(__stream: *mut FILE);
   fn fileno_unlocked(__stream: *mut FILE) -> libc::c_int;
-
-  
 
   fn setgroups(__n: size_t, __groups: *const gid_t) -> libc::c_int;
 

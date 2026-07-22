@@ -1,8 +1,8 @@
+use crate::compat::memmove;
+use crate::compat::strlen;
 use crate::libbb::skip_whitespace::skip_whitespace;
 use crate::librb::size_t;
 use libc;
-use crate::compat::memmove;
-use crate::compat::strlen;
 /*
  * Utility routines.
  *
@@ -30,8 +30,7 @@ pub unsafe fn trim(mut s: *mut libc::c_char) -> *mut libc::c_char {
   if len != 0 {
     let mut nws: *mut libc::c_char = skip_whitespace(s);
     if nws.offset_from(s) as libc::c_long != 0 {
-      len = (len as libc::c_ulong)
-        .wrapping_sub(nws.offset_from(s) as libc::c_long as libc::c_ulong)
+      len = (len as libc::c_ulong).wrapping_sub(nws.offset_from(s) as libc::c_long as libc::c_ulong)
         as size_t as size_t;
       memmove(s as *mut libc::c_void, nws as *const libc::c_void, len);
     }

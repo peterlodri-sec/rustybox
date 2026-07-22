@@ -1,6 +1,6 @@
+use crate::compat::strlen;
 use crate::librb::size_t;
 use libc;
-use crate::compat::strlen;
 /*
  * Busybox main internal header file
  *

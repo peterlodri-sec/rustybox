@@ -1,8 +1,8 @@
+use crate::compat::memcpy;
+use crate::compat::memset;
 use crate::librb::size_t;
 use libc;
 use libc::ssize_t;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;

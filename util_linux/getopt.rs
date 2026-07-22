@@ -1,3 +1,4 @@
+use crate::compat::strlen;
 use crate::libbb::xfuncs_printf::xmalloc;
 use libc;
 use libc::getenv;
@@ -6,7 +7,6 @@ use libc::puts;
 use libc::strchr;
 use libc::strcmp;
 use libc::strtok;
-use crate::compat::strlen;
 extern "C" {
   static mut optarg: *mut libc::c_char;
   static mut optind: libc::c_int;

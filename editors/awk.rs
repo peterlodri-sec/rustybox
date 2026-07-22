@@ -1,3 +1,7 @@
+use crate::compat::memcpy;
+use crate::compat::memmove;
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::llist::llist_t;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::skip_whitespace::skip_whitespace;
@@ -20,10 +24,6 @@ use libc::time;
 use libc::time_t;
 use libc::tm;
 use libc::FILE;
-use crate::compat::memcpy;
-use crate::compat::memmove;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
   /* Macros for min/max.  */
   /* buffer allocation schemes */
@@ -57,8 +57,6 @@ extern "C" {
 
   fn exit(_: libc::c_int) -> !;
 
-  
-  
   fn memchr(_: *const libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
@@ -464,26 +462,453 @@ unsafe fn not_const_pp(mut p: *const libc::c_void) -> *mut libc::c_void {
   return p as *mut libc::c_void;
 }
 static mut tokenlist: [libc::c_char; 448] = [
-  1, 40, 255u8 as libc::c_char, 1, 41, 255u8 as libc::c_char, 1, 47, 255u8 as libc::c_char, 2, 62, 62, 1, 62, 1, 124, 255u8 as libc::c_char, 2, 43, 43, 2, 45, 45, 255u8 as libc::c_char, 2, 43,
-  43, 2, 45, 45, 1, 36, 255u8 as libc::c_char, 2, 61, 61, 1, 61, 2, 43, 61, 2, 45, 61, 2, 42, 61, 2, 47, 61, 2, 37,
-  61, 2, 94, 61, 1, 43, 1, 45, 3, 42, 42, 61, 2, 42, 42, 1, 47, 1, 37, 1, 94, 1, 42, 2, 33, 61, 2,
-  62, 61, 2, 60, 61, 1, 62, 1, 60, 2, 33, 126, 1, 126, 2, 38, 38, 2, 124, 124, 1, 63, 1, 58, 255u8 as libc::c_char, 2,
-  105, 110, 255u8 as libc::c_char, 1, 44, 255u8 as libc::c_char, 1, 124, 255u8 as libc::c_char, 1, 43, 1, 45, 1, 33, 255u8 as libc::c_char, 1, 93, 255u8 as libc::c_char, 1, 123, 255u8 as libc::c_char, 1, 125, 255u8 as libc::c_char,
-  1, 59, 255u8 as libc::c_char, 1, 10, 255u8 as libc::c_char, 2, 105, 102, 2, 100, 111, 3, 102, 111, 114, 5, 98, 114, 101, 97, 107, 8,
-  99, 111, 110, 116, 105, 110, 117, 101, 6, 100, 101, 108, 101, 116, 101, 5, 112, 114, 105, 110,
-  116, 6, 112, 114, 105, 110, 116, 102, 4, 110, 101, 120, 116, 8, 110, 101, 120, 116, 102, 105,
-  108, 101, 6, 114, 101, 116, 117, 114, 110, 4, 101, 120, 105, 116, 255u8 as libc::c_char, 5, 119, 104, 105, 108, 101,
-  255u8 as libc::c_char, 4, 101, 108, 115, 101, 255u8 as libc::c_char, 3, 97, 110, 100, 5, 99, 111, 109, 112, 108, 6, 108, 115, 104, 105,
-  102, 116, 2, 111, 114, 6, 114, 115, 104, 105, 102, 116, 3, 120, 111, 114, 5, 99, 108, 111, 115,
-  101, 6, 115, 121, 115, 116, 101, 109, 6, 102, 102, 108, 117, 115, 104, 5, 97, 116, 97, 110, 50,
-  3, 99, 111, 115, 3, 101, 120, 112, 3, 105, 110, 116, 3, 108, 111, 103, 4, 114, 97, 110, 100, 3,
-  115, 105, 110, 4, 115, 113, 114, 116, 5, 115, 114, 97, 110, 100, 6, 103, 101, 110, 115, 117, 98,
-  4, 103, 115, 117, 98, 5, 105, 110, 100, 101, 120, 5, 109, 97, 116, 99, 104, 5, 115, 112, 108,
-  105, 116, 7, 115, 112, 114, 105, 110, 116, 102, 3, 115, 117, 98, 6, 115, 117, 98, 115, 116, 114,
-  7, 115, 121, 115, 116, 105, 109, 101, 8, 115, 116, 114, 102, 116, 105, 109, 101, 6, 109, 107,
-  116, 105, 109, 101, 7, 116, 111, 108, 111, 119, 101, 114, 7, 116, 111, 117, 112, 112, 101, 114,
-  255u8 as libc::c_char, 6, 108, 101, 110, 103, 116, 104, 255u8 as libc::c_char, 7, 103, 101, 116, 108, 105, 110, 101, 255u8 as libc::c_char, 4, 102, 117,
-  110, 99, 8, 102, 117, 110, 99, 116, 105, 111, 110, 255u8 as libc::c_char, 5, 66, 69, 71, 73, 78, 255u8 as libc::c_char, 3, 69, 78, 68,
+  1,
+  40,
+  255u8 as libc::c_char,
+  1,
+  41,
+  255u8 as libc::c_char,
+  1,
+  47,
+  255u8 as libc::c_char,
+  2,
+  62,
+  62,
+  1,
+  62,
+  1,
+  124,
+  255u8 as libc::c_char,
+  2,
+  43,
+  43,
+  2,
+  45,
+  45,
+  255u8 as libc::c_char,
+  2,
+  43,
+  43,
+  2,
+  45,
+  45,
+  1,
+  36,
+  255u8 as libc::c_char,
+  2,
+  61,
+  61,
+  1,
+  61,
+  2,
+  43,
+  61,
+  2,
+  45,
+  61,
+  2,
+  42,
+  61,
+  2,
+  47,
+  61,
+  2,
+  37,
+  61,
+  2,
+  94,
+  61,
+  1,
+  43,
+  1,
+  45,
+  3,
+  42,
+  42,
+  61,
+  2,
+  42,
+  42,
+  1,
+  47,
+  1,
+  37,
+  1,
+  94,
+  1,
+  42,
+  2,
+  33,
+  61,
+  2,
+  62,
+  61,
+  2,
+  60,
+  61,
+  1,
+  62,
+  1,
+  60,
+  2,
+  33,
+  126,
+  1,
+  126,
+  2,
+  38,
+  38,
+  2,
+  124,
+  124,
+  1,
+  63,
+  1,
+  58,
+  255u8 as libc::c_char,
+  2,
+  105,
+  110,
+  255u8 as libc::c_char,
+  1,
+  44,
+  255u8 as libc::c_char,
+  1,
+  124,
+  255u8 as libc::c_char,
+  1,
+  43,
+  1,
+  45,
+  1,
+  33,
+  255u8 as libc::c_char,
+  1,
+  93,
+  255u8 as libc::c_char,
+  1,
+  123,
+  255u8 as libc::c_char,
+  1,
+  125,
+  255u8 as libc::c_char,
+  1,
+  59,
+  255u8 as libc::c_char,
+  1,
+  10,
+  255u8 as libc::c_char,
+  2,
+  105,
+  102,
+  2,
+  100,
+  111,
+  3,
+  102,
+  111,
+  114,
+  5,
+  98,
+  114,
+  101,
+  97,
+  107,
+  8,
+  99,
+  111,
+  110,
+  116,
+  105,
+  110,
+  117,
+  101,
+  6,
+  100,
+  101,
+  108,
+  101,
+  116,
+  101,
+  5,
+  112,
+  114,
+  105,
+  110,
+  116,
+  6,
+  112,
+  114,
+  105,
+  110,
+  116,
+  102,
+  4,
+  110,
+  101,
+  120,
+  116,
+  8,
+  110,
+  101,
+  120,
+  116,
+  102,
+  105,
+  108,
+  101,
+  6,
+  114,
+  101,
+  116,
+  117,
+  114,
+  110,
+  4,
+  101,
+  120,
+  105,
+  116,
+  255u8 as libc::c_char,
+  5,
+  119,
+  104,
+  105,
+  108,
+  101,
+  255u8 as libc::c_char,
+  4,
+  101,
+  108,
+  115,
+  101,
+  255u8 as libc::c_char,
+  3,
+  97,
+  110,
+  100,
+  5,
+  99,
+  111,
+  109,
+  112,
+  108,
+  6,
+  108,
+  115,
+  104,
+  105,
+  102,
+  116,
+  2,
+  111,
+  114,
+  6,
+  114,
+  115,
+  104,
+  105,
+  102,
+  116,
+  3,
+  120,
+  111,
+  114,
+  5,
+  99,
+  108,
+  111,
+  115,
+  101,
+  6,
+  115,
+  121,
+  115,
+  116,
+  101,
+  109,
+  6,
+  102,
+  102,
+  108,
+  117,
+  115,
+  104,
+  5,
+  97,
+  116,
+  97,
+  110,
+  50,
+  3,
+  99,
+  111,
+  115,
+  3,
+  101,
+  120,
+  112,
+  3,
+  105,
+  110,
+  116,
+  3,
+  108,
+  111,
+  103,
+  4,
+  114,
+  97,
+  110,
+  100,
+  3,
+  115,
+  105,
+  110,
+  4,
+  115,
+  113,
+  114,
+  116,
+  5,
+  115,
+  114,
+  97,
+  110,
+  100,
+  6,
+  103,
+  101,
+  110,
+  115,
+  117,
+  98,
+  4,
+  103,
+  115,
+  117,
+  98,
+  5,
+  105,
+  110,
+  100,
+  101,
+  120,
+  5,
+  109,
+  97,
+  116,
+  99,
+  104,
+  5,
+  115,
+  112,
+  108,
+  105,
+  116,
+  7,
+  115,
+  112,
+  114,
+  105,
+  110,
+  116,
+  102,
+  3,
+  115,
+  117,
+  98,
+  6,
+  115,
+  117,
+  98,
+  115,
+  116,
+  114,
+  7,
+  115,
+  121,
+  115,
+  116,
+  105,
+  109,
+  101,
+  8,
+  115,
+  116,
+  114,
+  102,
+  116,
+  105,
+  109,
+  101,
+  6,
+  109,
+  107,
+  116,
+  105,
+  109,
+  101,
+  7,
+  116,
+  111,
+  108,
+  111,
+  119,
+  101,
+  114,
+  7,
+  116,
+  111,
+  117,
+  112,
+  112,
+  101,
+  114,
+  255u8 as libc::c_char,
+  6,
+  108,
+  101,
+  110,
+  103,
+  116,
+  104,
+  255u8 as libc::c_char,
+  7,
+  103,
+  101,
+  116,
+  108,
+  105,
+  110,
+  101,
+  255u8 as libc::c_char,
+  4,
+  102,
+  117,
+  110,
+  99,
+  8,
+  102,
+  117,
+  110,
+  99,
+  116,
+  105,
+  111,
+  110,
+  255u8 as libc::c_char,
+  5,
+  66,
+  69,
+  71,
+  73,
+  78,
+  255u8 as libc::c_char,
+  3,
+  69,
+  78,
+  68,
   0,
 ];
 static mut tokeninfo: [u32; 100] = [
@@ -625,7 +1050,31 @@ static mut vNames: [libc::c_char; 107] = [
   73, 82, 79, 78, 0, 0, 0,
 ];
 static mut vValues: [libc::c_char; 25] = [
-  37, 46, 54, 103, 0, 37, 46, 54, 103, 0, 32, 0, 32, 0, 10, 0, 10, 0, 0, 0, 28, 0, 0, 255u8 as libc::c_char, 0,
+  37,
+  46,
+  54,
+  103,
+  0,
+  37,
+  46,
+  54,
+  103,
+  0,
+  32,
+  0,
+  32,
+  0,
+  10,
+  0,
+  10,
+  0,
+  0,
+  0,
+  28,
+  0,
+  0,
+  255u8 as libc::c_char,
+  0,
 ];
 static mut PRIMES: [u16; 5] = [
   251i32 as u16,
@@ -848,7 +1297,7 @@ unsafe fn nextchar(mut s: *mut *mut libc::c_char) -> libc::c_char {
    * s = "abc\"def"
    * we must treat \" as "
    */
-  
+
   if c as libc::c_int == '\\' as i32 && *s == pps {
     /* unrecognized \z? */
     c = **s;
@@ -2468,8 +2917,7 @@ unsafe fn handle_special(mut v: *mut var) {
       {
         n as libc::c_long
       } else {
-        (v.offset_from((*ptr_to_globals.offset(-1i32 as isize)).Fields) as libc::c_long)
-          + 1
+        (v.offset_from((*ptr_to_globals.offset(-1i32 as isize)).Fields) as libc::c_long) + 1
       } as libc::c_double,
     );
     /* right here v is invalid. Just to note... */
@@ -3543,9 +3991,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -4138,9 +4584,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -4709,9 +5153,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -5280,9 +5722,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -5851,9 +6291,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -6422,9 +6860,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -6993,9 +7429,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -7564,9 +7998,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -8135,9 +8567,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -8706,9 +9136,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -9277,9 +9705,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -9848,9 +10274,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -10419,9 +10843,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -10990,9 +11412,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -11561,9 +11981,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -12132,9 +12550,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -12703,9 +13119,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -13274,9 +13688,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -13845,9 +14257,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -14416,9 +14826,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -14987,9 +15395,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -15558,9 +15964,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -16129,9 +16533,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -16700,9 +17102,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -17271,9 +17671,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -17842,9 +18240,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -18413,9 +18809,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -18984,9 +19378,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -19555,9 +19947,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -20126,9 +20516,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }
@@ -20697,9 +21085,7 @@ unsafe fn evaluate(mut op: *mut node, mut res: *mut var) -> *mut var {
                 (*v_1).type_0 |= 0x2000i32 as libc::c_uint;
                 (*v_1).x.parent = arg;
                 v_1 = v_1.offset(1);
-                if v_1.offset_from(vbeg) as libc::c_long
-                  >= (*(*op).r.f).nargs as libc::c_long
-                {
+                if v_1.offset_from(vbeg) as libc::c_long >= (*(*op).r.f).nargs as libc::c_long {
                   break;
                 }
               }

@@ -82,8 +82,7 @@ unsafe fn do_compress(
             .wrapping_add(1i32 as libc::c_uint)
             | 0x1fi32 as libc::c_uint);
         m_pos = *dict.offset(dindex as isize) as *const u8;
-        m_pos =
-          ip.offset(-(ip.offset_from(m_pos) as libc::c_long as libc::c_uint as isize));
+        m_pos = ip.offset(-(ip.offset_from(m_pos) as libc::c_long as libc::c_uint as isize));
         if (m_pos as uintptr_t) < in_0 as uintptr_t
           || {
             m_off = ip.offset_from(m_pos) as libc::c_long as libc::c_uint;
@@ -112,8 +111,7 @@ unsafe fn do_compress(
               *fresh1 = ip as *const libc::c_void;
               /* store current literal run */
               if ip.offset_from(ii) as libc::c_long as libc::c_uint > 0 as libc::c_uint {
-                let mut t: libc::c_uint =
-                  ip.offset_from(ii) as libc::c_long as libc::c_uint;
+                let mut t: libc::c_uint = ip.offset_from(ii) as libc::c_long as libc::c_uint;
                 if t <= 3i32 as libc::c_uint {
                   let ref mut fresh2 = *op.offset(-2i32 as isize);
                   *fresh2 = (*fresh2 as libc::c_int | t as u8 as libc::c_int) as u8

@@ -1,3 +1,4 @@
+use crate::compat::realloc;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::smallint;
 use libc;
@@ -15,7 +16,6 @@ use libc::sleep;
 use libc::stat;
 use libc::time;
 use libc::useconds_t;
-use crate::compat::realloc;
 extern "C" {
 
   static mut optind: libc::c_int;

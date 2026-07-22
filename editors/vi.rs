@@ -1,3 +1,7 @@
+use crate::compat::memcpy;
+use crate::compat::memmove;
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::skip_whitespace::skip_whitespace;
 use crate::libbb::xfuncs_printf::xmalloc;
@@ -26,13 +30,8 @@ use libc::strcpy;
 use libc::system;
 use libc::termios;
 use libc::FILE;
-use crate::compat::memcpy;
-use crate::compat::memmove;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
 
-  
   fn memchr(_: *const libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
   fn memrchr(__s: *const libc::c_void, __c: libc::c_int, __n: size_t) -> *mut libc::c_void;
 
@@ -1192,9 +1191,7 @@ unsafe extern "C" fn print_literal(mut buf: *mut libc::c_char, mut s: *const lib
       *fresh9 = '$' as i32 as libc::c_char;
       *d = '\u{0}' as i32 as libc::c_char
     }
-    if d.offset_from(buf) as libc::c_long
-      > (MAX_INPUT_LEN as libc::c_int - 10i32) as libc::c_long
-    {
+    if d.offset_from(buf) as libc::c_long > (MAX_INPUT_LEN as libc::c_int - 10i32) as libc::c_long {
       break;
     }
     s = s.offset(1)
@@ -1533,12 +1530,10 @@ unsafe extern "C" fn undo_push(
   if u_type as libc::c_int & 32i32 != 0 {
     (*undo_entry).start = (*ptr_to_globals)
       .undo_queue_spos
-      .offset_from((*ptr_to_globals).text) as libc::c_long
-      as libc::c_int
+      .offset_from((*ptr_to_globals).text) as libc::c_long as libc::c_int
   // use start position from queue
   } else {
-    (*undo_entry).start =
-      src.offset_from((*ptr_to_globals).text) as libc::c_long as libc::c_int
+    (*undo_entry).start = src.offset_from((*ptr_to_globals).text) as libc::c_long as libc::c_int
     // use offset from start of text buffer
   }
   u_type = (u_type as libc::c_int & !32i32) as u8;
@@ -1879,8 +1874,7 @@ unsafe extern "C" fn find_pair(mut p: *mut libc::c_char, c: libc::c_char) -> *mu
   let mut match_0: libc::c_char = 0;
   let mut dir: libc::c_int = 0;
   let mut level: libc::c_int = 0;
-  dir =
-    strchr(braces, c as libc::c_int).offset_from(braces) as libc::c_long as libc::c_int;
+  dir = strchr(braces, c as libc::c_int).offset_from(braces) as libc::c_long as libc::c_int;
   dir ^= 1i32;
   match_0 = *braces.offset(dir as isize);
   dir = ((dir & 1i32) << 1i32) - 1i32;
@@ -2193,10 +2187,7 @@ unsafe extern "C" fn get_one_address(
     // a search pattern
     p = p.offset(1); // save copy of pattern
     q = strchrnul(p, '/' as i32);
-    pat = crate::libbb::xfuncs_printf::xstrndup(
-      p,
-      q.offset_from(p) as libc::c_long as libc::c_int,
-    );
+    pat = crate::libbb::xfuncs_printf::xstrndup(p, q.offset_from(p) as libc::c_long as libc::c_int);
     p = q;
     if *p as libc::c_int == '/' as i32 {
       p = p.offset(1)
@@ -2510,9 +2501,7 @@ unsafe extern "C" fn colon(mut buf: *mut libc::c_char) {
                 b"\x00" as *const u8 as *const libc::c_char
               },
               li,
-              (*ptr_to_globals)
-                .end
-                .offset_from((*ptr_to_globals).text) as libc::c_long
+              (*ptr_to_globals).end.offset_from((*ptr_to_globals).text) as libc::c_long
                 as libc::c_int,
             );
           }
@@ -2680,8 +2669,7 @@ unsafe extern "C" fn colon(mut buf: *mut libc::c_char) {
           }
         }
         // dance around potentially-reallocated text[]
-        let mut ofs: uintptr_t =
-          q.offset_from((*ptr_to_globals).text) as libc::c_long as uintptr_t; // nothing was inserted
+        let mut ofs: uintptr_t = q.offset_from((*ptr_to_globals).text) as libc::c_long as uintptr_t; // nothing was inserted
         size_0 = file_insert(fn_0, q, 0);
         q = (*ptr_to_globals).text.offset(ofs as isize);
         if !(size_0 < 0) {
@@ -3590,8 +3578,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -5008,8 +4995,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -6167,8 +6153,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -7326,8 +7311,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -8485,8 +8469,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -9644,8 +9627,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -10803,8 +10785,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -11962,8 +11943,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -13121,8 +13101,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -14280,8 +14259,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -15439,8 +15417,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -16598,8 +16575,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -17757,8 +17733,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -18916,8 +18891,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -20075,8 +20049,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -21234,8 +21207,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -22393,8 +22365,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -23552,8 +23523,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -24711,8 +24681,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -25870,8 +25839,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -27029,8 +26997,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -28188,8 +28155,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -29347,8 +29313,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -30506,8 +30471,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -31665,8 +31629,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -32824,8 +32787,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -33983,8 +33945,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -35142,8 +35103,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -36301,8 +36261,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -37460,8 +37419,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -38619,8 +38577,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -39778,8 +39735,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -40937,8 +40893,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -42096,8 +42051,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -43255,8 +43209,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -44414,8 +44367,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -45573,8 +45525,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -46732,8 +46683,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -47891,8 +47841,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -49050,8 +48999,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -50209,8 +50157,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -51368,8 +51315,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -52527,8 +52473,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -53686,8 +53631,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -54845,8 +54789,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -56004,8 +55947,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -57163,8 +57105,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -58322,8 +58263,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -59481,8 +59421,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -60640,8 +60579,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -61799,8 +61737,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -62958,8 +62895,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -64117,8 +64053,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -65276,8 +65211,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -66435,8 +66369,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -67594,8 +67527,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -68753,8 +68685,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -69915,8 +69846,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -71074,8 +71004,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -72233,8 +72162,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -73392,8 +73320,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -74551,8 +74478,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -75713,8 +75639,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -76872,8 +76797,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -78031,8 +77955,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -79190,8 +79113,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -80349,8 +80271,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -81508,8 +81429,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -82667,8 +82587,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -83826,8 +83745,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -84985,8 +84903,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -86144,8 +86061,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -87303,8 +87219,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -88462,8 +88377,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -89621,8 +89535,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -90780,8 +90693,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -91939,8 +91851,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -93098,8 +93009,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -94257,8 +94167,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -95416,8 +95325,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint
@@ -96575,8 +96483,7 @@ unsafe extern "C" fn do_cmd(mut c: libc::c_int) {
                     == (*ptr_to_globals)
                       .end
                       .offset(-1)
-                      .offset_from((*ptr_to_globals).text)
-                      as libc::c_long
+                      .offset_from((*ptr_to_globals).text) as libc::c_long
                       + 1
                   {
                     (*ptr_to_globals).editing = 0 as smallint

@@ -22,13 +22,19 @@ struct MountEntry {
 
 fn read_proc_mounts() -> Vec<MountEntry> {
   let mut out = Vec::new();
-  let Ok(content) = fs::read_to_string("/proc/mounts") else { return out };
+  let Ok(content) = fs::read_to_string("/proc/mounts") else {
+    return out;
+  };
   for line in content.lines() {
     let fields: Vec<&str> = line.split_whitespace().collect();
     if fields.len() < 3 {
       continue;
     }
-    out.push(MountEntry { fsname: fields[0].to_string(), dir: fields[1].to_string(), vfstype: fields[2].to_string() });
+    out.push(MountEntry {
+      fsname: fields[0].to_string(),
+      dir: fields[1].to_string(),
+      vfstype: fields[2].to_string(),
+    });
   }
   out
 }
@@ -50,7 +56,13 @@ struct Opts {
 }
 
 pub fn run(argv: &[&str]) -> i32 {
-  let mut o = Opts { all: false, remount_ro_on_busy: false, lazy: false, force: false, fstype: None };
+  let mut o = Opts {
+    all: false,
+    remount_ro_on_busy: false,
+    lazy: false,
+    force: false,
+    fstype: None,
+  };
   let mut targets = Vec::new();
   let mut it = argv.iter().skip(1).copied();
   while let Some(arg) = it.next() {
@@ -103,7 +115,11 @@ pub fn run(argv: &[&str]) -> i32 {
   let mounts = read_proc_mounts();
   for t in &targets {
     let resolved = normalize(t);
-    let device = mounts.iter().rev().find(|e| normalize(&e.dir) == resolved || e.fsname == *t).map(|e| e.fsname.clone());
+    let device = mounts
+      .iter()
+      .rev()
+      .find(|e| normalize(&e.dir) == resolved || e.fsname == *t)
+      .map(|e| e.fsname.clone());
     if let Err(err) = unmount_one(t, flags, o.remount_ro_on_busy, device.as_deref()) {
       eprintln!("umount: can't unmount {t}: {err}");
       status = 1;
@@ -112,12 +128,25 @@ pub fn run(argv: &[&str]) -> i32 {
   status
 }
 
-fn unmount_one(target: &str, flags: MntFlags, remount_ro_on_busy: bool, device: Option<&str>) -> io::Result<()> {
+fn unmount_one(
+  target: &str,
+  flags: MntFlags,
+  remount_ro_on_busy: bool,
+  device: Option<&str>,
+) -> io::Result<()> {
   match do_umount(target, flags) {
     Ok(()) => Ok(()),
     Err(Errno::EBUSY) if remount_ro_on_busy => {
-      let Some(dev) = device else { return Err(io::Error::from(Errno::EBUSY)) };
-      match nix::mount::mount(Some(dev), target, None::<&str>, nix::mount::MsFlags::MS_REMOUNT | nix::mount::MsFlags::MS_RDONLY, None::<&str>) {
+      let Some(dev) = device else {
+        return Err(io::Error::from(Errno::EBUSY));
+      };
+      match nix::mount::mount(
+        Some(dev),
+        target,
+        None::<&str>,
+        nix::mount::MsFlags::MS_REMOUNT | nix::mount::MsFlags::MS_RDONLY,
+        None::<&str>,
+      ) {
         Ok(()) => {
           eprintln!("umount: {target} busy - remounted read-only");
           Ok(())
@@ -136,4 +165,3 @@ pub fn run_and_exit(args: &[&str]) -> ! {
   let code = run(args);
   std::process::exit(code);
 }
-

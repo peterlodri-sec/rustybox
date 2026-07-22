@@ -1,6 +1,7 @@
 use crate::archival::libarchive::bb_archive::archive_handle_t;
 use crate::archival::libarchive::bb_archive::file_header_t;
 use crate::archival::libarchive::bb_archive::hardlinks_t;
+use crate::compat::memset;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::size_t;
 use crate::librb::uoff_t;
@@ -14,7 +15,6 @@ use libc::strcmp;
 use libc::strcpy;
 use libc::time_t;
 use libc::uid_t;
-use crate::compat::memset;
 extern "C" {
 
   static cpio_TRAILER: [libc::c_char; 0];

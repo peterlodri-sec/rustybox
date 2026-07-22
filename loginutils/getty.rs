@@ -1,3 +1,4 @@
+use crate::compat::read;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::xfunc_die::die_func;
@@ -24,7 +25,6 @@ use libc::tcflag_t;
 use libc::termios;
 use libc::uid_t;
 use libc::useconds_t;
-use crate::compat::read;
 extern "C" {
   fn exit(_: libc::c_int) -> !;
 
@@ -484,8 +484,8 @@ unsafe fn get_logname() -> *mut libc::c_char {
       }
       /* fall through and ignore it */
       if !((c as libc::c_uchar as libc::c_int) < ' ' as i32) {
-        if (bp.offset_from((*ptr_to_globals).line_buf.as_mut_ptr()) as libc::c_long
-          as libc::c_int as libc::c_ulong)
+        if (bp.offset_from((*ptr_to_globals).line_buf.as_mut_ptr()) as libc::c_long as libc::c_int
+          as libc::c_ulong)
           < (::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong)
             .wrapping_sub(1i32 as libc::c_ulong)
         {

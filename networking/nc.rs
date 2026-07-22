@@ -1,3 +1,6 @@
+use crate::compat::memcmp;
+use crate::compat::memset;
+use crate::compat::read;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::signal::__sighandler_t;
 use crate::librb::size_t;
@@ -19,9 +22,6 @@ use libc::sprintf;
 use libc::ssize_t;
 use libc::strcmp;
 use libc::FILE;
-use crate::compat::memcmp;
-use crate::compat::memset;
-use crate::compat::read;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;
@@ -51,8 +51,6 @@ extern "C" {
   fn longjmp(_: *mut __jmp_buf_tag, _: libc::c_int) -> !;
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
   static mut stderr: *mut FILE;
-
-  
 
   fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;

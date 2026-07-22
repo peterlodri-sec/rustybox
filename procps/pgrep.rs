@@ -1,3 +1,5 @@
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::librb::procps_status_t;
 use crate::librb::re_pattern_buffer;
@@ -8,14 +10,10 @@ use libc::getpid;
 use libc::kill;
 use libc::pid_t;
 use libc::printf;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
 
   fn getsid(__pid: pid_t) -> pid_t;
   static mut optind: libc::c_int;
-
-  
 
   static mut option_mask32: u32;
 

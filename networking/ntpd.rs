@@ -1,3 +1,7 @@
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::llist::llist_t;
 use crate::libbb::parse_config::parser_t;
 use crate::libbb::ptr_to_globals::bb_errno;
@@ -30,10 +34,6 @@ use libc::strcpy;
 use libc::suseconds_t;
 use libc::time_t;
 use libc::timeval;
-use crate::compat::memcmp;
-use crate::compat::memcpy;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;
@@ -93,8 +93,6 @@ extern "C" {
   fn unsetenv(__name: *const libc::c_char) -> libc::c_int;
   fn qsort(__base: *mut libc::c_void, __nmemb: size_t, __size: size_t, __compar: __compar_fn_t);
   fn abs(_: libc::c_int) -> libc::c_int;
-
-  
 
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 

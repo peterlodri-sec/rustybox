@@ -1,3 +1,5 @@
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::librb::size_t;
 use libc;
 use libc::access;
@@ -8,8 +10,6 @@ use libc::pid_t;
 use libc::setutxent;
 use libc::time;
 use libc::time_t;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
 
   fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> *mut libc::c_char;

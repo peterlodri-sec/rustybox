@@ -1,3 +1,5 @@
+use crate::compat::memcpy;
+use crate::compat::memset;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::rtattr;
 use crate::networking::libiproute::libnetlink::rtnl_handle;
@@ -5,24 +7,22 @@ use libc;
 use libc::nlmsghdr;
 use libc::sockaddr_nl;
 use libc::strcpy;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
   fn if_nametoindex(__ifname: *const libc::c_char) -> libc::c_uint;
 
-/* We need linux/types.h because older kernels use u32 etc
- * in linux/[rt]netlink.h. 2.6.19 seems to be ok, though */
-/* bbox doesn't use parameters no. 3, 4, 6, 7, stub them out */
-//TODO: pass rth->fd instead of full rth?
-// Used to be:
-//struct sockaddr_nl nladdr;
-//memset(&nladdr, 0, sizeof(nladdr));
-//nladdr.nl_family = AF_NETLINK;
-//return xsendto(rth->fd, buf, len, (struct sockaddr*)&nladdr, sizeof(nladdr));
-// iproute2-4.2.0 simplified the above to:
-//return send(rth->fd, buf, len, 0);
-// We are using even shorter:
-// and convert to void, inline.
+  /* We need linux/types.h because older kernels use u32 etc
+   * in linux/[rt]netlink.h. 2.6.19 seems to be ok, though */
+  /* bbox doesn't use parameters no. 3, 4, 6, 7, stub them out */
+  //TODO: pass rth->fd instead of full rth?
+  // Used to be:
+  //struct sockaddr_nl nladdr;
+  //memset(&nladdr, 0, sizeof(nladdr));
+  //nladdr.nl_family = AF_NETLINK;
+  //return xsendto(rth->fd, buf, len, (struct sockaddr*)&nladdr, sizeof(nladdr));
+  // iproute2-4.2.0 simplified the above to:
+  //return send(rth->fd, buf, len, 0);
+  // We are using even shorter:
+  // and convert to void, inline.
 
 }
 

@@ -1,3 +1,5 @@
+use crate::compat::memcpy;
+use crate::compat::memset;
 use crate::libbb::appletlib::applet_name;
 use crate::librb::smallint;
 use crate::librb::socklen_t;
@@ -8,13 +10,9 @@ use libc::printf;
 use libc::sockaddr;
 use libc::strcmp;
 use libc::FILE;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
 
   static mut stderr: *mut FILE;
-
-  
 
   static bb_msg_requires_arg: [libc::c_char; 0];
   static mut bb_common_bufsiz1: [libc::c_char; 0];
@@ -45,10 +43,10 @@ extern "C" {
 
   static mut preferred_family: family_t;
 
-//const char *dnet_ntop(int af, const void *addr, char *str, size_t len);
-//int dnet_pton(int af, const char *src, void *addr);
-//const char *ipx_ntop(int af, const void *addr, char *str, size_t len);
-//int ipx_pton(int af, const char *src, void *addr);
+  //const char *dnet_ntop(int af, const void *addr, char *str, size_t len);
+  //int dnet_pton(int af, const char *src, void *addr);
+  //const char *ipx_ntop(int af, const void *addr, char *str, size_t len);
+  //int ipx_pton(int af, const char *src, void *addr);
 
 }
 

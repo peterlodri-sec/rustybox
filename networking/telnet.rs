@@ -1,9 +1,9 @@
+use crate::compat::read;
 use libc;
 use libc::getenv;
 use libc::kill;
 use libc::printf;
 use libc::sleep;
-use crate::compat::read;
 extern "C" {
   fn exit(_: libc::c_int) -> !;
 

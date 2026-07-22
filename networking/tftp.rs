@@ -1,3 +1,4 @@
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::xfuncs_printf::xmalloc;
@@ -31,7 +32,6 @@ use libc::strcpy;
 use libc::strrchr;
 use libc::strstr;
 use libc::unlink;
-use crate::compat::strlen;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;

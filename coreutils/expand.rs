@@ -16,7 +16,7 @@ extern "C" {
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
 
   static bb_msg_standard_input: [libc::c_char; 0];
-/* Width on terminal */
+  /* Width on terminal */
 
 }
 

@@ -1,3 +1,5 @@
+use crate::compat::memset;
+use crate::compat::read;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::signal::__sighandler_t;
 use crate::librb::size_t;
@@ -11,8 +13,6 @@ use libc::printf;
 use libc::ssize_t;
 use libc::strcpy;
 use libc::FILE;
-use crate::compat::memset;
-use crate::compat::read;
 extern "C" {
   static mut optind: libc::c_int;
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;

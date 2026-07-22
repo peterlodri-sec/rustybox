@@ -1,3 +1,5 @@
+use crate::compat::memcpy;
+use crate::compat::memset;
 use crate::libbb::appletlib::applet_name;
 use crate::librb::rtattr;
 use crate::networking::libiproute::libnetlink::rtnl_handle;
@@ -8,8 +10,6 @@ use libc::printf;
 use libc::puts;
 use libc::sockaddr_nl;
 use libc::strcmp;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
 
   static bb_msg_requires_arg: [libc::c_char; 0];
@@ -19,26 +19,26 @@ extern "C" {
 
   static mut preferred_family: family_t;
 
-/* We need linux/types.h because older kernels use u32 etc
- * in linux/[rt]netlink.h. 2.6.19 seems to be ok, though */
-/* bbox doesn't use parameters no. 3, 4, 6, 7, stub them out */
-//TODO: pass rth->fd instead of full rth?
-// Used to be:
-//struct sockaddr_nl nladdr;
-//memset(&nladdr, 0, sizeof(nladdr));
-//nladdr.nl_family = AF_NETLINK;
-//return xsendto(rth->fd, buf, len, (struct sockaddr*)&nladdr, sizeof(nladdr));
-// iproute2-4.2.0 simplified the above to:
-//return send(rth->fd, buf, len, 0);
-// We are using even shorter:
-// and convert to void, inline.
+  /* We need linux/types.h because older kernels use u32 etc
+   * in linux/[rt]netlink.h. 2.6.19 seems to be ok, though */
+  /* bbox doesn't use parameters no. 3, 4, 6, 7, stub them out */
+  //TODO: pass rth->fd instead of full rth?
+  // Used to be:
+  //struct sockaddr_nl nladdr;
+  //memset(&nladdr, 0, sizeof(nladdr));
+  //nladdr.nl_family = AF_NETLINK;
+  //return xsendto(rth->fd, buf, len, (struct sockaddr*)&nladdr, sizeof(nladdr));
+  // iproute2-4.2.0 simplified the above to:
+  //return send(rth->fd, buf, len, 0);
+  // We are using even shorter:
+  // and convert to void, inline.
 
-//static: const char *ll_idx_n2a(int idx, char *buf) FAST_FUNC;
+  //static: const char *ll_idx_n2a(int idx, char *buf) FAST_FUNC;
 
-//const char *dnet_ntop(int af, const void *addr, char *str, size_t len);
-//int dnet_pton(int af, const char *src, void *addr);
-//const char *ipx_ntop(int af, const void *addr, char *str, size_t len);
-//int ipx_pton(int af, const char *src, void *addr);
+  //const char *dnet_ntop(int af, const void *addr, char *str, size_t len);
+  //int dnet_pton(int af, const char *src, void *addr);
+  //const char *ipx_ntop(int af, const void *addr, char *str, size_t len);
+  //int ipx_pton(int af, const char *src, void *addr);
 
 }
 

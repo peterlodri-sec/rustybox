@@ -1,3 +1,5 @@
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::in6_addr;
 use crate::librb::size_t;
@@ -16,8 +18,6 @@ use libc::sockaddr_in6;
 use libc::sscanf;
 use libc::stat;
 use libc::strcpy;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
 
   fn getservbyport(__port: libc::c_int, __proto: *const libc::c_char) -> *mut servent;
@@ -31,7 +31,7 @@ extern "C" {
   ) -> libc::c_int;
 
   fn strcat(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
-  
+
   fn inet_pton(
     __af: libc::c_int,
     __cp: *const libc::c_char,

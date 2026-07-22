@@ -1,3 +1,5 @@
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::re_pattern_buffer;
@@ -12,8 +14,6 @@ use libc::readdir;
 use libc::rmdir;
 use libc::time;
 use libc::unlink;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
 
   fn fnmatch(
@@ -870,9 +870,18 @@ unsafe extern "C" fn func_links(
   mut ap: *mut action_links,
 ) -> libc::c_int {
   match (*ap).links_char as libc::c_int {
-    45 => return (((*statbuf).st_nlink as libc::c_ulong) < (*ap).links_count as libc::c_ulong) as libc::c_int,
-    43 => return (((*statbuf).st_nlink as libc::c_ulong) > (*ap).links_count as libc::c_ulong) as libc::c_int,
-    _ => return ((*statbuf).st_nlink as libc::c_ulong == (*ap).links_count as libc::c_ulong) as libc::c_int,
+    45 => {
+      return (((*statbuf).st_nlink as libc::c_ulong) < (*ap).links_count as libc::c_ulong)
+        as libc::c_int
+    }
+    43 => {
+      return (((*statbuf).st_nlink as libc::c_ulong) > (*ap).links_count as libc::c_ulong)
+        as libc::c_int
+    }
+    _ => {
+      return ((*statbuf).st_nlink as libc::c_ulong == (*ap).links_count as libc::c_ulong)
+        as libc::c_int
+    }
   };
 }
 unsafe fn fileAction(

@@ -1,8 +1,8 @@
 use c2rust_asm_casts;
 use c2rust_asm_casts::AsmCastTrait;
 
-use libc;
 use crate::compat::memcpy;
+use libc;
 
 pub type bb__aliased_u32 = u32;
 use crate::librb::size_t;

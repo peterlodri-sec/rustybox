@@ -1,3 +1,4 @@
+use crate::compat::strlen;
 use crate::librb::size_t;
 use libc;
 use libc::alarm;
@@ -10,7 +11,6 @@ use libc::printf;
 use libc::puts;
 use libc::ssize_t;
 use libc::FILE;
-use crate::compat::strlen;
 extern "C" {
 
   fn vfork() -> libc::c_int;

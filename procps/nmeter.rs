@@ -1,3 +1,6 @@
+use crate::compat::memset;
+use crate::compat::read;
+use crate::compat::strlen;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::size_t;
 use crate::librb::smallint;
@@ -11,9 +14,6 @@ use libc::time_t;
 use libc::timeval;
 use libc::tm;
 use libc::useconds_t;
-use crate::compat::memset;
-use crate::compat::read;
-use crate::compat::strlen;
 extern "C" {
   fn strtoul(
     __nptr: *const libc::c_char,
@@ -30,7 +30,6 @@ extern "C" {
   static ptr_to_globals: *mut globals;
   fn usleep(__useconds: useconds_t) -> libc::c_int;
 
-  
   fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> *mut libc::c_char;
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
 
@@ -213,8 +212,8 @@ unsafe extern "C" fn reset_outbuf() {
 unsafe extern "C" fn print_outbuf() {
   let mut sz: libc::c_int = (*ptr_to_globals)
     .cur_outbuf
-    .offset_from(bb_common_bufsiz1.as_mut_ptr())
-    as libc::c_long as libc::c_int;
+    .offset_from(bb_common_bufsiz1.as_mut_ptr()) as libc::c_long
+    as libc::c_int;
   if sz > 0 {
     crate::libbb::xfuncs_printf::xwrite(
       1i32,

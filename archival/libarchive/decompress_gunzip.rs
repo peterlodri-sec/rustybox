@@ -1,4 +1,7 @@
 use crate::archival::libarchive::bb_archive::transformer_state_t;
+use crate::compat::memcpy;
+use crate::compat::memmove;
+use crate::compat::memset;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::size_t;
 use crate::librb::smallint;
@@ -8,15 +11,10 @@ use libc::off_t;
 use libc::sigset_t;
 use libc::ssize_t;
 use libc::time_t;
-use crate::compat::memcpy;
-use crate::compat::memmove;
-use crate::compat::memset;
 extern "C" {
 
   fn _setjmp(_: *mut __jmp_buf_tag) -> libc::c_int;
   fn longjmp(_: *mut __jmp_buf_tag, _: libc::c_int) -> !;
-
-  
 
 }
 

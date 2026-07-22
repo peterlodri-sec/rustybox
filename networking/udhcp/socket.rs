@@ -1,14 +1,12 @@
 use c2rust_asm_casts;
 use c2rust_asm_casts::AsmCastTrait;
 
+use crate::compat::memcpy;
+use crate::compat::memset;
 use libc;
 use libc::close;
 use libc::strrchr;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
-
-  
 
   fn inet_ntoa(__in: in_addr) -> *mut libc::c_char;
 

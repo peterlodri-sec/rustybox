@@ -1,10 +1,10 @@
+use crate::compat::read;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::size_t;
 use libc;
 use libc::close;
 use libc::open;
 use libc::ssize_t;
-use crate::compat::read;
 
 /*
  * Utility routines.

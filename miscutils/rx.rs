@@ -1,10 +1,10 @@
+use crate::compat::read;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::size_t;
 use libc;
 use libc::alarm;
 use libc::ssize_t;
 use libc::termios;
-use crate::compat::read;
 extern "C" {
 
   fn tcgetattr(__fd: libc::c_int, __termios_p: *mut termios) -> libc::c_int;

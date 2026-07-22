@@ -1,3 +1,7 @@
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::librb::rtattr;
 use crate::librb::size_t;
@@ -15,10 +19,6 @@ use libc::sockaddr_nl;
 use libc::sprintf;
 use libc::strcmp;
 use libc::FILE;
-use crate::compat::memcmp;
-use crate::compat::memcpy;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
   fn fnmatch(
     __pattern: *const libc::c_char,
@@ -26,8 +26,6 @@ extern "C" {
     __flags: libc::c_int,
   ) -> libc::c_int;
   fn socket(__domain: libc::c_int, __type: libc::c_int, __protocol: libc::c_int) -> libc::c_int;
-
-  
 
   static mut stdout: *mut FILE;
 
@@ -44,25 +42,25 @@ extern "C" {
   static mut oneline: smallint;
   static mut _SL_: libc::c_char;
 
-/*void get_prefix_1(inet_prefix *dst, char *arg, int family) FAST_FUNC;*/
+  /*void get_prefix_1(inet_prefix *dst, char *arg, int family) FAST_FUNC;*/
 
-/* We need linux/types.h because older kernels use u32 etc
- * in linux/[rt]netlink.h. 2.6.19 seems to be ok, though */
-/* bbox doesn't use parameters no. 3, 4, 6, 7, stub them out */
-//TODO: pass rth->fd instead of full rth?
-// Used to be:
-//struct sockaddr_nl nladdr;
-//memset(&nladdr, 0, sizeof(nladdr));
-//nladdr.nl_family = AF_NETLINK;
-//return xsendto(rth->fd, buf, len, (struct sockaddr*)&nladdr, sizeof(nladdr));
-// iproute2-4.2.0 simplified the above to:
-//return send(rth->fd, buf, len, 0);
-// We are using even shorter:
-// and convert to void, inline.
+  /* We need linux/types.h because older kernels use u32 etc
+   * in linux/[rt]netlink.h. 2.6.19 seems to be ok, though */
+  /* bbox doesn't use parameters no. 3, 4, 6, 7, stub them out */
+  //TODO: pass rth->fd instead of full rth?
+  // Used to be:
+  //struct sockaddr_nl nladdr;
+  //memset(&nladdr, 0, sizeof(nladdr));
+  //nladdr.nl_family = AF_NETLINK;
+  //return xsendto(rth->fd, buf, len, (struct sockaddr*)&nladdr, sizeof(nladdr));
+  // iproute2-4.2.0 simplified the above to:
+  //return send(rth->fd, buf, len, 0);
+  // We are using even shorter:
+  // and convert to void, inline.
 
-//static: const char *ll_idx_n2a(int idx, char *buf) FAST_FUNC;
+  //static: const char *ll_idx_n2a(int idx, char *buf) FAST_FUNC;
 
-/* int ll_index_to_type(int idx); */
+  /* int ll_index_to_type(int idx); */
 
 }
 

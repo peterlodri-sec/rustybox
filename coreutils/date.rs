@@ -1,3 +1,5 @@
+use crate::compat::memcpy;
+use crate::compat::memmove;
 use crate::librb::size_t;
 use libc;
 use libc::putenv;
@@ -8,13 +10,9 @@ use libc::time;
 use libc::time_t;
 use libc::timespec;
 use libc::tm;
-use crate::compat::memcpy;
-use crate::compat::memmove;
 extern "C" {
 
   static mut optind: libc::c_int;
-
-  
 
   fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
 

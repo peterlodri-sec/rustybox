@@ -1,9 +1,9 @@
+use crate::compat::memcmp;
+use crate::compat::strlen;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::size_t;
 use libc;
 use libc::free;
-use crate::compat::memcmp;
-use crate::compat::strlen;
 extern "C" {
 
   fn mempcpy(
@@ -11,7 +11,7 @@ extern "C" {
     __src: *const libc::c_void,
     __n: size_t,
   ) -> *mut libc::c_void;
-  
+
   fn stpcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
 
 }

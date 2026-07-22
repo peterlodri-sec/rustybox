@@ -1,3 +1,5 @@
+use crate::compat::memcpy;
+use crate::compat::memset;
 use crate::librb::md5_ctx_t;
 use crate::librb::sha1_ctx_t;
 use crate::librb::sha256_ctx_t;
@@ -7,8 +9,6 @@ use crate::librb::size_t;
 use c2rust_asm_casts;
 use c2rust_asm_casts::AsmCastTrait;
 use libc;
-use crate::compat::memcpy;
-use crate::compat::memset;
 
 pub type bb__aliased_u64 = u64;
 /* Constants for SHA512 from FIPS 180-2:4.2.3.

@@ -1,3 +1,4 @@
+use crate::compat::memcpy;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::size_t;
 use libc;
@@ -5,7 +6,6 @@ use libc::free;
 use libc::off64_t;
 use libc::sprintf;
 use libc::ssize_t;
-use crate::compat::memcpy;
 extern "C" {
 
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;

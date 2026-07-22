@@ -1,3 +1,5 @@
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::parse_config::parser_t;
 use crate::librb::size_t;
 use libc;
@@ -5,13 +7,9 @@ use libc::printf;
 use libc::sscanf;
 use libc::strcmp;
 use libc::strstr;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
 
-  
-
-/* Specialized */
+  /* Specialized */
 
 }
 

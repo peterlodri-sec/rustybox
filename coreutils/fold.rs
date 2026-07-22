@@ -1,9 +1,9 @@
+use crate::compat::memmove;
 use crate::librb::size_t;
 use crate::librb::smallint;
 use libc;
 use libc::putchar_unlocked;
 use libc::FILE;
-use crate::compat::memmove;
 extern "C" {
   static mut optind: libc::c_int;
   static mut stdout: *mut FILE;

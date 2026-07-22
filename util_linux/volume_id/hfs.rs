@@ -1,10 +1,10 @@
+use crate::compat::memcpy;
 use crate::librb::md5_ctx_t;
 use crate::librb::size_t;
 use crate::util_linux::volume_id::volume_id::volume_id;
 use c2rust_asm_casts;
 use c2rust_asm_casts::AsmCastTrait;
 use libc;
-use crate::compat::memcpy;
 
 pub type uuid_format = libc::c_uint;
 // pub const UUID_DCE_STRING: uuid_format = 3;

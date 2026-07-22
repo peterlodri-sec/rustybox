@@ -1,10 +1,10 @@
+use crate::compat::strlen;
 use libc;
 use libc::close;
 use libc::ioctl;
 use libc::printf;
 use libc::puts;
 use libc::strcasecmp;
-use crate::compat::strlen;
 extern "C" {
   fn exit(_: libc::c_int) -> !;
   static mut optind: libc::c_int;

@@ -1,5 +1,7 @@
 use crate::archival::libarchive::bb_archive::archive_handle_t;
 use crate::archival::libarchive::bb_archive::file_header_t;
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::bb_uidgid_t;
 use crate::librb::fd_pair;
@@ -19,8 +21,6 @@ use libc::stat;
 use libc::strcpy;
 use libc::uid_t;
 use libc::FILE;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
 
   static mut optind: libc::c_int;
@@ -32,8 +32,6 @@ extern "C" {
   static mut stdin: *mut FILE;
 
   static mut stderr: *mut FILE;
-
-  
 
   fn mkdir(__path: *const libc::c_char, __mode: mode_t) -> libc::c_int;
 

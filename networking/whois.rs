@@ -1,10 +1,10 @@
+use crate::compat::memcpy;
 use crate::libbb::skip_whitespace::skip_whitespace;
 use libc;
 use libc::fclose;
 use libc::free;
 use libc::printf;
 use libc::strcmp;
-use crate::compat::memcpy;
 extern "C" {
 
   static mut optind: libc::c_int;
@@ -15,7 +15,7 @@ extern "C" {
     __n: libc::c_int,
     __stream: *mut FILE,
   ) -> *mut libc::c_char;
-  
+
   static mut option_mask32: u32;
 
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;

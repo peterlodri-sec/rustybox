@@ -1,3 +1,4 @@
+use crate::compat::memset;
 use crate::librb::size_t;
 use libc;
 use libc::close;
@@ -12,11 +13,10 @@ use libc::sprintf;
 use libc::stat;
 use libc::strcpy;
 use libc::DIR;
-use crate::compat::memset;
 extern "C" {
 
-// NB: will return short read on error, not -1,
-// if some data was read before error occurred
+  // NB: will return short read on error, not -1,
+  // if some data was read before error occurred
 
 }
 

@@ -1,14 +1,12 @@
+use crate::compat::memmove;
+use crate::compat::strlen;
 use crate::librb::size_t;
 use libc;
 use libc::strchr;
 use libc::strcmp;
 use libc::FILE;
-use crate::compat::memmove;
-use crate::compat::strlen;
 extern "C" {
   fn getc_unlocked(__stream: *mut FILE) -> libc::c_int;
-
-  
 
 }
 
@@ -271,8 +269,7 @@ pub unsafe fn decode_base64(
         }
       }
       /* Convert encoded character to decimal */
-      ch =
-        table_ptr.offset_from(bb_uuenc_tbl_base64.as_ptr()) as libc::c_long as libc::c_int;
+      ch = table_ptr.offset_from(bb_uuenc_tbl_base64.as_ptr()) as libc::c_long as libc::c_int;
       /* ch is 64 if char was '=', otherwise 0..63 */
       if ch == 64i32 {
         break;

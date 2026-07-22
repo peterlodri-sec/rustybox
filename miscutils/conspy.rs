@@ -3,6 +3,8 @@ use crate::librb::signal::__sighandler_t;
 use crate::librb::size_t;
 use crate::librb::smallint;
 
+use crate::compat::memmove;
+use crate::compat::read;
 use libc;
 use libc::close;
 use libc::getpid;
@@ -20,8 +22,6 @@ use libc::ssize_t;
 use libc::strcpy;
 use libc::termios;
 use libc::FILE;
-use crate::compat::memmove;
-use crate::compat::read;
 extern "C" {
   fn exit(_: libc::c_int) -> !;
 
@@ -34,8 +34,6 @@ extern "C" {
 
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
   fn execl(__path: *const libc::c_char, __arg: *const libc::c_char, _: ...) -> libc::c_int;
-
-  
 
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;
 
@@ -711,11 +709,7 @@ pub unsafe fn conspy_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_ch
     let mut result: libc::c_int = 0;
     let mut kbd_mode: libc::c_long = 0;
     handle = crate::libbb::xfuncs_printf::xopen(tty_name.as_mut_ptr(), 0o1i32);
-    result = ioctl(
-      handle,
-      0x4b44i32 as _,
-      &mut kbd_mode as *mut libc::c_long,
-    );
+    result = ioctl(handle, 0x4b44i32 as _, &mut kbd_mode as *mut libc::c_long);
     if result >= 0 {
       let mut p: *mut libc::c_char = bb_common_bufsiz1.as_mut_ptr();
       (*ptr_to_globals).ioerror_count = 0;

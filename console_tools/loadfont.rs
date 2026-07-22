@@ -1,10 +1,10 @@
+use crate::compat::memcpy;
 use crate::libbb::parse_config::parser_t;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::size_t;
 use libc;
 use libc::chdir;
 use libc::free;
-use crate::compat::memcpy;
 extern "C" {
   static mut optind: libc::c_int;
 

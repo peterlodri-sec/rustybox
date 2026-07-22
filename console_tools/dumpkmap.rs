@@ -1,5 +1,5 @@
-use libc;
 use crate::compat::memcpy;
+use libc;
 extern "C" {
 
   static mut bb_common_bufsiz1: [libc::c_char; 0];

@@ -13,12 +13,12 @@ extern "C" {
   fn shmctl(__shmid: libc::c_int, __cmd: libc::c_int, __buf: *mut shmid_ds) -> libc::c_int;
 
   fn ctime(__timer: *const time_t) -> *mut libc::c_char;
-/* Search for an entry with a matching user ID.  */
+  /* Search for an entry with a matching user ID.  */
 
-/* Search for an entry with a matching group ID.  */
+  /* Search for an entry with a matching group ID.  */
 
-/* Guaranteed to NOT be a macro (smallest code). Saves nearly 2k on uclibc.
- * But potentially slow, don't use in one-billion-times loops */
+  /* Guaranteed to NOT be a macro (smallest code). Saves nearly 2k on uclibc.
+   * But potentially slow, don't use in one-billion-times loops */
 
 }
 

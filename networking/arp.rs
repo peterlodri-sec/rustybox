@@ -1,3 +1,5 @@
+use crate::compat::memcpy;
+use crate::compat::memset;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::aftype;
 use crate::librb::hwtype;
@@ -10,10 +12,8 @@ use libc::sockaddr;
 use libc::sscanf;
 use libc::strcmp;
 use libc::FILE;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
-  
+
   static mut optind: libc::c_int;
 
   fn fgets_unlocked(

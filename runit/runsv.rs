@@ -5,6 +5,8 @@ use crate::librb::smallint;
 use c2rust_asm_casts;
 use c2rust_asm_casts::AsmCastTrait;
 
+use crate::compat::memset;
+use crate::compat::read;
 use libc;
 use libc::close;
 use libc::dup2;
@@ -19,8 +21,6 @@ use libc::stat;
 use libc::strcpy;
 use libc::timespec;
 use libc::unlink;
-use crate::compat::memset;
-use crate::compat::read;
 extern "C" {
 
   fn flock(__fd: libc::c_int, __operation: libc::c_int) -> libc::c_int;
@@ -32,8 +32,6 @@ extern "C" {
   fn execv(__path: *const libc::c_char, __argv: *const *mut libc::c_char) -> libc::c_int;
 
   fn fchdir(__fd: libc::c_int) -> libc::c_int;
-
-  
 
   fn stpcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
   fn poll(__fds: *mut pollfd, __nfds: nfds_t, __timeout: libc::c_int) -> libc::c_int;

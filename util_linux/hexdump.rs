@@ -21,15 +21,15 @@ extern "C" {
 
   static bkm_suffixes: [suffix_mult; 0];
 
-/*
- * ascii-to-numbers implementations for busybox
- *
- * Copyright (C) 2003  Manuel Novoa III  <mjn3@codepoet.org>
- *
- * Licensed under GPLv2, see file LICENSE in this source tree.
- */
-/* Provides extern declarations of functions */
-/* Unsigned long long functions always exist */
+  /*
+   * ascii-to-numbers implementations for busybox
+   *
+   * Copyright (C) 2003  Manuel Novoa III  <mjn3@codepoet.org>
+   *
+   * Licensed under GPLv2, see file LICENSE in this source tree.
+   */
+  /* Provides extern declarations of functions */
+  /* Unsigned long long functions always exist */
 
 }
 
@@ -217,8 +217,8 @@ pub unsafe fn hexdump_main(mut argc: libc::c_int, mut argv: *mut *mut libc::c_ch
           crate::libbb::dump::bb_dump_add(dumper, add_first.as_ptr());
           crate::libbb::dump::bb_dump_add(
             dumper,
-            add_strings[p.offset_from(hexdump_opts.as_ptr()) as libc::c_long as libc::c_int
-              as usize],
+            add_strings
+              [p.offset_from(hexdump_opts.as_ptr()) as libc::c_long as libc::c_int as usize],
           );
         }
         /* Save a little bit of space below by omitting the 'else's. */

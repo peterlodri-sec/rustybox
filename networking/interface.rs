@@ -1,3 +1,6 @@
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::skip_whitespace::skip_whitespace;
 use crate::libbb::xfuncs_printf::xmalloc;
@@ -23,9 +26,6 @@ use libc::sscanf;
 use libc::strcmp;
 use libc::strstr;
 use libc::FILE;
-use crate::compat::memcpy;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
 
   fn fgets_unlocked(
@@ -42,23 +42,23 @@ extern "C" {
     __buf: *mut libc::c_void,
   ) -> libc::c_int;
 
-/*
- * stolen from net-tools-1.59 and stripped down for busybox by
- *                      Erik Andersen <andersen@codepoet.org>
- *
- * Heavily modified by Manuel Novoa III       Mar 12, 2001
- *
- */
-/* hostfirst!=0 If we expect this to be a hostname,
-  try hostname database first
-*/
+  /*
+   * stolen from net-tools-1.59 and stripped down for busybox by
+   *                      Erik Andersen <andersen@codepoet.org>
+   *
+   * Heavily modified by Manuel Novoa III       Mar 12, 2001
+   *
+   */
+  /* hostfirst!=0 If we expect this to be a hostname,
+    try hostname database first
+  */
 
-/* numeric: & 0x8000: "default" instead of "*",
- *          & 0x4000: host instead of net,
- *          & 0x0fff: don't resolve
- */
+  /* numeric: & 0x8000: "default" instead of "*",
+   *          & 0x4000: host instead of net,
+   *          & 0x0fff: don't resolve
+   */
 
-/* These return malloced string */
+  /* These return malloced string */
 
 }
 

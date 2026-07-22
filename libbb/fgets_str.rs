@@ -1,12 +1,10 @@
+use crate::compat::memcmp;
+use crate::compat::strlen;
 use crate::librb::size_t;
 use libc;
 use libc::FILE;
-use crate::compat::memcmp;
-use crate::compat::strlen;
 extern "C" {
   fn getc_unlocked(__stream: *mut FILE) -> libc::c_int;
-
-  
 
 }
 

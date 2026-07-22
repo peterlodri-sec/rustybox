@@ -1,11 +1,11 @@
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use libc;
 use libc::fclose;
 use libc::getenv;
 use libc::open;
 use libc::putenv;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
 
   fn unsetenv(__name: *const libc::c_char) -> libc::c_int;

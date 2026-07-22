@@ -2,8 +2,8 @@
 //! Manage locks from shell scripts.
 
 use nix::libc;
-use nix::unistd::{execvp, fork, ForkResult};
 use nix::sys::wait::{waitpid, WaitStatus};
+use nix::unistd::{execvp, fork, ForkResult};
 use std::ffi::CString;
 
 pub fn run(argv: &[&str]) -> i32 {
@@ -16,12 +16,17 @@ pub fn run(argv: &[&str]) -> i32 {
   while idx < argv.len() {
     let arg = argv[idx];
     if arg.starts_with('-') && arg != "-" {
-      if arg == "--shared" { shared = true; }
-      else if arg == "--exclusive" { _exclusive = true; }
-      else if arg == "--unlock" { unlock = true; }
-      else if arg == "--nonblock" { nonblock = true; }
-      else if arg == "--help" { return 0; }
-      else {
+      if arg == "--shared" {
+        shared = true;
+      } else if arg == "--exclusive" {
+        _exclusive = true;
+      } else if arg == "--unlock" {
+        unlock = true;
+      } else if arg == "--nonblock" {
+        nonblock = true;
+      } else if arg == "--help" {
+        return 0;
+      } else {
         for c in arg.chars().skip(1) {
           match c {
             's' => shared = true,
@@ -75,12 +80,22 @@ pub fn run(argv: &[&str]) -> i32 {
   } else {
     // Treat as FILE
     let path = CString::new(file_or_fd).unwrap();
-    fd = unsafe { libc::open(path.as_ptr(), libc::O_RDONLY | libc::O_NOCTTY | libc::O_CREAT, 0o666) };
+    fd = unsafe {
+      libc::open(
+        path.as_ptr(),
+        libc::O_RDONLY | libc::O_NOCTTY | libc::O_CREAT,
+        0o666,
+      )
+    };
     if fd < 0 && std::io::Error::last_os_error().raw_os_error() == Some(libc::EISDIR) {
       fd = unsafe { libc::open(path.as_ptr(), libc::O_RDONLY | libc::O_NOCTTY) };
     }
     if fd < 0 {
-      eprintln!("flock: can't open '{}': {}", file_or_fd, std::io::Error::last_os_error());
+      eprintln!(
+        "flock: can't open '{}': {}",
+        file_or_fd,
+        std::io::Error::last_os_error()
+      );
       return 1;
     }
   }
@@ -107,13 +122,11 @@ pub fn run(argv: &[&str]) -> i32 {
 
   if !cmd_args.is_empty() {
     match unsafe { fork() } {
-      Ok(ForkResult::Parent { child }) => {
-        match waitpid(child, None) {
-          Ok(WaitStatus::Exited(_, code)) => return code,
-          Ok(WaitStatus::Signaled(_, sig, _)) => return sig as i32 + 128,
-          _ => return 1,
-        }
-      }
+      Ok(ForkResult::Parent { child }) => match waitpid(child, None) {
+        Ok(WaitStatus::Exited(_, code)) => return code,
+        Ok(WaitStatus::Signaled(_, sig, _)) => return sig as i32 + 128,
+        _ => return 1,
+      },
       Ok(ForkResult::Child) => {
         let mut exec_argv = Vec::new();
         let prog;
@@ -132,7 +145,11 @@ pub fn run(argv: &[&str]) -> i32 {
         }
 
         let _ = execvp(&prog, &exec_argv);
-        eprintln!("flock: can't execute '{}': {}", prog.to_string_lossy(), std::io::Error::last_os_error());
+        eprintln!(
+          "flock: can't execute '{}': {}",
+          prog.to_string_lossy(),
+          std::io::Error::last_os_error()
+        );
         std::process::exit(127);
       }
       Err(e) => {
@@ -149,4 +166,3 @@ pub fn run(argv: &[&str]) -> i32 {
 pub fn run_and_exit(argv: &[&str]) -> ! {
   std::process::exit(run(argv));
 }
-

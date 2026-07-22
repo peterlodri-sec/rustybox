@@ -1,3 +1,4 @@
+use crate::compat::memset;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::len_and_sockaddr;
 use crate::librb::size_t;
@@ -20,7 +21,6 @@ use libc::ssize_t;
 use libc::suseconds_t;
 use libc::time_t;
 use libc::timeval;
-use crate::compat::memset;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;

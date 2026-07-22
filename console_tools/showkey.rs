@@ -1,6 +1,7 @@
 use crate::librb::size_t;
 use crate::librb::smallint;
 
+use crate::compat::read;
 use libc;
 use libc::alarm;
 use libc::printf;
@@ -8,7 +9,6 @@ use libc::ptrdiff_t;
 use libc::puts;
 use libc::ssize_t;
 use libc::termios;
-use crate::compat::read;
 extern "C" {
 
   static ptr_to_globals: *mut globals;

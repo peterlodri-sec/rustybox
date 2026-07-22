@@ -1,3 +1,6 @@
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::size_t;
 use c2rust_asm_casts;
@@ -10,17 +13,12 @@ use libc::pid_t;
 use libc::sleep;
 use libc::sprintf;
 use libc::strrchr;
-use crate::compat::memcmp;
-use crate::compat::memcpy;
-use crate::compat::strlen;
 extern "C" {
 
   fn fork() -> pid_t;
   static mut optarg: *mut libc::c_char;
   static mut optind: libc::c_int;
   fn daemon(__nochdir: libc::c_int, __noclose: libc::c_int) -> libc::c_int;
-
-  
 
   static const_int_0: libc::c_int;
   fn getopt_long_only(

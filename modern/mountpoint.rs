@@ -29,7 +29,8 @@ fn device_for_mountpoint(dir: &str) -> String {
         let mut fields = line.split_whitespace();
         let fsname = fields.next()?;
         let mnt_dir = fields.next()?;
-        (fs::canonicalize(mnt_dir).unwrap_or_else(|_| mnt_dir.into()) == resolved).then(|| fsname.to_string())
+        (fs::canonicalize(mnt_dir).unwrap_or_else(|_| mnt_dir.into()) == resolved)
+          .then(|| fsname.to_string())
       })
     })
     .unwrap_or_else(|| "UNKNOWN".to_string())
@@ -43,7 +44,12 @@ struct Opts {
 }
 
 pub fn run(argv: &[&str]) -> i32 {
-  let mut o = Opts { quiet: false, devno: false, blockdev_devno: false, devname: false };
+  let mut o = Opts {
+    quiet: false,
+    devno: false,
+    blockdev_devno: false,
+    devname: false,
+  };
   let mut arg = None;
   for a in argv.iter().skip(1).copied() {
     match a {
@@ -115,7 +121,10 @@ pub fn run(argv: &[&str]) -> i32 {
     println!("{} {path}", device_for_mountpoint(path));
   }
   if !o.devno && !o.devname {
-    println!("{path} is {}a mountpoint", if is_mountpoint { "" } else { "not " });
+    println!(
+      "{path} is {}a mountpoint",
+      if is_mountpoint { "" } else { "not " }
+    );
   }
   i32::from(!is_mountpoint)
 }
@@ -125,4 +134,3 @@ pub fn run_and_exit(args: &[&str]) -> ! {
   let code = run(args);
   std::process::exit(code);
 }
-

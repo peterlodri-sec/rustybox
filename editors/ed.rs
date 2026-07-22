@@ -1,3 +1,6 @@
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::strlen;
 use crate::libbb::skip_whitespace::skip_whitespace;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::size_t;
@@ -12,9 +15,6 @@ use libc::puts;
 use libc::strchr;
 use libc::strcpy;
 use libc::FILE;
-use crate::compat::memcmp;
-use crate::compat::memcpy;
-use crate::compat::strlen;
 extern "C" {
 
   fn creat(__file: *const libc::c_char, __mode: mode_t) -> libc::c_int;
@@ -24,8 +24,6 @@ extern "C" {
   static mut stdout: *mut FILE;
 
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-
-  
 
   fn memchr(_: *const libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 

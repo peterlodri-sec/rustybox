@@ -1,3 +1,4 @@
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::librb::size_t;
 use libc;
@@ -13,7 +14,6 @@ use libc::stat;
 use libc::strchr;
 use libc::strcpy;
 use libc::unlink;
-use crate::compat::strlen;
 extern "C" {
 
   static mut optind: libc::c_int;

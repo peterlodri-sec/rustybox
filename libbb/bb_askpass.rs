@@ -1,3 +1,5 @@
+use crate::compat::memset;
+use crate::compat::read;
 use crate::librb::signal::sigaction;
 use crate::librb::size_t;
 use libc;
@@ -6,16 +8,12 @@ use libc::free;
 use libc::ssize_t;
 use libc::termios;
 use libc::FILE;
-use crate::compat::memset;
-use crate::compat::read;
 extern "C" {
 
   fn sigaction(__sig: libc::c_int, __act: *const sigaction, __oact: *mut sigaction) -> libc::c_int;
   static mut stdout: *mut FILE;
 
   fn fputs_unlocked(__s: *const libc::c_char, __stream: *mut FILE) -> libc::c_int;
-
-  
 
   fn tcgetattr(__fd: libc::c_int, __termios_p: *mut termios) -> libc::c_int;
 

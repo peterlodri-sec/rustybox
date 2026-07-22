@@ -1,3 +1,5 @@
+use crate::compat::memcpy;
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::len_and_sockaddr;
@@ -13,11 +15,7 @@ use libc::sockaddr_in6;
 use libc::sprintf;
 use libc::strchr;
 use libc::strtok;
-use crate::compat::memcpy;
-use crate::compat::strlen;
 extern "C" {
-
-  
 
   /* Some useful definitions */
   /* Macros for min/max.  */
@@ -564,9 +562,8 @@ pub unsafe extern "C" fn udhcp_option_idx(
   while *s != 0 {
     s = s.offset(strlen(s).wrapping_add(1i32 as libc::c_ulong) as isize)
   }
-  buf = crate::libbb::xfuncs_printf::xzalloc(
-    s.offset_from(option_strings) as libc::c_long as size_t
-  ) as *mut libc::c_char;
+  buf = crate::libbb::xfuncs_printf::xzalloc(s.offset_from(option_strings) as libc::c_long as size_t)
+    as *mut libc::c_char;
   d = buf;
   s = option_strings;
   while !(*s as libc::c_int == '\u{0}' as i32 && *s.offset(1) as libc::c_int == '\u{0}' as i32) {

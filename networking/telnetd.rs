@@ -1,3 +1,5 @@
+use crate::compat::memmove;
+use crate::compat::memset;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::len_and_sockaddr;
@@ -25,8 +27,6 @@ use libc::time_t;
 use libc::timeval;
 use libc::useconds_t;
 use libc::winsize;
-use crate::compat::memmove;
-use crate::compat::memset;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;
@@ -51,7 +51,6 @@ extern "C" {
   fn accept(__fd: libc::c_int, __addr: __SOCKADDR_ARG, __addr_len: *mut socklen_t) -> libc::c_int;
   fn signal(__sig: libc::c_int, __handler: __sighandler_t) -> __sighandler_t;
 
-  
   fn memchr(_: *const libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   fn tcgetattr(__fd: libc::c_int, __termios_p: *mut termios) -> libc::c_int;
@@ -240,7 +239,6 @@ unsafe fn safe_write_to_pty_decode_iac(mut ts: *mut tsession) -> ssize_t {
        */
       //bb_error_msg("dangling IAC!");
 
-      
       (*ts).buffered_IAC_for_pty = 1i32 as smallint;
       rc = 1i32 as ssize_t;
       current_block = 13835600803501426168;

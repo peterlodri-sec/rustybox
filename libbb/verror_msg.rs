@@ -1,3 +1,6 @@
+use crate::compat::memmove;
+use crate::compat::realloc;
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::librb::size_t;
 use crate::librb::smallint;
@@ -5,9 +8,6 @@ use libc;
 use libc::free;
 use libc::strcpy;
 use libc::syslog;
-use crate::compat::memmove;
-use crate::compat::realloc;
-use crate::compat::strlen;
 extern "C" {
 
   fn vsnprintf(
@@ -21,8 +21,6 @@ extern "C" {
     __f: *const libc::c_char,
     __arg: ::std::ffi::VaList,
   ) -> libc::c_int;
-
-  
 
 }
 pub type __builtin_va_list = [__va_list_tag; 1];

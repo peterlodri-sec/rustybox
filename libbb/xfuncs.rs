@@ -1,3 +1,5 @@
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::size_t;
 use libc;
@@ -12,10 +14,8 @@ use libc::pid_t;
 use libc::ssize_t;
 use libc::termios;
 use libc::winsize;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
-  
+
   fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> *mut libc::c_char;
 
   fn waitpid(__pid: pid_t, __stat_loc: *mut libc::c_int, __options: libc::c_int) -> pid_t;
@@ -413,8 +413,8 @@ pub unsafe fn get_terminal_width_height(
   win.ws_col = 0 as libc::c_ushort;
   /* I've seen ioctl returning 0, but row/col is (still?) 0.
    * We treat that as an error too.  */
-  err = (ioctl(fd, 0x5413i32 as _, &mut win as *mut winsize) != 0
-    || win.ws_row as libc::c_int == 0) as libc::c_int;
+  err = (ioctl(fd, 0x5413i32 as _, &mut win as *mut winsize) != 0 || win.ws_row as libc::c_int == 0)
+    as libc::c_int;
   if !height.is_null() {
     *height = wh_helper(
       win.ws_row as libc::c_int,

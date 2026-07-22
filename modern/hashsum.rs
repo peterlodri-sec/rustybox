@@ -88,13 +88,21 @@ struct Opts {
 fn set_width(o: &mut Opts, v: &str) -> Result<(), String> {
   o.width = v.parse().map_err(|_| format!("sha3sum: bad -a{v}"))?;
   if !matches!(o.width, 224 | 256 | 384 | 512) {
-    return Err(format!("sha3sum: bad -a{}: must be 224, 256, 384, or 512", o.width));
+    return Err(format!(
+      "sha3sum: bad -a{}: must be 224, 256, 384, or 512",
+      o.width
+    ));
   }
   Ok(())
 }
 
 fn parse_args<'a>(algo_is_sha3: bool, argv: &[&'a str]) -> Result<(Opts, Vec<&'a str>), String> {
-  let mut o = Opts { check: false, status: false, warn: false, width: 224 };
+  let mut o = Opts {
+    check: false,
+    status: false,
+    warn: false,
+    width: 224,
+  };
   let mut files = Vec::new();
   let mut it = argv.iter().skip(1).copied();
   while let Some(arg) = it.next() {
@@ -219,7 +227,11 @@ pub fn run(name: &str, argv: &[&str]) -> i32 {
     _ => unreachable!("only registered for the five hashsum applet names"),
   };
 
-  let result = if opts.check { check_files(&algo, name, &files, &opts) } else { print_hashes(&algo, &files) };
+  let result = if opts.check {
+    check_files(&algo, name, &files, &opts)
+  } else {
+    print_hashes(&algo, &files)
+  };
   io::stdout().flush().ok();
   result
 }
@@ -232,4 +244,3 @@ pub fn run_and_exit(argv: &[&str]) -> ! {
     .unwrap_or("md5sum");
   std::process::exit(run(name, argv));
 }
-

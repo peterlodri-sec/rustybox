@@ -1,3 +1,7 @@
+use crate::compat::memcpy;
+use crate::compat::memmove;
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::skip_whitespace::skip_whitespace;
@@ -14,10 +18,6 @@ use libc::strchr;
 use libc::strcmp;
 use libc::strcpy;
 use libc::strrchr;
-use crate::compat::memcpy;
-use crate::compat::memmove;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
 
   static mut optarg: *mut libc::c_char;
@@ -36,8 +36,6 @@ extern "C" {
 
   fn llabs(_: libc::c_longlong) -> libc::c_longlong;
 
-  
-
   static ptr_to_globals: *mut globals;
   static const_int_0: libc::c_int;
   static bb_hexdigits_upcase: [libc::c_char; 0];
@@ -47,7 +45,7 @@ extern "C" {
   static mut option_mask32: u32;
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  
+
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 }
 pub type __builtin_va_list = [__va_list_tag; 1];
@@ -2874,8 +2872,7 @@ unsafe fn bc_num_parseDecimal(mut n: *mut BcNum, mut val: *const libc::c_char) {
   ptr = strchr(val, '.' as i32);
   (*n).rdx = 0 as size_t;
   if !ptr.is_null() {
-    (*n).rdx =
-      val.offset(len as isize).offset_from(ptr.offset(1)) as libc::c_long as size_t
+    (*n).rdx = val.offset(len as isize).offset_from(ptr.offset(1)) as libc::c_long as size_t
   }
   i = 0 as size_t;
   while *val.offset(i as isize) != 0 {

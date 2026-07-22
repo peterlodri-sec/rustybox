@@ -1,3 +1,7 @@
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::llist::llist_t;
 use crate::libbb::ptr_to_globals::bb_errno;
@@ -23,15 +27,7 @@ use libc::sprintf;
 use libc::ssize_t;
 use libc::strcpy;
 use libc::unlink;
-use crate::compat::memcmp;
-use crate::compat::memcpy;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
-
-  
-
-  
 
   fn __cmsg_nxthdr(__mhdr: *mut msghdr, __cmsg: *mut cmsghdr) -> *mut cmsghdr;
 
@@ -127,11 +123,11 @@ extern "C" {
   /* ** Logging ***/
   static mut dhcp_verbose: libc::c_uint;
 
-/* 2nd param is "struct option_set**" */
+  /* 2nd param is "struct option_set**" */
 
-/* Returns 1 if no reply received */
+  /* Returns 1 if no reply received */
 
-/* note: ip is a pointer to an IPv6 in network order, possibly misaliged */
+  /* note: ip is a pointer to an IPv6 in network order, possibly misaliged */
 
 }
 

@@ -1,6 +1,11 @@
 use nix::unistd::{fork, getpgrp, getppid, setpgid, tcgetpgrp, tcsetpgrp, ForkResult, Pid};
 use std::os::fd::BorrowedFd;
 
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memmove;
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::libpwdgrp::pwd_grp::bb_internal_getpwnam;
@@ -49,11 +54,6 @@ use libc::timeval;
 use libc::umask;
 use libc::DIR;
 use libc::FILE;
-use crate::compat::memcmp;
-use crate::compat::memcpy;
-use crate::compat::memmove;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
   fn sigaction(__sig: libc::c_int, __act: *const sigaction, __oact: *mut sigaction) -> libc::c_int;
   fn fnmatch(
@@ -119,8 +119,6 @@ extern "C" {
   ) -> *mut libc::c_void;
   fn qsort(__base: *mut libc::c_void, __nmemb: size_t, __size: size_t, __compar: __compar_fn_t);
 
-  
-
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
   fn strcspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
   fn strpbrk(_: *const libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
@@ -130,7 +128,7 @@ extern "C" {
     __src: *const libc::c_void,
     __n: size_t,
   ) -> *mut libc::c_void;
-  
+
   fn strerror(_: libc::c_int) -> *mut libc::c_char;
   fn strsignal(__sig: libc::c_int) -> *mut libc::c_char;
   fn stpcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
@@ -4300,8 +4298,7 @@ unsafe extern "C" fn clear_traps() {
         free(*tp as *mut libc::c_void);
       }
       *tp = std::ptr::null_mut::<libc::c_char>();
-      if tp.offset_from((*ash_ptr_to_globals_misc).trap.as_mut_ptr()) as libc::c_long != 0
-      {
+      if tp.offset_from((*ash_ptr_to_globals_misc).trap.as_mut_ptr()) as libc::c_long != 0 {
         setsignal(
           tp.offset_from((*ash_ptr_to_globals_misc).trap.as_mut_ptr()) as libc::c_long
             as libc::c_int,
@@ -6546,8 +6543,7 @@ unsafe extern "C" fn subevalvar(
     (len_0 + 1i32) as libc::c_ulong,
   );
   //bb_error_msg("startp:'%s'", startp);
-  amount =
-    expdest.offset_from(startp.offset(len_0 as isize)) as libc::c_long as libc::c_int;
+  amount = expdest.offset_from(startp.offset(len_0 as isize)) as libc::c_long as libc::c_int;
   expdest = expdest.offset(-amount as isize);
   return startp;
 }
@@ -7125,8 +7121,7 @@ unsafe extern "C" fn expmeta(
     *endname = '\u{0}' as i32 as libc::c_char;
     endname = endname.offset((esc + 1i32) as isize)
   }
-  name_len =
-    (name_len as libc::c_long - endname.offset_from(name) as libc::c_long) as libc::c_uint;
+  name_len = (name_len as libc::c_long - endname.offset_from(name) as libc::c_long) as libc::c_uint;
   matchdot = 0;
   p = start;
   if *p as libc::c_int == '\\' as i32 {
@@ -9878,8 +9873,7 @@ unsafe extern "C" fn evalcommand(mut cmd: *mut node, mut flags: libc::c_int) -> 
         /* It's "command [-p] PROG ARGS" (that is, no -Vv).
          * nargv => "PROG". path is updated if -p.
          */
-        argc =
-          (argc as libc::c_long - nargv.offset_from(argv) as libc::c_long) as libc::c_int;
+        argc = (argc as libc::c_long - nargv.offset_from(argv) as libc::c_long) as libc::c_int;
         argv = nargv;
         cmd_flag |= 0x4i32
       }
@@ -10359,18 +10353,16 @@ unsafe extern "C" fn preadbuffer() -> libc::c_int {
           } else {
             q = q.offset(1);
             if c as libc::c_int == '\n' as i32 {
-              (*g_parsefile).left_in_line = (q.offset_from((*g_parsefile).next_to_pgetc)
-                as libc::c_long
-                - 1) as libc::c_int;
+              (*g_parsefile).left_in_line =
+                (q.offset_from((*g_parsefile).next_to_pgetc) as libc::c_long - 1) as libc::c_int;
               break 's_104;
             }
           }
           if !(more <= 0) {
             continue;
           }
-          (*g_parsefile).left_in_line = (q.offset_from((*g_parsefile).next_to_pgetc)
-            as libc::c_long
-            - 1) as libc::c_int;
+          (*g_parsefile).left_in_line =
+            (q.offset_from((*g_parsefile).next_to_pgetc) as libc::c_long - 1) as libc::c_int;
           if (*g_parsefile).left_in_line < 0 {
             current_block = 6729265098275823777;
             break;
@@ -12238,9 +12230,8 @@ unsafe extern "C" fn readtoken1(
     {
       let mut q: *mut libc::c_char = out; /* permit 4 calls to USTPUTC */
       let mut l: size_t = 4i32 as size_t;
-      let mut m: size_t = (*ash_ptr_to_globals_memstack)
-        .sstrend
-        .offset_from(q) as libc::c_long as size_t;
+      let mut m: size_t =
+        (*ash_ptr_to_globals_memstack).sstrend.offset_from(q) as libc::c_long as size_t;
       if l > m {
         out = makestrspace(l, q)
       }
@@ -13126,8 +13117,7 @@ unsafe extern "C" fn xxreadtoken() -> libc::c_int {
         if p.is_null() {
           break;
         }
-        if p.offset_from(xxreadtoken_chars.as_ptr()) as libc::c_long as libc::c_int >= 3i32
-        {
+        if p.offset_from(xxreadtoken_chars.as_ptr()) as libc::c_long as libc::c_int >= 3i32 {
           let mut cc: libc::c_int = pgetc_eatbnl();
           if cc == c {
             /* double occurrence? */

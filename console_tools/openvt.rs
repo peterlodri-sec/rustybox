@@ -134,13 +134,7 @@ unsafe fn find_free_vtno() -> libc::c_int {
   let mut fd: libc::c_int = get_vt_fd();
   *bb_errno = 0;
   /*xfunc_error_retval = 3; - do we need compat? */
-  if ioctl(
-    fd,
-    0x5600i32 as _,
-    &mut vtno as *mut libc::c_int,
-  ) != 0
-    || vtno <= 0
-  {
+  if ioctl(fd, 0x5600i32 as _, &mut vtno as *mut libc::c_int) != 0 || vtno <= 0 {
     crate::libbb::perror_msg::bb_simple_perror_msg_and_die(
       b"can\'t find open VT\x00" as *const u8 as *const libc::c_char,
     );

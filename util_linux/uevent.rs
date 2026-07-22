@@ -1,5 +1,6 @@
 use crate::librb::size_t;
 
+use crate::compat::strlen;
 use libc;
 use libc::off64_t;
 use libc::putchar_unlocked;
@@ -7,7 +8,6 @@ use libc::putenv;
 use libc::puts;
 use libc::ssize_t;
 use libc::strchr;
-use crate::compat::strlen;
 extern "C" {
 
   fn mmap(

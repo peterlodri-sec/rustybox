@@ -1,3 +1,4 @@
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::bb_uidgid_t;
@@ -25,7 +26,6 @@ use libc::strcpy;
 use libc::strrchr;
 use libc::uid_t;
 use libc::FILE;
-use crate::compat::strlen;
 extern "C" {
 
   fn execvp(__file: *const libc::c_char, __argv: *const *mut libc::c_char) -> libc::c_int;

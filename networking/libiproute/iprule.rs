@@ -1,3 +1,5 @@
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::librb::rtattr;
 use crate::librb::size_t;
@@ -8,8 +10,6 @@ use libc::nlmsghdr;
 use libc::printf;
 use libc::sockaddr_nl;
 use libc::FILE;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
   static mut stdout: *mut FILE;
 

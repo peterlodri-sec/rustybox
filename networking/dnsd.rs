@@ -1,3 +1,5 @@
+use crate::compat::memcpy;
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::parse_config::parser_t;
 use crate::librb::len_and_sockaddr;
@@ -15,11 +17,7 @@ use libc::sockaddr_in6;
 use libc::sprintf;
 use libc::strcasecmp;
 use libc::strcpy;
-use crate::compat::memcpy;
-use crate::compat::strlen;
 extern "C" {
-
-  
 
   fn inet_aton(__cp: *const libc::c_char, __inp: *mut in_addr) -> libc::c_int;
 

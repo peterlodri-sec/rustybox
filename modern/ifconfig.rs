@@ -38,13 +38,21 @@ const IF_NAMESIZE: usize = libc::IF_NAMESIZE;
 // no raw strcmp/strncpy, no wrapping-cast bitmasks.
 
 fn open_ctl_socket() -> io::Result<OwnedFd> {
-  socket(AddressFamily::Inet, SockType::Datagram, SockFlag::empty(), None)
-    .map_err(|e| io::Error::from_raw_os_error(e as i32))
+  socket(
+    AddressFamily::Inet,
+    SockType::Datagram,
+    SockFlag::empty(),
+    None,
+  )
+  .map_err(|e| io::Error::from_raw_os_error(e as i32))
 }
 
 fn ifreq_named(name: &str) -> io::Result<libc::ifreq> {
   if name.is_empty() || name.len() >= IF_NAMESIZE {
-    return Err(io::Error::new(io::ErrorKind::InvalidInput, format!("invalid interface name '{name}'")));
+    return Err(io::Error::new(
+      io::ErrorKind::InvalidInput,
+      format!("invalid interface name '{name}'"),
+    ));
   }
   // SAFETY: ifreq is a plain-old-data C struct; all-zero is a valid value.
   let mut ifr: libc::ifreq = unsafe { std::mem::zeroed() };
@@ -97,7 +105,9 @@ fn sockaddr_in(addr: Ipv4Addr) -> libc::sockaddr_in {
   libc::sockaddr_in {
     sin_family: libc::AF_INET as libc::sa_family_t,
     sin_port: 0,
-    sin_addr: libc::in_addr { s_addr: u32::from_ne_bytes(addr.octets()) },
+    sin_addr: libc::in_addr {
+      s_addr: u32::from_ne_bytes(addr.octets()),
+    },
     sin_zero: [0; 8],
   }
 }
@@ -151,7 +161,9 @@ struct Ctl {
 
 impl Ctl {
   fn open() -> io::Result<Self> {
-    Ok(Self { fd: open_ctl_socket()? })
+    Ok(Self {
+      fd: open_ctl_socket()?,
+    })
   }
 
   fn get_flags(&self, name: &str) -> io::Result<i32> {
@@ -265,9 +277,9 @@ fn set_interface(name: &str, opts: &[&str]) -> i32 {
         } else {
           let v = next_val!("an address");
           match parse_ipv4(v) {
-            Some(a) => ctl.set_addr(name, libc::SIOCSIFBRDADDR, a).and_then(|_| {
-              ctl.toggle_flag(name, libc::IFF_BROADCAST, true)
-            }),
+            Some(a) => ctl
+              .set_addr(name, libc::SIOCSIFBRDADDR, a)
+              .and_then(|_| ctl.toggle_flag(name, libc::IFF_BROADCAST, true)),
             None => {
               eprintln!("ifconfig: bad broadcast address '{v}'");
               return 1;
@@ -281,9 +293,9 @@ fn set_interface(name: &str, opts: &[&str]) -> i32 {
         } else {
           let v = next_val!("an address");
           match parse_ipv4(v) {
-            Some(a) => ctl.set_addr(name, libc::SIOCSIFDSTADDR, a).and_then(|_| {
-              ctl.toggle_flag(name, libc::IFF_POINTOPOINT, true)
-            }),
+            Some(a) => ctl
+              .set_addr(name, libc::SIOCSIFDSTADDR, a)
+              .and_then(|_| ctl.toggle_flag(name, libc::IFF_POINTOPOINT, true)),
             None => {
               eprintln!("ifconfig: bad pointopoint address '{v}'");
               return 1;
@@ -411,8 +423,16 @@ fn collect_interfaces(only: Option<&str>) -> io::Result<Vec<Iface>> {
     entry.flags = ifa.flags;
     if let Some(addr) = ifa.address.as_ref() {
       if let Some(sin) = addr.as_sockaddr_in() {
-        let netmask = ifa.netmask.as_ref().and_then(|a| a.as_sockaddr_in()).map(|s| s.ip());
-        let broadcast = ifa.broadcast.as_ref().and_then(|a| a.as_sockaddr_in()).map(|s| s.ip());
+        let netmask = ifa
+          .netmask
+          .as_ref()
+          .and_then(|a| a.as_sockaddr_in())
+          .map(|s| s.ip());
+        let broadcast = ifa
+          .broadcast
+          .as_ref()
+          .and_then(|a| a.as_sockaddr_in())
+          .map(|s| s.ip());
         entry.inet = Some((sin.ip(), netmask, broadcast));
       } else if let Some(sin6) = addr.as_sockaddr_in6() {
         entry.inet6.push(sin6.ip().to_string());
@@ -427,12 +447,24 @@ fn collect_interfaces(only: Option<&str>) -> io::Result<Vec<Iface>> {
 }
 
 fn format_mac(mac: [u8; 6]) -> String {
-  mac.iter().map(|b| format!("{b:02X}")).collect::<Vec<_>>().join(":")
+  mac
+    .iter()
+    .map(|b| format!("{b:02X}"))
+    .collect::<Vec<_>>()
+    .join(":")
 }
 
 fn print_iface(ife: &Iface) {
   let loopback = ife.flags.contains(InterfaceFlags::IFF_LOOPBACK);
-  print!("{:<9} Link encap:{}", ife.name, if loopback { "Local Loopback" } else { "Ethernet" });
+  print!(
+    "{:<9} Link encap:{}",
+    ife.name,
+    if loopback {
+      "Local Loopback"
+    } else {
+      "Ethernet"
+    }
+  );
   // Loopback/tunnel devices report an all-zero link address; matches
   // upstream's behavior of only printing a HWaddr for real ethernet-class
   // hardware.
@@ -523,4 +555,3 @@ pub fn run_and_exit(args: &[&str]) -> ! {
   let code = run(args);
   std::process::exit(code);
 }
-

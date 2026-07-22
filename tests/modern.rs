@@ -11,7 +11,10 @@ use duct::cmd;
 
 #[test]
 fn echo_basic() {
-  assert_eq!(cmd!(exe(), "echo", "hello", "world").read().unwrap(), "hello world");
+  assert_eq!(
+    cmd!(exe(), "echo", "hello", "world").read().unwrap(),
+    "hello world"
+  );
 }
 
 #[test]
@@ -22,7 +25,10 @@ fn cat_stdin() {
 
 #[test]
 fn wc_lines() {
-  let out = cmd!(exe(), "wc", "-l").stdin_bytes("x\ny\nz\n").read().unwrap();
+  let out = cmd!(exe(), "wc", "-l")
+    .stdin_bytes("x\ny\nz\n")
+    .read()
+    .unwrap();
   assert_eq!(out.trim(), "3");
 }
 
@@ -43,13 +49,19 @@ fn seq_range() {
 
 #[test]
 fn head_n() {
-  let out = cmd!(exe(), "head", "-n", "2").stdin_bytes("1\n2\n3\n4\n").read().unwrap();
+  let out = cmd!(exe(), "head", "-n", "2")
+    .stdin_bytes("1\n2\n3\n4\n")
+    .read()
+    .unwrap();
   assert_eq!(out, "1\n2");
 }
 
 #[test]
 fn tr_delete() {
-  let out = cmd!(exe(), "tr", "-d", "aeiou").stdin_bytes("hello").read().unwrap();
+  let out = cmd!(exe(), "tr", "-d", "aeiou")
+    .stdin_bytes("hello")
+    .read()
+    .unwrap();
   assert_eq!(out, "hll");
 }
 
@@ -64,7 +76,10 @@ fn cut_fields() {
 
 #[test]
 fn grep_basic_and_exit() {
-  let out = cmd!(exe(), "grep", "an").stdin_bytes("banana\ncherry\n").read().unwrap();
+  let out = cmd!(exe(), "grep", "an")
+    .stdin_bytes("banana\ncherry\n")
+    .read()
+    .unwrap();
   assert_eq!(out, "banana");
 
   // No match -> exit 1.
@@ -112,9 +127,17 @@ fn find_type_and_maxdepth() {
   std::fs::create_dir(root.join("d")).unwrap();
   std::fs::write(root.join("d/deep.txt"), "y").unwrap();
 
-  let out = cmd!(exe(), "find", root.to_str().unwrap(), "-maxdepth", "1", "-type", "f")
-    .read()
-    .unwrap();
+  let out = cmd!(
+    exe(),
+    "find",
+    root.to_str().unwrap(),
+    "-maxdepth",
+    "1",
+    "-type",
+    "f"
+  )
+  .read()
+  .unwrap();
   assert_eq!(out.lines().count(), 1, "got: {out}");
 }
 
@@ -137,7 +160,10 @@ fn timeout_passes_quick() {
 fn base64_roundtrip() {
   let enc = cmd!(exe(), "base64").stdin_bytes("hi").read().unwrap();
   assert_eq!(enc, "aGk=");
-  let dec = cmd!(exe(), "base64", "-d").stdin_bytes("aGk=").read().unwrap();
+  let dec = cmd!(exe(), "base64", "-d")
+    .stdin_bytes("aGk=")
+    .read()
+    .unwrap();
   assert_eq!(dec, "hi");
 }
 
@@ -178,16 +204,31 @@ fn tar_create_list_extract() {
   let arc = src.path().join("a.tar");
   let arc_s = arc.to_str().unwrap();
 
-  cmd!(exe(), "tar", "-cf", arc_s, "-C", src.path().to_str().unwrap(), "f.txt")
-    .run()
-    .unwrap();
+  cmd!(
+    exe(),
+    "tar",
+    "-cf",
+    arc_s,
+    "-C",
+    src.path().to_str().unwrap(),
+    "f.txt"
+  )
+  .run()
+  .unwrap();
   let listing = cmd!(exe(), "tar", "-tf", arc_s).read().unwrap();
   assert!(listing.contains("f.txt"), "listing: {listing}");
 
   let out = tempfile::tempdir().unwrap();
-  cmd!(exe(), "tar", "-xf", arc_s, "-C", out.path().to_str().unwrap())
-    .run()
-    .unwrap();
+  cmd!(
+    exe(),
+    "tar",
+    "-xf",
+    arc_s,
+    "-C",
+    out.path().to_str().unwrap()
+  )
+  .run()
+  .unwrap();
   assert_eq!(
     std::fs::read_to_string(out.path().join("f.txt")).unwrap(),
     "tarred content"
@@ -221,14 +262,20 @@ fn ifconfig_unknown_iface_errors() {
 
 #[test]
 fn mountpoint_root_is_mountpoint() {
-  let status = cmd!(exe(), "mountpoint", "-q", "/").unchecked().run().unwrap();
+  let status = cmd!(exe(), "mountpoint", "-q", "/")
+    .unchecked()
+    .run()
+    .unwrap();
   assert_eq!(status.status.code(), Some(0));
 }
 
 #[test]
 fn mountpoint_regular_dir_is_not() {
   let dir = tempfile::tempdir().unwrap();
-  let status = cmd!(exe(), "mountpoint", "-q", dir.path().to_str().unwrap()).unchecked().run().unwrap();
+  let status = cmd!(exe(), "mountpoint", "-q", dir.path().to_str().unwrap())
+    .unchecked()
+    .run()
+    .unwrap();
   assert_eq!(status.status.code(), Some(1));
 }
 
@@ -236,16 +283,34 @@ fn mountpoint_regular_dir_is_not() {
 fn mount_umount_tmpfs_roundtrip() {
   let dir = tempfile::tempdir().unwrap();
   let path = dir.path().to_str().unwrap();
-  let status = cmd!(exe(), "mount", "-t", "tmpfs", "tmpfs", path).unchecked().stderr_capture().run().unwrap();
+  let status = cmd!(exe(), "mount", "-t", "tmpfs", "tmpfs", path)
+    .unchecked()
+    .stderr_capture()
+    .run()
+    .unwrap();
   if status.status.code() != Some(0) {
     eprintln!("SKIPPED: mount tmpfs needs CAP_SYS_ADMIN, not available in this environment");
     return;
   }
-  let mp_status = cmd!(exe(), "mountpoint", "-q", path).unchecked().run().unwrap();
-  assert_eq!(mp_status.status.code(), Some(0), "tmpfs mount should register as a mountpoint");
+  let mp_status = cmd!(exe(), "mountpoint", "-q", path)
+    .unchecked()
+    .run()
+    .unwrap();
+  assert_eq!(
+    mp_status.status.code(),
+    Some(0),
+    "tmpfs mount should register as a mountpoint"
+  );
   cmd!(exe(), "umount", path).run().unwrap();
-  let mp_after = cmd!(exe(), "mountpoint", "-q", path).unchecked().run().unwrap();
-  assert_eq!(mp_after.status.code(), Some(1), "should no longer be a mountpoint after umount");
+  let mp_after = cmd!(exe(), "mountpoint", "-q", path)
+    .unchecked()
+    .run()
+    .unwrap();
+  assert_eq!(
+    mp_after.status.code(),
+    Some(1),
+    "should no longer be a mountpoint after umount"
+  );
 }
 
 #[test]
@@ -263,7 +328,11 @@ fn ip_link_show_bare_device() {
 
 #[test]
 fn ip_route_show_runs() {
-  let status = cmd!(exe(), "ip", "route", "show").unchecked().stdout_null().run().unwrap();
+  let status = cmd!(exe(), "ip", "route", "show")
+    .unchecked()
+    .stdout_null()
+    .run()
+    .unwrap();
   assert_eq!(status.status.code(), Some(0));
 }
 
@@ -282,7 +351,11 @@ fn ip_unknown_device_errors() {
 fn ip_unsupported_subcommand_falls_through() {
   // `ip rule` isn't covered by the modern backend; it must fall through to
   // the transpiled ip_main rather than erroring.
-  let status = cmd!(exe(), "ip", "rule", "show").unchecked().stdout_null().run().unwrap();
+  let status = cmd!(exe(), "ip", "rule", "show")
+    .unchecked()
+    .stdout_null()
+    .run()
+    .unwrap();
   assert_eq!(status.status.code(), Some(0));
 }
 
@@ -294,13 +367,23 @@ fn init_rejects_non_pid1() {
   // verified manually via `unshare --pid --fork --mount-proc` during
   // development — not something a plain `cargo test` process can safely
   // exercise (it would require real PID-namespace privileges in CI).
-  let status = cmd!(exe(), "init").unchecked().stdout_null().stderr_null().run().unwrap();
+  let status = cmd!(exe(), "init")
+    .unchecked()
+    .stdout_null()
+    .stderr_null()
+    .run()
+    .unwrap();
   assert_ne!(status.status.code(), Some(0));
 }
 
 #[test]
 fn linuxrc_alias_rejects_non_pid1() {
-  let status = cmd!(exe(), "linuxrc").unchecked().stdout_null().stderr_null().run().unwrap();
+  let status = cmd!(exe(), "linuxrc")
+    .unchecked()
+    .stdout_null()
+    .stderr_null()
+    .run()
+    .unwrap();
   assert_ne!(status.status.code(), Some(0));
 }
 
@@ -323,7 +406,10 @@ fn md5sum_known_vector() {
 #[test]
 fn sha256sum_known_vector() {
   let out = cmd!(exe(), "sha256sum").stdin_bytes("abc").read().unwrap();
-  assert_eq!(out, "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad  -");
+  assert_eq!(
+    out,
+    "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad  -"
+  );
 }
 
 #[test]
@@ -344,12 +430,21 @@ fn sha512sum_known_vector() {
 #[test]
 fn sha3sum_default_width_known_vector() {
   let out = cmd!(exe(), "sha3sum").stdin_bytes("abc").read().unwrap();
-  assert_eq!(out, "e642824c3f8cf24ad09234ee7d3c766fc9a3a5168d0c94ad73b46fdf  -");
+  assert_eq!(
+    out,
+    "e642824c3f8cf24ad09234ee7d3c766fc9a3a5168d0c94ad73b46fdf  -"
+  );
 }
 
 #[test]
 fn sha3sum_rejects_non_standard_width() {
-  let status = cmd!(exe(), "sha3sum", "-a300").unchecked().stdin_bytes("").stdout_null().stderr_null().run().unwrap();
+  let status = cmd!(exe(), "sha3sum", "-a300")
+    .unchecked()
+    .stdin_bytes("")
+    .stdout_null()
+    .stderr_null()
+    .run()
+    .unwrap();
   assert_ne!(status.status.code(), Some(0));
 }
 
@@ -358,15 +453,23 @@ fn md5sum_check_mode_roundtrip() {
   let dir = tempfile::tempdir().unwrap();
   let file = dir.path().join("f.txt");
   std::fs::write(&file, "hello").unwrap();
-  let sums = cmd!(exe(), "md5sum", file.to_str().unwrap()).read().unwrap();
+  let sums = cmd!(exe(), "md5sum", file.to_str().unwrap())
+    .read()
+    .unwrap();
   let sums_file = dir.path().join("sums.md5");
   std::fs::write(&sums_file, format!("{sums}\n")).unwrap();
 
-  let ok = cmd!(exe(), "md5sum", "-c", sums_file.to_str().unwrap()).read().unwrap();
+  let ok = cmd!(exe(), "md5sum", "-c", sums_file.to_str().unwrap())
+    .read()
+    .unwrap();
   assert!(ok.ends_with("OK"), "got: {ok}");
 
   std::fs::write(&sums_file, sums.replacen(char::is_numeric, "0", 1) + "\n").unwrap();
-  let status = cmd!(exe(), "md5sum", "-c", sums_file.to_str().unwrap()).unchecked().stdout_null().run().unwrap();
+  let status = cmd!(exe(), "md5sum", "-c", sums_file.to_str().unwrap())
+    .unchecked()
+    .stdout_null()
+    .run()
+    .unwrap();
   assert_ne!(status.status.code(), Some(0));
 }
 
@@ -381,7 +484,11 @@ fn md5sum_check_empty_file_fails() {
     .stderr_null()
     .run()
     .unwrap();
-  assert_ne!(status.status.code(), Some(0), "GNU compat: empty checksum file must fail");
+  assert_ne!(
+    status.status.code(),
+    Some(0),
+    "GNU compat: empty checksum file must fail"
+  );
 }
 
 #[test]

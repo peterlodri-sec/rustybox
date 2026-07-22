@@ -1,10 +1,10 @@
+use crate::compat::memmove;
 use crate::libbb::xfuncs_printf::xmalloc;
 use libc;
 use libc::close;
 use libc::fstat;
 use libc::open;
 use libc::sleep;
-use crate::compat::memmove;
 extern "C" {
 
   static mut optind: libc::c_int;

@@ -1,3 +1,4 @@
+use crate::compat::memset;
 use crate::librb::rtattr;
 use crate::networking::libiproute::libnetlink::rtnl_handle;
 use libc;
@@ -5,7 +6,6 @@ use libc::nlmsghdr;
 use libc::printf;
 use libc::sockaddr_nl;
 use libc::strcmp;
-use crate::compat::memset;
 extern "C" {
 
   fn snprintf(
@@ -22,7 +22,7 @@ extern "C" {
 
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
-//static: const char *ll_idx_n2a(int idx, char *buf) FAST_FUNC;
+  //static: const char *ll_idx_n2a(int idx, char *buf) FAST_FUNC;
 
 }
 

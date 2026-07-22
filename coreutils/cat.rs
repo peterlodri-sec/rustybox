@@ -1,3 +1,4 @@
+use crate::compat::read;
 use crate::libbb::print_numbered_lines::number_state;
 use crate::librb::size_t;
 use crate::librb::smallint;
@@ -6,7 +7,6 @@ use libc::close;
 use libc::printf;
 use libc::ssize_t;
 use libc::FILE;
-use crate::compat::read;
 extern "C" {
   static mut optind: libc::c_int;
   static mut stdout: *mut FILE;

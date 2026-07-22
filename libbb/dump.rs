@@ -1,3 +1,6 @@
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
 use crate::libbb::skip_whitespace::skip_whitespace;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::size_t;
@@ -12,9 +15,6 @@ use libc::sprintf;
 use libc::stat;
 use libc::strchr;
 use libc::FILE;
-use crate::compat::memcmp;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
 
   static mut stdin: *mut FILE;
@@ -27,8 +27,6 @@ extern "C" {
   fn fread(__ptr: *mut libc::c_void, __size: size_t, __n: size_t, __stream: *mut FILE) -> size_t;
   fn fseeko(__stream: *mut FILE, __off: off64_t, __whence: libc::c_int) -> libc::c_int;
   fn ferror_unlocked(__stream: *mut FILE) -> libc::c_int;
-
-  
 
 }
 

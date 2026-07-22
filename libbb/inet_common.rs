@@ -1,3 +1,6 @@
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::size_t;
@@ -7,9 +10,6 @@ use libc::sa_family_t;
 use libc::sockaddr;
 use libc::strcmp;
 use libc::strcpy;
-use crate::compat::memcpy;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
   fn gethostbyname(__name: *const libc::c_char) -> *mut hostent;
   fn getaddrinfo(
@@ -20,15 +20,14 @@ extern "C" {
   ) -> libc::c_int;
   fn freeaddrinfo(__ai: *mut addrinfo);
 
-  
   fn inet_aton(__cp: *const libc::c_char, __inp: *mut in_addr) -> libc::c_int;
-/* Some useful definitions */
-/* Macros for min/max.  */
-/* buffer allocation schemes */
-/* glibc uses __errno_location() to get a ptr to errno */
-/* We can just memorize it once - no multithreading in busybox :) */
+  /* Some useful definitions */
+  /* Macros for min/max.  */
+  /* buffer allocation schemes */
+  /* glibc uses __errno_location() to get a ptr to errno */
+  /* We can just memorize it once - no multithreading in busybox :) */
 
-/* This one doesn't append :PORTNUM */
+  /* This one doesn't append :PORTNUM */
 
 }
 

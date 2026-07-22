@@ -1,7 +1,7 @@
+use crate::compat::strlen;
+use crate::librb::size_t;
 use libc;
 use libc::sprintf;
-use crate::librb::size_t;
-use crate::compat::strlen;
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

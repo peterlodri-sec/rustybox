@@ -1,3 +1,4 @@
+use crate::compat::memcpy;
 use libc;
 use libc::alarm;
 use libc::fprintf;
@@ -6,7 +7,6 @@ use libc::printf;
 use libc::termios;
 use libc::winsize;
 use libc::FILE;
-use crate::compat::memcpy;
 extern "C" {
   fn _exit(_: libc::c_int) -> !;
 

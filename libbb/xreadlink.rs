@@ -1,9 +1,9 @@
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use libc;
 use libc::free;
 use libc::strcpy;
 use libc::strrchr;
-use crate::compat::strlen;
 extern "C" {
 
   fn readlink(__path: *const libc::c_char, __buf: *mut libc::c_char, __len: size_t) -> ssize_t;

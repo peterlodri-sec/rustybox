@@ -1,3 +1,5 @@
+use crate::compat::memcmp;
+use crate::compat::memset;
 use crate::libbb::ptr_to_globals::bb_errno;
 use libc;
 use libc::cc_t;
@@ -11,8 +13,6 @@ use libc::tcflag_t;
 use libc::termios;
 use libc::winsize;
 use libc::FILE;
-use crate::compat::memcmp;
-use crate::compat::memset;
 extern "C" {
   static mut stdout: *mut FILE;
 

@@ -20,11 +20,11 @@ extern "C" {
   fn localtime(__timer: *const time_t) -> *mut tm;
   fn ctime(__timer: *const time_t) -> *mut libc::c_char;
 
-/*
- * Common defines/structures/etc... for applets that need to work with the RTC.
- *
- * Licensed under GPLv2 or later, see file LICENSE in this source tree.
- */
+  /*
+   * Common defines/structures/etc... for applets that need to work with the RTC.
+   *
+   * Licensed under GPLv2 or later, see file LICENSE in this source tree.
+   */
 
 }
 

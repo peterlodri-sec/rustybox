@@ -1,3 +1,4 @@
+use crate::compat::strlen;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::size_t;
 use crate::librb::smallint;
@@ -15,12 +16,11 @@ use libc::strchr;
 use libc::strcmp;
 use libc::strstr;
 use libc::FILE;
-use crate::compat::strlen;
 extern "C" {
   static mut stdout: *mut FILE;
   fn setbuf(__stream: *mut FILE, __buf: *mut libc::c_char);
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  
+
   fn waitpid(__pid: pid_t, __stat_loc: *mut libc::c_int, __options: libc::c_int) -> pid_t;
   fn getmntent_r(
     __stream: *mut FILE,
@@ -905,10 +905,8 @@ unsafe fn compile_fs_type(mut fs_type: *mut libc::c_char) {
     let ref mut fresh12 = *(*(bb_common_bufsiz1.as_mut_ptr() as *mut globals))
       .fs_type_list
       .offset(fresh11 as isize);
-    *fresh12 = crate::libbb::xfuncs_printf::xstrndup(
-      s,
-      comma.offset_from(s) as libc::c_long as libc::c_int,
-    );
+    *fresh12 =
+      crate::libbb::xfuncs_printf::xstrndup(s, comma.offset_from(s) as libc::c_long as libc::c_int);
     if *comma as libc::c_int == '\u{0}' as i32 {
       break;
     }

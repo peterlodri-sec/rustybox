@@ -1,6 +1,9 @@
 use crate::librb::md5_ctx_t;
 use crate::librb::size_t;
 
+use crate::compat::memcpy;
+use crate::compat::memmove;
+use crate::compat::strlen;
 use libc;
 use libc::alarm;
 use libc::atoi;
@@ -11,9 +14,6 @@ use libc::pid_t;
 use libc::ptrdiff_t;
 use libc::strchr;
 use libc::FILE;
-use crate::compat::memcpy;
-use crate::compat::memmove;
-use crate::compat::strlen;
 extern "C" {
 
   fn unsetenv(__name: *const libc::c_char) -> libc::c_int;
@@ -26,9 +26,7 @@ extern "C" {
   fn popen(__command: *const libc::c_char, __modes: *const libc::c_char) -> *mut FILE;
   fn pclose(__stream: *mut FILE) -> libc::c_int;
 
-  
-
-//char FAST_FUNC *parse_url(char *url, char **user, char **pass);
+  //char FAST_FUNC *parse_url(char *url, char **user, char **pass);
 
 }
 

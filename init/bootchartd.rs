@@ -1,3 +1,4 @@
+use crate::compat::strlen;
 use crate::libbb::parse_config::parser_t;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::size_t;
@@ -28,7 +29,6 @@ use libc::umount2;
 use libc::unlink;
 use libc::useconds_t;
 use libc::FILE;
-use crate::compat::strlen;
 extern "C" {
 
   fn atof(__nptr: *const libc::c_char) -> libc::c_double;

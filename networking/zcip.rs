@@ -1,3 +1,6 @@
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::smallint;
@@ -6,16 +9,12 @@ use c2rust_asm_casts::AsmCastTrait;
 use libc;
 use libc::openlog;
 use libc::putenv;
-use crate::compat::memcmp;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
-  
+
   static mut optind: libc::c_int;
   fn rand() -> libc::c_int;
   fn srand(__seed: libc::c_uint);
 
-  
   fn inet_ntoa(__in: in_addr) -> *mut libc::c_char;
   fn inet_aton(__cp: *const libc::c_char, __inp: *mut in_addr) -> libc::c_int;
 

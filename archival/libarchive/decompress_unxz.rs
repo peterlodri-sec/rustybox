@@ -1,19 +1,15 @@
 use crate::archival::libarchive::bb_archive::transformer_state_t;
-use crate::libbb::xfuncs_printf::xmalloc;
-use crate::librb::size_t;
-use libc;
-use libc::free;
-use libc::strcpy;
 use crate::compat::malloc;
 use crate::compat::memcmp;
 use crate::compat::memcpy;
 use crate::compat::memmove;
 use crate::compat::memset;
+use crate::libbb::xfuncs_printf::xmalloc;
+use crate::librb::size_t;
+use libc;
+use libc::free;
+use libc::strcpy;
 extern "C" {
-
-  
-
-  
 
   /* Returns $SHELL, getpwuid(getuid())->pw_shell, or DEFAULT_SHELL.
    * Note that getpwuid result might need xstrdup'ing

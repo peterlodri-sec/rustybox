@@ -1,3 +1,4 @@
+use crate::compat::memset;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::size_t;
@@ -7,7 +8,6 @@ use libc::off_t;
 use libc::printf;
 use libc::ssize_t;
 use libc::strcmp;
-use crate::compat::memset;
 extern "C" {
 
   static mut optind: libc::c_int;

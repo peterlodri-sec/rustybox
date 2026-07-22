@@ -1,3 +1,4 @@
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::default_error_retval::xfunc_error_retval;
 use crate::librb::re_pattern_buffer;
@@ -7,7 +8,6 @@ use libc::free;
 use libc::printf;
 use libc::puts;
 use libc::strstr;
-use crate::compat::strlen;
 extern "C" {
 
   fn exit(_: libc::c_int) -> !;

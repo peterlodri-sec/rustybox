@@ -33,13 +33,21 @@ use nix::sys::socket::{socket, AddressFamily, SockFlag, SockType};
 // Same pattern as modern/ifconfig.rs: every unsafe operation lives here.
 
 fn open_ctl_socket() -> io::Result<OwnedFd> {
-  socket(AddressFamily::Inet, SockType::Datagram, SockFlag::empty(), None)
-    .map_err(|e| io::Error::from_raw_os_error(e as i32))
+  socket(
+    AddressFamily::Inet,
+    SockType::Datagram,
+    SockFlag::empty(),
+    None,
+  )
+  .map_err(|e| io::Error::from_raw_os_error(e as i32))
 }
 
 fn ifreq_named(name: &str) -> io::Result<libc::ifreq> {
   if name.is_empty() || name.len() >= libc::IF_NAMESIZE {
-    return Err(io::Error::new(io::ErrorKind::InvalidInput, format!("invalid interface name '{name}'")));
+    return Err(io::Error::new(
+      io::ErrorKind::InvalidInput,
+      format!("invalid interface name '{name}'"),
+    ));
   }
   // SAFETY: ifreq is plain-old-data; all-zero is a valid value.
   let mut ifr: libc::ifreq = unsafe { std::mem::zeroed() };
@@ -90,7 +98,9 @@ struct Iface {
 }
 
 fn prefixlen_v4(mask: Option<Ipv4Addr>) -> u32 {
-  mask.map(|m| u32::from_ne_bytes(m.octets()).count_ones()).unwrap_or(32)
+  mask
+    .map(|m| u32::from_ne_bytes(m.octets()).count_ones())
+    .unwrap_or(32)
 }
 
 fn collect_interfaces(only: Option<&str>) -> io::Result<Vec<Iface>> {
@@ -105,7 +115,13 @@ fn collect_interfaces(only: Option<&str>) -> io::Result<Vec<Iface>> {
     let idx = match out.iter().position(|i| i.name == ifa.interface_name) {
       Some(i) => i,
       None => {
-        out.push(Iface { name: ifa.interface_name.clone(), flags: ifa.flags, mac: None, inet: Vec::new(), inet6: Vec::new() });
+        out.push(Iface {
+          name: ifa.interface_name.clone(),
+          flags: ifa.flags,
+          mac: None,
+          inet: Vec::new(),
+          inet6: Vec::new(),
+        });
         out.len() - 1
       }
     };
@@ -113,7 +129,11 @@ fn collect_interfaces(only: Option<&str>) -> io::Result<Vec<Iface>> {
     entry.flags = ifa.flags;
     if let Some(addr) = ifa.address.as_ref() {
       if let Some(sin) = addr.as_sockaddr_in() {
-        let mask = ifa.netmask.as_ref().and_then(|m| m.as_sockaddr_in()).map(|s| s.ip());
+        let mask = ifa
+          .netmask
+          .as_ref()
+          .and_then(|m| m.as_sockaddr_in())
+          .map(|s| s.ip());
         entry.inet.push((sin.ip(), prefixlen_v4(mask)));
       } else if let Some(sin6) = addr.as_sockaddr_in6() {
         // Netmask isn't exposed in prefixlen form by getifaddrs for v6 in a
@@ -121,9 +141,12 @@ fn collect_interfaces(only: Option<&str>) -> io::Result<Vec<Iface>> {
         // netlink. We don't have that without one, so this shows /128 for
         // any address without a discoverable mask — acceptable for a
         // read-only display helper, not used for any mutation.
-        let plen = ifa.netmask.as_ref().and_then(|m| m.as_sockaddr_in6()).map(|s| {
-          s.ip().octets().iter().map(|b| b.count_ones()).sum::<u32>()
-        }).unwrap_or(128);
+        let plen = ifa
+          .netmask
+          .as_ref()
+          .and_then(|m| m.as_sockaddr_in6())
+          .map(|s| s.ip().octets().iter().map(|b| b.count_ones()).sum::<u32>())
+          .unwrap_or(128);
         entry.inet6.push((sin6.ip().to_string(), plen));
       } else if let Some(link) = addr.as_link_addr() {
         if let Some(mac) = link.addr() {
@@ -136,7 +159,11 @@ fn collect_interfaces(only: Option<&str>) -> io::Result<Vec<Iface>> {
 }
 
 fn format_mac(mac: [u8; 6]) -> String {
-  mac.iter().map(|b| format!("{b:02x}")).collect::<Vec<_>>().join(":")
+  mac
+    .iter()
+    .map(|b| format!("{b:02x}"))
+    .collect::<Vec<_>>()
+    .join(":")
 }
 
 fn flag_names(flags: InterfaceFlags) -> String {
@@ -151,14 +178,23 @@ fn flag_names(flags: InterfaceFlags) -> String {
     (InterfaceFlags::IFF_ALLMULTI, "ALLMULTI"),
     (InterfaceFlags::IFF_MULTICAST, "MULTICAST"),
   ];
-  table.iter().filter(|(bit, _)| flags.contains(*bit)).map(|(_, n)| *n).collect::<Vec<_>>().join(",")
+  table
+    .iter()
+    .filter(|(bit, _)| flags.contains(*bit))
+    .map(|(_, n)| *n)
+    .collect::<Vec<_>>()
+    .join(",")
 }
 
 fn print_link_line(ctl: &OwnedFd, ife: &Iface) {
   let idx = if_nametoindex(ife.name.as_str()).unwrap_or(0);
   let mtu = get_mtu(ctl.as_raw_fd(), &ife.name).unwrap_or(0);
   println!("{idx}: {}: <{}> mtu {mtu}", ife.name, flag_names(ife.flags));
-  let encap = if ife.flags.contains(InterfaceFlags::IFF_LOOPBACK) { "loopback" } else { "ether" };
+  let encap = if ife.flags.contains(InterfaceFlags::IFF_LOOPBACK) {
+    "loopback"
+  } else {
+    "ether"
+  };
   if let Some(mac) = ife.mac {
     println!("    link/{encap} {}", format_mac(mac));
   } else {
@@ -246,7 +282,11 @@ fn cmd_link_set_updown(dev: &str, up: bool) -> i32 {
       return 1;
     }
   };
-  let next = if up { cur | libc::IFF_UP | libc::IFF_RUNNING } else { cur & !libc::IFF_UP };
+  let next = if up {
+    cur | libc::IFF_UP | libc::IFF_RUNNING
+  } else {
+    cur & !libc::IFF_UP
+  };
   match set_flags(fd, dev, next) {
     Ok(()) => 0,
     Err(e) => {
@@ -316,7 +356,12 @@ pub fn run(argv: &[&str]) -> Option<i32> {
   let mut args: Vec<&str> = argv.iter().skip(1).copied().collect();
   // Strip global family/oneline options we don't need to act on for the
   // read-only paths we cover; anything else falls through.
-  args.retain(|a| !matches!(*a, "-o" | "-oneline" | "-4" | "-6" | "-f" | "-family" | "inet" | "inet6"));
+  args.retain(|a| {
+    !matches!(
+      *a,
+      "-o" | "-oneline" | "-4" | "-6" | "-f" | "-family" | "inet" | "inet6"
+    )
+  });
   let mut it = args.into_iter().peekable();
   let sub = it.next()?;
   match sub {

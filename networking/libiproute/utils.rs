@@ -1,3 +1,5 @@
+use crate::compat::memcmp;
+use crate::compat::memset;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::size_t;
 use crate::librb::socklen_t;
@@ -9,8 +11,6 @@ use libc::fscanf;
 use libc::strchr;
 use libc::strcmp;
 use libc::FILE;
-use crate::compat::memcmp;
-use crate::compat::memset;
 extern "C" {
 
   fn strtoul(

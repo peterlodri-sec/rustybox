@@ -1,3 +1,6 @@
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
 use crate::libbb::default_error_retval::xfunc_error_retval;
 use crate::librb::size_t;
 use crate::librb::socklen_t;
@@ -17,9 +20,6 @@ use libc::sockaddr;
 use libc::sockaddr_in;
 use libc::sockaddr_in6;
 use libc::ssize_t;
-use crate::compat::memcmp;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;
@@ -53,7 +53,6 @@ extern "C" {
 
   fn exit(_: libc::c_int) -> !;
 
-  
   fn mempcpy(
     __dest: *mut libc::c_void,
     __src: *const libc::c_void,

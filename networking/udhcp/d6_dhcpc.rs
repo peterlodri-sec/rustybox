@@ -1,3 +1,6 @@
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::llist::llist_t;
 use crate::libbb::ptr_to_globals::bb_errno;
@@ -21,12 +24,7 @@ use libc::sleep;
 use libc::sockaddr;
 use libc::strcmp;
 use libc::unlink;
-use crate::compat::memcpy;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
-
-  
 
   fn mempcpy(
     __dest: *mut libc::c_void,
@@ -1091,8 +1089,7 @@ unsafe extern "C" fn add_d6_client_options(mut ptr: *mut u8) -> *mut u8 {
     *start.offset(1) = 6i32 as u8;
     *start.offset(2) =
       (ptr.offset_from(start) as libc::c_long - 4i32 as libc::c_long >> 8i32) as u8;
-    *start.offset(3) =
-      (ptr.offset_from(start) as libc::c_long - 4i32 as libc::c_long) as u8
+    *start.offset(3) = (ptr.offset_from(start) as libc::c_long - 4i32 as libc::c_long) as u8
   } else {
     ptr = start
   }
@@ -1676,8 +1673,7 @@ unsafe extern "C" fn send_d6_renew(
   if !server_ipv6.is_null() {
     return crate::networking::udhcp::d6_packet::d6_send_kernel_packet(
       &mut packet,
-      opt_ptr.offset_from(&mut packet as *mut d6_packet as *mut u8) as libc::c_long
-        as libc::c_uint,
+      opt_ptr.offset_from(&mut packet as *mut d6_packet as *mut u8) as libc::c_long as libc::c_uint,
       our_cur_ipv6,
       546i32,
       server_ipv6,
@@ -1774,8 +1770,7 @@ unsafe extern "C" fn send_d6_release(
   );
   return crate::networking::udhcp::d6_packet::d6_send_kernel_packet(
     &mut packet,
-    opt_ptr.offset_from(&mut packet as *mut d6_packet as *mut u8) as libc::c_long
-      as libc::c_uint,
+    opt_ptr.offset_from(&mut packet as *mut d6_packet as *mut u8) as libc::c_long as libc::c_uint,
     our_cur_ipv6,
     546i32,
     server_ipv6,

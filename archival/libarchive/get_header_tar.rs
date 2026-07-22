@@ -1,4 +1,5 @@
 use crate::archival::libarchive::bb_archive::file_header_t;
+use crate::compat::memcmp;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::size_t;
@@ -12,7 +13,6 @@ use libc::off64_t;
 use libc::off_t;
 use libc::time_t;
 use libc::uid_t;
-use crate::compat::memcmp;
 extern "C" {
 
   fn strtoull(
@@ -22,19 +22,19 @@ extern "C" {
   ) -> libc::c_ulonglong;
 
   fn lseek(__fd: libc::c_int, __offset: off64_t, __whence: libc::c_int) -> off64_t;
-  
-/* Some useful definitions */
-/* Macros for min/max.  */
-/* buffer allocation schemes */
-/* glibc uses __errno_location() to get a ptr to errno */
-/* We can just memorize it once - no multithreading in busybox :) */
 
-/* NB: can violate const-ness (similarly to strchr) */
+  /* Some useful definitions */
+  /* Macros for min/max.  */
+  /* buffer allocation schemes */
+  /* glibc uses __errno_location() to get a ptr to errno */
+  /* We can just memorize it once - no multithreading in busybox :) */
 
-// NB: will return short read on error, not -1,
-// if some data was read before error occurred
+  /* NB: can violate const-ness (similarly to strchr) */
 
-/* Autodetects gzip/bzip2 formats. fd may be in the middle of the file! */
+  // NB: will return short read on error, not -1,
+  // if some data was read before error occurred
+
+  /* Autodetects gzip/bzip2 formats. fd may be in the middle of the file! */
 
 }
 

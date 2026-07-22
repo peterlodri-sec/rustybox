@@ -1,3 +1,4 @@
+use crate::compat::strlen;
 use crate::libbb::default_error_retval::xfunc_error_retval;
 use crate::libbb::llist::llist_t;
 use crate::libbb::skip_whitespace::skip_whitespace;
@@ -22,7 +23,6 @@ use libc::strcpy;
 use libc::uid_t;
 use libc::unlink;
 use libc::FILE;
-use crate::compat::strlen;
 extern "C" {
   fn strtol(
     __nptr: *const libc::c_char,
@@ -379,8 +379,7 @@ unsafe fn parse_regex_delim(
   cmdstr_ptr = cmdstr_ptr.offset((idx + 1i32) as isize);
   idx = index_of_next_unescaped_regexp_delim(-(delimiter as libc::c_int), cmdstr_ptr);
   *replace = copy_parsing_escapes(cmdstr_ptr, idx);
-  return (cmdstr_ptr.offset_from(cmdstr) as libc::c_long + idx as libc::c_long)
-    as libc::c_int;
+  return (cmdstr_ptr.offset_from(cmdstr) as libc::c_long + idx as libc::c_long) as libc::c_int;
 }
 /*
  * returns the index in the string just past where the address ends.
@@ -462,8 +461,7 @@ unsafe fn parse_file_cmd(
       start,
       (eol.offset_from(start) as libc::c_long + 1) as libc::c_int,
     );
-    *(*retval).offset(eol.offset_from(start) as libc::c_long as isize) =
-      '\\' as i32 as libc::c_char
+    *(*retval).offset(eol.offset_from(start) as libc::c_long as isize) = '\\' as i32 as libc::c_char
   } else {
     /* eol is NUL */
     *retval = crate::libbb::xfuncs_printf::xstrdup(start)

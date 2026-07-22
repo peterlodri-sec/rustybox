@@ -1,3 +1,4 @@
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::bb_uidgid_t;
@@ -16,7 +17,6 @@ use libc::sockaddr;
 use libc::sockaddr_in;
 use libc::sockaddr_in6;
 use libc::ssize_t;
-use crate::compat::strlen;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;
@@ -50,14 +50,14 @@ extern "C" {
 
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
-/* Returns number of already opened connects to this ips, including this one.
- * ip should be a malloc'ed ptr.
- * If return value is <= maxconn, ip is inserted into the table
- * and pointer to table entry if stored in *hccpp
- * (useful for storing pid later).
- * Else ip is NOT inserted (you must take care of it - free() etc) */
+  /* Returns number of already opened connects to this ips, including this one.
+   * ip should be a malloc'ed ptr.
+   * If return value is <= maxconn, ip is inserted into the table
+   * and pointer to table entry if stored in *hccpp
+   * (useful for storing pid later).
+   * Else ip is NOT inserted (you must take care of it - free() etc) */
 
-/* Finds and frees element with pid */
+  /* Finds and frees element with pid */
 
 }
 

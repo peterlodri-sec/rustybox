@@ -1,10 +1,10 @@
+use crate::compat::strlen;
 use crate::librb::size_t;
 use libc;
 use libc::free;
 use libc::passwd;
 use libc::printf;
 use libc::strchr;
-use crate::compat::strlen;
 extern "C" {
 
   fn strcasestr(

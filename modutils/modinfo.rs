@@ -1,9 +1,9 @@
+use crate::compat::strlen;
 use crate::libbb::parse_config::parser_t;
 use libc;
 use libc::free;
 use libc::printf;
 use libc::strcmp;
-use crate::compat::strlen;
 extern "C" {
   fn fnmatch(
     __pattern: *const libc::c_char,
@@ -181,9 +181,7 @@ unsafe extern "C" fn modinfo(
               ptr = memchr(
                 ptr as *const libc::c_void,
                 *pattern as libc::c_int,
-                len.wrapping_sub(
-                  ptr.offset_from(the_module) as libc::c_long as libc::c_ulong
-                ),
+                len.wrapping_sub(ptr.offset_from(the_module) as libc::c_long as libc::c_ulong),
               ) as *mut libc::c_char;
               if ptr.is_null() {
                 break;

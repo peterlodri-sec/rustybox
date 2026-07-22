@@ -1,8 +1,8 @@
 use libc;
 use libc::free;
 
-use crate::librb::size_t;
 use crate::compat::memset;
+use crate::librb::size_t;
 /*
  * Copyright (C) 2017 Denys Vlasenko
  *

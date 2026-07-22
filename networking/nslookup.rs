@@ -1,3 +1,7 @@
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
+use crate::compat::read;
 use crate::libbb::skip_whitespace::skip_whitespace;
 use crate::librb::len_and_sockaddr;
 use crate::librb::size_t;
@@ -19,10 +23,6 @@ use libc::strcmp;
 use libc::strcpy;
 use libc::strtok;
 use libc::FILE;
-use crate::compat::memcmp;
-use crate::compat::memcpy;
-use crate::compat::memset;
-use crate::compat::read;
 extern "C" {
 
   fn fopen(__filename: *const libc::c_char, __modes: *const libc::c_char) -> *mut FILE;
@@ -57,8 +57,6 @@ extern "C" {
     _: libc::c_int,
   ) -> libc::c_int;
   // ...end resolv externs
-
-  
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
 

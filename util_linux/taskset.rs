@@ -1,11 +1,11 @@
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::librb::size_t;
 
+use crate::compat::memset;
 use libc;
 use libc::pid_t;
 use libc::printf;
 use libc::sprintf;
-use crate::compat::memset;
 extern "C" {
   fn sched_getaffinity(__pid: pid_t, __cpusetsize: size_t, __cpuset: *mut cpu_set_t)
     -> libc::c_int;
@@ -15,7 +15,7 @@ extern "C" {
     __cpuset: *const cpu_set_t,
   ) -> libc::c_int;
   static mut optind: libc::c_int;
-  
+
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
 
 }

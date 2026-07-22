@@ -1,3 +1,6 @@
+use crate::compat::memcmp;
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::default_error_retval::xfunc_error_retval;
 use crate::libbb::ptr_to_globals::bb_errno;
@@ -47,9 +50,6 @@ use libc::time;
 use libc::time_t;
 use libc::tm;
 use libc::FILE;
-use crate::compat::memcmp;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;
@@ -912,8 +912,8 @@ unsafe extern "C" fn parse_conf(mut path: *const libc::c_char, mut flag: libc::c
           p_1 = crate::libbb::simplify_path::bb_simplify_abs_path_inplace(
             (*cur_0).before_colon.as_mut_ptr(),
           );
-          file_len = p_1.offset_from((*cur_0).before_colon.as_mut_ptr()) as libc::c_long
-            as libc::c_uint;
+          file_len =
+            p_1.offset_from((*cur_0).before_colon.as_mut_ptr()) as libc::c_long as libc::c_uint;
           /* add "user:pass" after NUL */
           p_1 = p_1.offset(1);
           strcpy(p_1, after_colon);
@@ -2102,8 +2102,7 @@ unsafe extern "C" fn check_user_passwd(
           && strncmp(
             (*cur).after_colon,
             user_and_passwd,
-            (colon_after_user.offset_from(user_and_passwd) as libc::c_long + 1)
-              as libc::c_ulong,
+            (colon_after_user.offset_from(user_and_passwd) as libc::c_long + 1) as libc::c_ulong,
           ) != 0
         {
           current_block = 16559507199688588974;
@@ -2200,8 +2199,8 @@ unsafe extern "C" fn check_user_passwd(
             if r == 0 {
               (*ptr_to_globals).remoteuser = crate::libbb::xfuncs_printf::xstrndup(
                 user_and_passwd,
-                strchrnul(user_and_passwd, ':' as i32).offset_from(user_and_passwd)
-                  as libc::c_long as libc::c_int,
+                strchrnul(user_and_passwd, ':' as i32).offset_from(user_and_passwd) as libc::c_long
+                  as libc::c_int,
               );
               return 1i32;
               /* Ok */
@@ -2387,8 +2386,7 @@ unsafe extern "C" fn handle_incoming_and_exit(mut fromAddr: *const len_and_socka
   /* Copy URL from after "GET "/"POST " to stack-allocated char[] */
   let mut fresh25 = ::std::vec::from_elem(
     0,
-    ((HTTP_slash.offset_from(urlp) as libc::c_long + 2i32 as libc::c_long)
-      as libc::c_ulong)
+    ((HTTP_slash.offset_from(urlp) as libc::c_long + 2i32 as libc::c_long) as libc::c_ulong)
       .wrapping_add(strlen((*ptr_to_globals).index_page)) as usize,
   );
   urlcopy = fresh25.as_mut_ptr() as *mut libc::c_char;

@@ -1,5 +1,6 @@
 use crate::libbb::ptr_to_globals::bb_errno;
 
+use crate::compat::strlen;
 use libc;
 use libc::close;
 use libc::closedir;
@@ -7,7 +8,6 @@ use libc::ioctl;
 use libc::open;
 use libc::opendir;
 use libc::readdir;
-use crate::compat::strlen;
 extern "C" {
 
   fn putc_unlocked(__c: libc::c_int, __stream: *mut FILE) -> libc::c_int;
@@ -133,7 +133,8 @@ pub unsafe fn fgetsetflags(
         ((1u32 << 0 + 8i32 + 8i32 + 14i32
           | (('f' as i32) << 0 + 8i32) as libc::c_uint
           | (2i32 << 0) as libc::c_uint) as libc::c_ulong
-          | (::std::mem::size_of::<libc::c_long>() as libc::c_ulong) << 0 + 8i32 + 8i32) as _,
+          | (::std::mem::size_of::<libc::c_long>() as libc::c_ulong) << 0 + 8i32 + 8i32)
+          as _,
         &mut f as *mut libc::c_int,
       )
     } else {
@@ -142,7 +143,8 @@ pub unsafe fn fgetsetflags(
         ((2u32 << 0 + 8i32 + 8i32 + 14i32
           | (('f' as i32) << 0 + 8i32) as libc::c_uint
           | (1i32 << 0) as libc::c_uint) as libc::c_ulong
-          | (::std::mem::size_of::<libc::c_long>() as libc::c_ulong) << 0 + 8i32 + 8i32) as _,
+          | (::std::mem::size_of::<libc::c_long>() as libc::c_ulong) << 0 + 8i32 + 8i32)
+          as _,
         &mut f as *mut libc::c_int,
       );
       *get_flags = f as libc::c_ulong

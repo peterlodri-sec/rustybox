@@ -1,12 +1,12 @@
+use crate::compat::strlen;
 use crate::librb::size_t;
 use libc;
 use libc::ssize_t;
 use libc::strcmp;
-use crate::compat::strlen;
 extern "C" {
 
   fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> libc::c_int;
-  
+
 }
 
 /*

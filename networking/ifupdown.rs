@@ -1,3 +1,4 @@
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::llist::llist_t;
 use crate::libbb::ptr_to_globals::bb_errno;
@@ -27,7 +28,6 @@ use libc::strcmp;
 use libc::useconds_t;
 use libc::DIR;
 use libc::FILE;
-use crate::compat::strlen;
 extern "C" {
 
   fn if_nametoindex(__ifname: *const libc::c_char) -> libc::c_uint;

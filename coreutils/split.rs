@@ -1,11 +1,11 @@
-use libc;
 use crate::compat::memset;
 use crate::compat::strlen;
+use libc;
 extern "C" {
 
   static bb_msg_standard_input: [libc::c_char; 0];
   static mut optind: libc::c_int;
-  
+
   fn memchr(_: *const libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
 
   static mut bb_common_bufsiz1: [libc::c_char; 0];

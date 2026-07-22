@@ -1,8 +1,8 @@
 /* Print string that matches bit masked flags */
 
+use crate::compat::strlen;
 use libc;
 use libc::printf;
-use crate::compat::strlen;
 
 // #[derive(Copy, Clone)]
 // #[repr(C)]

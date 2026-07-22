@@ -41,8 +41,8 @@ pub fn run(argv: &[&str]) -> i32 {
       }
       continue;
     }
-    let is_cluster = a.starts_with('-')
-      || (first && !a.is_empty() && a.chars().all(|c| "cxtzjJvftC".contains(c)));
+    let is_cluster =
+      a.starts_with('-') || (first && !a.is_empty() && a.chars().all(|c| "cxtzjJvftC".contains(c)));
     first = false;
     if is_cluster {
       for c in a.trim_start_matches('-').chars() {
@@ -90,7 +90,10 @@ fn wrap_writer(w: Box<dyn Write>, comp: Comp) -> io::Result<Box<dyn Write>> {
   Ok(match comp {
     Comp::None => w,
     #[cfg(feature = "modern-gzip")]
-    Comp::Gz => Box::new(flate2::write::GzEncoder::new(w, flate2::Compression::new(6))),
+    Comp::Gz => Box::new(flate2::write::GzEncoder::new(
+      w,
+      flate2::Compression::new(6),
+    )),
     #[cfg(feature = "modern-bzip2")]
     Comp::Bz2 => Box::new(bzip2::write::BzEncoder::new(w, bzip2::Compression::new(9))),
     #[cfg(feature = "modern-xz")]

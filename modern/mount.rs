@@ -35,7 +35,13 @@ struct ParsedOpts {
 }
 
 fn parse_o_opts(opts: &str) -> ParsedOpts {
-  let mut p = ParsedOpts { flags: MsFlags::MS_SILENT, data: Vec::new(), noauto: false, swap: false, nofail: false };
+  let mut p = ParsedOpts {
+    flags: MsFlags::MS_SILENT,
+    data: Vec::new(),
+    noauto: false,
+    swap: false,
+    nofail: false,
+  };
   for tok in opts.split(',').map(str::trim).filter(|s| !s.is_empty()) {
     let (name, _val) = match tok.split_once('=') {
       Some((n, v)) => (n, Some(v)),
@@ -87,7 +93,9 @@ fn parse_o_opts(opts: &str) -> ParsedOpts {
 }
 
 fn shared_subtree_only(flags: MsFlags) -> bool {
-  flags.intersects(MsFlags::MS_SHARED | MsFlags::MS_PRIVATE | MsFlags::MS_SLAVE | MsFlags::MS_UNBINDABLE)
+  flags.intersects(
+    MsFlags::MS_SHARED | MsFlags::MS_PRIVATE | MsFlags::MS_SLAVE | MsFlags::MS_UNBINDABLE,
+  )
 }
 
 fn is_root() -> bool {
@@ -100,7 +108,11 @@ fn autodetect_fstypes() -> Vec<String> {
     if let Ok(content) = fs::read_to_string(path) {
       for line in content.lines() {
         let line = line.trim();
-        if line.is_empty() || line.starts_with('#') || line.starts_with('*') || line.starts_with("nodev") {
+        if line.is_empty()
+          || line.starts_with('#')
+          || line.starts_with('*')
+          || line.starts_with("nodev")
+        {
           continue;
         }
         let fstype = line.split_whitespace().last().unwrap_or(line);
@@ -117,7 +129,13 @@ fn autodetect_fstypes() -> Vec<String> {
 // ordinary (non-`unsafe`) fn — Rust's safety model is about memory, and this
 // call can't corrupt the process's own memory, only kernel/OS state, same
 // category as e.g. `std::fs::remove_dir_all`.
-fn do_mount(source: Option<&str>, target: &str, fstype: Option<&str>, mut flags: MsFlags, data: &str) -> Result<(), Errno> {
+fn do_mount(
+  source: Option<&str>,
+  target: &str,
+  fstype: Option<&str>,
+  mut flags: MsFlags,
+  data: &str,
+) -> Result<(), Errno> {
   let data_opt = if data.is_empty() { None } else { Some(data) };
   match mount(source, target, fstype, flags, data_opt) {
     Ok(()) => Ok(()),
@@ -130,8 +148,16 @@ fn do_mount(source: Option<&str>, target: &str, fstype: Option<&str>, mut flags:
   }
 }
 
-fn singlemount(source: &str, target: &str, fstype: Option<&str>, flags: MsFlags, data: &str) -> io::Result<()> {
-  let no_fstype_needed = flags.intersects(MsFlags::MS_REMOUNT | MsFlags::MS_BIND | MsFlags::MS_MOVE) || shared_subtree_only(flags);
+fn singlemount(
+  source: &str,
+  target: &str,
+  fstype: Option<&str>,
+  flags: MsFlags,
+  data: &str,
+) -> io::Result<()> {
+  let no_fstype_needed = flags
+    .intersects(MsFlags::MS_REMOUNT | MsFlags::MS_BIND | MsFlags::MS_MOVE)
+    || shared_subtree_only(flags);
   if fstype.is_some() || no_fstype_needed {
     return do_mount(Some(source), target, fstype, flags, data).map_err(io::Error::from);
   }
@@ -155,7 +181,9 @@ struct FstabEntry {
 
 fn read_fstab_like(path: &str) -> Vec<FstabEntry> {
   let mut out = Vec::new();
-  let Ok(content) = fs::read_to_string(path) else { return out };
+  let Ok(content) = fs::read_to_string(path) else {
+    return out;
+  };
   for line in content.lines() {
     let line = line.trim();
     if line.is_empty() || line.starts_with('#') {
@@ -181,7 +209,9 @@ fn normalize(p: &str) -> PathBuf {
 
 fn already_mounted(dir: &str) -> bool {
   let target = normalize(dir);
-  read_fstab_like("/proc/mounts").iter().any(|e| normalize(&e.dir) == target)
+  read_fstab_like("/proc/mounts")
+    .iter()
+    .any(|e| normalize(&e.dir) == target)
 }
 
 fn print_mount_listing(fstype_filter: Option<&str>) -> i32 {
@@ -215,7 +245,11 @@ fn mount_all(fstab_path: &str, fstype_filter: Option<&str>, o_filter: Option<&st
       continue;
     }
     let data = parsed.data.join(",");
-    let fstype = if e.vfstype == "auto" { None } else { Some(e.vfstype.as_str()) };
+    let fstype = if e.vfstype == "auto" {
+      None
+    } else {
+      Some(e.vfstype.as_str())
+    };
     match singlemount(&e.fsname, &e.dir, fstype, parsed.flags, &data) {
       Ok(()) => {}
       Err(err) if err.raw_os_error() == Some(Errno::EBUSY as i32) => {}
@@ -256,10 +290,30 @@ fn parse_args(argv: &[&str]) -> Result<Args, String> {
   let mut it = argv.iter().skip(1).copied();
   while let Some(arg) = it.next() {
     match arg {
-      "-o" => push_opt(&mut a.o_opts, it.next().ok_or("mount: -o requires an argument")?),
-      "-t" => a.fstype = Some(it.next().ok_or("mount: -t requires an argument")?.to_string()),
-      "-T" => a.fstab = it.next().ok_or("mount: -T requires an argument")?.to_string(),
-      "-O" => a.o_filter = Some(it.next().ok_or("mount: -O requires an argument")?.to_string()),
+      "-o" => push_opt(
+        &mut a.o_opts,
+        it.next().ok_or("mount: -o requires an argument")?,
+      ),
+      "-t" => {
+        a.fstype = Some(
+          it.next()
+            .ok_or("mount: -t requires an argument")?
+            .to_string(),
+        )
+      }
+      "-T" => {
+        a.fstab = it
+          .next()
+          .ok_or("mount: -T requires an argument")?
+          .to_string()
+      }
+      "-O" => {
+        a.o_filter = Some(
+          it.next()
+            .ok_or("mount: -O requires an argument")?
+            .to_string(),
+        )
+      }
       "-a" => a.all = true,
       "-r" => push_opt(&mut a.o_opts, "ro"),
       "-w" => push_opt(&mut a.o_opts, "rw"),
@@ -307,10 +361,19 @@ pub fn run(argv: &[&str]) -> i32 {
 
   if a.positional.len() >= 2 {
     let data = parsed_cli_opts.data.join(",");
-    return match singlemount(&a.positional[0], &a.positional[1], a.fstype.as_deref(), parsed_cli_opts.flags, &data) {
+    return match singlemount(
+      &a.positional[0],
+      &a.positional[1],
+      a.fstype.as_deref(),
+      parsed_cli_opts.flags,
+      &data,
+    ) {
       Ok(()) => 0,
       Err(e) => {
-        eprintln!("mount: mounting {} on {}: {e}", a.positional[0], a.positional[1]);
+        eprintln!(
+          "mount: mounting {} on {}: {e}",
+          a.positional[0], a.positional[1]
+        );
         1
       }
     };
@@ -318,10 +381,19 @@ pub fn run(argv: &[&str]) -> i32 {
 
   // remount/bind/move only ever need the one path given (the target); they
   // don't need a source, so skip the fstab lookup entirely.
-  if parsed_cli_opts.flags.intersects(MsFlags::MS_REMOUNT | MsFlags::MS_BIND | MsFlags::MS_MOVE) {
+  if parsed_cli_opts
+    .flags
+    .intersects(MsFlags::MS_REMOUNT | MsFlags::MS_BIND | MsFlags::MS_MOVE)
+  {
     let target = &a.positional[0];
     let data = parsed_cli_opts.data.join(",");
-    return match do_mount(None, target, a.fstype.as_deref(), parsed_cli_opts.flags, &data) {
+    return match do_mount(
+      None,
+      target,
+      a.fstype.as_deref(),
+      parsed_cli_opts.flags,
+      &data,
+    ) {
       Ok(()) => 0,
       Err(e) => {
         eprintln!("mount: {target}: {e}");
@@ -351,8 +423,18 @@ pub fn run(argv: &[&str]) -> i32 {
   let mut data = base.data;
   data.extend(parsed_cli_opts.data.iter().cloned());
   let fstype = a.fstype.clone().unwrap_or_else(|| entry.vfstype.clone());
-  let fstype_opt = if fstype == "auto" { None } else { Some(fstype.as_str()) };
-  match singlemount(&entry.fsname, &entry.dir, fstype_opt, flags, &data.join(",")) {
+  let fstype_opt = if fstype == "auto" {
+    None
+  } else {
+    Some(fstype.as_str())
+  };
+  match singlemount(
+    &entry.fsname,
+    &entry.dir,
+    fstype_opt,
+    flags,
+    &data.join(","),
+  ) {
     Ok(()) => 0,
     Err(e) => {
       eprintln!("mount: mounting {} on {}: {e}", entry.fsname, entry.dir);
@@ -365,4 +447,3 @@ pub fn run_and_exit(args: &[&str]) -> ! {
   let code = run(args);
   std::process::exit(code);
 }
-

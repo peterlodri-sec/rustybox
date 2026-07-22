@@ -479,8 +479,7 @@ pub unsafe fn run_shell(
   }
   args = xmalloc(
     (::std::mem::size_of::<*mut libc::c_char>() as libc::c_ulong).wrapping_mul(
-      (2i32 as libc::c_long + args.offset_from(additional_args) as libc::c_long)
-        as libc::c_ulong,
+      (2i32 as libc::c_long + args.offset_from(additional_args) as libc::c_long) as libc::c_ulong,
     ),
   ) as *mut *const libc::c_char;
   if shell.is_null() || *shell.offset(0) == 0 {

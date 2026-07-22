@@ -16,10 +16,10 @@ extern "C" {
   fn ctime(__timer: *const time_t) -> *mut libc::c_char;
   fn inet_ntoa(__in: in_addr) -> *mut libc::c_char;
 
-// NB: will return short read on error, not -1,
-// if some data was read before error occurred
+  // NB: will return short read on error, not -1,
+  // if some data was read before error occurred
 
-//UNUSED: char* FAST_FUNC unicode_conv_to_printable_maxwidth(uni_stat_t *stats, const char *src, unsigned maxwidth);
+  //UNUSED: char* FAST_FUNC unicode_conv_to_printable_maxwidth(uni_stat_t *stats, const char *src, unsigned maxwidth);
 
 }
 
@@ -104,7 +104,7 @@ pub unsafe fn dumpleases_main(
   fd = crate::libbb::xfuncs_printf::xopen(file, 0);
   /*     "123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 */
   /*     "00:00:00:00:00:00 255.255.255.255 ABCDEFGHIJKLMNOPQRS Wed Jun 30 21:49:08 1993" */
-  
+
   printf(
     b"Mac %-14sIP %-13sHost %-15sExpires %s\n\x00" as *const u8 as *const libc::c_char,
     b"Address\x00" as *const u8 as *const libc::c_char,

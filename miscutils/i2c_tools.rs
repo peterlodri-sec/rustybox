@@ -1,3 +1,5 @@
+use crate::compat::memcpy;
+use crate::compat::memset;
 use crate::libbb::ptr_to_globals::bb_errno;
 use libc;
 use libc::close;
@@ -12,11 +14,7 @@ use libc::readdir;
 use libc::sprintf;
 use libc::sscanf;
 use libc::strchr;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
-
-  
 
   static mut optind: libc::c_int;
 
@@ -49,14 +47,14 @@ extern "C" {
   ) -> libc::c_ulong;
   fn exit(_: libc::c_int) -> !;
 
-/* Some useful definitions */
-/* Macros for min/max.  */
-/* buffer allocation schemes */
-/* glibc uses __errno_location() to get a ptr to errno */
-/* We can just memorize it once - no multithreading in busybox :) */
+  /* Some useful definitions */
+  /* Macros for min/max.  */
+  /* buffer allocation schemes */
+  /* glibc uses __errno_location() to get a ptr to errno */
+  /* We can just memorize it once - no multithreading in busybox :) */
 
-/* Guaranteed to NOT be a macro (smallest code). Saves nearly 2k on uclibc.
- * But potentially slow, don't use in one-billion-times loops */
+  /* Guaranteed to NOT be a macro (smallest code). Saves nearly 2k on uclibc.
+   * But potentially slow, don't use in one-billion-times loops */
 
 }
 
@@ -151,11 +149,7 @@ unsafe extern "C" fn i2c_smbus_access(
   args.command = cmd;
   args.size = size as u32;
   args.data = data;
-  return ioctl(
-    fd,
-    0x720i32 as _,
-    &mut args as *mut i2c_smbus_ioctl_data,
-  );
+  return ioctl(fd, 0x720i32 as _, &mut args as *mut i2c_smbus_ioctl_data);
 }
 unsafe extern "C" fn i2c_smbus_read_byte(mut fd: libc::c_int) -> i32 {
   let mut data: i2c_smbus_data = i2c_smbus_data { byte: 0 };

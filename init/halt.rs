@@ -1,3 +1,4 @@
+use crate::compat::memset;
 use crate::libbb::appletlib::applet_name;
 use crate::librb::smallint;
 use libc;
@@ -9,7 +10,6 @@ use libc::strcpy;
 use libc::sync;
 use libc::time;
 use libc::time_t;
-use crate::compat::memset;
 extern "C" {
 
   fn execlp(__file: *const libc::c_char, __arg: *const libc::c_char, _: ...) -> libc::c_int;

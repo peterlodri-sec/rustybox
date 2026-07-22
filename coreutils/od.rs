@@ -1,3 +1,6 @@
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
 use crate::libbb::llist::llist_t;
 use crate::libbb::ptr_to_globals::bb_errno;
 use crate::libbb::xfuncs_printf::xmalloc;
@@ -16,9 +19,6 @@ use libc::stat;
 use libc::strchr;
 use libc::strcpy;
 use libc::FILE;
-use crate::compat::memcmp;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
 
   static mut optind: libc::c_int;
@@ -40,8 +40,6 @@ extern "C" {
   fn ferror_unlocked(__stream: *mut FILE) -> libc::c_int;
 
   fn fileno_unlocked(__stream: *mut FILE) -> libc::c_int;
-
-  
 
   static bkm_suffixes: [suffix_mult; 0];
 
@@ -585,8 +583,7 @@ unsafe fn decode_one_format(
           ::std::mem::size_of::<libc::c_int>() as libc::c_ulong as u8,
           ::std::mem::size_of::<libc::c_long>() as libc::c_ulong as u8,
         ];
-        size = CSIL_sizeof[p.offset_from(CSIL.as_ptr()) as libc::c_long as usize]
-          as libc::c_uint;
+        size = CSIL_sizeof[p.offset_from(CSIL.as_ptr()) as libc::c_long as usize] as libc::c_uint;
         s = s.offset(1)
         /* skip C/S/I/L */
       }
@@ -614,8 +611,8 @@ unsafe fn decode_one_format(
         [32, 37, 37, 37, 117, 37, 115, 0, 0],
         [32, 37, 37, 48, 37, 117, 37, 115, 0],
       ];
-      pos = strchr(doux.as_ptr(), c as libc::c_int).offset_from(doux.as_ptr())
-        as libc::c_long as libc::c_int;
+      pos = strchr(doux.as_ptr(), c as libc::c_int).offset_from(doux.as_ptr()) as libc::c_long
+        as libc::c_int;
       fmt = doux_fmt[pos as usize];
       field_width = *doux_bytes_to_XXX[pos as usize].offset(size as isize) as libc::c_uint;
       p = doux_fmt_letter[pos as usize].as_ptr().offset(2);
@@ -705,8 +702,7 @@ unsafe fn decode_one_format(
           ::std::mem::size_of::<libc::c_float>() as libc::c_ulong as u8,
           ::std::mem::size_of::<libc::c_double>() as libc::c_ulong as u8,
         ];
-        size =
-          FDL_sizeof[p.offset_from(FDL.as_ptr()) as libc::c_long as usize] as libc::c_uint;
+        size = FDL_sizeof[p.offset_from(FDL.as_ptr()) as libc::c_long as usize] as libc::c_uint;
         s = s.offset(1)
         /* skip F/D/L */
       }
@@ -1401,11 +1397,110 @@ unsafe fn parse_old_offset(mut s: *const libc::c_char, mut offset: *mut off_t) -
 
 pub unsafe fn od_main(mut _argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> libc::c_int {
   static mut od_longopts: [libc::c_char; 104] = [
-    115, 107, 105, 112, 45, 98, 121, 116, 101, 115, 0, 1, 106, 97, 100, 100, 114, 101, 115, 115,
-    45, 114, 97, 100, 105, 120, 0, 1, 65, 114, 101, 97, 100, 45, 98, 121, 116, 101, 115, 0, 1, 78,
-    102, 111, 114, 109, 97, 116, 0, 1, 116, 111, 117, 116, 112, 117, 116, 45, 100, 117, 112, 108,
-    105, 99, 97, 116, 101, 115, 0, 0, 118, 115, 116, 114, 105, 110, 103, 115, 0, 2, 83, 119, 105,
-    100, 116, 104, 0, 2, 119, 116, 114, 97, 100, 105, 116, 105, 111, 110, 97, 108, 0, 0, 255u8 as libc::c_char, 0,
+    115,
+    107,
+    105,
+    112,
+    45,
+    98,
+    121,
+    116,
+    101,
+    115,
+    0,
+    1,
+    106,
+    97,
+    100,
+    100,
+    114,
+    101,
+    115,
+    115,
+    45,
+    114,
+    97,
+    100,
+    105,
+    120,
+    0,
+    1,
+    65,
+    114,
+    101,
+    97,
+    100,
+    45,
+    98,
+    121,
+    116,
+    101,
+    115,
+    0,
+    1,
+    78,
+    102,
+    111,
+    114,
+    109,
+    97,
+    116,
+    0,
+    1,
+    116,
+    111,
+    117,
+    116,
+    112,
+    117,
+    116,
+    45,
+    100,
+    117,
+    112,
+    108,
+    105,
+    99,
+    97,
+    116,
+    101,
+    115,
+    0,
+    0,
+    118,
+    115,
+    116,
+    114,
+    105,
+    110,
+    103,
+    115,
+    0,
+    2,
+    83,
+    119,
+    105,
+    100,
+    116,
+    104,
+    0,
+    2,
+    119,
+    116,
+    114,
+    97,
+    100,
+    105,
+    116,
+    105,
+    111,
+    110,
+    97,
+    108,
+    0,
+    0,
+    255u8 as libc::c_char,
+    0,
   ];
   let mut str_A: *const libc::c_char = std::ptr::null();
   let mut str_N: *const libc::c_char = std::ptr::null();

@@ -2,8 +2,8 @@ use libc;
 
 use crate::librb::size_t;
 
-use crate::util_linux::volume_id::volume_id::volume_id;
 use crate::compat::memcmp;
+use crate::util_linux::volume_id::volume_id::volume_id;
 
 pub type endian = libc::c_uint;
 pub const BE: endian = 1;

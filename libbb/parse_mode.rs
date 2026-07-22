@@ -65,8 +65,8 @@ pub unsafe fn bb_parse_mode(
         p = who_chars.as_ptr();
         loop {
           if *p as libc::c_int == *s as libc::c_int {
-            wholist |= who_mask
-              [p.offset_from(who_chars.as_ptr()) as libc::c_long as libc::c_int as usize];
+            wholist |=
+              who_mask[p.offset_from(who_chars.as_ptr()) as libc::c_long as libc::c_int as usize];
             s = s.offset(1);
             if *s == 0 {
               return -1i32;
@@ -150,9 +150,8 @@ pub unsafe fn bb_parse_mode(
                         as libc::c_uint
                       != 0
                   {
-                    permlist |= perm_mask[p.offset_from(perm_chars.as_ptr())
-                      as libc::c_long as libc::c_int
-                      as usize]
+                    permlist |= perm_mask
+                      [p.offset_from(perm_chars.as_ptr()) as libc::c_long as libc::c_int as usize]
                   }
                   s = s.offset(1);
                   if *s == 0 {

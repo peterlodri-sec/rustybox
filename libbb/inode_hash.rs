@@ -1,10 +1,10 @@
+use crate::compat::strlen;
 use crate::libbb::xfuncs_printf::xmalloc;
 use crate::librb::size_t;
 use libc;
 use libc::ino_t;
 use libc::stat;
 use libc::strcpy;
-use crate::compat::strlen;
 /*
  * Utility routines.
  *

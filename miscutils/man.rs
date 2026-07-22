@@ -1,3 +1,4 @@
+use crate::compat::strlen;
 use crate::libbb::parse_config::parser_t;
 use crate::libbb::skip_whitespace::skip_whitespace;
 use libc;
@@ -13,7 +14,6 @@ use libc::strcmp;
 use libc::strcpy;
 use libc::strrchr;
 use libc::system;
-use crate::compat::strlen;
 extern "C" {
 
   static mut optind: libc::c_int;

@@ -1,13 +1,11 @@
 use c2rust_bitfields;
 use c2rust_bitfields::BitfieldStruct;
 
-use libc;
-use libc::printf;
 use crate::compat::memset;
 use crate::compat::strlen;
+use libc;
+use libc::printf;
 extern "C" {
-
-  
 
   fn adjtimex(__ntx: *mut timex) -> libc::c_int;
 }

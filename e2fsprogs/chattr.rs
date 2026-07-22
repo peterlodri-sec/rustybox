@@ -1,8 +1,8 @@
+use crate::compat::memset;
 use libc;
 use libc::free;
 use libc::lstat;
 use libc::strchr;
-use crate::compat::memset;
 extern "C" {
 
   /*
@@ -44,8 +44,8 @@ unsafe fn get_flag(mut c: libc::c_char) -> libc::c_ulong {
     strchr(&*e2attr_flags_sname.as_ptr().offset(1), c as libc::c_int);
   if !fp.is_null() {
     return *(&*e2attr_flags_value.as_ptr().offset(1) as *const u32).offset(
-      fp.offset_from(&*e2attr_flags_sname.as_ptr().offset(1) as *const libc::c_char)
-        as libc::c_long as isize,
+      fp.offset_from(&*e2attr_flags_sname.as_ptr().offset(1) as *const libc::c_char) as libc::c_long
+        as isize,
     ) as libc::c_ulong;
   }
   crate::libbb::appletlib::bb_show_usage();

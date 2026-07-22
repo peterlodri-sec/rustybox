@@ -1,3 +1,4 @@
+use crate::compat::strlen;
 use crate::libbb::default_error_retval::xfunc_error_retval;
 use crate::libbb::llist::llist_t;
 use crate::librb::__compar_fn_t;
@@ -10,7 +11,6 @@ use libc::strchr;
 use libc::strcmp;
 use libc::tm;
 use libc::FILE;
-use crate::compat::strlen;
 extern "C" {
   fn atof(__nptr: *const libc::c_char) -> libc::c_double;
   fn strtod(__nptr: *const libc::c_char, __endptr: *mut *mut libc::c_char) -> libc::c_double;
@@ -22,7 +22,7 @@ extern "C" {
   static mut optind: libc::c_int;
   static mut stderr: *mut FILE;
   fn qsort(__base: *mut libc::c_void, __nmemb: size_t, __size: size_t, __compar: __compar_fn_t);
-  
+
   fn strverscmp(__s1: *const libc::c_char, __s2: *const libc::c_char) -> libc::c_int;
   fn strptime(
     __s: *const libc::c_char,

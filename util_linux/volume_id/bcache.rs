@@ -2,8 +2,8 @@ use crate::librb::size_t;
 
 use libc;
 
-use crate::util_linux::volume_id::volume_id::volume_id;
 use crate::compat::memcmp;
+use crate::util_linux::volume_id::volume_id::volume_id;
 
 pub type uuid_format = libc::c_uint;
 // pub const UUID_DCE_STRING: uuid_format = 3;

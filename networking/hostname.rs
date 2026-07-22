@@ -1,3 +1,4 @@
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::parse_config::parser_t;
 use crate::librb::size_t;
@@ -7,22 +8,21 @@ use libc::in_addr;
 use libc::printf;
 use libc::puts;
 use libc::FILE;
-use crate::compat::strlen;
 extern "C" {
 
   static mut optind: libc::c_int;
   fn sethostname(__name: *const libc::c_char, __len: size_t) -> libc::c_int;
 
   fn strchrnul(__s: *const libc::c_char, __c: libc::c_int) -> *mut libc::c_char;
-  
+
   fn inet_ntoa(__in: in_addr) -> *mut libc::c_char;
-// "old" (ipv4 only) API
-// users: traceroute.c hostname.c - use _list_ of all IPs
+  // "old" (ipv4 only) API
+  // users: traceroute.c hostname.c - use _list_ of all IPs
 
-/* Guaranteed to NOT be a macro (smallest code). Saves nearly 2k on uclibc.
- * But potentially slow, don't use in one-billion-times loops */
+  /* Guaranteed to NOT be a macro (smallest code). Saves nearly 2k on uclibc.
+   * But potentially slow, don't use in one-billion-times loops */
 
-/* delims[0] is a comment char (use '\0' to disable), the rest are token delimiters */
+  /* delims[0] is a comment char (use '\0' to disable), the rest are token delimiters */
 
 }
 

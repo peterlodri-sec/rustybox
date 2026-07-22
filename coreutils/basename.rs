@@ -1,8 +1,8 @@
+use crate::compat::strlen;
 use crate::librb::size_t;
 use libc;
 use libc::ssize_t;
 use libc::strcmp;
-use crate::compat::strlen;
 
 /*
  * Mini basename implementation for busybox

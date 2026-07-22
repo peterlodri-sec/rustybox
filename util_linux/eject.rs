@@ -1,6 +1,6 @@
+use crate::compat::memset;
 use libc;
 use libc::ioctl;
-use crate::compat::memset;
 extern "C" {
 
   static mut optind: libc::c_int;
@@ -67,13 +67,7 @@ unsafe fn eject_scsi(mut dev: *const libc::c_char) {
   let mut sense_buffer: [libc::c_uchar; 32] = [0; 32];
   let mut inqBuff: [libc::c_uchar; 2] = [0; 2];
   let mut io_hdr: sg_io_hdr_t = std::mem::zeroed();
-  if ioctl(
-    3i32,
-    0x2282i32 as _,
-    &mut i as *mut libc::c_uint,
-  ) < 0
-    || i < 30000i32 as libc::c_uint
-  {
+  if ioctl(3i32, 0x2282i32 as _, &mut i as *mut libc::c_uint) < 0 || i < 30000i32 as libc::c_uint {
     crate::libbb::verror_msg::bb_simple_error_msg_and_die(
       b"not a sg device or old sg driver\x00" as *const u8 as *const libc::c_char,
     );

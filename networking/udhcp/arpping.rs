@@ -1,3 +1,6 @@
+use crate::compat::memcmp;
+use crate::compat::memcpy;
+use crate::compat::memset;
 use crate::librb::size_t;
 use crate::librb::socklen_t;
 use c2rust_asm_casts;
@@ -9,9 +12,6 @@ use libc::sockaddr;
 use libc::sockaddr_in;
 use libc::sockaddr_in6;
 use libc::ssize_t;
-use crate::compat::memcmp;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
   pub type sockaddr_x25;
   pub type sockaddr_un;
@@ -32,8 +32,6 @@ extern "C" {
     __addr: __CONST_SOCKADDR_ARG,
     __addr_len: socklen_t,
   ) -> ssize_t;
-
-  
 
   /* Wrapper which restarts poll on EINTR or ENOMEM.
    * On other errors complains [perror("poll")] and returns.

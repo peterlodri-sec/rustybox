@@ -22,11 +22,11 @@ extern "C" {
 
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
-/* Returns:
- * 0: no UUID= or LABEL= prefix found
- * 1: UUID= or LABEL= prefix found. In this case,
- *    *fsname is replaced if device with such UUID or LABEL is found
- */
+  /* Returns:
+   * 0: no UUID= or LABEL= prefix found
+   * 1: UUID= or LABEL= prefix found. In this case,
+   *    *fsname is replaced if device with such UUID or LABEL is found
+   */
 
 }
 

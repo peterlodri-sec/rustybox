@@ -1,9 +1,9 @@
+use crate::compat::memcpy;
 use crate::libbb::parse_config::parser_t;
 use libc;
 use libc::sprintf;
 use libc::strcmp;
 use libc::FILE;
-use crate::compat::memcpy;
 
 pub type C2RustUnnamed = libc::c_uint;
 pub const PARSE_NORMAL: C2RustUnnamed = 4653056;

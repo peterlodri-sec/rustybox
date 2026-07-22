@@ -1,3 +1,5 @@
+use crate::compat::memset;
+use crate::compat::strlen;
 use crate::libbb::appletlib::applet_name;
 use crate::libbb::parse_config::parser_t;
 use crate::libbb::ptr_to_globals::bb_errno;
@@ -48,8 +50,6 @@ use libc::timeval;
 use libc::uid_t;
 use libc::umask;
 use libc::unlink;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
 
   fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> *mut libc::c_char;

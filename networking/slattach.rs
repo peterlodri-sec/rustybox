@@ -1,3 +1,5 @@
+use crate::compat::memcpy;
+use crate::compat::memset;
 use libc;
 use libc::cc_t;
 use libc::free;
@@ -8,15 +10,11 @@ use libc::speed_t;
 use libc::system;
 use libc::tcflag_t;
 use libc::termios;
-use crate::compat::memcpy;
-use crate::compat::memset;
 extern "C" {
 
   static mut optind: libc::c_int;
 
   fn exit(_: libc::c_int) -> !;
-
-  
 
   fn cfgetospeed(__termios_p: *const termios) -> speed_t;
   fn cfgetispeed(__termios_p: *const termios) -> speed_t;
@@ -292,12 +290,7 @@ pub unsafe fn slattach_main(
         /* Watch line for hangup */
         {
           let mut modem_stat: libc::c_int = 0;
-          if ioctl(
-            3i32,
-            0x5415i32 as _,
-            &mut modem_stat as *mut libc::c_int,
-          ) != 0
-          {
+          if ioctl(3i32, 0x5415i32 as _, &mut modem_stat as *mut libc::c_int) != 0 {
             break;
           }
           if modem_stat & 0x40i32 == 0 {

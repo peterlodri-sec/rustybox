@@ -1,3 +1,5 @@
+use crate::compat::memset;
+use crate::compat::strlen;
 use libc;
 use libc::free;
 use libc::printf;
@@ -5,13 +7,9 @@ use libc::puts;
 use libc::sprintf;
 use libc::strcpy;
 use libc::time;
-use crate::compat::memset;
-use crate::compat::strlen;
 extern "C" {
 
   static mut optind: libc::c_int;
-
-  
 
   fn strftime(
     __s: *mut libc::c_char,
@@ -23,7 +21,7 @@ extern "C" {
 
   static mut option_mask32: u32;
 
-//UNUSED: char* FAST_FUNC unicode_conv_to_printable_maxwidth(uni_stat_t *stats, const char *src, unsigned maxwidth);
+  //UNUSED: char* FAST_FUNC unicode_conv_to_printable_maxwidth(uni_stat_t *stats, const char *src, unsigned maxwidth);
 
 }
 

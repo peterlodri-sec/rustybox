@@ -9,18 +9,18 @@ extern "C" {
 
   static mut option_mask32: u32;
 
-/*
- * See README for additional information
- *
- * This file can be redistributed under the terms of the GNU Library General
- * Public License
- */
-/* Constants and structures */
-/* Iterate a function on each entry of a directory */
+  /*
+   * See README for additional information
+   *
+   * This file can be redistributed under the terms of the GNU Library General
+   * Public License
+   */
+  /* Constants and structures */
+  /* Iterate a function on each entry of a directory */
 
-/* Get/set a file version on an ext2 file system */
+  /* Get/set a file version on an ext2 file system */
 
-/* Print file attributes on an ext2 file system */
+  /* Print file attributes on an ext2 file system */
 
 }
 

@@ -1,3 +1,6 @@
+use crate::compat::memcmp;
+use crate::compat::memmove;
+use crate::compat::memset;
 use crate::libbb::appletlib::applet_name;
 use crate::librb::size_t;
 use crate::librb::smallint;
@@ -7,12 +10,8 @@ use libc;
 use libc::free;
 use libc::strcmp;
 use libc::strrchr;
-use crate::compat::memcmp;
-use crate::compat::memmove;
-use crate::compat::memset;
 extern "C" {
 
-  
   static mut optind: libc::c_int;
 
   static mut option_mask32: u32;
@@ -21,42 +20,42 @@ extern "C" {
 
   static mut bb_common_bufsiz1: [libc::c_char; 0];
 
-/*
-  This file is part of the LZO real-time data compression library.
+  /*
+    This file is part of the LZO real-time data compression library.
 
-  Copyright (C) 1996..2008 Markus Franz Xaver Johannes Oberhumer
-  All Rights Reserved.
+    Copyright (C) 1996..2008 Markus Franz Xaver Johannes Oberhumer
+    All Rights Reserved.
 
-  Markus F.X.J. Oberhumer <markus@oberhumer.com>
-  http://www.oberhumer.com/opensource/lzo/
+    Markus F.X.J. Oberhumer <markus@oberhumer.com>
+    http://www.oberhumer.com/opensource/lzo/
 
-  The LZO library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+    The LZO library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of
+    the License, or (at your option) any later version.
 
-  The LZO library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+    The LZO library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-  You should have received a copy of the GNU General Public License
-  along with the LZO library; see the file COPYING.
-  If not, write to the Free Software Foundation, Inc.,
-  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-*/
-/*
-static void die_at(int line)
-{
-  bb_error_msg_and_die("internal error at %d", line);
-}
-#define assert(v) if (!(v)) die_at(__LINE__)
-*/
+    You should have received a copy of the GNU General Public License
+    along with the LZO library; see the file COPYING.
+    If not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+  */
+  /*
+  static void die_at(int line)
+  {
+    bb_error_msg_and_die("internal error at %d", line);
+  }
+  #define assert(v) if (!(v)) die_at(__LINE__)
+  */
 
-/* decompression */
-//int lzo1x_decompress(const u8* src, unsigned src_len,
-//		u8* dst, unsigned* dst_len /*, void* wrkmem */);
-/* safe decompression with overrun testing */
+  /* decompression */
+  //int lzo1x_decompress(const u8* src, unsigned src_len,
+  //		u8* dst, unsigned* dst_len /*, void* wrkmem */);
+  /* safe decompression with overrun testing */
 
 }
 
@@ -1028,9 +1027,8 @@ unsafe fn lzo_compress(mut h: *const header_t) -> libc::c_int {
       crate::libbb::xfuncs_printf::xwrite(
         1i32,
         wordbuf.as_mut_ptr() as *const libc::c_void,
-        (wordptr as *mut libc::c_char)
-          .offset_from(wordbuf.as_mut_ptr() as *mut libc::c_char) as libc::c_long
-          as size_t,
+        (wordptr as *mut libc::c_char).offset_from(wordbuf.as_mut_ptr() as *mut libc::c_char)
+          as libc::c_long as size_t,
       );
       if dst_len < src_len {
         /* write compressed block data */
@@ -1287,8 +1285,8 @@ unsafe fn write_header(mut h: *mut header_t) {
   /*h->len_and_name[0] = end - (h->len_and_name+1); - zero already */
   f_write(
     &mut (*h).version_be16 as *mut u16 as *const libc::c_void,
-    end.offset_from(&mut (*h).version_be16 as *mut u16 as *mut libc::c_char)
-      as libc::c_long as libc::c_int,
+    end.offset_from(&mut (*h).version_be16 as *mut u16 as *mut libc::c_char) as libc::c_long
+      as libc::c_int,
   ); /* native endianness for lzo_compress() */
   (*h).flags32 = {
     let mut __v: libc::c_uint = 0;
@@ -1323,8 +1321,8 @@ unsafe fn read_header(mut h: *mut header_t) -> libc::c_int {
   f_read(
     &mut (*h).version_be16 as *mut u16 as *mut libc::c_void,
     (&mut *(*h).len_and_name.as_mut_ptr().offset(1) as *mut libc::c_char)
-      .offset_from(&mut (*h).version_be16 as *mut u16 as *mut libc::c_char)
-      as libc::c_long as libc::c_int,
+      .offset_from(&mut (*h).version_be16 as *mut u16 as *mut libc::c_char) as libc::c_long
+      as libc::c_int,
   );
   h_version = ({
     let mut __v: libc::c_ushort = 0;
