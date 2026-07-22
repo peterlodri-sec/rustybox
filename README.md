@@ -64,6 +64,7 @@ Official release binaries go through a rigorous, supply-chain secured pipeline b
 
 - **Idiomatic core** — replace the transpiled `unsafe` internals of the common applets with safe Rust (including `init`, `ifconfig`, and `ash` job-control), and trim the inherited warning pile.
 - **Modern equivalents** — where a best-in-class Rust CLI already exists (`ripgrep`, `bat`, `fd`, `eza`, `uutils`…), offer it as a drop-in behind the familiar applet name. See [MIGRATION.md](MIGRATION.md).
+- **Help Us Port Legacy Applets** — We are actively looking for robust, permissively licensed Rust library equivalents to replace the remaining transpiled GPL applets (e.g., `awk`, `vi`, `wget`). Check the interactive [Applet Registry](https://rustybox.io/docs/#registry) to see the migration status of all 300+ tools and help us secure the rest of the userland!
 
 ## Sponsor
 
