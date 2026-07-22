@@ -96,7 +96,7 @@ _Be the first._
 rustybox ships in two editions:
 
 - **`rustybox` (full)** — the complete BusyBox-lineage toolbox (300+ applets, incl. `awk`, `ash`, `vi`, networking, archives). Because it descends from BusyBox (transpiled via c2rust), it is a **GPL-2.0-only** derivative and stays GPLv2. This is the default binary.
-- **`rustybox-core` (MIT)** — a memory-safe multicall built **entirely on permissive crates** (the [uutils](https://github.com/uutils/coreutils) coreutils, [ripgrep](https://github.com/BurntSushi/ripgrep)'s search libraries, `walkdir`/`globset`) plus rustybox's own dispatch/`grep`/`find` code. **No BusyBox/GPL code is compiled**, so this binary is distributable under **MIT**. Covers the ~66 migrated applets (coreutils family + `grep`/`find` + agent tools like `timeout`).
+- **`rustybox-core` (MIT)** — a memory-safe multicall built **entirely on permissive crates** (the [uutils](https://github.com/uutils/coreutils) coreutils, [ripgrep](https://github.com/BurntSushi/ripgrep)'s search libraries, `walkdir`/`globset`) plus rustybox's own dispatch/`grep`/`find`/archive/hash code. **No BusyBox/GPL code is compiled**, so this binary is distributable under **MIT**. Covers all 85+ memory-safe, permissive applets (coreutils family + `grep`/`find` + `tar`/`gzip`/`bzip2`/`xz` + hashes + agent tools like `timeout`/`xargs`/`watch`/`flock`).
 
 ```sh
 cargo build -p rustybox-core --release        # the MIT edition

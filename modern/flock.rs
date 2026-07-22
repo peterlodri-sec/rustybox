@@ -8,7 +8,7 @@ use std::ffi::CString;
 
 pub fn run(argv: &[&str]) -> i32 {
   let mut shared = false;
-  let mut exclusive = false;
+  let mut _exclusive = false;
   let mut unlock = false;
   let mut nonblock = false;
 
@@ -17,7 +17,7 @@ pub fn run(argv: &[&str]) -> i32 {
     let arg = argv[idx];
     if arg.starts_with('-') && arg != "-" {
       if arg == "--shared" { shared = true; }
-      else if arg == "--exclusive" { exclusive = true; }
+      else if arg == "--exclusive" { _exclusive = true; }
       else if arg == "--unlock" { unlock = true; }
       else if arg == "--nonblock" { nonblock = true; }
       else if arg == "--help" { return 0; }
@@ -25,7 +25,7 @@ pub fn run(argv: &[&str]) -> i32 {
         for c in arg.chars().skip(1) {
           match c {
             's' => shared = true,
-            'x' => exclusive = true,
+            'x' => _exclusive = true,
             'u' => unlock = true,
             'n' => nonblock = true,
             _ => {
@@ -144,3 +144,9 @@ pub fn run(argv: &[&str]) -> i32 {
 
   0
 }
+
+#[allow(dead_code)]
+pub fn run_and_exit(argv: &[&str]) -> ! {
+  std::process::exit(run(argv));
+}
+

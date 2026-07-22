@@ -30,7 +30,7 @@ mod ip;
 #[cfg(feature = "modern-init")]
 pub mod init;
 #[cfg(feature = "modern-hashsum")]
-mod hashsum;
+pub mod hashsum;
 #[cfg(feature = "modern-setsid")]
 pub mod setsid;
 #[cfg(feature = "modern-chrt")]
@@ -41,6 +41,9 @@ pub mod ionice;
 pub mod watch;
 #[cfg(feature = "modern-xargs")]
 pub mod xargs;
+#[cfg(feature = "modern-flock")]
+pub mod flock;
+
 
 #[allow(unused_variables)]
 pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
@@ -223,7 +226,9 @@ pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
         Some(0)
     },
     #[cfg(feature = "modern-uname")]
-    "uname" => Some(uu_uname::uumain(argv.iter().map(std::ffi::OsString::from))),
+    "uname" | "arch" => Some(uu_uname::uumain(argv.iter().map(std::ffi::OsString::from))),
+    #[cfg(feature = "modern-flock")]
+    "flock" => Some(flock::run(argv)),
     #[cfg(feature = "modern-sum")]
     "sum" => Some(uu_sum::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-base64")]

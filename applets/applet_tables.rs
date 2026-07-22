@@ -795,7 +795,7 @@ lazy_static! {
     appy_mcappface.push(applet {
       name: "flock",
       main: "flock",
-      entrypoint: Entrypoint::CStyle(crate::util_linux::flock::flock_main),
+      entrypoint: Entrypoint::SafeStyle(crate::modern::flock::run_and_exit),
       install_loc: InstallLoc::DIR_USR_BIN,
       usage: std::include_str!("../usage/flock"),
     });
@@ -1530,8 +1530,8 @@ lazy_static! {
     #[cfg(feature = "md5sum")]
     appy_mcappface.push(applet {
       name: "md5sum",
-      main: "md5_sha1_sum",
-      entrypoint: Entrypoint::CStyle(crate::coreutils::md5_sha1_sum::md5_sha1_sum_main),
+      main: "hashsum",
+      entrypoint: Entrypoint::SafeStyle(crate::modern::hashsum::run_and_exit),
       install_loc: InstallLoc::DIR_USR_BIN,
       usage: std::include_str!("../usage/md5sum"),
     });
@@ -2378,32 +2378,32 @@ lazy_static! {
     #[cfg(feature = "sha1sum")]
     appy_mcappface.push(applet {
       name: "sha1sum",
-      main: "md5_sha1_sum",
-      entrypoint: Entrypoint::CStyle(crate::coreutils::md5_sha1_sum::md5_sha1_sum_main),
+      main: "hashsum",
+      entrypoint: Entrypoint::SafeStyle(crate::modern::hashsum::run_and_exit),
       install_loc: InstallLoc::DIR_USR_BIN,
       usage: std::include_str!("../usage/sha1sum"),
     });
     #[cfg(feature = "sha256sum")]
     appy_mcappface.push(applet {
       name: "sha256sum",
-      main: "md5_sha1_sum",
-      entrypoint: Entrypoint::CStyle(crate::coreutils::md5_sha1_sum::md5_sha1_sum_main),
+      main: "hashsum",
+      entrypoint: Entrypoint::SafeStyle(crate::modern::hashsum::run_and_exit),
       install_loc: InstallLoc::DIR_USR_BIN,
       usage: std::include_str!("../usage/sha256sum"),
     });
     #[cfg(feature = "sha3sum")]
     appy_mcappface.push(applet {
       name: "sha3sum",
-      main: "md5_sha1_sum",
-      entrypoint: Entrypoint::CStyle(crate::coreutils::md5_sha1_sum::md5_sha1_sum_main),
+      main: "hashsum",
+      entrypoint: Entrypoint::SafeStyle(crate::modern::hashsum::run_and_exit),
       install_loc: InstallLoc::DIR_USR_BIN,
       usage: std::include_str!("../usage/sha3sum"),
     });
     #[cfg(feature = "sha512sum")]
     appy_mcappface.push(applet {
       name: "sha512sum",
-      main: "md5_sha1_sum",
-      entrypoint: Entrypoint::CStyle(crate::coreutils::md5_sha1_sum::md5_sha1_sum_main),
+      main: "hashsum",
+      entrypoint: Entrypoint::SafeStyle(crate::modern::hashsum::run_and_exit),
       install_loc: InstallLoc::DIR_USR_BIN,
       usage: std::include_str!("../usage/sha512sum"),
     });

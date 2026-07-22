@@ -11,6 +11,14 @@ description = "rustybox core — a memory-safe, MIT-licensed multicall busybox-s
 [[bin]]
 name = "rustybox-core"
 path = "main.rs"
+
+[features]
+default = ["modern-gzip", "modern-bzip2", "modern-xz", "modern-tar"]
+modern-gzip = []
+modern-bzip2 = []
+modern-xz = []
+modern-tar = []
+
 [dependencies]
 libc = "0.2"
 uu_base64 = "0.9"
@@ -74,3 +82,13 @@ grep-searcher = "0.1"
 ignore = "0.4"
 walkdir = "2"
 globset = "0.4"
+md-5 = "0.10"
+sha1 = "0.10"
+sha2 = "0.10"
+sha3 = "0.10"
+flate2 = "1"
+bzip2 = "0.5"
+xz2 = "0.1"
+tar = "0.4"
+nix = { version = "0.29", features = ["net", "ioctl", "mount", "user", "fs", "process", "signal", "term"] }
+

@@ -7,6 +7,7 @@
 use std::fs;
 use std::os::unix::fs::{FileTypeExt, MetadataExt};
 
+#[allow(dead_code)]
 const S_IFBLK: u32 = 0o60000;
 
 fn major(dev: u64) -> u32 {
@@ -119,6 +120,7 @@ pub fn run(argv: &[&str]) -> i32 {
   i32::from(!is_mountpoint)
 }
 
+#[allow(dead_code)]
 pub fn run_and_exit(args: &[&str]) -> ! {
   let code = run(args);
   std::process::exit(code);

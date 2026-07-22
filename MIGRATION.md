@@ -64,12 +64,9 @@ is nearly free.
   dump family (`hexyl`), archives (`tar`/`flate2`/…). Each is its own PR + parity
   tests.
   - `md5sum`/`sha1sum`/`sha256sum`/`sha512sum`/`sha3sum` ✅ — `modern/hashsum.rs`,
-    feature `modern-hashsum`. The planned dependency was uutils' `uu_hashsum`,
-    but it's been stuck at 0.5 for 7+ months (checked crates.io directly)
-    while the rest of the uutils family here is at 0.9 — genuinely blocked,
-    not worth waiting on further. Used RustCrypto's `md-5`/`sha1`/`sha2`/
-    `sha3` crates directly instead — audited, far more widely used than a
-    single coreutils wrapper, and all expose the same `Digest` trait, so one
+    feature `modern-hashsum`. Legacy transpiled `coreutils/md5_sha1_sum.rs` retired in Phase 4.
+    Used RustCrypto's `md-5`/`sha1`/`sha2`/`sha3` crates directly — audited, far more
+    widely used than a single coreutils wrapper, and all expose the same `Digest` trait.
     small dispatcher covers all five algorithms. Covers plain hashing,
     `-c` check mode (both `HASH  file` and `HASH *file` separators), `-s`/
     `-w`, `-b`/`-t` (GNU no-ops), and sha3sum's `-a WIDTH` restricted to the
@@ -158,7 +155,7 @@ is nearly free.
     to an unrelated PID 1 is inherently environment-dependent, matching
     a disposable namespace instead.
   - `setsid` ✅ — `modern/setsid.rs`, feature `modern-setsid`. Full memory-safe rewrite using `nix::unistd::setsid` and `fork`/`execvp`. Covers `-c` (controlling terminal) via a safe `ioctl` helper.
-  - `flock` ✅ — `modern/flock.rs`, feature `modern-flock`. Full memory-safe rewrite using `nix::libc::flock`. Covers shared, exclusive, non-blocking, and unlock semantics, as well as executing a command with or without `-c`.
+  - `flock` ✅ — `modern/flock.rs`, feature `modern-flock`. Full memory-safe rewrite using `nix::libc::flock`. Legacy transpiled `util_linux/flock.rs` retired in Phase 4.
   - `chrt` ✅ — `modern/chrt.rs`, feature `modern-chrt`. Full memory-safe rewrite using `nix::libc::sched_*`. Covers scheduling policy getting/setting and execution.
   - `ionice` ✅ — `modern/ionice.rs`, feature `modern-ionice`. Full memory-safe rewrite using `libc::SYS_ioprio_get` and `libc::SYS_ioprio_set`. Covers scheduling class getting/setting and execution.
   - `ash` — full grammar/parser/executor rewrite ruled out for now (uses

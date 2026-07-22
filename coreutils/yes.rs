@@ -1,14 +1,19 @@
 use std::io::Write;
 
 pub fn yes_main(args: &[&str]) -> ! {
+  #[cfg(unix)]
+  unsafe {
+    libc::signal(libc::SIGPIPE, libc::SIG_IGN);
+  }
+
   let line = if args.len() > 1 {
     args[1..].join(" ")
   } else {
     "y".to_string()
   };
 
-  // This nonsense is necessary in order to prevent a panic with things like
-  // `yes | head`. See https://github.com/BurntSushi/advent-of-code/issues/17.
-  while let Ok(_) = writeln!(std::io::stdout(), "{}", line) {}
+  let stdout = std::io::stdout();
+  let mut handle = stdout.lock();
+  while writeln!(handle, "{}", line).is_ok() {}
   std::process::exit(0);
 }

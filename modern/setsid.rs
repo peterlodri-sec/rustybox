@@ -51,6 +51,7 @@ pub fn run(argv: &[&str]) -> i32 {
   127
 }
 
+#[allow(dead_code)]
 pub fn run_and_exit(args: &[&str]) -> ! {
   let code = run(args);
   std::process::exit(code);

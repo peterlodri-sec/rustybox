@@ -13,6 +13,29 @@
 mod grep;
 #[path = "../../modern/find.rs"]
 mod find;
+#[path = "../../modern/hashsum.rs"]
+mod hashsum;
+#[path = "../../modern/compress.rs"]
+mod compress;
+#[path = "../../modern/tar.rs"]
+mod tar;
+#[path = "../../modern/flock.rs"]
+mod flock;
+#[path = "../../modern/setsid.rs"]
+mod setsid;
+#[cfg(target_os = "linux")]
+#[path = "../../modern/chrt.rs"]
+mod chrt;
+#[cfg(target_os = "linux")]
+#[path = "../../modern/ionice.rs"]
+mod ionice;
+#[path = "../../modern/watch.rs"]
+mod watch;
+#[path = "../../modern/xargs.rs"]
+mod xargs;
+#[path = "../../modern/mountpoint.rs"]
+mod mountpoint;
+
 
 fn main() {
   let raw: Vec<String> = std::env::args().collect();
@@ -136,9 +159,23 @@ fn dispatch(name: &str, argv: &[&str]) -> Option<i32> {
         unsafe { libc::sync(); }
         Some(0)
     },
-    "uname" => Some(uu_uname::uumain(argv.iter().map(std::ffi::OsString::from))),
+    "uname" | "arch" => Some(uu_uname::uumain(argv.iter().map(std::ffi::OsString::from))),
     "sum" => Some(uu_sum::uumain(argv.iter().map(std::ffi::OsString::from))),
     "base64" => Some(uu_base64::uumain(argv.iter().map(std::ffi::OsString::from))),
+    "md5sum" | "sha1sum" | "sha256sum" | "sha512sum" | "sha3sum" => Some(hashsum::run(name, argv)),
+    "gzip" | "gunzip" | "zcat" => Some(compress::run(name, argv, &compress::GZIP)),
+    "bzip2" | "bunzip2" | "bzcat" => Some(compress::run(name, argv, &compress::BZIP2)),
+    "xz" | "unxz" | "xzcat" => Some(compress::run(name, argv, &compress::XZ)),
+    "tar" => Some(tar::run(argv)),
+    "flock" => Some(flock::run(argv)),
+    "setsid" => Some(setsid::run(argv)),
+    #[cfg(target_os = "linux")]
+    "chrt" => Some(chrt::run(argv)),
+    #[cfg(target_os = "linux")]
+    "ionice" => Some(ionice::run(argv)),
+    "watch" => Some(watch::run(argv)),
+    "xargs" => Some(xargs::run(argv)),
+    "mountpoint" => Some(mountpoint::run(argv)),
     _ => None,
   }
 }
@@ -155,5 +192,5 @@ fn print_version() {
 }
 
 fn list_applets() {
-  eprintln!("applets: grep egrep fgrep find cat echo ls cp mv rm mkdir rmdir ln pwd touch true false head tail wc sort uniq cut tr chmod chown df du env printenv date basename dirname readlink stat seq sleep id whoami yes tac nl tee mktemp realpath nproc printf link unlink logname factor timeout nohup shuf nice dd truncate fold expand unexpand comm split cksum paste sync uname sum base64");
+  eprintln!("applets: grep egrep fgrep find cat echo ls cp mv rm mkdir rmdir ln pwd touch true false head tail wc sort uniq cut tr chmod chown df du env printenv date basename dirname readlink stat seq sleep id whoami yes tac nl tee mktemp realpath nproc printf link unlink logname factor timeout nohup shuf nice dd truncate fold expand unexpand comm split cksum paste sync uname arch sum base64 md5sum sha1sum sha256sum sha512sum sha3sum gzip gunzip zcat bzip2 bunzip2 bzcat xz unxz xzcat tar flock setsid chrt ionice watch xargs mountpoint");
 }

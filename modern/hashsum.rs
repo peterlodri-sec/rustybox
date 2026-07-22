@@ -223,3 +223,13 @@ pub fn run(name: &str, argv: &[&str]) -> i32 {
   io::stdout().flush().ok();
   result
 }
+
+#[allow(dead_code)]
+pub fn run_and_exit(argv: &[&str]) -> ! {
+  let name = std::path::Path::new(argv.first().map(|s| *s).unwrap_or(""))
+    .file_name()
+    .and_then(|s| s.to_str())
+    .unwrap_or("md5sum");
+  std::process::exit(run(name, argv));
+}
+

@@ -2164,11 +2164,19 @@ dependencies = [
 name = "rustybox-core"
 version = "0.3.0"
 dependencies = [
+ "bzip2",
+ "flate2",
  "globset",
  "grep-regex",
  "grep-searcher",
  "ignore",
  "libc",
+ "md-5 0.10.6",
+ "nix 0.29.0",
+ "sha1 0.10.7",
+ "sha2 0.10.9",
+ "sha3 0.10.9",
+ "tar",
  "uu_base64",
  "uu_basename",
  "uu_cat",
@@ -2226,6 +2234,7 @@ dependencies = [
  "uu_wc",
  "uu_yes",
  "walkdir",
+ "xz2",
 ]
 
 [[package]]

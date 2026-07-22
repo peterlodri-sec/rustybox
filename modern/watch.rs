@@ -1,6 +1,3 @@
-use std::env;
-use std::ffi::OsString;
-use std::os::unix::ffi::OsStrExt;
 use std::process::Command;
 use std::thread;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
@@ -125,6 +122,7 @@ pub fn run(argv: &[&str]) -> i32 {
     }
 }
 
+#[allow(dead_code)]
 pub fn run_and_exit(argv: &[&str]) -> ! {
     std::process::exit(run(argv))
 }

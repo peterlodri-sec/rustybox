@@ -96,6 +96,7 @@ pub fn run(argv: &[&str]) -> i32 {
     exit_code
 }
 
+#[allow(dead_code)]
 pub fn run_and_exit(argv: &[&str]) -> ! {
     std::process::exit(run(argv));
 }

@@ -125,7 +125,6 @@ pub mod coreutils {
   pub mod ln;
   pub mod logname;
   pub mod ls;
-  pub mod md5_sha1_sum;
   pub mod mkdir;
   pub mod mkfifo;
   pub mod mknod;

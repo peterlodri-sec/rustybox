@@ -12,7 +12,6 @@ pub mod fbset;
 pub mod fdformat;
 pub mod fdisk;
 pub mod findfs;
-pub mod flock;
 pub mod freeramdisk;
 pub mod fsck_minix;
 pub mod fsfreeze;

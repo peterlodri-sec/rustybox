@@ -102,7 +102,7 @@ pub fn run(args: &[&str]) -> i32 {
         let current_class = (res >> IOPRIO_CLASS_SHIFT) & 0x3;
         let current_pri = res & 0xff;
 
-        if current_class == IOPRIO_CLASS_IDLE as libc::c_long {
+        if current_class as i64 == IOPRIO_CLASS_IDLE as i64 {
             println!("{}", class_name(current_class as i32));
         } else {
             println!("{}: prio {}", class_name(current_class as i32), current_pri);
@@ -137,6 +137,7 @@ pub fn run(args: &[&str]) -> i32 {
     0
 }
 
+#[allow(dead_code)]
 pub fn run_and_exit(argv: &[&str]) -> ! {
     std::process::exit(run(argv))
 }

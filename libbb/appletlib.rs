@@ -113,6 +113,17 @@ unsafe fn rustybox_main(argv: &[&str]) -> i32 {
     print_rustybox_help();
     return 0;
   } else {
+    if argv[1] == "--version" || argv[1] == "-V" {
+      println!("rustybox {} (full edition)", env!("CARGO_PKG_VERSION"));
+      println!("commit:   {}", env!("RB_GIT_SHA"));
+      println!("built:    {}", env!("RB_BUILD_DATE"));
+      println!("target:   {}", env!("RB_TARGET"));
+      println!("args:     {}", env!("RB_BUILD_ARGS"));
+      println!("repo:     https://github.com/peterlodri-sec/rustybox");
+      println!("site:     https://rustybox.io");
+      return 0;
+    }
+
     if argv[1] == "--list" {
       for applet in applets.iter() {
         println!("{}", applet.name);
@@ -230,6 +241,9 @@ unsafe fn run_applet_and_exit(name: &str, argv: &[&str]) -> ! {
 }
 
 pub unsafe fn main() {
+  #[cfg(unix)]
+  libc::signal(libc::SIGPIPE, libc::SIG_IGN);
+
   // This is absolutely essential to fix bb_errno which is really the same as
   // errno. In the future we should come up with a more elegant approach to
   // interfacing with errno.

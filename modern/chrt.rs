@@ -151,7 +151,8 @@ pub fn run(args: &[&str]) -> i32 {
     if let Some(pid) = parsed.pid {
         if let Some(priority) = parsed.priority {
             // Set priority for PID
-            let mut sp = libc::sched_param { sched_priority: priority };
+            let mut sp: libc::sched_param = unsafe { std::mem::zeroed() };
+            sp.sched_priority = priority;
             if unsafe { libc::sched_setscheduler(pid, policy, &mut sp) } < 0 {
                 eprintln!("chrt: can't set pid {}'s policy", pid);
                 return 1;
@@ -166,7 +167,7 @@ pub fn run(args: &[&str]) -> i32 {
             let current_pol_masked = current_pol & !0x40000000;
             println!("pid {}'s current scheduling policy: SCHED_{}", pid, policy_name(current_pol_masked));
             
-            let mut sp = libc::sched_param { sched_priority: 0 };
+            let mut sp: libc::sched_param = unsafe { std::mem::zeroed() };
             if unsafe { libc::sched_getparam(pid, &mut sp) } != 0 {
                 eprintln!("chrt: can't get pid {}'s attributes", pid);
                 return 1;
@@ -179,7 +180,8 @@ pub fn run(args: &[&str]) -> i32 {
     if !parsed.command.is_empty() {
         if let Some(priority) = parsed.priority {
             // Set priority for self
-            let mut sp = libc::sched_param { sched_priority: priority };
+            let mut sp: libc::sched_param = unsafe { std::mem::zeroed() };
+            sp.sched_priority = priority;
             if unsafe { libc::sched_setscheduler(0, policy, &mut sp) } < 0 {
                 eprintln!("chrt: can't set policy");
                 return 1;
@@ -200,6 +202,7 @@ pub fn run(args: &[&str]) -> i32 {
     0
 }
 
+#[allow(dead_code)]
 pub fn run_and_exit(args: &[&str]) -> ! {
     let code = run(args);
     std::process::exit(code);
