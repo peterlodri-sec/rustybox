@@ -1,8 +1,62 @@
+==============================================================================
+RUSTYBOX DUAL-EDITION LICENSING MODEL
+==============================================================================
+
+Rustybox is distributed under a dual-edition licensing model to offer maximum
+flexibility for developers, enterprise environments, and embedded devices.
+The project is split into two distinct editions compiled from the same workspace:
+
+1. RUSTYBOX CORE (Permissive MIT Edition)
+   - Binary Target: `rustybox-core`
+   - Crate Path: `crates/rustybox-core`
+   - License: MIT License (see Section A below)
+   - Scope: Consists of 85+ applets implemented entirely using safe, permissive
+     Rust libraries (e.g., uutils/coreutils, ripgrep libs, RustCrypto).
+     No copyleft code (BusyBox C code) is compiled into this binary.
+
+2. RUSTYBOX FULL (Copyleft GPL-2.0 Edition)
+   - Binary Target: `rustybox`
+   - Crate Path: Root crate
+   - License: GNU General Public License, Version 2 (see Section B below)
+   - Scope: Includes all 300+ applets, compiling both the permissive Rust
+     re-implementations and the legacy transpiled BusyBox C codebase (via c2rust).
+     As a derivative work of BusyBox, this combined binary falls under GPL-2.0.
+
+==============================================================================
+SECTION A: MIT LICENSE (For rustybox-core)
+==============================================================================
+
+MIT License
+
+Copyright (c) 2026 rustybox contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+==============================================================================
+SECTION B: GNU GENERAL PUBLIC LICENSE, VERSION 2 (For the full rustybox)
+==============================================================================
+
                     GNU GENERAL PUBLIC LICENSE
                        Version 2, June 1991
 
  Copyright (C) 1989, 1991 Free Software Foundation, Inc.,
- <https://fsf.org/>
+ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  Everyone is permitted to copy and distribute verbatim copies
  of this license document, but changing it is not allowed.
 
@@ -279,60 +333,108 @@ POSSIBILITY OF SUCH DAMAGES.
 
                      END OF TERMS AND CONDITIONS
 
-            How to Apply These Terms to Your New Programs
+==============================================================================
+SECTION C: PER-APPLET LICENSE MATRIX & ENGINE DETAILS
+==============================================================================
 
-  If you develop a new program, and you want it to be of the greatest
-possible use to the public, the best way to achieve this is to make it
-free software which everyone can redistribute and change under these terms.
+The following is a breakdown of all applets mapped to their licenses, backend
+engines, and target binary availability:
 
-  To do so, attach the following notices to the program.  It is safest
-to attach them to the start of each source file to most effectively
-convey the exclusion of warranty; and each file should have at least
-the "copyright" line and a pointer to where the full notice is found.
+APPLET NAME   | LICENSE     | COMPILED IN                | SYSTEM BACKEND ENGINE
+--------------+-------------+----------------------------+-----------------------------
+cat           | MIT         | rustybox & rustybox-core   | uutils / uu_cat
+ls            | MIT         | rustybox & rustybox-core   | uutils / uu_ls
+echo          | MIT         | rustybox & rustybox-core   | uutils / uu_echo
+cp            | MIT         | rustybox & rustybox-core   | uutils / uu_cp
+mv            | MIT         | rustybox & rustybox-core   | uutils / uu_mv
+rm            | MIT         | rustybox & rustybox-core   | uutils / uu_rm
+mkdir         | MIT         | rustybox & rustybox-core   | uutils / uu_mkdir
+rmdir         | MIT         | rustybox & rustybox-core   | uutils / uu_rmdir
+ln            | MIT         | rustybox & rustybox-core   | uutils / uu_ln
+pwd           | MIT         | rustybox & rustybox-core   | uutils / uu_pwd
+touch         | MIT         | rustybox & rustybox-core   | uutils / uu_touch
+true          | MIT         | rustybox & rustybox-core   | uutils / inline
+false         | MIT         | rustybox & rustybox-core   | uutils / inline
+head          | MIT         | rustybox & rustybox-core   | uutils / uu_head
+tail          | MIT         | rustybox & rustybox-core   | uutils / uu_tail
+wc            | MIT         | rustybox & rustybox-core   | uutils / uu_wc
+sort          | MIT         | rustybox & rustybox-core   | uutils / uu_sort
+uniq          | MIT         | rustybox & rustybox-core   | uutils / uu_uniq
+cut           | MIT         | rustybox & rustybox-core   | uutils / uu_cut
+tr            | MIT         | rustybox & rustybox-core   | uutils / uu_tr
+chmod         | MIT         | rustybox & rustybox-core   | uutils / uu_chmod
+chown         | MIT         | rustybox & rustybox-core   | uutils / uu_chown
+df            | MIT         | rustybox & rustybox-core   | uutils / uu_df
+du            | MIT         | rustybox & rustybox-core   | uutils / uu_du
+env           | MIT         | rustybox & rustybox-core   | uutils / uu_env
+printenv      | MIT         | rustybox & rustybox-core   | uutils / uu_env
+date          | MIT         | rustybox & rustybox-core   | uutils / uu_date
+basename      | MIT         | rustybox & rustybox-core   | uutils / uu_basename
+dirname       | MIT         | rustybox & rustybox-core   | uutils / uu_dirname
+readlink      | MIT         | rustybox & rustybox-core   | uutils / uu_readlink
+stat          | MIT         | rustybox & rustybox-core   | uutils / uu_stat
+seq           | MIT         | rustybox & rustybox-core   | uutils / uu_seq
+sleep         | MIT         | rustybox & rustybox-core   | uutils / uu_sleep
+id            | MIT         | rustybox & rustybox-core   | uutils / uu_id
+whoami        | MIT         | rustybox & rustybox-core   | uutils / uu_id
+logname       | MIT         | rustybox & rustybox-core   | uutils / uu_id
+yes           | MIT         | rustybox & rustybox-core   | uutils / uu_yes
+tac           | MIT         | rustybox & rustybox-core   | uutils / uu_tac
+nl            | MIT         | rustybox & rustybox-core   | uutils / uu_nl
+tee           | MIT         | rustybox & rustybox-core   | uutils / uu_tee
+mktemp        | MIT         | rustybox & rustybox-core   | uutils / uu_mktemp
+realpath      | MIT         | rustybox & rustybox-core   | uutils / uu_realpath
+nproc         | MIT         | rustybox & rustybox-core   | uutils / uu_nproc
+printf        | MIT         | rustybox & rustybox-core   | uutils / uu_printf
+link          | MIT         | rustybox & rustybox-core   | uutils / uu_ln
+unlink        | MIT         | rustybox & rustybox-core   | uutils / uu_rm
+factor        | MIT         | rustybox & rustybox-core   | uutils / uu_factor
+timeout       | MIT         | rustybox & rustybox-core   | uutils / uu_timeout
+nohup         | MIT         | rustybox & rustybox-core   | uutils / uu_nohup
+shuf          | MIT         | rustybox & rustybox-core   | uutils / uu_shuf
+nice          | MIT         | rustybox & rustybox-core   | uutils / uu_nice
+dd            | MIT         | rustybox & rustybox-core   | uutils / uu_dd
+truncate      | MIT         | rustybox & rustybox-core   | uutils / uu_truncate
+fold          | MIT         | rustybox & rustybox-core   | uutils / uu_fold
+expand        | MIT         | rustybox & rustybox-core   | uutils / uu_expand
+unexpand      | MIT         | rustybox & rustybox-core   | uutils / uu_unexpand
+comm          | MIT         | rustybox & rustybox-core   | uutils / uu_comm
+split         | MIT         | rustybox & rustybox-core   | uutils / uu_split
+cksum         | MIT         | rustybox & rustybox-core   | uutils / uu_cksum
+paste         | MIT         | rustybox & rustybox-core   | uutils / uu_paste
+sync          | MIT         | rustybox & rustybox-core   | in-house (libc call)
+uname         | MIT         | rustybox & rustybox-core   | uutils / uu_uname
+arch          | MIT         | rustybox & rustybox-core   | uutils / uu_uname
+sum           | MIT         | rustybox & rustybox-core   | uutils / uu_sum
+base64        | MIT         | rustybox & rustybox-core   | uutils / uu_base64
+md5sum        | MIT         | rustybox & rustybox-core   | RustCrypto (md-5)
+sha1sum       | MIT         | rustybox & rustybox-core   | RustCrypto (sha1)
+sha256sum     | MIT         | rustybox & rustybox-core   | RustCrypto (sha2)
+sha512sum     | MIT         | rustybox & rustybox-core   | RustCrypto (sha2)
+sha3sum       | MIT         | rustybox & rustybox-core   | RustCrypto (sha3)
+gzip          | MIT         | rustybox & rustybox-core   | flate2
+gunzip        | MIT         | rustybox & rustybox-core   | flate2
+zcat          | MIT         | rustybox & rustybox-core   | flate2
+bzip2         | MIT         | rustybox & rustybox-core   | bzip2
+bunzip2       | MIT         | rustybox & rustybox-core   | bzip2
+bzcat         | MIT         | rustybox & rustybox-core   | bzip2
+xz            | MIT         | rustybox & rustybox-core   | xz2
+unxz          | MIT         | rustybox & rustybox-core   | xz2
+xzcat         | MIT         | rustybox & rustybox-core   | xz2
+tar           | MIT         | rustybox & rustybox-core   | tar / flate2
+flock         | MIT         | rustybox & rustybox-core   | in-house rewrite (nix)
+setsid        | MIT         | rustybox & rustybox-core   | in-house rewrite (nix)
+chrt          | MIT         | rustybox & rustybox-core   | in-house rewrite (nix)
+ionice        | MIT         | rustybox & rustybox-core   | in-house rewrite (nix)
+watch         | MIT         | rustybox & rustybox-core   | in-house rewrite (nix)
+xargs         | MIT         | rustybox & rustybox-core   | in-house rewrite (nix)
+mountpoint    | MIT         | rustybox & rustybox-core   | in-house rewrite (nix)
+grep          | MIT         | rustybox & rustybox-core   | ripgrep (grep-regex)
+egrep         | MIT         | rustybox & rustybox-core   | ripgrep (grep-regex)
+fgrep         | MIT         | rustybox & rustybox-core   | ripgrep (grep-regex)
+find          | MIT         | rustybox & rustybox-core   | walkdir / globset
 
-    <one line to give the program's name and a brief idea of what it does.>
-    Copyright (C) <year>  <name of author>
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with this program; if not, see <https://www.gnu.org/licenses/>.
-
-Also add information on how to contact you by electronic and paper mail.
-
-If the program is interactive, make it output a short notice like this
-when it starts in an interactive mode:
-
-    Gnomovision version 69, Copyright (C) year name of author
-    Gnomovision comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
-    This is free software, and you are welcome to redistribute it
-    under certain conditions; type `show c' for details.
-
-The hypothetical commands `show w' and `show c' should show the appropriate
-parts of the General Public License.  Of course, the commands you use may
-be called something other than `show w' and `show c'; they could even be
-mouse-clicks or menu items--whatever suits your program.
-
-You should also get your employer (if you work as a programmer) or your
-school, if any, to sign a "copyright disclaimer" for the program, if
-necessary.  Here is a sample; alter the names:
-
-  Yoyodyne, Inc., hereby disclaims all copyright interest in the program
-  `Gnomovision' (which makes passes at compilers) written by James Hacker.
-
-  <signature of Moe Ghoul>, 1 April 1989
-  Moe Ghoul, President of Vice
-
-This General Public License does not permit incorporating your program into
-proprietary programs.  If your program is a subroutine library, you may
-consider it more useful to permit linking proprietary applications with the
-library.  If this is what you want to do, use the GNU Lesser General
-Public License instead of this License.
+[ALL OTHER 200+ APPLET NAMES]
+              | GPL-2.0     | rustybox ONLY              | c2rust legacy transpile
+              |             |                            | from BusyBox source
+(Including: ash, hush, awk, vi, wget, mount, umount, ifconfig, ip, fdisk, less, top, ps, etc.)

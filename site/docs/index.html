@@ -1,0 +1,1390 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>rustybox docs — Guides, Architecture &amp; Licensing</title>
+<meta name="description" content="Comprehensive documentation for rustybox. Learn about its dual-edition architecture (GPL vs MIT), per-applet licensing, migration process, contribution guidelines, and examples.">
+<link rel="canonical" href="https://rustybox.io/docs/">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0b0f0d">
+<meta name="author" content="peterlodri-sec">
+<meta name="keywords" content="busybox, rust, documentation, static binary, musl, licensing, gpl, mit, uutils, ripgrep">
+
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="rustybox docs">
+<meta property="og:url" content="https://rustybox.io/docs/">
+<meta property="og:title" content="rustybox docs — Guides, Architecture &amp; Licensing">
+<meta property="og:description" content="Comprehensive documentation for rustybox. Learn about its dual-edition architecture (GPL vs MIT), per-applet licensing, migration process, contribution guidelines, and examples.">
+<meta property="og:image" content="https://rustybox.io/og-image.png">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="rustybox docs — Guides, Architecture &amp; Licensing">
+<meta name="twitter:description" content="Comprehensive documentation for rustybox. Learn about its dual-edition architecture (GPL vs MIT), per-applet licensing, migration process, contribution guidelines, and examples.">
+<meta name="twitter:image" content="https://rustybox.io/og-image.png">
+
+<style>
+  :root {
+    --bg: #0b0f0d;
+    --panel: #111613;
+    --panel-glow: rgba(46, 230, 166, 0.03);
+    --ink: #e8f0ea;
+    --muted: #8ba193;
+    --acc: #2ee6a6;
+    --acc-hover: #4bf0b8;
+    --acc2: #6cf;
+    --line: #1e2823;
+    --warn: #f0b429;
+    --err: #ff5c5c;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  }
+  @media(prefers-color-scheme: light) {
+    :root {
+      --bg: #f6f8f6;
+      --panel: #ffffff;
+      --panel-glow: rgba(10, 143, 95, 0.02);
+      --ink: #0d1712;
+      --muted: #5a6b60;
+      --line: #e2e9e4;
+      --acc: #0a8f5f;
+      --acc-hover: #08754e;
+      --acc2: #0369a1;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.6;
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  /* Sidebar Navigation */
+  .sidebar {
+    width: 280px;
+    background: var(--panel);
+    border-right: 1px solid var(--line);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    overflow-y: auto;
+    z-index: 100;
+  }
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 32px;
+    text-decoration: none;
+  }
+  .sidebar-header .logo {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--ink);
+    letter-spacing: .5px;
+  }
+  .sidebar-header .logo b { color: var(--acc); }
+  .sidebar-header .badge {
+    background: var(--line);
+    color: var(--acc);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .search-box {
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .search-box input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-box input:focus {
+    border-color: var(--acc);
+  }
+  .nav-group {
+    margin-bottom: 28px;
+  }
+  .nav-group h4 {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 0 0 12px 0;
+  }
+  .nav-link {
+    display: block;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.92rem;
+    padding: 6px 0;
+    transition: color 0.15s;
+  }
+  .nav-link:hover, .nav-link.active {
+    color: var(--acc);
+  }
+  .nav-link.active {
+    font-weight: 600;
+  }
+
+  /* Main Content Area */
+  .main-content {
+    margin-left: 280px;
+    flex: 1;
+    max-width: 100%;
+    padding: 48px 64px 80px;
+    background-image: radial-gradient(60rem 30rem at 90% 0%, var(--panel-glow), transparent);
+  }
+  
+  .content-container {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  /* Typography */
+  h1 {
+    font-size: 2.5rem;
+    letter-spacing: -1px;
+    margin: 0 0 12px 0;
+    line-height: 1.15;
+  }
+  h2 {
+    font-size: 1.75rem;
+    letter-spacing: -0.5px;
+    margin: 40px 0 16px 0;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 8px;
+  }
+  h3 {
+    font-size: 1.25rem;
+    margin: 28px 0 12px 0;
+  }
+  p {
+    margin: 0 0 18px 0;
+    color: color-mix(in oklab, var(--ink) 85%, var(--bg));
+  }
+  ul, ol {
+    margin: 0 0 20px 0;
+    padding-left: 24px;
+  }
+  li {
+    margin-bottom: 8px;
+  }
+  a {
+    color: var(--acc);
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Codes & Pre */
+  code {
+    font-family: var(--mono);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.88em;
+    color: var(--acc2);
+  }
+  pre {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 20px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    margin: 20px 0;
+    position: relative;
+  }
+  pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--ink);
+    font-size: inherit;
+  }
+  .pre-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--line);
+    padding: 8px 16px;
+    border-radius: 10px 10px 0 0;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-bottom: none;
+    margin-bottom: -20px;
+    position: relative;
+    z-index: 10;
+  }
+  .pre-header + pre {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+  .copy-btn {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .copy-btn:hover {
+    color: var(--ink);
+    border-color: var(--muted);
+  }
+
+  /* Alerts / Cards */
+  .alert {
+    border-left: 4px solid var(--acc);
+    background: var(--panel);
+    padding: 16px 20px;
+    border-radius: 0 12px 12px 0;
+    margin: 24px 0;
+  }
+  .alert.note { border-left-color: var(--acc2); }
+  .alert.warning { border-left-color: var(--warn); }
+  .alert.error { border-left-color: var(--err); }
+  .alert p:last-child { margin: 0; }
+  .alert-title {
+    font-weight: 700;
+    margin-bottom: 6px;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 28px 0;
+    font-size: 0.92rem;
+  }
+  th, td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+  }
+  th {
+    background: var(--panel);
+    font-family: var(--mono);
+    font-weight: 600;
+    color: var(--muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  tr:hover td {
+    background: var(--panel-glow);
+  }
+  
+  /* Grid layouts */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin: 28px 0;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .card:hover {
+    border-color: var(--acc);
+    transform: translateY(-2px);
+  }
+  .card h3 {
+    margin-top: 0;
+    font-family: var(--mono);
+    color: var(--acc);
+  }
+  
+  /* Interactive Applet Filter Section */
+  .filter-section {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 28px 0;
+  }
+  .filter-controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .filter-btn {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    border-color: var(--acc);
+    color: var(--acc);
+  }
+  .filter-btn.active {
+    background: rgba(46, 230, 166, 0.08);
+  }
+  .applet-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 8px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 6px;
+  }
+  .applet-item {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .applet-item:hover {
+    border-color: var(--acc);
+    transform: scale(1.02);
+  }
+  .applet-item.mit { border-left: 3px solid var(--acc2); }
+  .applet-item.gpl { border-left: 3px solid var(--warn); }
+  
+  /* Modal styling */
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    backdrop-filter: blur(8px);
+  }
+  .modal.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal-content {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    padding: 32px;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  }
+  .modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .modal-close:hover {
+    color: var(--ink);
+  }
+  .modal h3 {
+    margin-top: 0;
+    font-family: var(--mono);
+  }
+
+  /* Responsive layout overrides */
+  @media (max-width: 1024px) {
+    .sidebar {
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+    .sidebar.open {
+      transform: translateX(0);
+    }
+    .main-content {
+      margin-left: 0;
+      padding: 80px 24px 48px;
+    }
+    .mobile-nav {
+      display: flex !important;
+      align-items: center;
+      justify-content: space-between;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      padding: 0 20px;
+      z-index: 99;
+    }
+    .menu-toggle {
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--ink);
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+    }
+  }
+
+  .mobile-nav {
+    display: none;
+  }
+
+  /* Highlight colors */
+  .h-gpl { color: var(--warn); font-family: var(--mono); }
+  .h-mit { color: var(--acc2); font-family: var(--mono); }
+</style>
+</head>
+<body>
+
+<!-- Mobile Header Navigation -->
+<div class="mobile-nav">
+  <a href="/" class="sidebar-header" style="margin:0">
+    <span class="logo">rusty<b>box</b></span>
+  </a>
+  <button class="menu-toggle" id="menuToggle">MENU</button>
+</div>
+
+<!-- Sidebar Navigation -->
+<nav class="sidebar" id="sidebar">
+  <a href="/" class="sidebar-header">
+    <span class="logo">rusty<b>box</b> · <b>docs</b></span>
+    <span class="badge">v0.3.0</span>
+  </a>
+  
+  <div class="search-box">
+    <input type="text" id="docsSearch" placeholder="Search documentation..." aria-label="Search documentation">
+  </div>
+
+  <div class="nav-group">
+    <h4>Getting Started</h4>
+    <a href="#getting-started" class="nav-link">Overview &amp; Install</a>
+    <a href="#multicall" class="nav-link">Multicall Mechanics</a>
+    <a href="#examples" class="nav-link">Usage &amp; Examples</a>
+  </div>
+
+  <div class="nav-group">
+    <h4>Architecture</h4>
+    <a href="#dual-edition" class="nav-link">Dual-Edition Model</a>
+    <a href="#backends" class="nav-link">Modern Backends</a>
+    <a href="#compilation" class="nav-link">Size &amp; Compiling</a>
+  </div>
+
+  <div class="nav-group">
+    <h4>Project Guides</h4>
+    <a href="#contributing" class="nav-link">Contribution Guide</a>
+    <a href="#licensing" class="nav-link">Licensing Breakdown</a>
+    <a href="#registry" class="nav-link">Applet Registry</a>
+  </div>
+  
+  <div style="flex:1"></div>
+  
+  <div class="nav-group" style="margin:0">
+    <a href="https://github.com/peterlodri-sec/rustybox" class="nav-link" target="_blank">GitHub Repository ↗</a>
+    <a href="/" class="nav-link">Back to Landing Page</a>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<main class="main-content">
+  <div class="content-container">
+    
+    <!-- Section: Getting Started -->
+    <section id="getting-started">
+      <h1>Documentation</h1>
+      <p class="lede" style="font-size: 1.2rem; color: var(--muted); margin-bottom: 32px;">
+        Welcome to the documentation for Rustybox, a modern, memory-safe reincarnation of BusyBox written entirely in Rust.
+      </p>
+
+      <h2>Getting Started</h2>
+      <p>
+        Rustybox packages the functionality of standard system commands into a single, fully-static binary. It ships in two distinct editions: <strong>Full (GPL-2.0)</strong>, which retains maximum BusyBox compatibility, and <strong>Core (MIT)</strong>, which compiles only permissively licensed, safe Rust backends.
+      </p>
+
+      <h3>Quick Installation</h3>
+      <p>You can fetch the statically linked binary for your architecture directly from the release page:</p>
+
+      <div class="pre-header">
+        <span>Shell Command</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code># Download the MIT edition (rustybox-core)
+curl -LO https://github.com/peterlodri-sec/rustybox/releases/latest/download/rustybox-core-x86_64-unknown-linux-musl
+
+# Make executable
+chmod +x rustybox-core-x86_64-unknown-linux-musl
+
+# Verify execution
+./rustybox-core-x86_64-unknown-linux-musl --version</code></pre>
+      
+      <div class="alert note">
+        <div class="alert-title">Sigstore Signatures</div>
+        <p>Every official release is cryptographically signed using keyless <code>cosign</code>. You can verify release authenticity with: <code>cosign verify-blob &lt;binary&gt; --certificate-identity &lt;author-email&gt; --signature &lt;signature-file&gt;</code>.</p>
+      </div>
+    </section>
+
+    <!-- Section: Multicall Mechanics -->
+    <section id="multicall">
+      <h2>Multicall Mechanics</h2>
+      <p>
+        Like original BusyBox, Rustybox uses <strong>multicall mechanics</strong> to act as multiple utilities. The binary determines which tool to execute based on its own process name (<code>argv[0]</code>).
+      </p>
+      <p>There are two primary ways to run commands:</p>
+
+      <h3>1. Symlinks (Standard Unix Integration)</h3>
+      <p>
+        By creating symlinks named after individual applets (such as <code>ls</code>, <code>grep</code>, <code>cat</code>) that point to the <code>rustybox</code> binary, the utilities will execute natively when invoked.
+      </p>
+
+      <div class="pre-header">
+        <span>Symlink Creation</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code># Create a symlink named "ls" pointing to rustybox-core
+ln -s rustybox-core-x86_64-unknown-linux-musl ls
+
+# Run the command through the symlink
+./ls -la</code></pre>
+
+      <h3>2. Explicit Subcommands</h3>
+      <p>
+        If called by its own binary name, Rustybox dispatches commands based on its first argument:
+      </p>
+      
+      <div class="pre-header">
+        <span>Direct Invocation</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code># Dispatch the 'grep' applet explicitly
+./rustybox grep -rn "TODO" src/</code></pre>
+    </section>
+
+    <!-- Section: Examples -->
+    <section id="examples">
+      <h2>Usage &amp; Examples</h2>
+      <p>
+        Rustybox is designed for minimal containers, system rescue images, and orchestration engines that require robust, sandboxed userlands.
+      </p>
+
+      <h3>1. Scratch Containers (Peak Minimalism)</h3>
+      <p>
+        Because the binary is compiled fully-statically using <code>musl</code>, it has absolutely zero external dependencies. You can drop it directly into an empty <code>scratch</code> container to create lightweight, secure environments.
+      </p>
+
+      <div class="pre-header">
+        <span>Dockerfile</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code>FROM scratch
+
+# Copy statically linked MIT edition into container
+COPY rustybox-core-x86_64-unknown-linux-musl /bin/rustybox
+
+# Automatically install all symlinks into /bin on container startup
+RUN ["/bin/rustybox", "--install", "/bin"]
+
+# Run a minimal shell
+ENTRYPOINT ["/bin/ash"]</code></pre>
+
+      <h3>2. Agentic AI and Automation Harnesses</h3>
+      <p>
+        Rustybox integrates modern utilities like <code>timeout</code>, <code>watch</code>, <code>flock</code>, and <code>xargs</code> natively, making it a powerful harness environment for scripting and bounding processes spawned by AI agents.
+      </p>
+
+      <div class="pre-header">
+        <span>Orchestration Script Examples</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code># Bounding execution: kill the build command if it runs past 30 seconds
+rustybox timeout 30 cargo build
+
+# Task locking: ensure only one agent script runs at a time
+rustybox flock /tmp/agent.lock -c "python run_tasks.py"
+
+# Periodic observation: monitor CPU usage of a specific process every 2s
+rustybox watch -n 2 "ps aux | grep node"</code></pre>
+    </section>
+
+    <!-- Section: Dual-Edition Model -->
+    <section id="dual-edition">
+      <h2>Dual-Edition Model</h2>
+      <p>
+        The defining architectural feature of Rustybox is its <strong>dual-edition compilation pipeline</strong>, which separates copyleft licensing from permissive deployments:
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <h3>rustybox (GPL-2.0)</h3>
+          <p>
+            The full edition compiles <strong>all 300+ applets</strong>. It includes the legacy transpiled codebase (BusyBox's lineage) and thus remains subject to the copyleft conditions of the GPLv2 license.
+          </p>
+        </div>
+        <div class="card">
+          <h3>rustybox-core (MIT)</h3>
+          <p>
+            The permissive edition compiles <strong>only the 85+ applets</strong> that have been ported to safe, permissively licensed Rust libraries (like <code>uutils</code> and <code>ripgrep</code>). No GPL code is compiled into this binary.
+          </p>
+        </div>
+      </div>
+      
+      <div class="alert note">
+        <div class="alert-title">GPL Compatibility</div>
+        <p>Because the modern safe libraries we link to (like <code>uutils</code>) are licensed under the MIT license, they are fully GPL-compatible. The combined binary of the <strong>Full Edition</strong> remains GPL-2.0, while the <strong>Core Edition</strong> is legally distributable under the MIT license.</p>
+      </div>
+    </section>
+
+    <!-- Section: Modern Backends -->
+    <section id="backends">
+      <h2>Modern Backends</h2>
+      <p>
+        Originally, Rustybox was generated as a pure <code>c2rust</code> transpile of BusyBox, producing heavily <code>unsafe</code>, pointer-based C code written in Rust syntax. We are incrementally replacing this legacy transpile with modern, memory-safe library code.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <h3>uutils Coreutils</h3>
+          <p>
+            Directly routes utilities like <code>cat</code>, <code>ls</code>, <code>cp</code>, and <code>mv</code> to the library entrypoints (<code>uumain</code>) of the Rust <code>uutils/coreutils</code> project.
+          </p>
+        </div>
+        <div class="card">
+          <h3>ripgrep &amp; fd</h3>
+          <p>
+            Uses ripgrep's underlying <code>grep-searcher</code>, <code>grep-regex</code>, and <code>ignore</code> libraries for high-performance searching, and <code>walkdir</code>/<code>globset</code> for directory traversals.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Nix System Calls</h3>
+          <p>
+            Low-level Linux tools (such as <code>mount</code>, <code>ifconfig</code>, and <code>init</code>) are rewritten as safe Rust modules utilizing the <code>nix</code> crate for raw system calls, eliminating FFI pointers.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: Compilation -->
+    <section id="compilation">
+      <h2>Size &amp; Compilation Strategies</h2>
+      <p>
+        To preserve BusyBox's tiny footprint while running on memory-safe engines, Rustybox employs several link-time optimization (LTO) techniques:
+      </p>
+
+      <ul>
+        <li><strong>Size Optimization:</strong> Cargo compiles code with <code>opt-level = 'z'</code> and <code>codegen-units = 1</code> to prioritize density.</li>
+        <li><strong>Static musl Target:</strong> Releases are built against <code>musl-gcc</code> to enable static linking, allowing binaries to run on empty filesystems.</li>
+        <li><strong>UPX Compression:</strong> Artifacts are packed in CI using <code>UPX --best --lzma</code>. The normal builds retain debug symbols inside the compressed package, while <code>-slim</code> builds strip symbols before compression to achieve a target size of just ~3.2MB.</li>
+        <li><strong>The wild Linker:</strong> We use the <code>wild</code> linker in the CI pipeline to significantly accelerate link-time optimization (LTO) stages for cross-crate static builds.</li>
+      </ul>
+    </section>
+
+    <!-- Section: Contributing -->
+    <section id="contributing">
+      <h2>Contribution Guide</h2>
+      <p>
+        We welcome contributions! Our main roadmap is migrating the legacy transpiled applets over to safe, permissively licensed Rust modules.
+      </p>
+
+      <h3>How to Migrate an Applet</h3>
+      <p>If you want to port an applet to a safe modern engine, follow these steps:</p>
+      
+      <ol>
+        <li>
+          <strong>Expose Dependencies:</strong> Add the permissive library under <code>[dependencies]</code> in <code>Cargo.toml</code> and <code>crates/rustybox-core/Cargo.toml</code>.
+        </li>
+        <li>
+          <strong>Define Feature Flags:</strong> Declare a feature flag named <code>modern-&lt;applet&gt;</code> in the root <code>Cargo.toml</code>.
+        </li>
+        <li>
+          <strong>Wire Dispatch:</strong> Update <code>modern.rs</code> to route execution to the library wrapper, and add the dispatch matcher under <code>dispatch()</code> in <code>crates/rustybox-core/main.rs</code>.
+        </li>
+        <li>
+          <strong>Bypass Legacy FFI:</strong> Disable or remove the legacy transpiled C entrypoint from the vector in <code>applets/applet_tables.rs</code>.
+        </li>
+        <li>
+          <strong>Verify Behavior:</strong> Add smoke/integration tests in <code>tests/modern.rs</code> and run the test suite.
+        </li>
+      </ol>
+
+      <h3>Coding Standards</h3>
+      <ul>
+        <li><strong>Unsafety Reduction:</strong> The primary goal is reducing the count of <code>unsafe</code> blocks. Unsafe operations should be isolated to thin system call boundaries.</li>
+        <li><strong>One-Line Imports:</strong> Maintain a single-line, single-symbol import style for standard library components (e.g. <code>use libc::uid_t;</code>) to allow global refactoring scripts to process imports easily.</li>
+      </ul>
+    </section>
+
+    <!-- Section: Licensing -->
+    <section id="licensing">
+      <h2>Licensing Breakdown</h2>
+      <p>
+        Rustybox contains two separate licensing boundaries, enabling flexible usage:
+      </p>
+
+      <h3>The GPL Boundary (rustybox binary)</h3>
+      <p>
+        Because the transpiled code is derived directly from the C sources of BusyBox, the full binary is a derivative work under the <strong>GNU General Public License, Version 2 (GPL-2.0-only)</strong>.
+      </p>
+      <p>
+        If you distribute modifications to the full <code>rustybox</code> binary, or link it into proprietary compilation pipelines, you must make its complete source code available under GPL-2.0.
+      </p>
+
+      <h3>The MIT Boundary (rustybox-core binary)</h3>
+      <p>
+        The <code>rustybox-core</code> subcrate does not import or link any transpiled C code. All compiled components (uutils coreutils, RustCrypto hashers, and custom adapters) are permissively licensed.
+      </p>
+      <p>
+        This binary is distributed under the <strong>MIT License</strong>, allowing you to embed it in proprietary firmware, proprietary automation workflows, or commercial container distributions without copyleft requirements.
+      </p>
+    </section>
+
+    <!-- Section: Applet Registry -->
+    <section id="registry">
+      <h2>Applet Registry</h2>
+      <p>
+        Use the interactive table below to explore all available applets, their migration status, dependencies, and license classifications.
+      </p>
+
+      <div class="filter-section">
+        <div class="filter-controls">
+          <button class="filter-btn active" onclick="filterApplets('all')">All Applets</button>
+          <button class="filter-btn" onclick="filterApplets('mit')">MIT Only (rustybox-core)</button>
+          <button class="filter-btn" onclick="filterApplets('gpl')">GPL Only (transpiled)</button>
+          <button class="filter-btn" onclick="filterApplets('modern')">Safe Rust (uutils/in-house)</button>
+          <button class="filter-btn" onclick="filterApplets('legacy')">Legacy C (transpiled)</button>
+        </div>
+        
+        <div class="search-box" style="margin-bottom: 12px;">
+          <input type="text" id="appletSearch" placeholder="Type applet name (e.g., grep, ash, ls)..." onkeyup="searchTable()" aria-label="Search applets">
+        </div>
+
+        <table id="appletTable">
+          <thead>
+            <tr>
+              <th>Applet</th>
+              <th>License</th>
+              <th>Status</th>
+              <th>Engine / Dependency</th>
+            </tr>
+          </thead>
+          <tbody id="appletTableBody">
+            <!-- Applets will be injected here dynamically by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- Info Modal -->
+<div class="modal" id="infoModal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <h3 id="modalTitle">Applet Details</h3>
+    <div id="modalBody">Loading...</div>
+  </div>
+</div>
+
+<script>
+  // Complete data registry of applets
+  const appletsData = [
+    { name: "grep", license: "MIT", status: "Modern Safe", engine: "ripgrep (grep-regex)" },
+    { name: "egrep", license: "MIT", status: "Modern Safe", engine: "ripgrep (grep-regex)" },
+    { name: "fgrep", license: "MIT", status: "Modern Safe", engine: "ripgrep (grep-regex)" },
+    { name: "find", license: "MIT", status: "Modern Safe", engine: "walkdir / globset" },
+    { name: "cat", license: "MIT", status: "Modern Safe", engine: "uutils / uu_cat" },
+    { name: "echo", license: "MIT", status: "Modern Safe", engine: "uutils / uu_echo" },
+    { name: "ls", license: "MIT", status: "Modern Safe", engine: "uutils / uu_ls" },
+    { name: "cp", license: "MIT", status: "Modern Safe", engine: "uutils / uu_cp" },
+    { name: "mv", license: "MIT", status: "Modern Safe", engine: "uutils / uu_mv" },
+    { name: "rm", license: "MIT", status: "Modern Safe", engine: "uutils / uu_rm" },
+    { name: "mkdir", license: "MIT", status: "Modern Safe", engine: "uutils / uu_mkdir" },
+    { name: "rmdir", license: "MIT", status: "Modern Safe", engine: "uutils / uu_rmdir" },
+    { name: "ln", license: "MIT", status: "Modern Safe", engine: "uutils / uu_ln" },
+    { name: "pwd", license: "MIT", status: "Modern Safe", engine: "uutils / uu_pwd" },
+    { name: "touch", license: "MIT", status: "Modern Safe", engine: "uutils / uu_touch" },
+    { name: "true", license: "MIT", status: "Modern Safe", engine: "uutils / inline" },
+    { name: "false", license: "MIT", status: "Modern Safe", engine: "uutils / inline" },
+    { name: "head", license: "MIT", status: "Modern Safe", engine: "uutils / uu_head" },
+    { name: "tail", license: "MIT", status: "Modern Safe", engine: "uutils / uu_tail" },
+    { name: "wc", license: "MIT", status: "Modern Safe", engine: "uutils / uu_wc" },
+    { name: "sort", license: "MIT", status: "Modern Safe", engine: "uutils / uu_sort" },
+    { name: "uniq", license: "MIT", status: "Modern Safe", engine: "uutils / uu_uniq" },
+    { name: "cut", license: "MIT", status: "Modern Safe", engine: "uutils / uu_cut" },
+    { name: "tr", license: "MIT", status: "Modern Safe", engine: "uutils / uu_tr" },
+    { name: "chmod", license: "MIT", status: "Modern Safe", engine: "uutils / uu_chmod" },
+    { name: "chown", license: "MIT", status: "Modern Safe", engine: "uutils / uu_chown" },
+    { name: "df", license: "MIT", status: "Modern Safe", engine: "uutils / uu_df" },
+    { name: "du", license: "MIT", status: "Modern Safe", engine: "uutils / uu_du" },
+    { name: "env", license: "MIT", status: "Modern Safe", engine: "uutils / uu_env" },
+    { name: "printenv", license: "MIT", status: "Modern Safe", engine: "uutils / uu_env" },
+    { name: "date", license: "MIT", status: "Modern Safe", engine: "uutils / uu_date" },
+    { name: "basename", license: "MIT", status: "Modern Safe", engine: "uutils / uu_basename" },
+    { name: "dirname", license: "MIT", status: "Modern Safe", engine: "uutils / uu_dirname" },
+    { name: "readlink", license: "MIT", status: "Modern Safe", engine: "uutils / uu_readlink" },
+    { name: "stat", license: "MIT", status: "Modern Safe", engine: "uutils / uu_stat" },
+    { name: "seq", license: "MIT", status: "Modern Safe", engine: "uutils / uu_seq" },
+    { name: "sleep", license: "MIT", status: "Modern Safe", engine: "uutils / uu_sleep" },
+    { name: "id", license: "MIT", status: "Modern Safe", engine: "uutils / uu_id" },
+    { name: "whoami", license: "MIT", status: "Modern Safe", engine: "uutils / uu_id" },
+    { name: "logname", license: "MIT", status: "Modern Safe", engine: "uutils / uu_id" },
+    { name: "yes", license: "MIT", status: "Modern Safe", engine: "uutils / uu_yes" },
+    { name: "tac", license: "MIT", status: "Modern Safe", engine: "uutils / uu_tac" },
+    { name: "nl", license: "MIT", status: "Modern Safe", engine: "uutils / uu_nl" },
+    { name: "tee", license: "MIT", status: "Modern Safe", engine: "uutils / uu_tee" },
+    { name: "mktemp", license: "MIT", status: "Modern Safe", engine: "uutils / uu_mktemp" },
+    { name: "realpath", license: "MIT", status: "Modern Safe", engine: "uutils / uu_realpath" },
+    { name: "nproc", license: "MIT", status: "Modern Safe", engine: "uutils / uu_nproc" },
+    { name: "printf", license: "MIT", status: "Modern Safe", engine: "uutils / uu_printf" },
+    { name: "link", license: "MIT", status: "Modern Safe", engine: "uutils / uu_ln" },
+    { name: "unlink", license: "MIT", status: "Modern Safe", engine: "uutils / uu_rm" },
+    { name: "factor", license: "MIT", status: "Modern Safe", engine: "uutils / uu_factor" },
+    { name: "timeout", license: "MIT", status: "Modern Safe", engine: "uutils / uu_timeout" },
+    { name: "nohup", license: "MIT", status: "Modern Safe", engine: "uutils / uu_nohup" },
+    { name: "shuf", license: "MIT", status: "Modern Safe", engine: "uutils / uu_shuf" },
+    { name: "nice", license: "MIT", status: "Modern Safe", engine: "uutils / uu_nice" },
+    { name: "dd", license: "MIT", status: "Modern Safe", engine: "uutils / uu_dd" },
+    { name: "truncate", license: "MIT", status: "Modern Safe", engine: "uutils / uu_truncate" },
+    { name: "fold", license: "MIT", status: "Modern Safe", engine: "uutils / uu_fold" },
+    { name: "expand", license: "MIT", status: "Modern Safe", engine: "uutils / uu_expand" },
+    { name: "unexpand", license: "MIT", status: "Modern Safe", engine: "uutils / uu_unexpand" },
+    { name: "comm", license: "MIT", status: "Modern Safe", engine: "uutils / uu_comm" },
+    { name: "split", license: "MIT", status: "Modern Safe", engine: "uutils / uu_split" },
+    { name: "cksum", license: "MIT", status: "Modern Safe", engine: "uutils / uu_cksum" },
+    { name: "paste", license: "MIT", status: "Modern Safe", engine: "uutils / uu_paste" },
+    { name: "sync", license: "MIT", status: "Modern Safe", engine: "in-house (libc call)" },
+    { name: "uname", license: "MIT", status: "Modern Safe", engine: "uutils / uu_uname" },
+    { name: "arch", license: "MIT", status: "Modern Safe", engine: "uutils / uu_uname" },
+    { name: "sum", license: "MIT", status: "Modern Safe", engine: "uutils / uu_sum" },
+    { name: "base64", license: "MIT", status: "Modern Safe", engine: "uutils / uu_base64" },
+    { name: "md5sum", license: "MIT", status: "Modern Safe", engine: "RustCrypto (md-5)" },
+    { name: "sha1sum", license: "MIT", status: "Modern Safe", engine: "RustCrypto (sha1)" },
+    { name: "sha256sum", license: "MIT", status: "Modern Safe", engine: "RustCrypto (sha2)" },
+    { name: "sha512sum", license: "MIT", status: "Modern Safe", engine: "RustCrypto (sha2)" },
+    { name: "sha3sum", license: "MIT", status: "Modern Safe", engine: "RustCrypto (sha3)" },
+    { name: "gzip", license: "MIT", status: "Modern Safe", engine: "flate2" },
+    { name: "gunzip", license: "MIT", status: "Modern Safe", engine: "flate2" },
+    { name: "zcat", license: "MIT", status: "Modern Safe", engine: "flate2" },
+    { name: "bzip2", license: "MIT", status: "Modern Safe", engine: "bzip2" },
+    { name: "bunzip2", license: "MIT", status: "Modern Safe", engine: "bzip2" },
+    { name: "bzcat", license: "MIT", status: "Modern Safe", engine: "bzip2" },
+    { name: "xz", license: "MIT", status: "Modern Safe", engine: "xz2" },
+    { name: "unxz", license: "MIT", status: "Modern Safe", engine: "xz2" },
+    { name: "xzcat", license: "MIT", status: "Modern Safe", engine: "xz2" },
+    { name: "tar", license: "MIT", status: "Modern Safe", engine: "tar / flate2" },
+    { name: "flock", license: "MIT", status: "Modern Safe", engine: "in-house rewrite (nix)" },
+    { name: "setsid", license: "MIT", status: "Modern Safe", engine: "in-house rewrite (nix)" },
+    { name: "chrt", license: "MIT", status: "Modern Safe", engine: "in-house rewrite (nix)" },
+    { name: "ionice", license: "MIT", status: "Modern Safe", engine: "in-house rewrite (nix)" },
+    { name: "watch", license: "MIT", status: "Modern Safe", engine: "in-house rewrite (nix)" },
+    { name: "xargs", license: "MIT", status: "Modern Safe", engine: "in-house rewrite (nix)" },
+    { name: "mountpoint", license: "MIT", status: "Modern Safe", engine: "in-house rewrite (nix)" },
+    
+    // GPL Legacy/Transpiled Applets
+    { name: "ash", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "hush", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "awk", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "vi", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "wget", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "mount", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "umount", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ifconfig", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ip", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "acpid", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "addgroup", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "adduser", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "adjtimex", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "arp", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "arping", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "bc", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "beep", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "blkdiscard", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "blkid", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "blockdev", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "bootchartd", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "brctl", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "cal", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "chat", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "chattr", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "chpasswd", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "chpst", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "chroot", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "chvt", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "clear", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "cmp", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "conspy", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "cpio", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "crond", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "crontab", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "cryptpw", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "cttyhack", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "dc", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "deallocvt", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "delgroup", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "deluser", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "depmod", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "devmem", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "dhcprelay", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "diff", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "dmesg", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "dnsd", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "dnsdomainname", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "dos2unix", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "dpkg", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "dpkg-deb", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "dumpkmap", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "dumpleases", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ed", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "eject", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "envdir", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "envuidgid", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ether-wake", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "expr", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "fakeidentd", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "fallocate", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "fatattr", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "fbset", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "fbsplash", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "fdflush", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "fdformat", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "fdisk", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "fgconsole", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "findfs", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "free", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "freeramdisk", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "fsck", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "fsck_minix", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "fsfreeze", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "fstrim", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "fsync", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ftpd", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ftpget", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ftpput", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "fuser", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "getopt", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "getty", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "groups", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "halt", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "hd", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "hdparm", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "hexdump", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "hexedit", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "hostid", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "hostname", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "httpd", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "hwclock", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "i2cdetect", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "i2cdump", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "i2cget", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "i2cset", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "i2ctransfer", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ifdown", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ifenslave", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ifplugd", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ifup", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "inetd", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "insmod", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "install", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "iostat", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ipaddr", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ipcalc", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ipcrm", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ipcs", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "iplink", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ipneigh", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "iproute", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "iprule", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "iptunnel", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "kbd_mode", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "kill", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "killall", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "killall5", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "klogd", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "last", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "less", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "lsattr", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "lsmod", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "lsof", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "lspci", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "lzcat", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "lzma", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "lzop", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "makedevs", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "makemime", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "man", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "mdev", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "mesg", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "microcom", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "mkdosfs", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "mke2fs", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "mkfifo", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "mkfs_ext2", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "mkfs_minix", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "mkfs_vfat", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "mknod", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "mkpasswd", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "mkswap", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "modprobe", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "more", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "mpstat", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "mt", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "nameif", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "nanddump", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "nc", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "netstat", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "nmeter", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "nsenter", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "nslookup", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ntpd", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "nuke", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "openvt", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "partprobe", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "passwd", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "patch", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "pgrep", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "pidof", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ping", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ping6", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "pivot_root", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "pkill", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "pmap", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "popmaildir", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "poweroff", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "powertop", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ps", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "pscan", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "pstree", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "pwdx", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "raidautorun", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "rdate", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "rdev", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "readprofile", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "reboot", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "reformime", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "remove-shell", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "renice", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "reset", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "resize", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "resume", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "rev", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "rmmod", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "route", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "rpm", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "rpm2cpio", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "rtcwake", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "run-init", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "run-parts", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "runlevel", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "runsv", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "runsvdir", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "rx", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "script", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "scriptreplay", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "sendmail", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "setarch", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "setconsole", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "setfont", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "setkeycodes", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "setlogcons", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "setpriv", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "setserial", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "setuidgid", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "sh", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "showkey", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "shred", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "slattach", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "smemcap", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "softlimit", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ssl_client", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "start-stop-daemon", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "strings", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "su", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "sulogin", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "sv", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "svc", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "svlogd", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "svok", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "swapoff", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "swapon", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "switch_root", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "sysctl", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "syslogd", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "taskset", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "tc", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "tcpsvd", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "telnet", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "telnetd", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "tftp", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "tftpd", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "top", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "traceroute", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "traceroute6", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ts", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "tty", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ttysize", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "tunctl", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ubiattach", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ubidetach", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ubimkvol", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ubirmvol", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ubirsvol", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "ubiupdatevol", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "udhcpc", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "udhcpc6", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "udhcpd", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "udpsvd", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "uevent", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "unix2dos", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "unlzma", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "unshare", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "unxz", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "unzip", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "uptime", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "users", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "vconfig", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "vlock", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "w", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "wall", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "watchdog", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "which", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "who", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "whois", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "xxd", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" },
+    { name: "zcip", license: "GPL-2.0", status: "Legacy (Transpiled)", engine: "c2rust / hard-links" }
+  ];
+
+  // Populate Table on load
+  const tableBody = document.getElementById('appletTableBody');
+  
+  function renderTable(data) {
+    tableBody.innerHTML = '';
+    data.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.style.cursor = 'pointer';
+      tr.onclick = () => openModal(item.name);
+      
+      const licenseClass = item.license === 'MIT' ? 'h-mit' : 'h-gpl';
+      const statusColor = item.status.includes('Modern') ? 'var(--acc)' : 'var(--muted)';
+      
+      tr.innerHTML = `
+        <td style="font-family: var(--mono); font-weight: 600;">\u{1F4C1} ${item.name}</td>
+        <td><span class="${licenseClass}">${item.license}</span></td>
+        <td style="color: ${statusColor}; font-weight: 500;">${item.status}</td>
+        <td style="font-family: var(--mono); font-size: 0.85rem; color: var(--muted);">${item.engine}</td>
+      `;
+      tableBody.appendChild(tr);
+    });
+  }
+
+  renderTable(appletsData);
+
+  // Filter Table
+  function filterApplets(type) {
+    // Update active button style
+    const buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+
+    let filtered = appletsData;
+    if (type === 'mit') {
+      filtered = appletsData.filter(a => a.license === 'MIT');
+    } else if (type === 'gpl') {
+      filtered = appletsData.filter(a => a.license === 'GPL-2.0');
+    } else if (type === 'modern') {
+      filtered = appletsData.filter(a => a.status.includes('Modern'));
+    } else if (type === 'legacy') {
+      filtered = appletsData.filter(a => a.status.includes('Legacy'));
+    }
+    renderTable(filtered);
+  }
+
+  // Search Table
+  function searchTable() {
+    const query = document.getElementById('appletSearch').value.toLowerCase();
+    const activeFilterBtn = document.querySelector('.filter-btn.active');
+    
+    // Determine the current category filter
+    let baseData = appletsData;
+    if (activeFilterBtn.innerText.includes('MIT')) {
+      baseData = appletsData.filter(a => a.license === 'MIT');
+    } else if (activeFilterBtn.innerText.includes('GPL')) {
+      baseData = appletsData.filter(a => a.license === 'GPL-2.0');
+    } else if (activeFilterBtn.innerText.includes('Safe')) {
+      baseData = appletsData.filter(a => a.status.includes('Modern'));
+    } else if (activeFilterBtn.innerText.includes('Legacy')) {
+      baseData = appletsData.filter(a => a.status.includes('Legacy'));
+    }
+
+    const filtered = baseData.filter(a => a.name.toLowerCase().includes(query));
+    renderTable(filtered);
+  }
+
+  // Global search highlight
+  document.getElementById('docsSearch').addEventListener('keyup', function(e) {
+    const q = e.target.value.toLowerCase();
+    if (!q) {
+      document.querySelectorAll('section').forEach(s => s.style.display = 'block');
+      return;
+    }
+    
+    document.querySelectorAll('section').forEach(section => {
+      const text = section.innerText.toLowerCase();
+      if (text.includes(q)) {
+        section.style.display = 'block';
+      } else {
+        section.style.display = 'none';
+      }
+    });
+  });
+
+  // Modal handlers
+  const modal = document.getElementById('infoModal');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalBody = document.getElementById('modalBody');
+
+  function openModal(name) {
+    const item = appletsData.find(a => a.name === name);
+    if (!item) return;
+    
+    modalTitle.innerText = `${item.name} Applet`;
+    
+    let description = '';
+    if (item.license === 'MIT') {
+      description = `
+        <p><strong>License:</strong> <span class="h-mit">MIT / Apache-2.0 Compatible</span></p>
+        <p><strong>Deployment:</strong> Compiled in both <code>rustybox</code> (GPL-2.0) and <code>rustybox-core</code> (MIT).</p>
+        <p><strong>Architecture Engine:</strong> Uses a fully safe, permissive library wrapper (<code>${item.engine}</code>). This utility contains <strong>0 lines of legacy C code</strong> and compiles completely memory-safe.</p>
+        <p><strong>Command invocation:</strong> <code>rustybox ${item.name} [args...]</code></p>
+      `;
+    } else {
+      description = `
+        <p><strong>License:</strong> <span class="h-gpl">GPL-2.0-only</span></p>
+        <p><strong>Deployment:</strong> Only compiled in <code>rustybox</code>. Bypassed in the permissive <code>rustybox-core</code>.</p>
+        <p><strong>Architecture Engine:</strong> Legacy code transpiled from BusyBox via <code>c2rust</code>. Runs on raw FFI system boundaries. Safe rewrites are planned under Phase 3.</p>
+        <p><strong>Command invocation:</strong> <code>rustybox ${item.name} [args...]</code></p>
+      `;
+    }
+    
+    modalBody.innerHTML = description;
+    modal.classList.add('open');
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+  }
+
+  // Close modal on click outside
+  window.onclick = function(event) {
+    if (event.target === modal) {
+      closeModal();
+    }
+  }
+
+  // Copy code utility
+  function copyCode(button) {
+    const pre = button.parentElement.nextElementSibling;
+    const code = pre.querySelector('code');
+    navigator.clipboard.writeText(code.innerText).then(() => {
+      button.innerText = 'Copied!';
+      setTimeout(() => {
+        button.innerText = 'Copy';
+      }, 2000);
+    });
+  }
+
+  // Mobile menu toggle
+  const sidebar = document.getElementById('sidebar');
+  const menuToggle = document.getElementById('menuToggle');
+  
+  menuToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+    menuToggle.innerText = sidebar.classList.contains('open') ? 'CLOSE' : 'MENU';
+  });
+
+  // Close sidebar on link click (mobile)
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      menuToggle.innerText = 'MENU';
+    });
+  });
+
+  // Track active navigation link on scroll
+  const sections = document.querySelectorAll('section');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      if (pageYOffset >= sectionTop - 120) {
+        current = section.getAttribute('id');
+      }
+    });
+
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href').substring(1) === current) {
+        link.classList.add('active');
+      }
+    });
+  });
+</script>
+</body>
+</html>
