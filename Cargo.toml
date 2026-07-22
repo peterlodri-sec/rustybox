@@ -5,7 +5,7 @@ resolver = "2"
 [package]
 name = "rustybox"
 authors = ["Samuel Ainsworth"]
-version = "0.0.0"
+version = "0.3.0"
 publish = false
 edition = "2021"
 # BusyBox lineage: the transpiled tree is a GPLv2 derivative and stays GPLv2.
