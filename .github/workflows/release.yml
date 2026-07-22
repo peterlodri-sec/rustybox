@@ -69,12 +69,12 @@ jobs:
           CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_RUSTFLAGS: "-C target-feature=+crt-static -C relocation-model=static -C linker=clang -C link-arg=--ld-path=wild"
           CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUSTFLAGS: "-C target-feature=+crt-static -C relocation-model=static -C linker=clang -C link-arg=--ld-path=wild"
           RUSTYBOX_GIT_SHA: ${{ github.sha }}
-          RUSTYBOX_BUILD_ARGS: "cargo build --release --target ${{ matrix.target }} (--all-features | -p rustybox-core)"
+          RUSTYBOX_BUILD_ARGS: "cargo build -Z build-std=std,panic_abort --release --target ${{ matrix.target }} (--all-features | -p rustybox-core)"
         run: |
           export RUSTYBOX_BUILD_DATE="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
           echo "RUSTYBOX_BUILD_DATE=$RUSTYBOX_BUILD_DATE" >> "$GITHUB_ENV"
-          cargo build --release --target ${{ matrix.target }} --all-features
-          cargo build --release --target ${{ matrix.target }} -p rustybox-core
+          cargo build -Z build-std=std,panic_abort --release --target ${{ matrix.target }} --all-features
+          cargo build -Z build-std=std,panic_abort --release --target ${{ matrix.target }} -p rustybox-core
 
       # SOTA size WITHOUT stripping symbols: UPX --best --lzma. Symbols stay in
       # the (compressed) image; the artifact on disk is a fraction of the size.
