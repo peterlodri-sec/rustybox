@@ -2120,6 +2120,7 @@ dependencies = [
  "uu_factor",
  "uu_fold",
  "uu_head",
+ "uu_hostid",
  "uu_id",
  "uu_ln",
  "uu_ls",
@@ -2151,6 +2152,7 @@ dependencies = [
  "uu_touch",
  "uu_tr",
  "uu_truncate",
+ "uu_tty",
  "uu_uname",
  "uu_unexpand",
  "uu_uniq",
@@ -2197,6 +2199,7 @@ dependencies = [
  "uu_factor",
  "uu_fold",
  "uu_head",
+ "uu_hostid",
  "uu_id",
  "uu_ln",
  "uu_ls",
@@ -2228,6 +2231,7 @@ dependencies = [
  "uu_touch",
  "uu_tr",
  "uu_truncate",
+ "uu_tty",
  "uu_uname",
  "uu_unexpand",
  "uu_uniq",
@@ -2920,6 +2924,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "uu_hostid"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "06db46e1e601fe9510b94d2f228487544e0f21efc19384868f5c6ad2d44f5832"
+dependencies = [
+ "clap",
+ "fluent",
+ "libc",
+ "uucore",
+]
+
+[[package]]
 name = "uu_id"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3343,6 +3359,19 @@ dependencies = [
  "clap",
  "fluent",
  "uucore",
+]
+
+[[package]]
+name = "uu_tty"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bc23baaf9a00eb9b59e0967af267c80f915bf1c486ef305a54edbec308c2aabc"
+dependencies = [
+ "clap",
+ "fluent",
+ "rustix",
+ "uucore",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]

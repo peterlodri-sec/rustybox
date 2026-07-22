@@ -407,6 +407,8 @@ uname         | MIT         | rustybox & rustybox-core   | uutils / uu_uname
 arch          | MIT         | rustybox & rustybox-core   | uutils / uu_uname
 sum           | MIT         | rustybox & rustybox-core   | uutils / uu_sum
 base64        | MIT         | rustybox & rustybox-core   | uutils / uu_base64
+tty           | MIT         | rustybox & rustybox-core   | uutils / uu_tty
+hostid        | MIT         | rustybox & rustybox-core   | uutils / uu_hostid
 md5sum        | MIT         | rustybox & rustybox-core   | RustCrypto (md-5)
 sha1sum       | MIT         | rustybox & rustybox-core   | RustCrypto (sha1)
 sha256sum     | MIT         | rustybox & rustybox-core   | RustCrypto (sha2)

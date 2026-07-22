@@ -195,6 +195,8 @@ fn dispatch(name: &str, argv: &[&str]) -> Option<i32> {
     "ionice" => Some(ionice::run(argv)),
     "watch" => Some(watch::run(argv)),
     "xargs" => Some(xargs::run(argv)),
+    "tty" => Some(uu_tty::uumain(argv.iter().map(std::ffi::OsString::from))),
+    "hostid" => Some(uu_hostid::uumain(argv.iter().map(std::ffi::OsString::from))),
     "mountpoint" => Some(mountpoint::run(argv)),
     _ => None,
   }
@@ -212,5 +214,5 @@ fn print_version() {
 }
 
 fn list_applets() {
-  eprintln!("applets: grep egrep fgrep find cat echo ls cp mv rm mkdir rmdir ln pwd touch true false head tail wc sort uniq cut tr chmod chown df du env printenv date basename dirname readlink stat seq sleep id whoami yes tac nl tee mktemp realpath nproc printf link unlink logname factor timeout nohup shuf nice dd truncate fold expand unexpand comm split cksum paste sync uname arch sum base64 md5sum sha1sum sha256sum sha512sum sha3sum gzip gunzip zcat bzip2 bunzip2 bzcat xz unxz xzcat tar flock setsid chrt ionice watch xargs mountpoint");
+  eprintln!("applets: grep egrep fgrep find cat echo ls cp mv rm mkdir rmdir ln pwd touch true false head tail wc sort uniq cut tr chmod chown df du env printenv date basename dirname readlink stat seq sleep id whoami yes tac nl tee mktemp realpath nproc printf link unlink logname factor timeout nohup shuf nice dd truncate fold expand unexpand comm split cksum paste sync uname arch sum base64 md5sum sha1sum sha256sum sha512sum sha3sum gzip gunzip zcat bzip2 bunzip2 bzcat xz unxz xzcat tar flock setsid chrt ionice watch xargs mountpoint tty hostid");
 }

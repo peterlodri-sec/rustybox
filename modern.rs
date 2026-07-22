@@ -209,6 +209,10 @@ pub fn try_run(name: &str, argv: &[&str]) -> Option<i32> {
     "watch" => Some(watch::run(argv)),
     #[cfg(feature = "modern-xargs")]
     "xargs" => Some(xargs::run(argv)),
+    #[cfg(feature = "modern-tty")]
+    "tty" => Some(uu_tty::uumain(argv.iter().map(std::ffi::OsString::from))),
+    #[cfg(feature = "modern-hostid")]
+    "hostid" => Some(uu_hostid::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-nohup")]
     "nohup" => Some(uu_nohup::uumain(argv.iter().map(std::ffi::OsString::from))),
     #[cfg(feature = "modern-shuf")]

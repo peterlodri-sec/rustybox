@@ -991,7 +991,7 @@ lazy_static! {
       install_loc: InstallLoc::DIR_USR_BIN,
       usage: std::include_str!("../usage/hexedit"),
     });
-    #[cfg(feature = "hostid")]
+    #[cfg(all(feature = "hostid", not(feature = "modern-hostid")))]
     appy_mcappface.push(applet {
       name: "hostid",
       main: "hostid",
@@ -2799,7 +2799,7 @@ lazy_static! {
       install_loc: InstallLoc::DIR_USR_BIN,
       usage: std::include_str!("../usage/ts"),
     });
-    #[cfg(feature = "tty")]
+    #[cfg(all(feature = "tty", not(feature = "modern-tty")))]
     appy_mcappface.push(applet {
       name: "tty",
       main: "tty",
