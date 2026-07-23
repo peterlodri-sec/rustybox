@@ -775,7 +775,15 @@ lazy_static! {
       install_loc: InstallLoc::DIR_BIN,
       usage: std::include_str!("../usage/fgrep"),
     });
-    #[cfg(feature = "find")]
+    #[cfg(all(feature = "find", feature = "modern-find"))]
+    appy_mcappface.push(applet {
+      name: "find",
+      main: "find",
+      entrypoint: Entrypoint::SafeStyle(crate::modern::find::run_and_exit),
+      install_loc: InstallLoc::DIR_USR_BIN,
+      usage: std::include_str!("../usage/find"),
+    });
+    #[cfg(all(feature = "find", not(feature = "modern-find")))]
     appy_mcappface.push(applet {
       name: "find",
       main: "find",

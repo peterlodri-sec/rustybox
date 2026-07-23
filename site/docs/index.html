@@ -578,6 +578,11 @@ chmod +x rustybox-core-x86_64-unknown-linux-musl
         <div class="alert-title">Sigstore Signatures</div>
         <p>Every official release is cryptographically signed using keyless <code>cosign</code>. You can verify release authenticity with: <code>cosign verify-blob &lt;binary&gt; --certificate-identity &lt;author-email&gt; --signature &lt;signature-file&gt;</code>.</p>
       </div>
+
+      <div class="alert note" style="margin-top: 16px;">
+        <div class="alert-title">Entheai Agent Sandbox Integration</div>
+        <p>Rustybox serves as the default embedded Linux userland for <a href="https://github.com/entropy-om/entheai" target="_blank" style="color:var(--acc);font-weight:600;">Entheai</a> — the hybrid, visual coding agent harness — providing zero-dependency, memory-safe tool execution (<code>find</code>, <code>grep</code>, <code>timeout</code>, <code>flock</code>, <code>xargs</code>) within isolated sub-agent worktrees.</p>
+      </div>
     </section>
 
     <!-- Section: Multicall Mechanics -->

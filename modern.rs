@@ -18,7 +18,7 @@ pub mod chrt;
 ))]
 mod compress;
 #[cfg(feature = "modern-find")]
-mod find;
+pub mod find;
 #[cfg(feature = "modern-flock")]
 pub mod flock;
 #[cfg(feature = "modern-grep")]
